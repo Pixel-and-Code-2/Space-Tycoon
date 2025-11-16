@@ -1,0 +1,40 @@
+# =====================================================================
+# Unity Specific Files
+# =====================================================================
+
+# Library folder: Contains cached data, local settings, and GUIDs. MUST be ignored.
+/[Ll]ibrary/
+
+# Temp folder: Temporary files generated during runtime/compilation.
+/[Tt]emp/
+
+# Object folder: Intermediate build files.
+/[Oo]bj/
+
+# Build folder: Final build outputs (if you build locally).
+/[Bb]uild/
+/[Bb]uilds/
+
+# Logs: Runtime logs.
+*.log
+*.pdb
+
+# Visual Studio / IDE Specific Files
+.vs/
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+
+# Meta files: Unity generates .meta files for every asset. 
+# These are generally tracked, but sometimes large or unstable ones can be ignored.
+# NOTE: For standard workflow, keep .meta files! They store GUIDs necessary for linking assets.
+# If you are using Git LFS, you MUST NOT ignore .meta files unless you are tracking them via LFS too.
+
+# =====================================================================
+# Git LFS Configuration
+# =====================================================================
+
+# Git LFS tracks large files by replacing them with small pointer files.
+# You must configure LFS to track specific binary extensions in a separate .gitattributes file.
+# Do NOT ignore the file extensions you want LFS to manage here.
