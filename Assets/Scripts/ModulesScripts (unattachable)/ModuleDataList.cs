@@ -26,7 +26,7 @@ public class ModuleDataList
     {
         if (!moduleData.module.scene.IsValid())
         {
-            moduleData.module = GameObject.Instantiate(moduleData.module, moduleData.position, Quaternion.identity);
+            moduleData.module = GameObject.Instantiate(moduleData.module, moduleData.position, Quaternion.identity, spawnContext != null ? spawnContext.transform : null);
         }
         GateWay[] gateways = moduleData.module.GetComponents<GateWay>();
         moduleData.internalGateWayIds = new int[gateways.Length];
@@ -48,7 +48,7 @@ public class ModuleDataList
         int[] internalGateWayIds = new int[internalGateWays.Length];
         if (!module.scene.IsValid())
         {
-            module = GameObject.Instantiate(module);
+            module = GameObject.Instantiate(module, spawnContext != null ? spawnContext.transform : null);
             gatewayId = NO_GATEWAY_ID;
         }
 
@@ -87,15 +87,23 @@ public class ModuleDataList
         return gateWayList.FindAll(gateway => gateway.connectedGatewayId == NO_GATEWAY_ID);
     }
 
+    // test prefabs in inspector
     public void OnValidate()
     {
         for (int i = 0; i < modulePrefabs.Count; i++)
         {
             if (modulePrefabs[i] != null && !modulePrefabs[i].scene.IsValid())
             {
-                modulePrefabs[i] = GameObject.Instantiate(modulePrefabs[i]);
+                modulePrefabs[i] = GameObject.Instantiate(modulePrefabs[i], spawnContext != null ? spawnContext.transform : null);
                 this.Add(modulePrefabs[i], i);
             }
         }
+    }
+
+    public void Clear()
+    {
+        moduleDataList.Clear();
+        gateWayList.Clear();
+        modulePrefabs.Clear();
     }
 }
