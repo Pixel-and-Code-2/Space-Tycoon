@@ -6,8 +6,8 @@ using UnityEngine.InputSystem;
 public class CameraController : MonoBehaviour
 {
     [Header("Camera settings")]
-    [SerializeField] private float cameraRadius = 10f;
-    private float cameraRadiusCache = 10f;
+    [SerializeField] private float maxCameraRadius = 10f;
+    private float maxCameraRadiusCache = 10f;
     [SerializeField] private float cameraTopOffset = 5f;
     private float cameraTopOffsetCache = 5f;
     [SerializeField] private float cameraBottomOffset = -5f;
@@ -23,9 +23,10 @@ public class CameraController : MonoBehaviour
     [SerializeField] private InputActionReference zoomAction;
 
     [SerializeField] private float zoomSensitivity = 1f;
-    [SerializeField] private float maxFOV = 60f;
-    [SerializeField] private float minFOV = 5f;
-    [SerializeField] private AnimationCurve fOVChangeCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+    [SerializeField] private float minCameraRaduisCoef = 0.2f;
+    private float minCameraRaduisCoefCache = 0.2f;
+    private const float maxCameraRaduisCoef = 1f;
+    [SerializeField] private AnimationCurve zoomChangeCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
 
     [Header("References")]
@@ -36,14 +37,14 @@ public class CameraController : MonoBehaviour
 
     void OnValidate()
     {
-        if (cameraRadius != cameraRadiusCache
+        if (maxCameraRadius != maxCameraRadiusCache
          || cameraTopOffset != cameraTopOffsetCache
          || cameraBottomOffset != cameraBottomOffsetCache)
         {
-            cameraRadiusCache = cameraRadius;
-            cameraTopOffset = Math.Clamp(cameraTopOffset, 0, 0.95f * cameraRadius);
+            maxCameraRadiusCache = maxCameraRadius;
+            cameraTopOffset = Math.Clamp(cameraTopOffset, 0, 0.95f * maxCameraRadius);
             cameraTopOffsetCache = cameraTopOffset;
-            cameraBottomOffset = Math.Clamp(cameraBottomOffset, -0.95f * cameraRadius, cameraTopOffset);
+            cameraBottomOffset = Math.Clamp(cameraBottomOffset, -0.95f * maxCameraRadius, cameraTopOffset);
             cameraBottomOffsetCache = cameraBottomOffset;
             ApplyNewRadius();
         }
@@ -53,17 +54,24 @@ public class CameraController : MonoBehaviour
             cameraInitialDegreeHeight = Math.Clamp(cameraInitialDegreeHeight, orbitalFollow.VerticalAxis.Range[0], orbitalFollow.VerticalAxis.Range[1]);
             orbitalFollow.VerticalAxis.Value = cameraInitialDegreeHeight;
         }
+
+        if (minCameraRaduisCoef != minCameraRaduisCoefCache)
+        {
+            minCameraRaduisCoefCache = minCameraRaduisCoef;
+            minCameraRaduisCoef = Math.Clamp(minCameraRaduisCoef, 0.01f, maxCameraRaduisCoef);
+            orbitalFollow.RadialAxis.Range[0] = minCameraRaduisCoef;
+        }
     }
 
     void ApplyNewRadius()
     {
-        orbitalFollow.Orbits.Center.Radius = cameraRadius;
-        orbitalFollow.Orbits.Top.Height = Math.Clamp(cameraTopOffset, 0, cameraRadius);
-        orbitalFollow.Orbits.Bottom.Height = Math.Clamp(cameraBottomOffset, -cameraRadius, 0);
+        orbitalFollow.Orbits.Center.Radius = maxCameraRadius;
+        orbitalFollow.Orbits.Top.Height = Math.Clamp(cameraTopOffset, 0, maxCameraRadius);
+        orbitalFollow.Orbits.Bottom.Height = Math.Clamp(cameraBottomOffset, -maxCameraRadius, 0);
 
-        float newTopRadius = (float)Math.Pow(cameraRadius * cameraRadius - cameraTopOffset * cameraTopOffset, 0.5);
+        float newTopRadius = (float)Math.Pow(maxCameraRadius * maxCameraRadius - cameraTopOffset * cameraTopOffset, 0.5);
         orbitalFollow.Orbits.Top.Radius = newTopRadius;
-        float newBottomRadius = (float)Math.Pow(cameraRadius * cameraRadius - cameraBottomOffset * cameraBottomOffset, 0.5);
+        float newBottomRadius = (float)Math.Pow(maxCameraRadius * maxCameraRadius - cameraBottomOffset * cameraBottomOffset, 0.5);
         orbitalFollow.Orbits.Bottom.Radius = newBottomRadius;
     }
 
@@ -72,6 +80,8 @@ public class CameraController : MonoBehaviour
         orbitalFollow.Orbits.Center.Height = 0;
         orbitalFollow.Orbits.Top.Height = cameraTopOffset;
         orbitalFollow.Orbits.Bottom.Height = cameraBottomOffset;
+        orbitalFollow.RadialAxis.Range[0] = minCameraRaduisCoef;
+        orbitalFollow.RadialAxis.Range[1] = maxCameraRaduisCoef;
         ApplyNewRadius();
         zoomAction.action.Enable();
         walkAction.action.Enable();
@@ -111,13 +121,12 @@ public class CameraController : MonoBehaviour
 
         if (scrollDelta != 0f)
         {
-            float fovValuesRange = maxFOV - minFOV;
-            float currValue = virtualCamera.Lens.FieldOfView - minFOV;
+            float fovValuesRange = maxCameraRaduisCoef - minCameraRaduisCoef;
+            float currValue = orbitalFollow.RadialAxis.Value - minCameraRaduisCoef;
             float inPercent = Mathf.Clamp(currValue, 0, fovValuesRange) / fovValuesRange;
-            float valueWithCurve = Math.Clamp(fOVChangeCurve.Evaluate(inPercent), 0.2f, 1f);
+            float valueWithCurve = Math.Clamp(zoomChangeCurve.Evaluate(inPercent), 0.01f, 1f);
             float change = scrollDelta * zoomSensitivity * valueWithCurve;
-
-            virtualCamera.Lens.FieldOfView = Math.Clamp(virtualCamera.Lens.FieldOfView - change, minFOV, maxFOV);
+            orbitalFollow.RadialAxis.Value = Math.Clamp(orbitalFollow.RadialAxis.Value - change, minCameraRaduisCoef, maxCameraRaduisCoef);
         }
     }
 
@@ -151,7 +160,7 @@ public class CameraController : MonoBehaviour
         Gizmos.DrawWireCube(boundsCollider.bounds.center, boundsCollider.bounds.size);
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, cameraRadius);
+        Gizmos.DrawWireSphere(transform.position, maxCameraRadius);
 
         Vector3 center = transform.position + new Vector3(0f, cameraTopOffset, 0f);
         float radius = orbitalFollow.Orbits.Top.Radius;
