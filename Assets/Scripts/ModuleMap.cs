@@ -15,11 +15,7 @@ public class ModuleMap : MonoBehaviour
         moduleList.Clear();
         moduleList.spawnContext = this.gameObject;
         initialModulePrefab = Instantiate(initialModulePrefab, transform);
-        moduleList.Add(new ModuleData
-        {
-            position = Vector3.zero,
-            module = initialModulePrefab
-        });
+        moduleList.Add(new ModuleData(Vector3.zero, initialModulePrefab, new int[0], 0));
     }
 
     void OnValidate()

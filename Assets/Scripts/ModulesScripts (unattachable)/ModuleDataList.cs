@@ -22,24 +22,29 @@ public class ModuleDataList
 
 
 
-    public void Add(ModuleData moduleData)
+    public void Add(ModuleData moduleData, int externalGatewayId = NO_GATEWAY_ID, int gatewayId = NO_GATEWAY_ID)
     {
         if (!moduleData.module.scene.IsValid())
         {
             moduleData.module = GameObject.Instantiate(moduleData.module, moduleData.position, Quaternion.identity, spawnContext != null ? spawnContext.transform : null);
         }
         GateWay[] gateways = moduleData.module.GetComponents<GateWay>();
-        moduleData.internalGateWayIds = new int[gateways.Length];
+        int[] internalGateWayIds = new int[gateways.Length];
         for (int i = 0; i < gateways.Length; i++)
         {
             gateways[i].id = gateWayList.Count;
             gateWayList.Add(gateways[i]);
-            moduleData.internalGateWayIds[i] = gateways[i].id;
+            internalGateWayIds[i] = gateways[i].id;
 
             // test prefabs in inspector
             modulePrefabs.Add(null);
         }
+        moduleData.updateGatewayArray(internalGateWayIds, gateways.Length);
         moduleDataList.Add(moduleData);
+        if (externalGatewayId != NO_GATEWAY_ID)
+        {
+            ConnectModules(moduleData, gatewayId, moduleDataList[externalGatewayId], externalGatewayId);
+        }
     }
 
     public void Add(GameObject module, int externalGatewayId = NO_GATEWAY_ID, int gatewayId = NO_GATEWAY_ID)
@@ -56,6 +61,7 @@ public class ModuleDataList
         {
             gatewayId = gateWayList.Count;
         }
+
         for (int i = 0; i < internalGateWays.Length; i++)
         {
             internalGateWays[i].id = gateWayList.Count;
@@ -66,20 +72,24 @@ public class ModuleDataList
 
             internalGateWayIds[i] = internalGateWays[i].id;
         }
-        moduleDataList.Add(new ModuleData
-        {
-            position = module.transform.position,
-            module = module,
-            internalGateWayIds = internalGateWayIds
-        });
+        moduleDataList.Add(new ModuleData(module.transform.position, module, internalGateWayIds, internalGateWays.Length));
         if (externalGatewayId != NO_GATEWAY_ID)
         {
-            // test prefabs in inspector
-            modulePrefabs[gatewayId] = gateWayList[externalGatewayId].gameObject;
-
-            // if no gateways are there in prefab, then getting gateway by id here will fail
-            gateWayList[gatewayId].LinkToAnotherGateWay(gateWayList[externalGatewayId]);
+            ConnectModules(moduleDataList[moduleDataList.Count - 1], gatewayId, moduleDataList.Find(moduleData => moduleData.GetLocalGatewayId(externalGatewayId) != -1), externalGatewayId);
         }
+    }
+
+    public void ConnectModules(ModuleData module1, int gatewayId1, ModuleData module2, int gatewayId2)
+    {
+        int localGatewayId1 = module1.GetLocalGatewayId(gatewayId1);
+        int localGatewayId2 = module2.GetLocalGatewayId(gatewayId2);
+        module1.ConnectModules(module2, localGatewayId1, localGatewayId2);
+
+        // test prefabs in inspector
+        modulePrefabs[gatewayId1] = gateWayList[gatewayId2].gameObject;
+
+        // if no gateways are there in prefab, then getting gateway by id here will fail
+        gateWayList[gatewayId1].LinkToAnotherGateWay(gateWayList[gatewayId2]);
     }
 
     public List<GateWay> GetFreeGateWays()

@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &255088920 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8033463895082833371, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+  m_PrefabInstance: {fileID: 54534094607441672}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &265867764
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,7 +525,75 @@ PrefabInstance:
     - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: initialModulePrefab
       value: 
-      objectReference: {fileID: 8822679600907303698, guid: 9202360cfb3e544428368836575908c3, type: 3}
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.spawnContext
+      value: 
+      objectReference: {fileID: 255088920}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.modulePrefabs.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.moduleDataList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: 'moduleList.modulePrefabs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: 'moduleList.modulePrefabs.Array.data[4]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.moduleDataList.Array.data[0].module
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.moduleDataList.Array.data[1].module
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.moduleDataList.Array.data[0].position.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.moduleDataList.Array.data[0].internalGateWayIds.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.moduleDataList.Array.data[1].internalGateWayIds.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: 'moduleList.moduleDataList.Array.data[0].internalGateWayIds.Array.data[1]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: 'moduleList.moduleDataList.Array.data[0].internalGateWayIds.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: 'moduleList.moduleDataList.Array.data[0].internalGateWayIds.Array.data[3]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: 'moduleList.moduleDataList.Array.data[1].internalGateWayIds.Array.data[0]'
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: 'moduleList.moduleDataList.Array.data[1].internalGateWayIds.Array.data[1]'
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: 'moduleList.moduleDataList.Array.data[1].internalGateWayIds.Array.data[2]'
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: 'moduleList.moduleDataList.Array.data[1].internalGateWayIds.Array.data[3]'
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8033463895082833371, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: m_Name
       value: ModuleMap

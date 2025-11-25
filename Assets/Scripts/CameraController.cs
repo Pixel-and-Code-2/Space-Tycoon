@@ -1,6 +1,5 @@
 using UnityEngine;
 using Unity.Cinemachine;
-using System;// for Math
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
@@ -11,7 +10,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float cameraTopOffset = 5f;
     private float cameraTopOffsetCache = 5f;
     [SerializeField] private float cameraBottomOffset = -5f;
-    private float cameraBottomOffsetCache = 5f;
+    private float cameraBottomOffsetCache = -5f;
     [SerializeField] private float cameraInitialDegreeHeight = 15f;
 
     [Header("Input Configuration")]
@@ -23,8 +22,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private InputActionReference zoomAction;
 
     [SerializeField] private float zoomSensitivity = 1f;
-    [SerializeField] private float minCameraRaduisCoef = 0.2f;
-    private float minCameraRaduisCoefCache = 0.2f;
+    [SerializeField] private float minCameraRadiusCoef = 0.2f;
+    private float minCameraRadiusCoefCache = 0.2f;
     private const float maxCameraRaduisCoef = 1f;
     [SerializeField] private AnimationCurve zoomChangeCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
@@ -42,36 +41,36 @@ public class CameraController : MonoBehaviour
          || cameraBottomOffset != cameraBottomOffsetCache)
         {
             maxCameraRadiusCache = maxCameraRadius;
-            cameraTopOffset = Math.Clamp(cameraTopOffset, 0, 0.95f * maxCameraRadius);
+            cameraTopOffset = Mathf.Clamp(cameraTopOffset, 0, 0.95f * maxCameraRadius);
             cameraTopOffsetCache = cameraTopOffset;
-            cameraBottomOffset = Math.Clamp(cameraBottomOffset, -0.95f * maxCameraRadius, cameraTopOffset);
+            cameraBottomOffset = Mathf.Clamp(cameraBottomOffset, -0.95f * maxCameraRadius, cameraTopOffset);
             cameraBottomOffsetCache = cameraBottomOffset;
             ApplyNewRadius();
         }
 
         if (cameraInitialDegreeHeight != orbitalFollow.VerticalAxis.Value)
         {
-            cameraInitialDegreeHeight = Math.Clamp(cameraInitialDegreeHeight, orbitalFollow.VerticalAxis.Range[0], orbitalFollow.VerticalAxis.Range[1]);
+            cameraInitialDegreeHeight = Mathf.Clamp(cameraInitialDegreeHeight, orbitalFollow.VerticalAxis.Range[0], orbitalFollow.VerticalAxis.Range[1]);
             orbitalFollow.VerticalAxis.Value = cameraInitialDegreeHeight;
         }
 
-        if (minCameraRaduisCoef != minCameraRaduisCoefCache)
+        if (minCameraRadiusCoef != minCameraRadiusCoefCache)
         {
-            minCameraRaduisCoefCache = minCameraRaduisCoef;
-            minCameraRaduisCoef = Math.Clamp(minCameraRaduisCoef, 0.01f, maxCameraRaduisCoef);
-            orbitalFollow.RadialAxis.Range[0] = minCameraRaduisCoef;
+            minCameraRadiusCoefCache = minCameraRadiusCoef;
+            minCameraRadiusCoef = Mathf.Clamp(minCameraRadiusCoef, 0.01f, maxCameraRaduisCoef);
+            orbitalFollow.RadialAxis.Range[0] = minCameraRadiusCoef;
         }
     }
 
     void ApplyNewRadius()
     {
         orbitalFollow.Orbits.Center.Radius = maxCameraRadius;
-        orbitalFollow.Orbits.Top.Height = Math.Clamp(cameraTopOffset, 0, maxCameraRadius);
-        orbitalFollow.Orbits.Bottom.Height = Math.Clamp(cameraBottomOffset, -maxCameraRadius, 0);
+        orbitalFollow.Orbits.Top.Height = Mathf.Clamp(cameraTopOffset, 0, maxCameraRadius);
+        orbitalFollow.Orbits.Bottom.Height = Mathf.Clamp(cameraBottomOffset, -maxCameraRadius, 0);
 
-        float newTopRadius = (float)Math.Pow(maxCameraRadius * maxCameraRadius - cameraTopOffset * cameraTopOffset, 0.5);
+        float newTopRadius = (float)Mathf.Pow(maxCameraRadius * maxCameraRadius - cameraTopOffset * cameraTopOffset, 0.5f);
         orbitalFollow.Orbits.Top.Radius = newTopRadius;
-        float newBottomRadius = (float)Math.Pow(maxCameraRadius * maxCameraRadius - cameraBottomOffset * cameraBottomOffset, 0.5);
+        float newBottomRadius = (float)Mathf.Pow(maxCameraRadius * maxCameraRadius - cameraBottomOffset * cameraBottomOffset, 0.5f);
         orbitalFollow.Orbits.Bottom.Radius = newBottomRadius;
     }
 
@@ -80,7 +79,7 @@ public class CameraController : MonoBehaviour
         orbitalFollow.Orbits.Center.Height = 0;
         orbitalFollow.Orbits.Top.Height = cameraTopOffset;
         orbitalFollow.Orbits.Bottom.Height = cameraBottomOffset;
-        orbitalFollow.RadialAxis.Range[0] = minCameraRaduisCoef;
+        orbitalFollow.RadialAxis.Range[0] = minCameraRadiusCoef;
         orbitalFollow.RadialAxis.Range[1] = maxCameraRaduisCoef;
         ApplyNewRadius();
         zoomAction.action.Enable();
@@ -121,12 +120,12 @@ public class CameraController : MonoBehaviour
 
         if (scrollDelta != 0f)
         {
-            float fovValuesRange = maxCameraRaduisCoef - minCameraRaduisCoef;
-            float currValue = orbitalFollow.RadialAxis.Value - minCameraRaduisCoef;
+            float fovValuesRange = maxCameraRaduisCoef - minCameraRadiusCoef;
+            float currValue = orbitalFollow.RadialAxis.Value - minCameraRadiusCoef;
             float inPercent = Mathf.Clamp(currValue, 0, fovValuesRange) / fovValuesRange;
-            float valueWithCurve = Math.Clamp(zoomChangeCurve.Evaluate(inPercent), 0.01f, 1f);
+            float valueWithCurve = Mathf.Clamp(zoomChangeCurve.Evaluate(inPercent), 0.01f, 1f);
             float change = scrollDelta * zoomSensitivity * valueWithCurve;
-            orbitalFollow.RadialAxis.Value = Math.Clamp(orbitalFollow.RadialAxis.Value - change, minCameraRaduisCoef, maxCameraRaduisCoef);
+            orbitalFollow.RadialAxis.Value = Mathf.Clamp(orbitalFollow.RadialAxis.Value - change, minCameraRadiusCoef, maxCameraRaduisCoef);
         }
     }
 
