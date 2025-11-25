@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -44,5 +46,56 @@ public class ModuleData
             }
         }
         return -1;
+    }
+
+    // Add new methods for finding path
+    public Vector3 GetCenterPosition()
+    {
+        return module != null ? module.transform.position : position;
+    }
+
+    public List<ModuleData> GetConnectedModules()
+    {
+        List<ModuleData> connected = new List<ModuleData>();
+        for(int i = 0; i < gatewayAmount; i++)
+        {
+            if (connectedModules[i] != null)
+            {
+                connected.Add(connectedModules[i]);
+            }
+        }
+        return connected;
+    }
+
+    public GateWay GetGatewayByIndex(int index)
+    {
+        if(module != null && index >= 0 && index < gatewayAmount)
+        {
+            GateWay[] gateways = module.GetComponents<GateWay>();
+            for (int i = 0; i < gateways.Length; i++)
+            {
+                if (gateways[i].id == internalGateWayIds[index])
+                {
+                    return gateways[i];
+                }
+            }
+        }
+        return null;
+    }
+
+    public Vector3 GetGatewayPosition(int gatewayIndex)
+    {
+        GateWay gateway = GetGatewayByIndex(gatewayIndex);
+        return gateway != null ? gateway.GetPosition() : GetCenterPosition();
+    }
+
+    public override int GetHashCode()
+    {
+        return module != null ? module.GetInstanceID() : position.GetHashCode();
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is ModuleData other && this.GetHashCode() == other.GetHashCode();
     }
 }

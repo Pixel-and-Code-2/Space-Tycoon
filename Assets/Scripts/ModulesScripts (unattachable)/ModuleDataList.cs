@@ -20,7 +20,32 @@ public class ModuleDataList
     // test prefabs in inspector
     private List<GameObject> modulePrefabs = new List<GameObject>();
 
+    public GateWay GetGatewayById(int gatewayId)
+    {
+        if (gatewayId >= 0 && gatewayId < gateWayList.Count)
+            return gateWayList[gatewayId];
+        return null;
+    }
+    public List<ModuleData> GetAllModules()
+    {
+        return new List<ModuleData>(moduleDataList);
+    }
 
+    public ModuleData GetModuleByGatewayId(int gatewayId)
+    {
+        foreach (var moduleData in moduleDataList)
+        {
+            for (int i = 0; i < moduleData.GetConnectedModules().Count; i++)
+            {
+                GateWay gateway = moduleData.GetGatewayByIndex(i);
+                if (gateway != null && gateway.id == gatewayId)
+                {
+                    return moduleData;
+                }
+            }
+        }
+        return null;
+    }
 
     public void Add(ModuleData moduleData, int externalGatewayId = NO_GATEWAY_ID, int gatewayId = NO_GATEWAY_ID)
     {
