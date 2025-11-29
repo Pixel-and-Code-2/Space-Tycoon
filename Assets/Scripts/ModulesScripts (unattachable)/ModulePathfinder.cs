@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-public class ModulePathfinder : MonoBehaviour 
+public class ModulePathfinder : MonoBehaviour
 {
     [SerializeField]
     private bool drawGizmos = true;
@@ -10,7 +10,7 @@ public class ModulePathfinder : MonoBehaviour
     private ModuleMap moduleMap;
     private List<Vector3> lastFoundPath = new List<Vector3>();
 
-    private void Start()
+    private void Start() // как мы получаем отсюда компонент?
     {
         moduleMap = GetComponent<ModuleMap>();
     }
@@ -27,7 +27,7 @@ public class ModulePathfinder : MonoBehaviour
 
         List<Vector3> path = AStarSearch(startModule, targetModule, startPos, targetPos);
 
-        if(path !=  null)
+        if (path != null)
         {
             lastFoundPath = path;
         }
@@ -40,15 +40,15 @@ public class ModulePathfinder : MonoBehaviour
         var moduleDataListField = typeof(ModuleMap).GetField("moduleList",
             System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-        if (moduleDataListField == null) 
+        if (moduleDataListField == null)
         {
-            return null; 
+            return null;
         }
 
         var moduleDataList = moduleDataListField.GetValue(moduleMap) as ModuleDataList;
-        if (moduleDataList == null) 
+        if (moduleDataList == null)
         {
-            return null; 
+            return null;
         }
 
         ModuleData closest = null;
@@ -56,9 +56,9 @@ public class ModulePathfinder : MonoBehaviour
 
         foreach (var moduleData in moduleDataList.GetAllModules())
         {
-            if (moduleData == null || moduleData.module == null) 
+            if (moduleData == null || moduleData.module == null)
             {
-                continue; 
+                continue;
             }
 
             float distance = Vector3.Distance(position, moduleData.GetCenterPosition());

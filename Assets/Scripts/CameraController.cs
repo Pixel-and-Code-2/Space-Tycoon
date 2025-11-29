@@ -12,6 +12,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float cameraBottomOffset = -5f;
     private float cameraBottomOffsetCache = -5f;
     [SerializeField] private float cameraInitialDegreeHeight = 15f;
+    [SerializeField] private float cameraInitialHorizontalDegree = 15f;
+    [SerializeField] private float cameraHorizontalDegreeLimitation = 15f;
 
     [Header("Input Configuration")]
     [SerializeField] private InputActionReference lookAction;
@@ -54,6 +56,21 @@ public class CameraController : MonoBehaviour
             orbitalFollow.VerticalAxis.Value = cameraInitialDegreeHeight;
         }
 
+        if (cameraInitialHorizontalDegree != orbitalFollow.HorizontalAxis.Value)
+        {
+            cameraInitialHorizontalDegree = Mathf.Clamp(cameraInitialHorizontalDegree, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]);
+            orbitalFollow.HorizontalAxis.Value = cameraInitialHorizontalDegree;
+            orbitalFollow.HorizontalAxis.Range[0] = cameraInitialHorizontalDegree - cameraHorizontalDegreeLimitation;
+            orbitalFollow.HorizontalAxis.Range[1] = cameraInitialHorizontalDegree + cameraHorizontalDegreeLimitation;
+        }
+
+        if (2 * cameraHorizontalDegreeLimitation != orbitalFollow.HorizontalAxis.Range[1] - orbitalFollow.HorizontalAxis.Range[0])
+        {
+            cameraHorizontalDegreeLimitation = Mathf.Clamp(cameraHorizontalDegreeLimitation, 0, 180);
+            orbitalFollow.HorizontalAxis.Range[0] = cameraInitialHorizontalDegree - cameraHorizontalDegreeLimitation;
+            orbitalFollow.HorizontalAxis.Range[1] = cameraInitialHorizontalDegree + cameraHorizontalDegreeLimitation;
+        }
+
         if (minCameraRadiusCoef != minCameraRadiusCoefCache)
         {
             minCameraRadiusCoefCache = minCameraRadiusCoef;
@@ -64,19 +81,26 @@ public class CameraController : MonoBehaviour
 
     void ApplyNewRadius()
     {
-        orbitalFollow.Orbits.Center.Radius = maxCameraRadius;
-        orbitalFollow.Orbits.Top.Height = Mathf.Clamp(cameraTopOffset, 0, maxCameraRadius);
-        orbitalFollow.Orbits.Bottom.Height = Mathf.Clamp(cameraBottomOffset, -maxCameraRadius, 0);
+        float topHeight = Mathf.Clamp(cameraTopOffset, 0, maxCameraRadius);
+        float bottomHeight = Mathf.Clamp(cameraBottomOffset, -maxCameraRadius, topHeight);
+        float centerHeight = (topHeight + bottomHeight) / 2;
+        orbitalFollow.Orbits.Top.Height = topHeight;
+        orbitalFollow.Orbits.Bottom.Height = bottomHeight;
+        orbitalFollow.Orbits.Center.Height = centerHeight;
+        orbitalFollow.HorizontalAxis.Value = cameraInitialHorizontalDegree;
+        orbitalFollow.HorizontalAxis.Range[0] = cameraInitialHorizontalDegree - cameraHorizontalDegreeLimitation;
+        orbitalFollow.HorizontalAxis.Range[1] = cameraInitialHorizontalDegree + cameraHorizontalDegreeLimitation;
 
         float newTopRadius = (float)Mathf.Pow(maxCameraRadius * maxCameraRadius - cameraTopOffset * cameraTopOffset, 0.5f);
         orbitalFollow.Orbits.Top.Radius = newTopRadius;
-        float newBottomRadius = (float)Mathf.Pow(maxCameraRadius * maxCameraRadius - cameraBottomOffset * cameraBottomOffset, 0.5f);
+        float newBottomRadius = (float)Mathf.Pow(maxCameraRadius * maxCameraRadius - bottomHeight * bottomHeight, 0.5f);
         orbitalFollow.Orbits.Bottom.Radius = newBottomRadius;
+        float newCenterRadius = (float)Mathf.Pow(maxCameraRadius * maxCameraRadius - centerHeight * centerHeight, 0.5f);
+        orbitalFollow.Orbits.Center.Radius = newCenterRadius;
     }
 
     void Awake()
     {
-        orbitalFollow.Orbits.Center.Height = 0;
         orbitalFollow.Orbits.Top.Height = cameraTopOffset;
         orbitalFollow.Orbits.Bottom.Height = cameraBottomOffset;
         orbitalFollow.RadialAxis.Range[0] = minCameraRadiusCoef;
@@ -103,6 +127,7 @@ public class CameraController : MonoBehaviour
             float mouseX = mouseMove.x * rotationSpeeds.x;
             float mouseY = mouseMove.y * rotationSpeeds.y;
             orbitalFollow.HorizontalAxis.Value += mouseX;
+            orbitalFollow.HorizontalAxis.Value = Mathf.Clamp(orbitalFollow.HorizontalAxis.Value, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]);
 
             float newY = orbitalFollow.VerticalAxis.Value + mouseY;
             float maxY = orbitalFollow.VerticalAxis.Range[1];

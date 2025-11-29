@@ -5,7 +5,7 @@ using UnityEngine;
 public class PawnBrain : MonoBehaviour
 {
 
-    [SerializeField] 
+    [SerializeField]
     private float movementSpeed = 3f;
     [SerializeField]
     private float rotationSpeed = 5f;
@@ -14,7 +14,7 @@ public class PawnBrain : MonoBehaviour
 
     [SerializeField]
     private ModuleData mainModule;
-    [SerializeField] 
+    [SerializeField]
     private ModuleData targetModule;
 
     private ModuleData currentModule;
@@ -27,7 +27,7 @@ public class PawnBrain : MonoBehaviour
 
     [SerializeField]
     private bool drawPath = true;
-    [SerializeField] 
+    [SerializeField]
     private Color pathColor = Color.yellow;
 
     void Start()
@@ -58,7 +58,7 @@ public class PawnBrain : MonoBehaviour
         }
     }
 
-    public void MoveToModule(ModuleData targetModule)
+    public void MoveToModule(ModuleData targetModule) // имя коллизиться с полем targetModule
     {
         if (isMoving)
         {
@@ -251,7 +251,7 @@ public class PawnBrain : MonoBehaviour
 }
 
 
-/*
+
 public class PawnTestController : MonoBehaviour
 {
     public PawnBrain pawn;
@@ -261,12 +261,11 @@ public class PawnTestController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1) && testModules.Length > 0)
             pawn.MoveToModule(testModules[0]);
-        
+
         if (Input.GetKeyDown(KeyCode.Alpha2) && testModules.Length > 1)
             pawn.MoveToModule(testModules[1]);
-        
+
         if (Input.GetKeyDown(KeyCode.Alpha3) && testModules.Length > 2)
             pawn.MoveToModule(testModules[2]);
     }
 }
-*/

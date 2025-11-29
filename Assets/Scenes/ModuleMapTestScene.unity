@@ -525,18 +525,22 @@ PrefabInstance:
     - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: initialModulePrefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8822679600907303698, guid: 9202360cfb3e544428368836575908c3, type: 3}
     - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: moduleList.spawnContext
       value: 
       objectReference: {fileID: 255088920}
     - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: moduleList.modulePrefabs.Array.size
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: moduleList.moduleDataList.Array.size
-      value: 2
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: 'moduleList.modulePrefabs.Array.data[1]'
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: 'moduleList.modulePrefabs.Array.data[2]'
@@ -555,8 +559,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.moduleDataList.Array.data[2].module
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: moduleList.moduleDataList.Array.data[0].position.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.moduleDataList.Array.data[1].connectedModules.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.moduleDataList.Array.data[2].connectedModules.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: moduleList.moduleDataList.Array.data[0].internalGateWayIds.Array.size
@@ -564,7 +580,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: moduleList.moduleDataList.Array.data[1].internalGateWayIds.Array.size
-      value: 4
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: moduleList.moduleDataList.Array.data[2].internalGateWayIds.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: 'moduleList.moduleDataList.Array.data[0].internalGateWayIds.Array.data[1]'
@@ -593,6 +613,10 @@ PrefabInstance:
     - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: 'moduleList.moduleDataList.Array.data[1].internalGateWayIds.Array.data[3]'
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649901733723194010, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
+      propertyPath: 'moduleList.moduleDataList.Array.data[2].internalGateWayIds.Array.data[1]'
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8033463895082833371, guid: a0cf0aa8cc9f03b4a999e64530e24c3f, type: 3}
       propertyPath: m_Name
