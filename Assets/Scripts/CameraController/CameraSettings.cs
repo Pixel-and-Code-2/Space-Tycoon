@@ -1,8 +1,7 @@
-using UnityEngine;
 using Unity.Cinemachine;
-using UnityEngine.InputSystem;
+using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public abstract class CameraSettings : MonoBehaviour
 {
     [Header("Camera settings")]
     [SerializeField] private float maxCameraRadius = 10f;
@@ -15,28 +14,12 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float cameraInitialHorizontalDegree = 15f;
     [SerializeField] private float cameraHorizontalDegreeLimitation = 15f;
 
-    [Header("Input Configuration")]
-    [SerializeField] private InputActionReference lookAction;
-    [SerializeField] private InputActionReference lookReleaserAction;
-    [SerializeField] private Vector2 rotationSpeeds = Vector2.one;
-    [SerializeField] private InputActionReference walkAction;
-    [SerializeField] private float panSpeed = 1f;
-    [SerializeField] private InputActionReference zoomAction;
-
-    [SerializeField] private float zoomSensitivity = 1f;
-    [SerializeField] private float minCameraRadiusCoef = 0.2f;
-    private float minCameraRadiusCoefCache = 0.2f;
-    private const float maxCameraRaduisCoef = 1f;
-    [SerializeField] private AnimationCurve zoomChangeCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-
-
     [Header("References")]
-    [SerializeField] private CinemachineOrbitalFollow orbitalFollow;
-    [SerializeField] private CinemachineCamera virtualCamera;
-    [SerializeField] private Collider boundsCollider;
-    [SerializeField] private Transform lookTarget;
-
-    void OnValidate()
+    [SerializeField] public CinemachineOrbitalFollow orbitalFollow;
+    [SerializeField] public CinemachineCamera virtualCamera;
+    [SerializeField] public Collider boundsCollider;
+    [SerializeField] public Transform lookTarget;
+    protected void OnValidate()
     {
         if (maxCameraRadius != maxCameraRadiusCache
          || cameraTopOffset != cameraTopOffsetCache
@@ -70,13 +53,6 @@ public class CameraController : MonoBehaviour
             orbitalFollow.HorizontalAxis.Range[0] = cameraInitialHorizontalDegree - cameraHorizontalDegreeLimitation;
             orbitalFollow.HorizontalAxis.Range[1] = cameraInitialHorizontalDegree + cameraHorizontalDegreeLimitation;
         }
-
-        if (minCameraRadiusCoef != minCameraRadiusCoefCache)
-        {
-            minCameraRadiusCoefCache = minCameraRadiusCoef;
-            minCameraRadiusCoef = Mathf.Clamp(minCameraRadiusCoef, 0.01f, maxCameraRaduisCoef);
-            orbitalFollow.RadialAxis.Range[0] = minCameraRadiusCoef;
-        }
     }
 
     void ApplyNewRadius()
@@ -99,84 +75,12 @@ public class CameraController : MonoBehaviour
         orbitalFollow.Orbits.Center.Radius = newCenterRadius;
     }
 
-    void Awake()
+    protected void Awake()
     {
         orbitalFollow.Orbits.Top.Height = cameraTopOffset;
         orbitalFollow.Orbits.Bottom.Height = cameraBottomOffset;
-        orbitalFollow.RadialAxis.Range[0] = minCameraRadiusCoef;
-        orbitalFollow.RadialAxis.Range[1] = maxCameraRaduisCoef;
         ApplyNewRadius();
-        zoomAction.action.Enable();
-        walkAction.action.Enable();
-        lookAction.action.Enable();
-        lookReleaserAction.action.Enable();
     }
-
-    void Update()
-    {
-        HandleRotationInput();
-        HandleMoveInput();
-        HandleZoomInput();
-    }
-
-    void HandleRotationInput()
-    {
-        if (lookReleaserAction.action.ReadValue<float>() != 0f)
-        {
-            Vector2 mouseMove = lookAction.action.ReadValue<Vector2>();
-            float mouseX = mouseMove.x * rotationSpeeds.x;
-            float mouseY = mouseMove.y * rotationSpeeds.y;
-            orbitalFollow.HorizontalAxis.Value += mouseX;
-            orbitalFollow.HorizontalAxis.Value = Mathf.Clamp(orbitalFollow.HorizontalAxis.Value, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]);
-
-            float newY = orbitalFollow.VerticalAxis.Value + mouseY;
-            float maxY = orbitalFollow.VerticalAxis.Range[1];
-            float minY = orbitalFollow.VerticalAxis.Range[0];
-            newY = Mathf.Clamp(newY, minY, maxY);
-            orbitalFollow.VerticalAxis.Value = newY;
-
-            lookTarget.Rotate(Vector3.up, mouseX, Space.World);
-        }
-    }
-
-    void HandleZoomInput()
-    {
-        float scrollDelta = zoomAction.action.ReadValue<Vector2>().y;
-
-        if (scrollDelta != 0f)
-        {
-            float fovValuesRange = maxCameraRaduisCoef - minCameraRadiusCoef;
-            float currValue = orbitalFollow.RadialAxis.Value - minCameraRadiusCoef;
-            float inPercent = Mathf.Clamp(currValue, 0, fovValuesRange) / fovValuesRange;
-            float valueWithCurve = Mathf.Clamp(zoomChangeCurve.Evaluate(inPercent), 0.01f, 1f);
-            float change = scrollDelta * zoomSensitivity * valueWithCurve;
-            orbitalFollow.RadialAxis.Value = Mathf.Clamp(orbitalFollow.RadialAxis.Value - change, minCameraRadiusCoef, maxCameraRaduisCoef);
-        }
-    }
-
-    void HandleMoveInput()
-    {
-        Vector2 move = walkAction.action.ReadValue<Vector2>();
-        float moveX = move.y;
-        float moveZ = move.x;
-
-        if (moveX == 0 && moveZ == 0) return;
-
-        Vector3 movement = panSpeed * Time.deltaTime *
-                          (lookTarget.transform.forward * moveX +
-                           lookTarget.transform.right * moveZ);
-
-        Vector3 proposedPosition = lookTarget.position + movement;
-
-        Bounds bounds = boundsCollider.bounds;
-        proposedPosition.x = Mathf.Clamp(proposedPosition.x, bounds.min.x, bounds.max.x);
-        proposedPosition.z = Mathf.Clamp(proposedPosition.z, bounds.min.z, bounds.max.z);
-        proposedPosition.y = lookTarget.position.y;
-
-        lookTarget.position = proposedPosition;
-    }
-
-
 
     private void OnDrawGizmosSelected()
     {

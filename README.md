@@ -10,6 +10,7 @@ Assets/                                     # место хранения все
     Scenes/                                 # сцены (зачастую разные для разных тестов)
 
     Scripts/                                # папка со всеми C# скриптами проекта
+        CameraController/                   # группа скриптов для работы камеры
         ModulesScripts (unattachable)/      # папка со вспомогательными скриптами для модулей
 
     Settings/                               # настройки проекта: input bindings, graphics
