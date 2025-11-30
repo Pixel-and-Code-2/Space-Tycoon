@@ -1,10 +1,11 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BaseCameraControlActions))]
+[RequireComponent(typeof(IActions))]
 public class CameraController : CameraSettings
 {
     [Header("Input Configuration")]
-    [SerializeField] private BaseCameraControlActions cameraControlActions;
+    [SerializeField] private MonoBehaviour cameraControlActionsRef;
+    private IActions cameraControlActions;
     [SerializeField] private Vector2 rotationSpeeds = Vector2.one;
     [SerializeField] private float panSpeed = 1f;
 
@@ -30,6 +31,7 @@ public class CameraController : CameraSettings
         orbitalFollow.RadialAxis.Range[0] = minCameraRadiusCoef;
         orbitalFollow.RadialAxis.Range[1] = maxCameraRaduisCoef;
         base.Awake();
+        cameraControlActions = cameraControlActionsRef as IActions;
     }
 
     void Update()

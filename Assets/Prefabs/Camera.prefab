@@ -41,11 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4702315125008643062}
   - component: {fileID: 1954549480452778492}
-  - component: {fileID: 8540712339856212105}
-  - component: {fileID: 9095110935724116839}
-  - component: {fileID: 8930744558553703668}
-  - component: {fileID: 6684997923100117693}
-  - component: {fileID: 4185265228965965887}
+  - component: {fileID: 6309733935719371799}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -93,7 +89,7 @@ MonoBehaviour:
   virtualCamera: {fileID: 3219692792882578697}
   boundsCollider: {fileID: 2303051908882022399}
   lookTarget: {fileID: 1550519869933098387}
-  cameraControlActions: {fileID: 8540712339856212105}
+  cameraControlActionsRef: {fileID: 6309733935719371799}
   rotationSpeeds: {x: 0.3, y: -1}
   panSpeed: 1
   zoomSensitivity: 0.1
@@ -122,7 +118,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8540712339856212105
+--- !u!114 &6309733935719371799
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,64 +127,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5637859099870763945}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f30816a76aaded46bd41e38f52c70cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b7ae93bb85949e4b840b5488df85cf1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BaseCameraControlActions
-  lookReleaseActionImplementation: {fileID: 9095110935724116839}
-  zoomActionImplementation: {fileID: 8930744558553703668}
-  moveActionImplementation: {fileID: 6684997923100117693}
-  lookActionImplementation: {fileID: 4185265228965965887}
---- !u!114 &9095110935724116839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5637859099870763945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e118cca623844746ba7abbd2a8a3434, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LookReleaseAction
-  lookReleaserActionReference: {fileID: 9169725678241011566, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
---- !u!114 &8930744558553703668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5637859099870763945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e1fc5d2ac49d0745b62d237827a8e00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ZoomAction
+  m_EditorClassIdentifier: Assembly-CSharp::InputCameraControlActions
+  lookReleaseActionReference: {fileID: 9169725678241011566, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   zoomActionReference: {fileID: -7317863640907986851, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
---- !u!114 &6684997923100117693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5637859099870763945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c65995b11c3e9d48a06e24d61d3ba78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoveAction
   moveActionReference: {fileID: 8439316055708601252, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
---- !u!114 &4185265228965965887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5637859099870763945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eaca98db97e3a24d87946649eeca7c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LookAction
   lookActionReference: {fileID: 768050417373404248, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
 --- !u!1 &6383040990635429009
 GameObject:
