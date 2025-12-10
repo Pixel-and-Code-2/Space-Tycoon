@@ -122,7 +122,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5439597831197892550}
-  - component: {fileID: 2743931340496506493}
+  - component: {fileID: 3507979624046929367}
+  - component: {fileID: 4717392900356176267}
+  - component: {fileID: 5661963433164112803}
+  - component: {fileID: 2121323444879681969}
   m_Layer: 0
   m_Name: Pawn
   m_TagString: Untagged
@@ -146,7 +149,7 @@ Transform:
   - {fileID: 1806176190834051174}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2743931340496506493
+--- !u!114 &3507979624046929367
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,6 +158,94 @@ MonoBehaviour:
   m_GameObject: {fileID: 3741254989623529828}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d58a0162603bebb43a94ef1205062225, type: 3}
+  m_Script: {fileID: 11500000, guid: 662e2bf25e6524940bb11a6283c9562b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
+  m_EditorClassIdentifier: Assembly-CSharp::PawnBrain
+  travelTime: 1
+  homeModule:
+    gatewayAmount: 0
+    position: {x: 0, y: 0, z: 0}
+    module: {fileID: 0}
+    internalGateWayIds: 
+    connectedModules: []
+--- !u!54 &4717392900356176267
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3741254989623529828}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &5661963433164112803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3741254989623529828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35caf12230d594046ba44ab5bd86800d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PointMagnetiser
+  drawGizmos: 1
+  movementSpeedTrashold: 0.01
+  magnetisationTrashold: 0.01
+  magnetisationPosition: {x: 0, y: 0, z: 0}
+  oneUnitMultiplier: 5
+  speedDistanceRelation:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -1
+      value: -1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &2121323444879681969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3741254989623529828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c9954b7116b267449a78d9ca0aac6af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicMovement
+  speed: 10

@@ -563,6 +563,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1954549480452778492, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
+      propertyPath: cameraControlActionsRef
+      value: 
+      objectReference: {fileID: 1804866477}
     - target: {fileID: 4702315125008643062, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -661,6 +665,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1804866477 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6309733935719371799, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
+  m_PrefabInstance: {fileID: 679305911}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7ae93bb85949e4b840b5488df85cf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputCameraControlActions
 --- !u!1 &1830758881
 GameObject:
   m_ObjectHideFlags: 0

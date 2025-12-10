@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PathNode
+public class PriorityQueueNode
 {
     public ModuleData moduleData;
     public float gCost;
@@ -8,7 +8,7 @@ public class PathNode
     public float fCost => gCost + hCost;
     public Vector3 position;
 
-    public PathNode(ModuleData module, float g, float h)
+    public PriorityQueueNode(ModuleData module, float g, float h)
     {
         moduleData = module; 
         gCost = g;
@@ -18,7 +18,7 @@ public class PathNode
 
     public override bool Equals(object obj)
     {
-        return obj is PathNode other && moduleData == other.moduleData;
+        return obj is PriorityQueueNode other && moduleData == other.moduleData;
     }
 
     public override int GetHashCode()

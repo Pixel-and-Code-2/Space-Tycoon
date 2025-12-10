@@ -1,16 +1,16 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 
 [System.Serializable]
 public class ModuleDataList
 {
-    [HideInInspector]
+    [SerializeField, HideInInspector]
     // we better move this one to gateway class as public one
     private const int NO_GATEWAY_ID = -1;
-    [HideInInspector]
+    [SerializeField, HideInInspector]
     public GameObject spawnContext;
-    [HideInInspector]
+    [SerializeField]
     private List<GateWay> gateWayList = new List<GateWay>();
     [SerializeField]
     private List<ModuleData> moduleDataList = new List<ModuleData>();
@@ -100,7 +100,10 @@ public class ModuleDataList
         moduleDataList.Add(new ModuleData(module.transform.position, module, internalGateWayIds, internalGateWays.Length));
         if (externalGatewayId != NO_GATEWAY_ID)
         {
-            ConnectModules(moduleDataList[moduleDataList.Count - 1], gatewayId, moduleDataList.Find(moduleData => moduleData.GetLocalGatewayId(externalGatewayId) != -1), externalGatewayId);
+            ModuleData module1 = moduleDataList[moduleDataList.Count - 1];
+            ModuleData module2 = moduleDataList.Find(moduleData => moduleData.GetLocalGatewayId(externalGatewayId) != -1);
+            ConnectModules(module1, gatewayId, module2, externalGatewayId);
+            module1.position = module1.module.transform.position;
         }
     }
 
@@ -135,10 +138,16 @@ public class ModuleDataList
         }
     }
 
+    public ModuleData GetModuleDataByObject(GameObject gameObject)
+    {
+        return moduleDataList.Find(moduleData => moduleData.module == gameObject);
+    }
+
     public void Clear()
     {
         moduleDataList.Clear();
         gateWayList.Clear();
         modulePrefabs.Clear();
     }
+
 }

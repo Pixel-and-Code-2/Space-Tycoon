@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.Search;
 
 public class PriorityQueue<T>
 {
@@ -73,8 +72,8 @@ public class PriorityQueue<T>
     {
         foreach (var queueItem in items)
         {
-            if(queueItem.Item.Equals(item))
-                return true; 
+            if (queueItem.Item.Equals(item))
+                return true;
         }
         return false;
     }

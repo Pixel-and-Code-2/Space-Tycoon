@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 
@@ -12,12 +13,12 @@ public class GateWay : MonoBehaviour
     [SerializeField]
     private Vector3 positionOffset;
 
-    [HideInInspector]
+    [SerializeField, HideInInspector]
     public int id = -1;
-    [HideInInspector]
+    [SerializeField, HideInInspector]
     public int connectedGatewayId = -1;
 
-    [HideInInspector]
+    [SerializeField, HideInInspector]
     private bool isOccupied = false;
 
     public Vector3 GetPosition()

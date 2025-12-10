@@ -19,7 +19,7 @@ public class PawnBrain : MonoBehaviour
 
     private ModuleData currentModule;
     private ModuleData mainModuleCache;
-    private ModulePathfinder pathfinder;
+    private ModulePathFinder pathfinder;
     private List<Vector3> currentPath;
     private int currentPathIndex = 0;
     private bool isMoving = false;
@@ -32,7 +32,7 @@ public class PawnBrain : MonoBehaviour
 
     void Start()
     {
-        pathfinder = FindFirstObjectByType<ModulePathfinder>();
+        pathfinder = FindFirstObjectByType<ModulePathFinder>();
 
         if (mainModule != null)
         {
@@ -252,20 +252,20 @@ public class PawnBrain : MonoBehaviour
 
 
 
-public class PawnTestController : MonoBehaviour
-{
-    public PawnBrain pawn;
-    public ModuleData[] testModules;
+// public class PawnTestController : MonoBehaviour
+// {
+//     public PawnBrain pawn;
+//     public ModuleData[] testModules;
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && testModules.Length > 0)
-            pawn.MoveToModule(testModules[0]);
+//     void Update()
+//     {
+//         if (Input.GetKeyDown(KeyCode.Alpha1) && testModules.Length > 0)
+//             pawn.MoveToModule(testModules[0]);
 
-        if (Input.GetKeyDown(KeyCode.Alpha2) && testModules.Length > 1)
-            pawn.MoveToModule(testModules[1]);
+//         if (Input.GetKeyDown(KeyCode.Alpha2) && testModules.Length > 1)
+//             pawn.MoveToModule(testModules[1]);
 
-        if (Input.GetKeyDown(KeyCode.Alpha3) && testModules.Length > 2)
-            pawn.MoveToModule(testModules[2]);
-    }
-}
+//         if (Input.GetKeyDown(KeyCode.Alpha3) && testModules.Length > 2)
+//             pawn.MoveToModule(testModules[2]);
+//     }
+// }

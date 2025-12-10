@@ -1,16 +1,20 @@
-using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class ModuleData
 {
+    [SerializeField]
     private int gatewayAmount;
     public Vector3 position;
     public GameObject module;
+
+    [SerializeField, HideInInspector]
     private int[] internalGateWayIds;
-    [System.NonSerialized]
-    private ModuleData[] connectedModules;
+    // ToDo: make this an array of indeces and add getter method to extract objects
+    [HideInInspector]
+    public List<ModuleData> connectedModules;
 
     public ModuleData(Vector3 position, GameObject module, int[] internalGateWayIds, int gatewayAmount)
     {
@@ -19,7 +23,11 @@ public class ModuleData
         this.position = position;
         this.module = module;
         this.internalGateWayIds = internalGateWayIds;
-        connectedModules = new ModuleData[gatewayAmount];
+        connectedModules = new List<ModuleData>();
+        for (int i = 0; i < gatewayAmount; i++)
+        {
+            connectedModules.Add(null);
+        }
 
     }
 
@@ -27,7 +35,11 @@ public class ModuleData
     {
         internalGateWayIds = newGateWayIds;
         gatewayAmount = newGatewayAmount;
-        connectedModules = new ModuleData[gatewayAmount];
+        connectedModules = new List<ModuleData>();
+        for (int i = 0; i < gatewayAmount; i++)
+        {
+            connectedModules.Add(null);
+        }
     }
 
     public void ConnectModules(ModuleData otherModule, int myGateWayId, int otherGateWayId)
@@ -57,7 +69,7 @@ public class ModuleData
     public List<ModuleData> GetConnectedModules()
     {
         List<ModuleData> connected = new List<ModuleData>();
-        for(int i = 0; i < gatewayAmount; i++)
+        for (int i = 0; i < gatewayAmount; i++)
         {
             if (connectedModules[i] != null)
             {
@@ -69,7 +81,7 @@ public class ModuleData
 
     public GateWay GetGatewayByIndex(int index)
     {
-        if(module != null && index >= 0 && index < gatewayAmount)
+        if (module != null && index >= 0 && index < gatewayAmount)
         {
             GateWay[] gateways = module.GetComponents<GateWay>();
             for (int i = 0; i < gateways.Length; i++)
