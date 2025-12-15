@@ -10,7 +10,7 @@ public class PriorityQueueNode
 
     public PriorityQueueNode(ModuleData module, float g, float h)
     {
-        moduleData = module; 
+        moduleData = module;
         gCost = g;
         hCost = h;
         position = module.GetCenterPosition();

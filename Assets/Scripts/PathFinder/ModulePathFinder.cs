@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 public class ModulePathFinder
@@ -49,7 +50,7 @@ public class ModulePathFinder
 
             closedSet.Add(current.moduleData);
 
-            foreach (var neighbor in current.moduleData.GetConnectedModules())
+            foreach (var neighbor in moduleMapCache.GetConnectedModulesTo(current.moduleData))
             {
                 if (neighbor == null || closedSet.Contains(neighbor))
                     continue;

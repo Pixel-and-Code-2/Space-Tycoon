@@ -9,12 +9,22 @@ public class BasicMovement : MonoBehaviour
 
     private Vector3 targetPosition = Vector3.zero;
     private bool isMoving = false;
+    private Action callBackCache = null;
+    [SerializeField]
+    private float distanceTrashold = 0.01f;
 
     void Update()
     {
         if (isMoving)
         {
-            transform.Translate((transform.position - targetPosition).normalized * speed * Time.deltaTime);
+            Vector3 diff = targetPosition - transform.position;
+            transform.Translate(diff.normalized * speed * Time.deltaTime);
+            if (diff.normalized.magnitude * speed * Time.deltaTime > diff.magnitude || diff.magnitude < distanceTrashold)
+            {
+                transform.position = targetPosition;
+                isMoving = false;
+                callBackCache?.Invoke();
+            }
         }
     }
 
@@ -22,7 +32,7 @@ public class BasicMovement : MonoBehaviour
     {
         targetPosition = position;
         isMoving = true;
-        callback?.Invoke();
+        callBackCache = callback;
     }
 
     public void TeleportToPosition(Vector3 position, Action callback = null)

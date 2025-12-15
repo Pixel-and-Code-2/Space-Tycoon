@@ -16,7 +16,6 @@ class AutoCameraControlActions : MonoBehaviour, IActions
         float moveZ = Random.Range(-1f, 1f);
         return new Vector2(moveX, moveZ);
     }
-
     public Vector2 GetLookValue()
     {
         return Vector2.zero;

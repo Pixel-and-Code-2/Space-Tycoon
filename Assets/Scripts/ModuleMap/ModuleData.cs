@@ -6,46 +6,44 @@ using UnityEngine;
 public class ModuleData
 {
     [SerializeField]
-    private int gatewayAmount;
-    public Vector3 position;
+    public int gatewayAmount;
     public GameObject module;
+    public int moduleId;
 
     [SerializeField, HideInInspector]
     private int[] internalGateWayIds;
-    // ToDo: make this an array of indeces and add getter method to extract objects
-    [HideInInspector]
-    public List<ModuleData> connectedModules;
 
-    public ModuleData(Vector3 position, GameObject module, int[] internalGateWayIds, int gatewayAmount)
+    [SerializeField, HideInInspector]
+    public int[] connectedModules;
+
+    public ModuleData(GameObject module, int[] internalGateWayIds, int gatewayAmount, int moduleId = -1)
     {
-
         this.gatewayAmount = gatewayAmount;
-        this.position = position;
         this.module = module;
+        this.moduleId = moduleId;
         this.internalGateWayIds = internalGateWayIds;
-        connectedModules = new List<ModuleData>();
+        connectedModules = new int[gatewayAmount];
         for (int i = 0; i < gatewayAmount; i++)
         {
-            connectedModules.Add(null);
+            connectedModules[i] = -1;
         }
-
     }
 
     public void updateGatewayArray(int[] newGateWayIds, int newGatewayAmount)
     {
         internalGateWayIds = newGateWayIds;
         gatewayAmount = newGatewayAmount;
-        connectedModules = new List<ModuleData>();
+        connectedModules = new int[gatewayAmount];
         for (int i = 0; i < gatewayAmount; i++)
         {
-            connectedModules.Add(null);
+            connectedModules[i] = -1;
         }
     }
 
     public void ConnectModules(ModuleData otherModule, int myGateWayId, int otherGateWayId)
     {
-        connectedModules[myGateWayId] = otherModule;
-        otherModule.connectedModules[otherGateWayId] = this;
+        connectedModules[myGateWayId] = otherModule.moduleId;
+        otherModule.connectedModules[otherGateWayId] = moduleId;
     }
 
     public int GetLocalGatewayId(int gatewayId)
@@ -63,15 +61,16 @@ public class ModuleData
     // Add new methods for finding path
     public Vector3 GetCenterPosition()
     {
-        return module != null ? module.transform.position : position;
+        return module.transform.position;
     }
 
-    public List<ModuleData> GetConnectedModules()
+    /// <returns>All modules ids connected with this*</returns>
+    public List<int> GetConnectedModules()
     {
-        List<ModuleData> connected = new List<ModuleData>();
+        List<int> connected = new List<int>();
         for (int i = 0; i < gatewayAmount; i++)
         {
-            if (connectedModules[i] != null)
+            if (connectedModules[i] != -1)
             {
                 connected.Add(connectedModules[i]);
             }
@@ -103,7 +102,7 @@ public class ModuleData
 
     public override int GetHashCode()
     {
-        return module != null ? module.GetInstanceID() : position.GetHashCode();
+        return module.transform.position.GetHashCode();
     }
 
     public override bool Equals(object obj)

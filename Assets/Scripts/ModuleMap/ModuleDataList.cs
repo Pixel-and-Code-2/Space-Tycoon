@@ -6,9 +6,6 @@ using UnityEngine;
 public class ModuleDataList
 {
     [SerializeField, HideInInspector]
-    // we better move this one to gateway class as public one
-    private const int NO_GATEWAY_ID = -1;
-    [SerializeField, HideInInspector]
     public GameObject spawnContext;
     [SerializeField]
     private List<GateWay> gateWayList = new List<GateWay>();
@@ -35,7 +32,8 @@ public class ModuleDataList
     {
         foreach (var moduleData in moduleDataList)
         {
-            for (int i = 0; i < moduleData.GetConnectedModules().Count; i++)
+            int amount = moduleData.GetConnectedModules().Count;
+            for (int i = 0; i < amount; i++)
             {
                 GateWay gateway = moduleData.GetGatewayByIndex(i);
                 if (gateway != null && gateway.id == gatewayId)
@@ -47,11 +45,11 @@ public class ModuleDataList
         return null;
     }
 
-    public void Add(ModuleData moduleData, int externalGatewayId = NO_GATEWAY_ID, int gatewayId = NO_GATEWAY_ID)
+    public void Add(ModuleData moduleData, Vector3 pos, int externalGatewayId = GateWay.NO_GATEWAY_ID, int gatewayId = GateWay.NO_GATEWAY_ID)
     {
         if (!moduleData.module.scene.IsValid())
         {
-            moduleData.module = GameObject.Instantiate(moduleData.module, moduleData.position, Quaternion.identity, spawnContext != null ? spawnContext.transform : null);
+            moduleData.module = GameObject.Instantiate(moduleData.module, pos, Quaternion.identity, spawnContext != null ? spawnContext.transform : null);
         }
         GateWay[] gateways = moduleData.module.GetComponents<GateWay>();
         int[] internalGateWayIds = new int[gateways.Length];
@@ -66,23 +64,23 @@ public class ModuleDataList
         }
         moduleData.updateGatewayArray(internalGateWayIds, gateways.Length);
         moduleDataList.Add(moduleData);
-        if (externalGatewayId != NO_GATEWAY_ID)
+        if (externalGatewayId != GateWay.NO_GATEWAY_ID)
         {
             ConnectModules(moduleData, gatewayId, moduleDataList[externalGatewayId], externalGatewayId);
         }
     }
 
-    public void Add(GameObject module, int externalGatewayId = NO_GATEWAY_ID, int gatewayId = NO_GATEWAY_ID)
+    public void Add(GameObject module, int externalGatewayId = GateWay.NO_GATEWAY_ID, int gatewayId = GateWay.NO_GATEWAY_ID)
     {
         GateWay[] internalGateWays = module.GetComponents<GateWay>();
         int[] internalGateWayIds = new int[internalGateWays.Length];
         if (!module.scene.IsValid())
         {
             module = GameObject.Instantiate(module, spawnContext != null ? spawnContext.transform : null);
-            gatewayId = NO_GATEWAY_ID;
+            gatewayId = GateWay.NO_GATEWAY_ID;
         }
 
-        if (gatewayId == NO_GATEWAY_ID)
+        if (gatewayId == GateWay.NO_GATEWAY_ID)
         {
             gatewayId = gateWayList.Count;
         }
@@ -97,13 +95,12 @@ public class ModuleDataList
 
             internalGateWayIds[i] = internalGateWays[i].id;
         }
-        moduleDataList.Add(new ModuleData(module.transform.position, module, internalGateWayIds, internalGateWays.Length));
-        if (externalGatewayId != NO_GATEWAY_ID)
+        moduleDataList.Add(new ModuleData(module, internalGateWayIds, internalGateWays.Length, moduleDataList.Count));
+        if (externalGatewayId != GateWay.NO_GATEWAY_ID)
         {
             ModuleData module1 = moduleDataList[moduleDataList.Count - 1];
             ModuleData module2 = moduleDataList.Find(moduleData => moduleData.GetLocalGatewayId(externalGatewayId) != -1);
             ConnectModules(module1, gatewayId, module2, externalGatewayId);
-            module1.position = module1.module.transform.position;
         }
     }
 
@@ -122,7 +119,7 @@ public class ModuleDataList
 
     public List<GateWay> GetFreeGateWays()
     {
-        return gateWayList.FindAll(gateway => gateway.connectedGatewayId == NO_GATEWAY_ID);
+        return gateWayList.FindAll(gateway => gateway.connectedGatewayId == GateWay.NO_GATEWAY_ID);
     }
 
     // test prefabs in inspector
@@ -148,6 +145,21 @@ public class ModuleDataList
         moduleDataList.Clear();
         gateWayList.Clear();
         modulePrefabs.Clear();
+    }
+
+    public List<ModuleData> GetConnectedModulesTo(ModuleData moduleDataInstance)
+    {
+        List<int> ids = moduleDataInstance.GetConnectedModules();
+        List<ModuleData> res = new List<ModuleData> { };
+        for (int i = 0; i < ids.Count; i++)
+        {
+            res.Add(moduleDataList[ids[i]]);
+        }
+        return res;
+    }
+    public List<ModuleData> GetConnectedModulesTo(int id)
+    {
+        return GetConnectedModulesTo(moduleDataList[id]);
     }
 
 }

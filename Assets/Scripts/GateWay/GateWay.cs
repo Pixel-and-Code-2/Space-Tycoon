@@ -6,6 +6,8 @@ using UnityEngine;
 public class GateWay : MonoBehaviour
 {
     static private Vector3 gateWayScale = new Vector3(3, 3, 0.1f);
+    static private bool drawGizmos = false;
+    public const int NO_GATEWAY_ID = -1;
 
     [SerializeField]
     private Vector3 exitDirection;
@@ -14,9 +16,9 @@ public class GateWay : MonoBehaviour
     private Vector3 positionOffset;
 
     [SerializeField, HideInInspector]
-    public int id = -1;
+    public int id = GateWay.NO_GATEWAY_ID;
     [SerializeField, HideInInspector]
-    public int connectedGatewayId = -1;
+    public int connectedGatewayId = GateWay.NO_GATEWAY_ID;
 
     [SerializeField, HideInInspector]
     private bool isOccupied = false;
@@ -67,22 +69,25 @@ public class GateWay : MonoBehaviour
     void OnDrawGizmos()
     {
 
-        Gizmos.color = !isOccupied ? Color.red : Color.green;
-        Matrix4x4 oldMatrix = Gizmos.matrix;
-        Gizmos.matrix = Matrix4x4.TRS(GetPosition(), GetRotation(), Vector3.one);
-        Gizmos.DrawWireCube(Vector3.zero, gateWayScale);
-        Gizmos.matrix = oldMatrix;
+        if (drawGizmos)
+        {
+            Gizmos.color = !isOccupied ? Color.red : Color.green;
+            Matrix4x4 oldMatrix = Gizmos.matrix;
+            Gizmos.matrix = Matrix4x4.TRS(GetPosition(), GetRotation(), Vector3.one);
+            Gizmos.DrawWireCube(Vector3.zero, gateWayScale);
+            Gizmos.matrix = oldMatrix;
 
-        Vector3 start = GetPosition();
-        Vector3 dir = transform.TransformDirection(exitDirection).normalized;
-        float length = gateWayScale.x * 0.5f;
-        Vector3 end = start + dir * length;
-        Gizmos.DrawLine(start, end);
+            Vector3 start = GetPosition();
+            Vector3 dir = transform.TransformDirection(exitDirection).normalized;
+            float length = gateWayScale.x * 0.5f;
+            Vector3 end = start + dir * length;
+            Gizmos.DrawLine(start, end);
 
 #if UNITY_EDITOR
-        UnityEditor.Handles.color = Color.white;
-        Vector3 labelPos = GetPosition();
-        UnityEditor.Handles.Label(labelPos, id.ToString());
+            UnityEditor.Handles.color = Color.white;
+            Vector3 labelPos = GetPosition();
+            UnityEditor.Handles.Label(labelPos, id.ToString());
 #endif
+        }
     }
 }

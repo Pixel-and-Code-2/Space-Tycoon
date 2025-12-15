@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 using System.Collections.Generic;
@@ -7,7 +6,6 @@ using System.Collections.Generic;
 [RequireComponent(typeof(BasicMovement))]
 public class PawnBrain : MonoBehaviour
 {
-
     [SerializeField]
     private ModuleData homeModule = null;
 

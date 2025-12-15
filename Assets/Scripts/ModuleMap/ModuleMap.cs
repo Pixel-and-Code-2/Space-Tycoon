@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+// using System.Numerics;
 using UnityEngine;
 
 public class ModuleMap : MonoBehaviour
@@ -33,7 +34,7 @@ public class ModuleMap : MonoBehaviour
         moduleList.spawnContext = this.gameObject;
         if (!initialModulePrefab.activeInHierarchy)
             initialModulePrefab = Instantiate(initialModulePrefab, transform);
-        moduleList.Add(new ModuleData(Vector3.zero, initialModulePrefab, new int[0], 0));
+        moduleList.Add(new ModuleData(initialModulePrefab, new int[0], 0), Vector3.zero);
     }
 
     void OnValidate()
@@ -42,10 +43,10 @@ public class ModuleMap : MonoBehaviour
         moduleList.OnValidate();
 
         for (int i = 0; i < pawns.Count; i++) if (pawns[i] == null)
-            {
-                GameObject newPawn = Instantiate(defaultPawnPrefab, transform);
-                pawns[i] = newPawn;
-            }
+        {
+            GameObject newPawn = Instantiate(defaultPawnPrefab, transform);
+            pawns[i] = newPawn;
+        }
 
         if (getPawnsTo != getPawnsToCached)
         {
@@ -62,6 +63,11 @@ public class ModuleMap : MonoBehaviour
     public List<ModuleData> GetAllModules()
     {
         return moduleList.GetAllModules();
+    }
+
+    public List<ModuleData> GetConnectedModulesTo(ModuleData md)
+    {
+        return moduleList.GetConnectedModulesTo(md);
     }
 
 }

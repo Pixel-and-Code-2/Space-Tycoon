@@ -26,15 +26,6 @@ public class VectorPathFinder : ModulePathFinder
 
     public static ModuleData FindClosestModule(Vector3 position)
     {
-        // ToDo: explain why this is needed
-        // var moduleDataListField = typeof(ModuleMap).GetField("moduleList",
-        //     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-        // if (moduleDataListField == null)
-        // {
-        //     return null;
-        // }
-
         if (moduleMapCache == null)
         {
             return null;
@@ -113,7 +104,7 @@ public class VectorPathFinder : ModulePathFinder
                 ModuleData nextModule = modulePath[i + 1];
 
                 Vector3 gatewayPoint = FindConnectingGatewayPosition(currentModule, nextModule);
-                if (gatewayPoint != Vector3.zero)
+                if (gatewayPoint != Vector3.zero) // bad practice
                 {
                     detailedPath.Add(new PathNode(gatewayPoint));
                 }
@@ -132,14 +123,14 @@ public class VectorPathFinder : ModulePathFinder
     /// <returns>Position of gateway if it exists. Center of First module if module is connected yet gateway is null. Zero vector if modules aren't connected</returns>
     private static Vector3 FindConnectingGatewayPosition(ModuleData fromModule, ModuleData toModule)
     {
-        for (int i = 0; i < fromModule.connectedModules.Count; i++)
+        for (int i = 0; i < fromModule.gatewayAmount; i++)
         {
-            if (fromModule.connectedModules[i] == toModule)
+            if (fromModule.connectedModules[i] == toModule.moduleId)
             {
                 GateWay gateway = fromModule.GetGatewayByIndex(i);
                 return gateway != null ? gateway.GetPosition() : fromModule.GetCenterPosition();
             }
         }
-        return Vector3.zero;
+        return Vector3.zero; // bad practice
     }
 }

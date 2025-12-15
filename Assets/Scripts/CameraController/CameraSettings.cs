@@ -19,6 +19,7 @@ public abstract class CameraSettings : MonoBehaviour
     [SerializeField] public CinemachineCamera virtualCamera;
     [SerializeField] public Collider boundsCollider;
     [SerializeField] public Transform lookTarget;
+
     protected void OnValidate()
     {
         if (maxCameraRadius != maxCameraRadiusCache
@@ -81,7 +82,7 @@ public abstract class CameraSettings : MonoBehaviour
         orbitalFollow.Orbits.Bottom.Height = cameraBottomOffset;
         ApplyNewRadius();
     }
-
+    
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
