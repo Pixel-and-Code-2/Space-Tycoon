@@ -29,7 +29,9 @@ public class InputCameraControlActions : MonoBehaviour, IActions
     }
     public Vector2 GetMoveValue()
     {
-        return moveActionReference.action.ReadValue<Vector2>();
+        Vector2 move = moveActionReference.action.ReadValue<Vector2>();
+        Vector2 inversedMove = new Vector2(move.y, move.x);
+        return move;
     }
     public Vector2 GetLookValue()
     {

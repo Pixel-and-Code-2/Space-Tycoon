@@ -46,18 +46,13 @@ public class CameraController : CameraSettings
         if (cameraControlActions.GetLookReleaseValue() != 0f)
         {
             Vector2 mouseMove = cameraControlActions.GetLookValue();
+            float currentX = orbitalFollow.HorizontalAxis.Value;
             float mouseX = mouseMove.x * rotationSpeeds.x;
             float mouseY = mouseMove.y * rotationSpeeds.y;
-            orbitalFollow.HorizontalAxis.Value += mouseX;
-            orbitalFollow.HorizontalAxis.Value = Mathf.Clamp(orbitalFollow.HorizontalAxis.Value, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]);
-
-            float newY = orbitalFollow.VerticalAxis.Value + mouseY;
-            float maxY = orbitalFollow.VerticalAxis.Range[1];
-            float minY = orbitalFollow.VerticalAxis.Range[0];
-            newY = Mathf.Clamp(newY, minY, maxY);
-            orbitalFollow.VerticalAxis.Value = newY;
-
-            lookTarget.Rotate(Vector3.up, mouseX, Space.World);
+            float clampedMouseX = Mathf.Clamp(currentX + mouseX, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]) - currentX;
+            orbitalFollow.HorizontalAxis.Value += clampedMouseX;
+            orbitalFollow.VerticalAxis.Value += mouseY;
+            lookTarget.Rotate(Vector3.up, clampedMouseX, Space.World);
         }
     }
 
