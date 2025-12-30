@@ -6,11 +6,6 @@ using System.Collections.Generic;
 [RequireComponent(typeof(BasicMovement))]
 public class PawnBrain : MonoBehaviour
 {
-    [SerializeField]
-    private ModuleData homeModule = null;
-
-    private ModuleData targetModule = null;
-
     private PointMagnetiser pointMagnetiser;
     private BasicMovement basicMovement;
 
@@ -18,14 +13,12 @@ public class PawnBrain : MonoBehaviour
     private int currentTravelPointInd = -1;
 
     private Action travelNextAction = null;
-    private Action travelNextActionDelayed = null;
 
     void Awake()
     {
         pointMagnetiser = GetComponent<PointMagnetiser>();
         basicMovement = GetComponent<BasicMovement>();
         travelNextAction = () => StartCoroutine(basicMovement.DelayCallback(0.1f, MakeMove));
-        travelNextActionDelayed = () => StartCoroutine(basicMovement.DelayCallback(1f, travelNextAction));
     }
 
     void Update()
@@ -58,7 +51,6 @@ public class PawnBrain : MonoBehaviour
 
     public void TravelToModule(ModuleMap moduleMap, ModuleData module)
     {
-        targetModule = module;
         travelPoints = VectorPathFinder.FindPath(moduleMap, transform.position, module.GetCenterPosition());
     }
 }

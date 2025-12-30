@@ -43,18 +43,20 @@ public class ModuleMap : MonoBehaviour
         moduleList.OnValidate();
 
         for (int i = 0; i < pawns.Count; i++) if (pawns[i] == null)
-        {
-            GameObject newPawn = Instantiate(defaultPawnPrefab, transform);
-            pawns[i] = newPawn;
-        }
+            {
+                GameObject newPawn = Instantiate(defaultPawnPrefab, transform);
+                pawns[i] = newPawn;
+            }
 
         if (getPawnsTo != getPawnsToCached)
         {
             foreach (var pawn in pawns)
             {
-                PawnBrain brain = pawn.GetComponent<PawnBrain>();
-                ModuleData module = moduleList.GetModuleDataByObject(getPawnsTo);
-                brain.TravelToModule(this, module);
+                // PawnBrain brain = pawn.GetComponent<PawnBrain>();
+                // ModuleData module = moduleList.GetModuleDataByObject(getPawnsTo);
+                // brain.TravelToModule(this, module);
+                PawnBrainNavMesh brain = pawn.GetComponent<PawnBrainNavMesh>();
+                brain.TravelToPosition(getPawnsTo.transform.position);
             }
         }
 

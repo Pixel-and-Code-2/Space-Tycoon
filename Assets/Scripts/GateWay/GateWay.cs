@@ -1,12 +1,13 @@
 using System;
 using UnityEngine;
+using Unity.AI.Navigation;
 
 
 
 public class GateWay : MonoBehaviour
 {
     static private Vector3 gateWayScale = new Vector3(3, 3, 0.1f);
-    static private bool drawGizmos = false;
+    static private bool drawGizmos = true;
     public const int NO_GATEWAY_ID = -1;
 
     [SerializeField]
@@ -22,6 +23,9 @@ public class GateWay : MonoBehaviour
 
     [SerializeField, HideInInspector]
     private bool isOccupied = false;
+
+    [SerializeField]
+    private Vector3 floorPositionOffset;
 
     public Vector3 GetPosition()
     {
@@ -45,6 +49,24 @@ public class GateWay : MonoBehaviour
         return globalExitDirection;
     }
 
+    private Vector3 GetPositionOnFloor()
+    {
+        return GetPosition() + floorPositionOffset;
+    }
+
+    private void AddLinkToNavMesh(GateWay otherGateWay)
+    {
+        NavMeshLink navMeshLink = this.gameObject.AddComponent<NavMeshLink>();
+        Vector3 worldPos = GetPositionOnFloor();
+        Vector3 localPosition = worldPos - transform.position;
+        localPosition = transform.InverseTransformDirection(localPosition);
+        navMeshLink.startPoint = localPosition;
+        worldPos = otherGateWay.GetPositionOnFloor();
+        localPosition = worldPos - transform.position;
+        localPosition = transform.InverseTransformDirection(localPosition);
+        navMeshLink.endPoint = localPosition;
+    }
+
     public void LinkToAnotherGateWay(GateWay otherGateWay) // transfers this GameObject to fit to otherGateWay
     {
         otherGateWay.isOccupied = true;
@@ -64,6 +86,8 @@ public class GateWay : MonoBehaviour
         transform.position = new_pos;
 
         Debug.Log("Linking GateWay " + id + " to " + otherGateWay.id);
+
+        AddLinkToNavMesh(otherGateWay);
     }
 
     void OnDrawGizmos()
@@ -88,6 +112,11 @@ public class GateWay : MonoBehaviour
             Vector3 labelPos = GetPosition();
             UnityEditor.Handles.Label(labelPos, id.ToString());
 #endif
+
+            if (floorPositionOffset != Vector3.zero)
+            {
+                Gizmos.DrawWireSphere(GetPositionOnFloor(), 0.1f);
+            }
         }
     }
 }
