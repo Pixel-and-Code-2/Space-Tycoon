@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-// using System.Numerics;
 using UnityEngine;
 
 public class ModuleMap : MonoBehaviour
@@ -19,8 +18,6 @@ public class ModuleMap : MonoBehaviour
     [SerializeField]
     private GameObject getPawnsTo = null;
 
-    private GameObject getPawnsToCached = null;
-
     void Start()
     {
         Restart();
@@ -35,6 +32,7 @@ public class ModuleMap : MonoBehaviour
         if (!initialModulePrefab.activeInHierarchy)
             initialModulePrefab = Instantiate(initialModulePrefab, transform);
         moduleList.Add(new ModuleData(initialModulePrefab, new int[0], 0), Vector3.zero);
+        CheckPawns();
     }
 
     void OnValidate()
@@ -42,24 +40,25 @@ public class ModuleMap : MonoBehaviour
         if (initialModulePrefab != null && this.transform.childCount == 0) Restart();
         moduleList.OnValidate();
 
+        CheckPawns();
+    }
+
+    private void CheckPawns()
+    {
         for (int i = 0; i < pawns.Count; i++) if (pawns[i] == null)
             {
                 GameObject newPawn = Instantiate(defaultPawnPrefab, transform);
                 pawns[i] = newPawn;
             }
+    }
 
-        if (getPawnsTo != getPawnsToCached)
+    public void SendPawnsToTarget()
+    {
+        foreach (var pawn in pawns)
         {
-            foreach (var pawn in pawns)
-            {
-                // PawnBrain brain = pawn.GetComponent<PawnBrain>();
-                // ModuleData module = moduleList.GetModuleDataByObject(getPawnsTo);
-                // brain.TravelToModule(this, module);
-                PawnBrainNavMesh brain = pawn.GetComponent<PawnBrainNavMesh>();
-                brain.TravelToPosition(getPawnsTo.transform.position);
-            }
+            PawnBrainNavMesh brain = pawn.GetComponent<PawnBrainNavMesh>();
+            brain.TravelToPosition(getPawnsTo.transform.position);
         }
-
     }
 
     public List<ModuleData> GetAllModules()
