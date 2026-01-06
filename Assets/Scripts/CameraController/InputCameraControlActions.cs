@@ -31,7 +31,7 @@ public class InputCameraControlActions : MonoBehaviour, IActions
     {
         Vector2 move = moveActionReference.action.ReadValue<Vector2>();
         Vector2 inversedMove = new Vector2(move.y, move.x);
-        return move;
+        return inversedMove;
     }
     public Vector2 GetLookValue()
     {

@@ -74,8 +74,8 @@ public class CameraController : CameraSettings
     void HandleMoveInput()
     {
         Vector2 move = cameraControlActions.GetMoveValue();
-        float moveX = move.y;
-        float moveZ = move.x;
+        float moveX = move.x;
+        float moveZ = move.y;
 
         if (moveX == 0 && moveZ == 0) return;
 

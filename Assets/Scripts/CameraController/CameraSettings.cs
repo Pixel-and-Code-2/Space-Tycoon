@@ -83,6 +83,7 @@ public abstract class CameraSettings : MonoBehaviour
         orbitalFollow.Orbits.Top.Height = cameraTopOffset;
         orbitalFollow.Orbits.Bottom.Height = cameraBottomOffset;
         ApplyNewRadius();
+        lookTarget.localRotation = Quaternion.Euler(0f, cameraInitialHorizontalDegree, 0f);
     }
 
     private void OnDrawGizmosSelected()
