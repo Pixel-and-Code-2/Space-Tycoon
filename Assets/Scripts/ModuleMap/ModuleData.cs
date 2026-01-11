@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 [System.Serializable]
 public class ModuleData
@@ -8,6 +8,7 @@ public class ModuleData
     [SerializeField]
     public int gatewayAmount;
     public GameObject module;
+
     public int moduleId;
 
     [SerializeField, HideInInspector]
@@ -108,5 +109,22 @@ public class ModuleData
     public override bool Equals(object obj)
     {
         return obj is ModuleData other && this.GetHashCode() == other.GetHashCode();
+    }
+
+    public void DeinstantiatePrefab()
+    {
+        if (module != null && !module.scene.IsValid())
+        {
+            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(module);
+            GameObject.Destroy(module);
+            module = prefab;
+        }
+    }
+
+    public void InstantiatePrefab()
+    {
+        if (module == null || module.scene.IsValid()) return;
+        GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(module);
+        module = GameObject.Instantiate(prefab);
     }
 }

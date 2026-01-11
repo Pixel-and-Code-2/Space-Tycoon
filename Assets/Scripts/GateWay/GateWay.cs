@@ -85,8 +85,6 @@ public class GateWay : MonoBehaviour
         Vector3 new_pos = myNewGateWayPos - transform.TransformDirection(positionOffset);
         transform.position = new_pos;
 
-        Debug.Log("Linking GateWay " + id + " to " + otherGateWay.id);
-
         AddLinkToNavMesh(otherGateWay);
     }
 

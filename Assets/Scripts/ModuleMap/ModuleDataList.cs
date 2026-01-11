@@ -142,6 +142,13 @@ public class ModuleDataList
 
     public void Clear()
     {
+        foreach (var module in moduleDataList)
+        {
+            if (module.module != null && module.module.scene.IsValid())
+            {
+                GameObject.DestroyImmediate(module.module);
+            }
+        }
         moduleDataList.Clear();
         gateWayList.Clear();
         modulePrefabs.Clear();
@@ -160,6 +167,22 @@ public class ModuleDataList
     public List<ModuleData> GetConnectedModulesTo(int id)
     {
         return GetConnectedModulesTo(moduleDataList[id]);
+    }
+
+    public void DeinstantiateAllPrefabs()
+    {
+        foreach (var module in moduleDataList)
+        {
+            module.DeinstantiatePrefab();
+        }
+    }
+
+    public void InstantiateAllPrefabs()
+    {
+        foreach (var module in moduleDataList)
+        {
+            module.InstantiatePrefab();
+        }
     }
 
 }

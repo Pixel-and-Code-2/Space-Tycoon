@@ -51,7 +51,8 @@ public class CameraController : CameraSettings
             float mouseY = mouseMove.y * rotationSpeeds.y;
             float clampedMouseX = Mathf.Clamp(currentX + mouseX, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]) - currentX;
             orbitalFollow.HorizontalAxis.Value += clampedMouseX;
-            orbitalFollow.VerticalAxis.Value += mouseY;
+            float clampedMouseY = Mathf.Clamp(orbitalFollow.VerticalAxis.Value + mouseY, orbitalFollow.VerticalAxis.Range[0], orbitalFollow.VerticalAxis.Range[1]) - orbitalFollow.VerticalAxis.Value;
+            orbitalFollow.VerticalAxis.Value += clampedMouseY;
             lookTarget.Rotate(Vector3.up, clampedMouseX, Space.World);
         }
     }
@@ -85,9 +86,8 @@ public class CameraController : CameraSettings
 
         Vector3 proposedPosition = lookTarget.position + movement;
 
-        Bounds bounds = boundsCollider.bounds;
-        proposedPosition.x = Mathf.Clamp(proposedPosition.x, bounds.min.x, bounds.max.x);
-        proposedPosition.z = Mathf.Clamp(proposedPosition.z, bounds.min.z, bounds.max.z);
+        proposedPosition.x = Mathf.Clamp(proposedPosition.x, boundsGetter.bounds.min.x, boundsGetter.bounds.max.x);
+        proposedPosition.z = Mathf.Clamp(proposedPosition.z, boundsGetter.bounds.min.z, boundsGetter.bounds.max.z);
         proposedPosition.y = lookTarget.position.y;
 
         lookTarget.position = proposedPosition;

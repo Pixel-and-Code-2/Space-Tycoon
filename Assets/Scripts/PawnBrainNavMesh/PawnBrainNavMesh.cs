@@ -18,12 +18,12 @@ public class PawnBrainNavMesh : MonoBehaviour, ISelectable
 
     public void OnSelect()
     {
-        Debug.Log("OnSelect: " + name);
+        // Debug.Log("OnSelect: " + name);
     }
 
     public void OnDeselect()
     {
-        Debug.Log("OnDeselect: " + name);
+        // Debug.Log("OnDeselect: " + name);
     }
 
     public Transform GetTransform()

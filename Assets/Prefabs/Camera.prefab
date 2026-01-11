@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4960555859851724098}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.5941211, z: 0, w: 0.80437565}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -79,19 +79,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa101e95de2c26041bb71e90eb6257a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  maxCameraRadius: 20
-  cameraTopOffset: 19
-  cameraBottomOffset: 7.95
-  cameraInitialDegreeHeight: 23.5
-  cameraInitialHorizontalDegree: 63.8
+  maxCameraRadius: 40
+  cameraTopOffset: 38
+  cameraBottomOffset: -10
+  cameraInitialDegreeHeight: 27.7
+  cameraInitialHorizontalDegree: 72.9
   cameraHorizontalDegreeLimitation: 30
   orbitalFollow: {fileID: 830074181484065406}
   virtualCamera: {fileID: 3219692792882578697}
-  boundsCollider: {fileID: 2303051908882022399}
+  boundsGetterRef: {fileID: 5010313767339960598}
   lookTarget: {fileID: 1550519869933098387}
   cameraControlActionsRef: {fileID: 6309733935719371799}
   rotationSpeeds: {x: 0.3, y: -1}
-  panSpeed: 1
+  panSpeed: 4.42
   zoomSensitivity: 0.1
   minCameraRadiusCoef: 0.2
   zoomChangeCurve:
@@ -99,7 +99,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -165,8 +165,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6383040990635429009}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.36452362, y: 0.47724766, z: -0.22689602, w: 0.76673037}
-  m_LocalPosition: {x: -11.280758, y: 15.483189, z: -5.550819}
+  m_LocalRotation: {x: 0.25888884, y: 0.56250817, z: -0.1912183, w: 0.76157516}
+  m_LocalPosition: {x: -29.362476, y: 23.673054, z: -9.033074}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -238,20 +238,20 @@ MonoBehaviour:
   Radius: 5
   Orbits:
     Top:
-      Radius: 6.244998
-      Height: 19
+      Radius: 12.489996
+      Height: 38
     Center:
-      Radius: 14.779187
-      Height: 13.475
+      Radius: 37.46999
+      Height: 14
     Bottom:
-      Radius: 18.352043
-      Height: 7.95
+      Radius: 38.72983
+      Height: -10
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 63.8
+    Value: 72.9
     Center: 60.000004
-    Range: {x: 33.8, y: 93.8}
+    Range: {x: 42.9, y: 102.9}
     Wrap: 1
     Recentering:
       Enabled: 0
@@ -259,7 +259,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 23.5
+    Value: 27.7
     Center: 0
     Range: {x: -90, y: 90}
     Wrap: 0
@@ -480,9 +480,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8677754335990334183}
-  - component: {fileID: 2303051908882022399}
+  - component: {fileID: 4587844783493709135}
+  - component: {fileID: 5010313767339960598}
   m_Layer: 0
-  m_Name: Collider
+  m_Name: WalkableArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -503,7 +504,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4702315125008643062}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2303051908882022399
+--- !u!65 &4587844783493709135
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -518,9 +519,21 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5010313767339960598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7948481265514723889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4367606ca71818b49a0084254063f874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoundsIntroducer
