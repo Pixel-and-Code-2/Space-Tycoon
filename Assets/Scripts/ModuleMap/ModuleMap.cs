@@ -30,13 +30,13 @@ public class ModuleMap : MonoBehaviour, IBoundsGetter
 
     void Restart()
     {
-        moduleList.DeinstantiateAllPrefabs();
+        // moduleList.DeinstantiateAllPrefabs();
         moduleList.spawnContext = this.gameObject;
         if (moduleList.GetAllModules().Count == 0)
         {
             moduleList.Add(new ModuleData(initialModulePrefab, new int[0], 0), Vector3.zero);
         }
-        moduleList.InstantiateAllPrefabs();
+        // moduleList.InstantiateAllPrefabs();
         CheckPawns();
     }
 
