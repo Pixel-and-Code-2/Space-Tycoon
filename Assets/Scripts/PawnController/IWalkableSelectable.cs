@@ -4,7 +4,5 @@ interface IWalkableSelectable : ISelectable
 {
     void OnMove(Vector3 position);
 
-    Vector3[] GetPathPointsTo(Vector3 position);
-
-    float GetAvailableDistance();
+    (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) GetPathPointsTo(Vector3 position);
 }

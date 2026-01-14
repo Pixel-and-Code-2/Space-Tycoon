@@ -10,6 +10,10 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
 
     [SerializeField]
     private InputActionReference deselectionClick;
+    [SerializeField]
+    private float zeroPlaneHeight = 0f;
+    [SerializeField]
+    private bool showZeroPlane = false;
     // Those vars are used to prevent multiple click handles on the same button press
     private bool selectionClickHandled = false;
     private bool deselectionClickHandled = false;
@@ -61,23 +65,23 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
         return clicked;
     }
 
-    public (Vector3 point, FloorHitResult hit) GetMoveSelectionValue()
+    public (Vector3 worldPoint, Vector2 screenPoint, FloorHitResult hit) GetMoveSelectionValue()
     {
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Floor")))
         {
-            return (hit.point, FloorHitResult.FloorHit);
+            return (hit.point, mousePosition, FloorHitResult.FloorHit);
         }
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero); // y=0 plane
+        Plane groundPlane = new Plane(Vector3.up, Vector3.up * zeroPlaneHeight); // y={zeroPlaneHeight} plane
         float distance;
         if (groundPlane.Raycast(ray, out distance))
         {
             Vector3 intersection = ray.GetPoint(distance);
-            return (intersection, FloorHitResult.ZeroPlaneHit);
+            return (intersection, mousePosition, FloorHitResult.ZeroPlaneHit);
         }
-        return (Vector3.zero, FloorHitResult.NoHit);
+        return (Vector3.zero, mousePosition, FloorHitResult.NoHit);
     }
 
     public bool GetSelectionClickState()
@@ -92,5 +96,14 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
             selectionClickHandled = true;
         }
         return clicked;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (showZeroPlane)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(Vector3.up * zeroPlaneHeight, new Vector3(10f, 0.01f, 10f));
+        }
     }
 }

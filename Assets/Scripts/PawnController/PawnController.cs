@@ -49,24 +49,23 @@ public class PawnController : MonoBehaviour
 
     private void SetAimToPoint()
     {
-        (Vector3 point, FloorHitResult hit) = selector.GetMoveSelectionValue();
+        (Vector3 worldPoint, Vector2 screenPoint, FloorHitResult hit) = selector.GetMoveSelectionValue();
         if (hit != FloorHitResult.NoHit)
         {
-            Vector3[] calculatedPath = selectedWalkablePawn.GetPathPointsTo(point);
-            if (calculatedPath != null)
+            (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) = selectedWalkablePawn.GetPathPointsTo(worldPoint);
+            if (pointsAvailable != null || pointsOutOfRange != null)
             {
+                pawnMoveUIController.SetPathPoints(pointsAvailable, pointsOutOfRange, screenPoint);
                 if (!pawnMoveUIController.GetVisible())
                 {
                     pawnMoveUIController.SetVisible(true);
                 }
-                float availableDistance = selectedWalkablePawn.GetAvailableDistance();
-                pawnMoveUIController.SetPathPoints(calculatedPath, availableDistance);
             }
             else
             {
                 pawnMoveUIController.SetVisible(false);
             }
-            lastHitPoint = point;
+            lastHitPoint = worldPoint;
             hitPointValid = true;
         }
     }
