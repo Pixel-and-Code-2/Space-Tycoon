@@ -4,14 +4,10 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
 {
+    [SerializeField]
+    private PlayerData playerData;
     private NavMeshAgent navMeshAgent;
-    // less than 0 - unlimited
-    [SerializeField, Range(-1f, float.MaxValue), Tooltip("less than 0 - unlimited")]
-    private float availableDistance = -1f;
     private float initialDistance = 0f;
-
-    [SerializeField, Tooltip("max distance from mouse to walkable area, to show path")]
-    private float maxSampleDistance = 5f;
 
     private bool isMoving = false;
 
@@ -28,7 +24,7 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
     public void TravelToPosition(Vector3 position)
     {
         NavMeshHit navHit;
-        if (!NavMesh.SamplePosition(position, out navHit, maxSampleDistance, NavMesh.AllAreas))
+        if (!NavMesh.SamplePosition(position, out navHit, playerData.maxSampleDistance, NavMesh.AllAreas))
         {
             return;
         }
@@ -43,9 +39,9 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
                 Vector3 pointPrev = path.corners[i];
                 Vector3 pointNext = path.corners[i + 1];
                 float dist = Vector3.Distance(pointPrev, pointNext);
-                if (initialDistance + dist > availableDistance)
+                if (initialDistance + dist > playerData.availableDistance)
                 {
-                    float sectionDistance = (availableDistance - initialDistance) / dist;
+                    float sectionDistance = (playerData.availableDistance - initialDistance) / dist;
                     Vector3 pointInTheMiddleOfTheSection = Vector3.Lerp(pointPrev, pointNext, sectionDistance);
                     navMeshAgent.SetDestination(pointInTheMiddleOfTheSection);
                     initialDistance += sectionDistance * dist;
@@ -101,7 +97,7 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
     public (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) GetPathPointsTo(Vector3 position)
     {
         NavMeshHit navHit;
-        if (!NavMesh.SamplePosition(position, out navHit, maxSampleDistance, NavMesh.AllAreas))
+        if (!NavMesh.SamplePosition(position, out navHit, playerData.maxSampleDistance, NavMesh.AllAreas))
         {
             return (null, null);
         }
@@ -117,11 +113,11 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
 
     (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) DividePath(Vector3[] points)
     {
-        if (availableDistance < 0f)
+        if (playerData.availableDistance < 0f)
         {
             return (points, null);
         }
-        if (availableDistance == 0f)
+        if (playerData.availableDistance == 0f)
         {
             return (null, points);
         }
@@ -130,9 +126,9 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
         for (int i = 0; i < points.Length - 1; i++)
         {
 
-            if (distance + Vector3.Distance(points[i], points[i + 1]) > availableDistance)
+            if (distance + Vector3.Distance(points[i], points[i + 1]) > playerData.availableDistance)
             {
-                float sectionDistance = (availableDistance - distance) / Vector3.Distance(points[i], points[i + 1]);
+                float sectionDistance = (playerData.availableDistance - distance) / Vector3.Distance(points[i], points[i + 1]);
                 Vector3 pointInTheMiddleOfTheSection = Vector3.Lerp(points[i], points[i + 1], sectionDistance);
                 Vector3[] pointsAvailable = new Vector3[i + 2];
                 System.Array.Copy(points, pointsAvailable, i + 1);
