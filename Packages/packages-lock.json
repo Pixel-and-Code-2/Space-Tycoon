@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.handzlikchris.fastscriptreload": {
+      "version": "https://github.com/handzlikchris/FastScriptReload.git?path=Assets",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "2018c7615df46777b03b9a87304b65d14e9d0823"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.9",
       "depth": 0,
