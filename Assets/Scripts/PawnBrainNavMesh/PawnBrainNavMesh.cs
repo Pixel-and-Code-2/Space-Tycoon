@@ -13,6 +13,13 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
     [SerializeField, Tooltip("max distance from mouse to walkable area, to show path")]
     private float maxSampleDistance = 5f;
 
+    private bool isMoving = false;
+
+    public bool IsMoving()
+    {
+        return isMoving;
+    }
+
     void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -42,11 +49,32 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
                     Vector3 pointInTheMiddleOfTheSection = Vector3.Lerp(pointPrev, pointNext, sectionDistance);
                     navMeshAgent.SetDestination(pointInTheMiddleOfTheSection);
                     initialDistance += sectionDistance * dist;
+                    isMoving = true;
+                    // Debug.Log("Setting Moving to True: " + isMoving);
                     return;
                 }
                 initialDistance += dist;
             }
             navMeshAgent.SetDestination(samplePosition);
+            isMoving = true;
+            // Debug.Log("Setting Moving to True: " + isMoving);
+        }
+    }
+
+    void Update()
+    {
+        // Debug.Log("Update: " + isMoving);
+        // ToDo: isMoving here somehow turns again true, even without calling TravelToPosition, which is the only place to have isMoving = true;
+        if (isMoving)
+        {
+            if (
+                !navMeshAgent.pathPending &&
+                navMeshAgent.remainingDistance < 0.1f &&
+                navMeshAgent.velocity.magnitude < 0.01f
+                )
+            {
+                isMoving = false;
+            }
         }
     }
 

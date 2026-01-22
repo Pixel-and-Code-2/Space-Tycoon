@@ -39,10 +39,10 @@ public class PawnMoveUIController : MonoBehaviour
             SetVisible(false);
             return;
         }
+        float availableDistance = 0f;
 
         RecolorPathEnds(pointsAvailable, pointsOutOfRange);
 
-        float availableDistance = 0f;
         if (pointsAvailable != null)
         {
             pathLineWalkable.positionCount = pointsAvailable.Length;

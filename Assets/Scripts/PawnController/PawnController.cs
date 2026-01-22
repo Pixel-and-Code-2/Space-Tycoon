@@ -11,6 +11,9 @@ public class PawnController : MonoBehaviour
     [SerializeField]
     private PawnMoveUIController pawnMoveUIController;
 
+    private bool pathFrozen = false;
+    private Vector3 worldPointFrozen = Vector3.zero;
+
     void Awake()
     {
         selector = GetComponent<ISelectorBrain>();
@@ -33,6 +36,12 @@ public class PawnController : MonoBehaviour
             ClickWithPawnHandle();
         }
         DeselectionCheck();
+
+        if (pathFrozen && selectedWalkablePawn != null && !selectedWalkablePawn.IsMoving())
+        {
+            pathFrozen = false;
+            worldPointFrozen = Vector3.zero;
+        }
     }
 
     private void FixedUpdate()
@@ -49,23 +58,40 @@ public class PawnController : MonoBehaviour
 
     private void SetAimToPoint()
     {
+
         (Vector3 worldPoint, Vector2 screenPoint, FloorHitResult hit) = selector.GetMoveSelectionValue();
         if (hit != FloorHitResult.NoHit)
         {
-            (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) = selectedWalkablePawn.GetPathPointsTo(worldPoint);
-            if (pointsAvailable != null || pointsOutOfRange != null)
+            Vector3 targetPoint = pathFrozen ? worldPointFrozen : worldPoint;
+            (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) = selectedWalkablePawn.GetPathPointsTo(targetPoint);
+            if (pathFrozen)
             {
-                pawnMoveUIController.SetPathPoints(pointsAvailable, pointsOutOfRange, screenPoint);
-                if (!pawnMoveUIController.GetVisible())
+                if (pointsAvailable != null)
                 {
-                    pawnMoveUIController.SetVisible(true);
+                    pawnMoveUIController.SetPathPoints(pointsAvailable, null, screenPoint);
+                }
+                else
+                {
+                    pawnMoveUIController.SetVisible(false);
                 }
             }
             else
             {
-                pawnMoveUIController.SetVisible(false);
+                if (pointsAvailable != null || pointsOutOfRange != null)
+                {
+                    pawnMoveUIController.SetPathPoints(pointsAvailable, pointsOutOfRange, screenPoint);
+                    worldPointFrozen = pointsAvailable[^1];
+                    if (!pawnMoveUIController.GetVisible())
+                    {
+                        pawnMoveUIController.SetVisible(true);
+                    }
+                }
+                else
+                {
+                    pawnMoveUIController.SetVisible(false);
+                }
             }
-            lastHitPoint = worldPoint;
+            lastHitPoint = targetPoint;
             hitPointValid = true;
         }
     }
@@ -98,6 +124,7 @@ public class PawnController : MonoBehaviour
         if (clicked && hitPointValid && selectedWalkablePawn != null)
         {
             selectedWalkablePawn.OnMove(lastHitPoint);
+            pathFrozen = true;
         }
     }
 
