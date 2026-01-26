@@ -65,7 +65,7 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
         {
             if (
                 !navMeshAgent.pathPending &&
-                navMeshAgent.remainingDistance < 0.1f &&
+                !navMeshAgent.hasPath &&
                 navMeshAgent.velocity.magnitude < 0.01f
                 )
             {
