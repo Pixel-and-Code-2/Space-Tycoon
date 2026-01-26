@@ -19,6 +19,8 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
     void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        // Add some margin to stopping distance to avoid getting stuck just before reaching the target
+        navMeshAgent.stoppingDistance = 1.05f;
     }
 
     public void TravelToPosition(Vector3 position)
@@ -63,13 +65,19 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
         // ToDo: isMoving here somehow turns again true, even without calling TravelToPosition, which is the only place to have isMoving = true;
         if (isMoving)
         {
-            if (
-                !navMeshAgent.pathPending &&
-                !navMeshAgent.hasPath &&
-                navMeshAgent.velocity.magnitude < 0.01f
-                )
+            // More reliable way to check if the agent has reached the destination
+            if (!navMeshAgent.pathPending)
             {
-                isMoving = false;
+                // If the remaining distance is less than or equal to the stopping distance
+                if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+                {
+                    // If the agent has no path or is not moving
+                    if (!navMeshAgent.hasPath || navMeshAgent.velocity.sqrMagnitude == 0f)
+                    {
+                        isMoving = false;
+                        navMeshAgent.ResetPath(); // Reset the path to avoid any residual movement
+                    }
+                }
             }
         }
     }

@@ -121,7 +121,7 @@ public class PawnController : MonoBehaviour
     private void ClickWithPawnHandle()
     {
         bool clicked = selector.GetSelectionClickState();
-        if (clicked && hitPointValid && selectedWalkablePawn != null)
+        if (clicked && hitPointValid && selectedWalkablePawn != null && !pathFrozen)
         {
             selectedWalkablePawn.OnMove(lastHitPoint);
             pathFrozen = true;
