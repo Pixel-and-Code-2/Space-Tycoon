@@ -25,8 +25,33 @@ public class PawnController : MonoBehaviour
         pawnMoveUIController.SetVisible(false);
     }
 
+    private void Start()
+    {
+        if(TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnEnd += OnTurnEnd;  
+        }
+    }
+
+    private void OnTurnEnd()
+    {
+        if(selectedPawn != null)
+        {
+            selectedPawn.OnDeselect();
+            selectedPawn = null;
+            selectedWalkablePawn = null;
+        }
+        pawnMoveUIController.SetVisible(false);
+        pathFrozen = false;
+    }
+
     void Update()
     {
+
+        if( TurnManager.Instance != null && !TurnManager.Instance.IsPlayerTurn)
+        {
+            return;
+        }
         if (selectedPawn == null)
         {
             TryToTakeControlOfPawn();
@@ -46,6 +71,10 @@ public class PawnController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(TurnManager.Instance != null && !TurnManager.Instance.IsPlayerTurn)
+        {
+            return;
+        }
         if (selectedWalkablePawn != null)
         {
             SetAimToPoint();
@@ -66,22 +95,25 @@ public class PawnController : MonoBehaviour
             (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) = selectedWalkablePawn.GetPathPointsTo(targetPoint);
             if (pathFrozen)
             {
-                // if (pointsAvailable != null)
-                // {
-                //     pawnMoveUIController.SetPathPoints(pointsAvailable, null, screenPoint);
-                // }
-                // else
-                // {
-                pawnMoveUIController.SetVisible(false);
-                // }
+                if (pointsAvailable != null)
+                {
+                    pawnMoveUIController.SetPathPoints(pointsAvailable, null, screenPoint);
+                }
+                else
+                {
+                    pawnMoveUIController.SetVisible(false);
+                }
             }
             else
             {
                 if (pointsAvailable != null || pointsOutOfRange != null)
                 {
                     pawnMoveUIController.SetPathPoints(pointsAvailable, pointsOutOfRange, screenPoint);
-                    if (pointsAvailable != null) worldPointFrozen = pointsAvailable[^1];
-                    else worldPointFrozen = pointsOutOfRange[^1];
+                    if (pointsAvailable != null && pointsAvailable.Length > 0) 
+                    {
+                        worldPointFrozen = pointsAvailable[^1]; 
+                    }
+
                     if (!pawnMoveUIController.GetVisible())
                     {
                         pawnMoveUIController.SetVisible(true);
