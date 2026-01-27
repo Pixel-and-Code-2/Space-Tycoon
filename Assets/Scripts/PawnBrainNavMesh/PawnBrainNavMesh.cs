@@ -9,6 +9,7 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
     private PlayerData playerData;
     private NavMeshAgent navMeshAgent;
     private float initialDistance = 0f;
+    private Vector3 targetPosition = Vector3.zero;
 
     private bool isMoving = false;
     private Rigidbody rb = null;
@@ -54,6 +55,7 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
                     float sectionDistance = (playerData.availableDistance - initialDistance) / dist;
                     Vector3 pointInTheMiddleOfTheSection = Vector3.Lerp(pointPrev, pointNext, sectionDistance);
                     navMeshAgent.SetDestination(pointInTheMiddleOfTheSection);
+                    targetPosition = pointInTheMiddleOfTheSection;
                     initialDistance += sectionDistance * dist;
                     isMoving = true;
                     // Debug.Log("Setting Moving to True: " + isMoving);
@@ -62,6 +64,7 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
                 initialDistance += dist;
             }
             navMeshAgent.SetDestination(samplePosition);
+            targetPosition = samplePosition;
             isMoving = true;
             // Debug.Log("Setting Moving to True: " + isMoving);
         }

@@ -66,14 +66,14 @@ public class PawnController : MonoBehaviour
             (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) = selectedWalkablePawn.GetPathPointsTo(targetPoint);
             if (pathFrozen)
             {
-                if (pointsAvailable != null)
-                {
-                    pawnMoveUIController.SetPathPoints(pointsAvailable, null, screenPoint);
-                }
-                else
-                {
-                    pawnMoveUIController.SetVisible(false);
-                }
+                // if (pointsAvailable != null)
+                // {
+                //     pawnMoveUIController.SetPathPoints(pointsAvailable, null, screenPoint);
+                // }
+                // else
+                // {
+                pawnMoveUIController.SetVisible(false);
+                // }
             }
             else
             {
