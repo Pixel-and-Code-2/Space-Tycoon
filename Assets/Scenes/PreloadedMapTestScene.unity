@@ -1117,7 +1117,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2011297421}
   serializedVersion: 5
-  m_Mass: 60
+  m_Mass: 200
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1180,7 +1180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5439597831197892550, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.43
+      value: 3.57
       objectReference: {fileID: 0}
     - target: {fileID: 5439597831197892550, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1188,7 +1188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5439597831197892550, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.57
+      value: 4.13
       objectReference: {fileID: 0}
     - target: {fileID: 5439597831197892550, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: m_LocalRotation.w

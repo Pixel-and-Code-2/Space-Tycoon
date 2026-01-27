@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Rigidbody))]
 public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
 {
     [SerializeField]
@@ -10,6 +11,7 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
     private float initialDistance = 0f;
 
     private bool isMoving = false;
+    private Rigidbody rb = null;
 
     public bool IsMoving()
     {
@@ -19,8 +21,14 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
     void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
+<<<<<<< Updated upstream
+
         // Add some margin to stopping distance to avoid getting stuck just before reaching the target
         navMeshAgent.stoppingDistance = 1.05f;
+
+=======
+>>>>>>> Stashed changes
     }
 
     public void TravelToPosition(Vector3 position)
@@ -61,6 +69,14 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
 
     void Update()
     {
+        if (navMeshAgent.hasPath && navMeshAgent.remainingDistance < 0.3f)
+        {
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+        }
         // Debug.Log("Update: " + isMoving);
         // ToDo: isMoving here somehow turns again true, even without calling TravelToPosition, which is the only place to have isMoving = true;
         if (isMoving)
