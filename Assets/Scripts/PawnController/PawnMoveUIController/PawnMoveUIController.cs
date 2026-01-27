@@ -17,9 +17,9 @@ public class PawnMoveUIController : PathDrawer
     [SerializeField]
     protected Color outOfRangeTextColor = Color.red;
 
-    public new void SetPathPoints(Vector3[] pointsAvailable, Vector3[] pointsOutOfRange, Vector2 screenPoint)
+    public void SetPathPoints(Vector3[] pointsAvailable, Vector3[] pointsOutOfRange, Vector2 screenPoint)
     {
-        base.SetPathPoints(pointsAvailable, pointsOutOfRange, screenPoint);
+        base.SetPathPoints(pointsAvailable, pointsOutOfRange);
 
         distanceText.text = $"{availableDistance.ToString("F1")}m";
         RectTransform textRect = distanceText.rectTransform;
@@ -78,6 +78,7 @@ public class PawnMoveUIController : PathDrawer
         }
         if (canvasRect == null)
         {
+
             Debug.LogError("Canvas rect not found");
             return;
         }

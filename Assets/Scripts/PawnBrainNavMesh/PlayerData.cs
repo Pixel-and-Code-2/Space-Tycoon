@@ -13,4 +13,6 @@ public class PlayerData : ScriptableObject
     [Header("Still in development")]
     public float health = 100f;
     public float strength = 100f;
+    public float obstaclePushForce = 10f;
+    public float verticalPushOverride = 0.2f;
 }

@@ -3,6 +3,8 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(PathDrawer))]
 public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
 {
     [SerializeField]
@@ -12,7 +14,7 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
     private Vector3 targetPosition = Vector3.zero;
 
     private bool isMoving = false;
-    private Rigidbody rb = null;
+    private PathDrawer pathDrawer;
 
     public bool IsMoving()
     {
@@ -22,14 +24,9 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
     void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
-        rb = GetComponent<Rigidbody>();
-<<<<<<< Updated upstream
-
+        pathDrawer = GetComponent<PathDrawer>();
         // Add some margin to stopping distance to avoid getting stuck just before reaching the target
         navMeshAgent.stoppingDistance = 1.05f;
-
-=======
->>>>>>> Stashed changes
     }
 
     public void TravelToPosition(Vector3 position)
@@ -72,18 +69,19 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
 
     void Update()
     {
-        if (navMeshAgent.hasPath && navMeshAgent.remainingDistance < 0.3f)
-        {
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-            }
-        }
         // Debug.Log("Update: " + isMoving);
         // ToDo: isMoving here somehow turns again true, even without calling TravelToPosition, which is the only place to have isMoving = true;
         if (isMoving)
         {
+            if (!pathDrawer.GetVisible())
+            {
+                pathDrawer.SetVisible(true);
+                pathDrawer.SetPathPoints(GetPathPointsTo(targetPosition).pointsAvailable, null);
+            }
+            else
+            {
+                // pathDrawer.SetPathPoints(GetPathPointsTo(targetPosition).pointsAvailable, null);
+            }
             // More reliable way to check if the agent has reached the destination
             if (!navMeshAgent.pathPending)
             {
@@ -93,6 +91,10 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
                     // If the agent has no path or is not moving
                     if (!navMeshAgent.hasPath || navMeshAgent.velocity.sqrMagnitude == 0f)
                     {
+                        if (pathDrawer.GetVisible())
+                        {
+                            pathDrawer.SetVisible(false);
+                        }
                         isMoving = false;
                         navMeshAgent.ResetPath(); // Reset the path to avoid any residual movement
                     }
@@ -168,5 +170,14 @@ public class PawnBrainNavMesh : MonoBehaviour, IWalkableSelectable
             distance += Vector3.Distance(points[i], points[i + 1]);
         }
         return (points, null);
+    }
+
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (!other.rigidbody) return;
+        Vector3 dir = -transform.position + other.transform.position;
+        dir.y = playerData.verticalPushOverride;
+        other.rigidbody.AddForce(dir * playerData.obstaclePushForce, ForceMode.Impulse);
     }
 }

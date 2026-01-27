@@ -19,8 +19,22 @@ public class PathDrawer : MonoBehaviour
     public float availableDistance = 0f;
     [System.NonSerialized]
     private bool visible = false;
+    [SerializeField]
+    private bool updateStillnesOfEndPoints = false;
 
-    public void SetPathPoints(Vector3[] pointsAvailable, Vector3[] pointsOutOfRange, Vector2 screenPoint)
+    void LateUpdate()
+    {
+        if (updateStillnesOfEndPoints)
+        {
+            if (pathLineWalkable.positionCount > 0)
+            {
+                pathEndObject.transform.position = pathLineWalkable.GetPosition(pathLineWalkable.positionCount - 1);
+                pathStartObject.transform.position = pathLineWalkable.GetPosition(0);
+            }
+        }
+    }
+
+    public void SetPathPoints(Vector3[] pointsAvailable, Vector3[] pointsOutOfRange)
     {
         if (pointsAvailable == null && pointsOutOfRange == null)
         {
@@ -134,12 +148,12 @@ public class PathDrawer : MonoBehaviour
     {
         if (pathLineWalkable == null)
         {
-            Debug.LogError("Path line walkable not found");
+            Debug.LogError("Path line walkable not found in " + name);
             return;
         }
         if (pathLineOutOfRange == null)
         {
-            Debug.LogError("Path line out of range not found");
+            Debug.LogError("Path line out of range not found in " + name);
             return;
         }
     }

@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288290ebe52f52840afc19b8632352d9, type: 3}
   m_Name: PlayerMelee
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
-  reachDistance: 0.1
   maxSampleDistance: 5
   availableDistance: 12
+  health: 100
+  strength: 100
+  obstaclePushForce: 30
+  verticalPushOverride: 4
