@@ -80,7 +80,8 @@ public class PawnController : MonoBehaviour
                 if (pointsAvailable != null || pointsOutOfRange != null)
                 {
                     pawnMoveUIController.SetPathPoints(pointsAvailable, pointsOutOfRange, screenPoint);
-                    worldPointFrozen = pointsAvailable[^1];
+                    if (pointsAvailable != null) worldPointFrozen = pointsAvailable[^1];
+                    else worldPointFrozen = pointsOutOfRange[^1];
                     if (!pawnMoveUIController.GetVisible())
                     {
                         pawnMoveUIController.SetVisible(true);

@@ -34,6 +34,7 @@ public class PawnMoveUIController : PathDrawer
 
     protected override void ColorEndTo(bool isOutOfRange = true)
     {
+        base.ColorEndTo(isOutOfRange);
         if (isOutOfRange)
         {
             distanceText.color = outOfRangeTextColor;
