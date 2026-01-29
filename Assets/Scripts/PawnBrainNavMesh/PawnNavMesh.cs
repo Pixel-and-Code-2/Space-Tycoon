@@ -79,6 +79,7 @@ public class PawnNavMesh : MonoBehaviour, IWalkableSelectable
                 {
                     float sectionDistance = (playerData.availableDistance - distanceTravelling) / dist;
                     Vector3 pointInTheMiddleOfTheSection = Vector3.Lerp(pointPrev, pointNext, sectionDistance);
+                    distanceTravelling += sectionDistance * dist;
 
                     navMeshAgent.SetDestination(pointInTheMiddleOfTheSection);
                     targetPosition = pointInTheMiddleOfTheSection;
@@ -117,6 +118,7 @@ public class PawnNavMesh : MonoBehaviour, IWalkableSelectable
         }
     }
 
+    // Why do we need those here?
     public void OnSelect() { }
     public void OnDeselect() { }
     public Transform GetTransform() { return transform; }
@@ -153,7 +155,7 @@ public class PawnNavMesh : MonoBehaviour, IWalkableSelectable
 
     (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) DividePath(Vector3[] points)
     {
-        float limit = playerData.availableDistance;
+        float limit = playerData.availableDistance + distanceTravelling;
 
         if (limit < 0f) return (points, null);
         if (limit == 0f) return (null, points);
