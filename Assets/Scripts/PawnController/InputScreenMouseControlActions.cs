@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 
 public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
@@ -14,7 +15,12 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
     private float zeroPlaneHeight = 0f;
     [SerializeField]
     private bool showZeroPlane = false;
-    // Those vars are used to prevent multiple click handles on the same button press
+    // Change control type
+    public event System.Action<ControlType> OnControlTypeChange;
+    private ControlType currentControlType = ControlType.shoot;
+    [SerializeField]
+    private TextMeshProUGUI controlTypeText;
+    // These vars are used to prevent multiple click handles on the same button press
     private bool selectionClickHandled = false;
     private bool deselectionClickHandled = false;
     void OnValidate()
@@ -84,6 +90,23 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
         return (Vector3.zero, mousePosition, FloorHitResult.NoHit);
     }
 
+    public (Vector3 worldPoint, Vector2 screenPoint, PawnHitResult hit) GetShootSelectionValue()
+    {
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Pawn")))
+        {
+            return (hit.point, mousePosition, PawnHitResult.PawnHit);
+        }
+        (Vector3 worldPoint2, Vector2 _, FloorHitResult hit2) = GetMoveSelectionValue();
+        if (hit2 != FloorHitResult.NoHit)
+        {
+            return (worldPoint2, mousePosition, PawnHitResult.FloorHit);
+        }
+        return (Vector3.zero, mousePosition, PawnHitResult.NoHit);
+    }
+
     public bool GetSelectionClickState()
     {
         if (selectionClickHandled)
@@ -105,5 +128,16 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(Vector3.up * zeroPlaneHeight, new Vector3(10f, 0.01f, 10f));
         }
+    }
+
+    public void ChangeControlType()
+    {
+        Debug.Log("ChangeControlType");
+        currentControlType = currentControlType == ControlType.walk ? ControlType.shoot : ControlType.walk;
+        if (controlTypeText != null)
+        {
+            controlTypeText.text = currentControlType == ControlType.walk ? "Control: Walk" : "Control: Shoot";
+        }
+        OnControlTypeChange?.Invoke(currentControlType);
     }
 }

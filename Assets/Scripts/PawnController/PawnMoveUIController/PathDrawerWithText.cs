@@ -2,34 +2,32 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PawnMoveUIController : PathDrawer
+public class PathDrawerWithText : PathDrawer
 {
 
     [SerializeField]
     private GameObject canvasObject;
     private Canvas canvas;
     private RectTransform canvasRect;
-    private TextMeshProUGUI distanceText;
+    private TextMeshProUGUI uiText;
     [SerializeField]
-    private Vector2 distanceTextOffset = new Vector2(0f, 10f);
+    private Vector2 uiTextOffset = new Vector2(0f, 10f);
     [SerializeField]
     protected Color textColor = Color.green;
     [SerializeField]
     protected Color outOfRangeTextColor = Color.red;
 
-    public void SetPathPoints(Vector3[] pointsAvailable, Vector3[] pointsOutOfRange, Vector2 screenPoint)
+    public void SetText(string text, Vector2 screenPoint)
     {
-        base.SetPathPoints(pointsAvailable, pointsOutOfRange);
-
-        distanceText.text = $"{availableDistance.ToString("F1")}m";
-        RectTransform textRect = distanceText.rectTransform;
+        uiText.text = text;
+        RectTransform textRect = uiText.rectTransform;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,
             screenPoint,
             canvas.worldCamera,
             out Vector2 localPoint
         );
-        textRect.anchoredPosition = localPoint + distanceTextOffset;
+        textRect.anchoredPosition = localPoint + uiTextOffset;
     }
 
     protected override void ColorEndTo(bool isOutOfRange = true)
@@ -37,11 +35,11 @@ public class PawnMoveUIController : PathDrawer
         base.ColorEndTo(isOutOfRange);
         if (isOutOfRange)
         {
-            distanceText.color = outOfRangeTextColor;
+            uiText.color = outOfRangeTextColor;
         }
         else
         {
-            distanceText.color = textColor;
+            uiText.color = textColor;
         }
     }
 
@@ -49,7 +47,7 @@ public class PawnMoveUIController : PathDrawer
     {
         canvas = canvasObject.GetComponent<Canvas>();
         canvasRect = canvas.GetComponent<RectTransform>();
-        distanceText = canvas.GetComponentInChildren<TextMeshProUGUI>();
+        uiText = canvas.GetComponentInChildren<TextMeshProUGUI>();
         base.Awake();
     }
 
@@ -58,12 +56,12 @@ public class PawnMoveUIController : PathDrawer
         if (
             (canvas == null && canvasObject != null) ||
             (canvasRect == null && canvas != null) ||
-            (distanceText == null && canvas != null)
+            (uiText == null && canvas != null)
         )
         {
             canvas = canvasObject.GetComponent<Canvas>();
             canvasRect = canvas.GetComponent<RectTransform>();
-            distanceText = canvas.GetComponentInChildren<TextMeshProUGUI>();
+            uiText = canvas.GetComponentInChildren<TextMeshProUGUI>();
         }
 
         base.OnValidate();
@@ -83,7 +81,7 @@ public class PawnMoveUIController : PathDrawer
             Debug.LogError("Canvas rect not found");
             return;
         }
-        if (distanceText == null)
+        if (uiText == null)
         {
             Debug.LogError("Distance text not found");
             return;

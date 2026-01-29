@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class PawnNavMesh : MonoBehaviour, IWalkableSelectable
+public class PawnNavMesh : MonoBehaviour
 {
     [SerializeField]
     private PlayerData initialPlayerData;
@@ -118,12 +118,6 @@ public class PawnNavMesh : MonoBehaviour, IWalkableSelectable
         }
     }
 
-    // Why do we need those here?
-    public void OnSelect() { }
-    public void OnDeselect() { }
-    public Transform GetTransform() { return transform; }
-    public void OnMove(Vector3 position) { TravelToPosition(position); }
-
     public (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) GetPathPointsTo(Vector3 position)
     {
         if (cachedTargetPositionValid && cachedTargetPosition == position)
@@ -185,5 +179,19 @@ public class PawnNavMesh : MonoBehaviour, IWalkableSelectable
             distCalc += segmentDist;
         }
         return (points, null);
+    }
+
+    public static float CalculateDistance(Vector3[] points)
+    {
+        if (points == null || points.Length == 0)
+        {
+            return 0f;
+        }
+        float distance = 0f;
+        for (int i = 0; i < points.Length - 1; i++)
+        {
+            distance += Vector3.Distance(points[i], points[i + 1]);
+        }
+        return distance;
     }
 }
