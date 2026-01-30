@@ -1870,7 +1870,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: formulaField.formula
-      value: 
+      value: (c_somemoer *c_AvailableDistance+ e_AvailableDistance + 3)/ g_M
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: managedReferences[1000].formula
+      value: (c_somemoer *c_AvailableDistance+ e_AvailableDistance + 3)/ g_M
       objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'formulaField.dataAssets.Array.data[0]'
@@ -1878,6 +1882,10 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'formulaField.dataAssets.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 5f36f30d5757d3a429ca2f909ff094dd, type: 2}
+    - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: 'managedReferences[1000].dataAssets.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: 5f36f30d5757d3a429ca2f909ff094dd, type: 2}
     m_RemovedComponents: []
@@ -2334,11 +2342,19 @@ PrefabInstance:
       value: (c.AvailableDistance+c.AvailableDistance*8428.23)/c.Parameter3 g.M c.AvailableDistance
       objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: managedReferences[1000].formula
+      value: (c.AvailableDistance+c.AvailableDistance*8428.23)/c.Parameter3 g.M c.AvailableDistance
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'formulaField.dataAssets.Array.data[0]'
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'formulaField.dataAssets.Array.data[1]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: 'managedReferences[1000].dataAssets.Array.data[0]'
       value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []

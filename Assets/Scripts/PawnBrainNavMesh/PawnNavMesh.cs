@@ -23,7 +23,7 @@ public class PawnNavMesh : MonoBehaviour
     private Vector3[] cachedPointsAvailable = null;
     private Vector3[] cachedPointsOutOfRange = null;
     private bool cachedTargetPositionValid = false;
-    [SerializeField]
+    [SerializeReference]
     private FormulaField formulaField = new FormulaField();
 
     public bool IsMoving()
@@ -201,16 +201,9 @@ public class PawnNavMesh : MonoBehaviour
         }
         return distance;
     }
-    private int validateCount = 0;
+
     void OnValidate()
     {
-        validateCount++;
-        if (validateCount > 100)
-        {
-            Debug.LogError("validateCount > 50");
-            return;
-        }
-
         bool doUpdate = false;
         if (playerDataCached != initialPlayerData)
         {

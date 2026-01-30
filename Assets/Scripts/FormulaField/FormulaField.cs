@@ -34,5 +34,6 @@ public class FormulaField
     public void CompileFormula()
     {
         string formulaString = GetFormulaString();
+        Debug.Log("FormulaString: " + formulaString);
     }
 }

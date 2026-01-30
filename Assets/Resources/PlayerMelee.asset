@@ -19,6 +19,8 @@ MonoBehaviour:
     value: 5.2
   - name: AvailableDistance
     value: 12
+  - name: Health
+    value: 100
   maxSampleDistance: 5
   obstaclePushForce: 30
   verticalPushOverride: 4

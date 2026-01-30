@@ -1,14 +1,14 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(PlayerData))]
-public class PlayerDataEditor : Editor
+[CustomEditor(typeof(ParameteredScriptableObject))]
+public class ParameteredScriptableObjectEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        PlayerData data = (PlayerData)target;
+        ParameteredScriptableObject data = (ParameteredScriptableObject)target;
 
         EditorGUILayout.Space(10);
         if (GUILayout.Button("Update dictionary"))

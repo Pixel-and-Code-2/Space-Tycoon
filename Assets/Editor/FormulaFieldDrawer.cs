@@ -77,8 +77,28 @@ public class FormulaFieldDrawer : PropertyDrawer
             y = DrawDataAssetSectionWithData(position.x, width, y, "GlobalParameters", GlobalParameters.Instance, formulaProp, $"{property.propertyPath}.globalParameters");
         }
 
+        DrawCompileFormulaButton(new Rect(position.x, y, width, EditorGUIUtility.singleLineHeight), property);
+
 
         EditorGUI.EndProperty();
+    }
+
+    private void DrawCompileFormulaButton(Rect position, SerializedProperty property)
+    {
+        if (GUI.Button(position, "Compile Formula"))
+        {
+            var formulaField = property.managedReferenceValue as FormulaField;
+            
+            if (formulaField != null)
+            {
+                formulaField.CompileFormula();
+                EditorUtility.SetDirty(property.serializedObject.targetObject);
+            }
+            else
+            {
+                Debug.LogError($"Could not find FormulaField instance via managedReferenceValue for property: {property.propertyPath}. Make sure the field has [SerializeReference] attribute.");
+            }
+        }
     }
 
     private IFormulaData GetObjectFromProperty(SerializedProperty property)
@@ -166,14 +186,6 @@ public class FormulaFieldDrawer : PropertyDrawer
         return y;
     }
 
-
-
-
-    // ------------------------------------------------------------------------
-
-
-
-
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         var height = EditorGUIUtility.singleLineHeight;
@@ -209,6 +221,8 @@ public class FormulaFieldDrawer : PropertyDrawer
         {
             height += GetDataAssetHeightWithData(width, GlobalParameters.Instance, $"{property.propertyPath}.globalParameters");
         }
+
+        height += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 
         return height;
     }
