@@ -23,16 +23,9 @@ public class PlayerData : ParameteredScriptableObject
 
 
 
-    public new void RebuildParametersDict()
+    protected override void AddBuiltInParameters()
     {
-        parametersDict.Clear();
         parametersDict[AVAILABLE_DISTANCE_KEY] = -1f;
-        foreach (var parameter in GetParameters())
-        {
-            parameter.name = ParameteredScriptableObject.processParameterName(parameter.name);
-            if (parameter.name != null && parameter.name != "")
-                parametersDict[parameter.name] = parameter.value;
-        }
     }
 
     public Dictionary<string, float> GetCopyOfParameters()

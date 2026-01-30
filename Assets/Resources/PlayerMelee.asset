@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: PlayerMelee
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
   parameters:
-  - name: AvailableDistance
-    value: 12
   - name: somemoer
+    value: 17
+  - name: fsdadaf
+    value: 5.2
+  - name: AvailableDistance
     value: 12
   maxSampleDistance: 5
   obstaclePushForce: 30

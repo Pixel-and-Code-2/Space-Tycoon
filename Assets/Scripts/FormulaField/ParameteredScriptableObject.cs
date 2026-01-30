@@ -27,12 +27,18 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
     public void RebuildParametersDict()
     {
         parametersDict.Clear();
+        AddBuiltInParameters();
         foreach (var parameter in parameters)
         {
             parameter.name = processParameterName(parameter.name);
             if (parameter.name != null && parameter.name != "")
                 parametersDict[parameter.name] = parameter.value;
         }
+    }
+
+    protected virtual void AddBuiltInParameters()
+    {
+
     }
 
 
