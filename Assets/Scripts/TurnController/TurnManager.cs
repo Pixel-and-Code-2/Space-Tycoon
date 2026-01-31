@@ -61,7 +61,7 @@ public class TurnManager : MonoBehaviour
         OnEnemyTurnStart?.Invoke();
 
         Debug.Log("Enemy is thinking");
-        yield return new WaitForSeconds(2f); // Simulate enemy thinking time
+        yield return new WaitForSeconds(4.0f); // Simulate enemy thinking time
 
         OnEnemyTurnEnd?.Invoke();
         // Back to Player Turn

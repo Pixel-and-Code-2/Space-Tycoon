@@ -13,12 +13,10 @@ GameObject:
   - component: {fileID: 3152828477462652844}
   - component: {fileID: 6158508224242110520}
   - component: {fileID: 8025852397121735868}
-  - component: {fileID: 1217381758690116726}
   - component: {fileID: 1238644119791189941}
-  - component: {fileID: 8696655358907118961}
   m_Layer: 7
-  m_Name: Pawn
-  m_TagString: Player
+  m_Name: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -140,26 +138,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1217381758690116726
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2230305945013315322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5381058a23bd15f4ca47ede4ab394694, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PathDrawer
-  pathLineWalkable: {fileID: 3593063872941322112}
-  pathLineOutOfRange: {fileID: 4412212447165029792}
-  pathStartObject: {fileID: 8399723359236043576}
-  pathEndObject: {fileID: 1824557510076112080}
-  pathWalkableMaterial: {fileID: 2100000, guid: 420c92562ba9f7448830858d499db1bc, type: 2}
-  pathOutOfRangeMaterial: {fileID: 2100000, guid: 0397cd2f2a8a4cf42883ef2849b25b0e, type: 2}
-  availableDistance: -1
-  updateStillnesOfEndPoints: 1
 --- !u!54 &1238644119791189941
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -187,19 +165,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8696655358907118961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2230305945013315322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c6c0b2508611504fb61f80e24bc99e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PawnBrain
-  initialPlayerData: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
 --- !u!1001 &6846910732322107018
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -261,26 +226,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98ef8ca0af8ff3d4785c1bb417cf99ec, type: 3}
---- !u!4 &1824557510076112080 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5068586338782409306, guid: 98ef8ca0af8ff3d4785c1bb417cf99ec, type: 3}
-  m_PrefabInstance: {fileID: 6846910732322107018}
-  m_PrefabAsset: {fileID: 0}
---- !u!120 &3593063872941322112 stripped
-LineRenderer:
-  m_CorrespondingSourceObject: {fileID: 7987201588654145802, guid: 98ef8ca0af8ff3d4785c1bb417cf99ec, type: 3}
-  m_PrefabInstance: {fileID: 6846910732322107018}
-  m_PrefabAsset: {fileID: 0}
---- !u!120 &4412212447165029792 stripped
-LineRenderer:
-  m_CorrespondingSourceObject: {fileID: 7079182323191280426, guid: 98ef8ca0af8ff3d4785c1bb417cf99ec, type: 3}
-  m_PrefabInstance: {fileID: 6846910732322107018}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8399723359236043576 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3140366755097927090, guid: 98ef8ca0af8ff3d4785c1bb417cf99ec, type: 3}
-  m_PrefabInstance: {fileID: 6846910732322107018}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8446994651681600025 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3043551442767273107, guid: 98ef8ca0af8ff3d4785c1bb417cf99ec, type: 3}
