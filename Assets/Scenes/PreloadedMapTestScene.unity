@@ -1861,6 +1861,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: some_value
+      value: 31.531532
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: enemyDataExample
       value: 
       objectReference: {fileID: 11400000, guid: 5f36f30d5757d3a429ca2f909ff094dd, type: 2}
@@ -2332,7 +2336,7 @@ PrefabInstance:
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: enemyDataExample
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 5f36f30d5757d3a429ca2f909ff094dd, type: 2}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: initialPlayerData
       value: 
@@ -2348,15 +2352,19 @@ PrefabInstance:
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'formulaField.dataAssets.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'formulaField.dataAssets.Array.data[1]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 5f36f30d5757d3a429ca2f909ff094dd, type: 2}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'managedReferences[1000].dataAssets.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
+    - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: 'managedReferences[1000].dataAssets.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 5f36f30d5757d3a429ca2f909ff094dd, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

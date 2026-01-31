@@ -6,7 +6,7 @@ public class FormulaField
 {
     public FormulaField()
     {
-        instruction = "Instructions...\nmultiline\nyay";
+        instruction = "Type a mathematical expression using common '+', '-', '*', '/', '^', '(', ')'.\nYou also can provide variables from Data Assets available in this object, using words like 'g_Statname' - the full list of available vars is listed below.\nEverything starting with '//' till the end of the line will be ignored as well as between those two: '/*', '*/'.\nYou also can use Math C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls: Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians), Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available variable below to add its name to the end oа the formula (but be sure to the formula to be blured when clicked).";
         // dataAssets.Add(GlobalParameters.Instance);
     }
     public string formula;
@@ -23,8 +23,13 @@ public class FormulaField
     {
         if (compiledFormulaAction == null)
         {
-            Debug.LogError("Program is trying to use formula which is not compiled?!\nFormula: " + formula);
-            return 0f;
+            Debug.LogWarning("Program is trying to use formula which is not compiled?!\nFormula: " + formula);
+            CompileFormula();
+            if (compiledFormulaAction == null)
+            {
+                Debug.LogError("Program is trying to use formula which is cannot be compiled?!\nFormula: " + formula);
+                return 0f;
+            }
         }
         // Debug.Log("GlobalParameters.Instance: " + GlobalParameters.Instance.GetParametersDictState() + "locals: " + locals[0].Count);
         return compiledFormulaAction(locals, GlobalParameters.Instance.parametersDict);
