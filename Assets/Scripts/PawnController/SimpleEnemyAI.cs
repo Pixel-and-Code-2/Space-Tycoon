@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 using System.Linq;
 
 [RequireComponent(typeof(NavMeshAgent))]
@@ -33,7 +32,7 @@ public class SimpleEnemyAI : MonoBehaviour
     private void ExecuteTurn()
     {
         PawnNavMesh closestPlayer = FindClosestPlayer();
-        if(closestPlayer != null)
+        if (closestPlayer != null)
         {
             float distanceToPlayer = Vector3.Distance(transform.position, closestPlayer.transform.position);
             if (distanceToPlayer <= aggressionRange)
@@ -47,7 +46,7 @@ public class SimpleEnemyAI : MonoBehaviour
     {
         PawnNavMesh[] players = FindObjectsByType<PawnNavMesh>(FindObjectsSortMode.None)
             .Where(p => p.CompareTag("Player")).ToArray();
-        if(players.Length == 0) return null;
+        if (players.Length == 0) return null;
         PawnNavMesh closestPlayer = null;
         float closestDistance = float.MaxValue;
         foreach (var player in players)
@@ -59,6 +58,6 @@ public class SimpleEnemyAI : MonoBehaviour
                 closestPlayer = player;
             }
         }
-        return closestPlayer; 
+        return closestPlayer;
     }
 }
