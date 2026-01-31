@@ -1,20 +1,35 @@
 using UnityEngine;
+using System.Collections.Generic;
+
+[System.Serializable]
+public class NamedFloat
+{
+    public string name;
+    public float value;
+};
+
 
 [CreateAssetMenu(fileName = "PlayerData", menuName = "PlayerData", order = 1)]
-public class PlayerData : ScriptableObject
+public class PlayerData : ParameteredScriptableObject
 {
-    [Header("Active Parameters")]
-    // less than 0 - unlimited
-    [SerializeField, Range(-1f, float.MaxValue), Tooltip("less than 0 - unlimited")]
-    public float availableDistance = -1f;
-
-    [Header("Still in development")]
-    public float health = 100f;
-    public float strength = 100f;
     [Header("Additional Developing params")]
     [SerializeField, Tooltip("max distance from mouse to walkable area, to show path")]
     public float maxSampleDistance = 5f;
     public float obstaclePushForce = 10f;
     public float verticalPushOverride = 0.2f;
 
+
+    public const string AVAILABLE_DISTANCE_KEY = "AvailableDistance";
+
+
+
+    protected override void AddBuiltInParameters()
+    {
+        parametersDict[AVAILABLE_DISTANCE_KEY] = -1f;
+    }
+
+    public Dictionary<string, float> GetCopyOfParameters()
+    {
+        return new Dictionary<string, float>(parametersDict);
+    }
 }

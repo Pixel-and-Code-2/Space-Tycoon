@@ -132,7 +132,6 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
 
     public void ChangeControlType()
     {
-        Debug.Log("ChangeControlType");
         currentControlType = currentControlType == ControlType.walk ? ControlType.shoot : ControlType.walk;
         if (controlTypeText != null)
         {

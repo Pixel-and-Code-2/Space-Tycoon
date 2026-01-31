@@ -62,7 +62,7 @@ public class PawnBrain : PawnNavMesh, IWalkableSelectable
     {
         if (!other.rigidbody) return;
         Vector3 dir = -transform.position + other.transform.position;
-        dir.y = playerData.verticalPushOverride;
-        other.rigidbody.AddForce(dir * playerData.obstaclePushForce, ForceMode.Impulse);
+        dir.y = initialPlayerData.verticalPushOverride;
+        other.rigidbody.AddForce(dir * initialPlayerData.obstaclePushForce, ForceMode.Impulse);
     }
 }
