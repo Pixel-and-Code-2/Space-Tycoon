@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "GlobalParameters", menuName = "GlobalParameters", order = 1)]
 public class GlobalParameters : ParameteredScriptableObject

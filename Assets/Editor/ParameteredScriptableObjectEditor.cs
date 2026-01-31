@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(ParameteredScriptableObject))]
+[CustomEditor(typeof(ParameteredScriptableObject), true)]
 public class ParameteredScriptableObjectEditor : Editor
 {
     public override void OnInspectorGUI()

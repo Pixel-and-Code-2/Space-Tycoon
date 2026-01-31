@@ -201,9 +201,19 @@ public class PawnNavMesh : MonoBehaviour
         }
         return distance;
     }
-
+    public float some_value = 0f;
+    private float cache = 0f;
     void OnValidate()
     {
+        if (some_value != cache)
+        {
+            cache = some_value;
+            var dictsArr = new Dictionary<string, float>[] { initialPlayerData.GetParametersDict(), enemyDataExample.GetParametersDict() };
+            // Debug.Log("dictsArr: " + dictsArr[0].Count + " " + dictsArr[1].Count);
+            float res = formulaField.EvaluateFormula(dictsArr);
+            // Debug.Log("Formula result: " + res);
+            some_value = res;
+        }
         bool doUpdate = false;
         if (playerDataCached != initialPlayerData)
         {

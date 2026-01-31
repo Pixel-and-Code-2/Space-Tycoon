@@ -13,6 +13,12 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
 
     public Dictionary<string, float> parametersDict { get; private set; } = new Dictionary<string, float>();
 
+    public Dictionary<string, float> GetParametersDict()
+    {
+        RebuildParametersDict();
+        return parametersDict;
+    }
+
     public string GetParametersDictState()
     {
         RebuildParametersDict();
