@@ -11,14 +11,11 @@ public class PawnNavMesh : MonoBehaviour
     [SerializeField]
     private PlayerData enemyDataExample;
     private PlayerData enemyDataCached;
-
     protected Dictionary<string, float> playerData;
-
     private NavMeshAgent navMeshAgent;
     protected float distanceTravelling = 0f;
     protected Vector3 targetPosition = Vector3.zero;
     protected bool isMoving = false;
-
     private Vector3 cachedTargetPosition = Vector3.zero;
     private Vector3[] cachedPointsAvailable = null;
     private Vector3[] cachedPointsOutOfRange = null;
@@ -209,11 +206,10 @@ public class PawnNavMesh : MonoBehaviour
         {
             cache = some_value;
             var dictsArr = new Dictionary<string, float>[] { initialPlayerData.GetParametersDict(), enemyDataExample.GetParametersDict() };
-            // Debug.Log("dictsArr: " + dictsArr[0].Count + " " + dictsArr[1].Count);
             float res = formulaField.EvaluateFormula(dictsArr);
-            // Debug.Log("Formula result: " + res);
             some_value = res;
         }
+
         bool doUpdate = false;
         if (playerDataCached != initialPlayerData)
         {
@@ -234,7 +230,7 @@ public class PawnNavMesh : MonoBehaviour
             formulaField.dataAssets.Add(initialPlayerData);
             formulaField.dataAssets.Add(enemyDataExample);
             formulaField.names.Clear();
-            formulaField.names.Add("CurrentPanw");
+            formulaField.names.Add("CurrentPawn");
             formulaField.names.Add("EnemyPawn");
         }
     }
