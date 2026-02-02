@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(PathDrawer))]
-public class PawnBrain : PawnNavMesh, IWalkableSelectable
+public class PawnBrain : PawnNavMesh, IControlableSelectable
 {
     private PathDrawer pathDrawer;
 
@@ -38,16 +38,6 @@ public class PawnBrain : PawnNavMesh, IWalkableSelectable
         }
     }
 
-    public void OnSelect()
-    {
-        // Debug.Log("OnSelect: " + name);
-    }
-
-    public void OnDeselect()
-    {
-        // Debug.Log("OnDeselect: " + name);
-    }
-
     public Transform GetTransform()
     {
         return transform;
@@ -56,6 +46,14 @@ public class PawnBrain : PawnNavMesh, IWalkableSelectable
     public void OnMove(Vector3 position)
     {
         TravelToPosition(position);
+    }
+
+    public void OnShoot(Vector3 position)
+    {
+        Debug.Log("OnShoot: " + position);
+        transform.LookAt(position);
+        // transform.position += Vector3.up * 10f;
+        transform.position += transform.forward * 0.2f;
     }
 
     void OnCollisionEnter(Collision other)

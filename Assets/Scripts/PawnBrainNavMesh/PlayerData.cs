@@ -26,6 +26,7 @@ public class PlayerData : ParameteredScriptableObject
     protected override void AddBuiltInParameters()
     {
         parametersDict[AVAILABLE_DISTANCE_KEY] = -1f;
+        base.AddBuiltInParameters();
     }
 
     public Dictionary<string, float> GetCopyOfParameters()

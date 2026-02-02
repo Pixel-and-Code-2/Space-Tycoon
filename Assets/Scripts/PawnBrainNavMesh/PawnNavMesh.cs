@@ -8,9 +8,6 @@ public class PawnNavMesh : MonoBehaviour
     [SerializeField]
     protected PlayerData initialPlayerData;
     private PlayerData playerDataCached;
-    [SerializeField]
-    private PlayerData enemyDataExample;
-    private PlayerData enemyDataCached;
     protected Dictionary<string, float> playerData;
     private NavMeshAgent navMeshAgent;
     protected float distanceTravelling = 0f;
@@ -20,8 +17,6 @@ public class PawnNavMesh : MonoBehaviour
     private Vector3[] cachedPointsAvailable = null;
     private Vector3[] cachedPointsOutOfRange = null;
     private bool cachedTargetPositionValid = false;
-    [SerializeReference]
-    private FormulaField formulaField = new FormulaField();
 
     public bool IsMoving()
     {
@@ -198,40 +193,18 @@ public class PawnNavMesh : MonoBehaviour
         }
         return distance;
     }
-    public float some_value = 0f;
-    private float cache = 0f;
+
     void OnValidate()
     {
-        if (some_value != cache)
-        {
-            cache = some_value;
-            var dictsArr = new Dictionary<string, float>[] { initialPlayerData.GetParametersDict(), enemyDataExample.GetParametersDict() };
-            float res = formulaField.EvaluateFormula(dictsArr);
-            some_value = res;
-        }
 
-        bool doUpdate = false;
+        if (initialPlayerData == null)
+        {
+            initialPlayerData = HandleInittingGlobalVars.playerMustHaveParams;
+        }
         if (playerDataCached != initialPlayerData)
         {
             playerDataCached = initialPlayerData;
             playerData = initialPlayerData.GetCopyOfParameters();
-            doUpdate = true;
-        }
-
-        if (enemyDataCached != enemyDataExample)
-        {
-            enemyDataCached = enemyDataExample;
-            doUpdate = true;
-        }
-
-        if (doUpdate)
-        {
-            formulaField.dataAssets.Clear();
-            formulaField.dataAssets.Add(initialPlayerData);
-            formulaField.dataAssets.Add(enemyDataExample);
-            formulaField.names.Clear();
-            formulaField.names.Add("CurrentPawn");
-            formulaField.names.Add("EnemyPawn");
         }
     }
 

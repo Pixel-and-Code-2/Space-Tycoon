@@ -17,6 +17,8 @@ MonoBehaviour:
     value: 3
   - name: fgh
     value: 3
+  isContext: 0
+  mustHaveParameters: []
   maxSampleDistance: 5
   obstaclePushForce: 10
   verticalPushOverride: 0.2

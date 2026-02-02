@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class PathDrawerWithText : PathDrawer
@@ -28,19 +27,6 @@ public class PathDrawerWithText : PathDrawer
             out Vector2 localPoint
         );
         textRect.anchoredPosition = localPoint + uiTextOffset;
-    }
-
-    protected override void ColorEndTo(bool isOutOfRange = true)
-    {
-        base.ColorEndTo(isOutOfRange);
-        if (isOutOfRange)
-        {
-            uiText.color = outOfRangeTextColor;
-        }
-        else
-        {
-            uiText.color = textColor;
-        }
     }
 
     new void Awake()
@@ -93,6 +79,11 @@ public class PathDrawerWithText : PathDrawer
     {
         canvas.enabled = visible;
         base.SetVisible(visible);
+    }
+
+    public void SetTextColor(Color color)
+    {
+        uiText.color = color;
     }
 
 }

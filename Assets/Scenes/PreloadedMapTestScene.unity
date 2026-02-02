@@ -1095,6 +1095,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 524328144}
   m_CullTransparentMesh: 0
+--- !u!114 &550913343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230305945812372295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd1d07adffbecc844bde61f2558981ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleEnemyAI
+  aggressionRange: 20
 --- !u!1001 &627598361
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1686,6 +1699,7 @@ GameObject:
   - component: {fileID: 1072615991}
   - component: {fileID: 1072615990}
   - component: {fileID: 1072615993}
+  - component: {fileID: 1072615994}
   m_Layer: 0
   m_Name: MainController
   m_TagString: Untagged
@@ -1706,6 +1720,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnController
   pathDrawerWithText: {fileID: 402519186}
+  calculateShootAccuracy:
+    rid: 3912446145012432957
+  references:
+    version: 2
+    RefIds:
+    - rid: 3912446145012432957
+      type: {class: FormulaField, ns: , asm: Assembly-CSharp}
+      data:
+        formula: 'Math.Max(g_M, Math.Min(100-g_M,
+
+          c_shootingDistance
+
+          ))/100'
+        instruction: "Type a mathematical expression using common '+', '-', '*',
+          '/', '(', ')'.\nYou also can provide variables from Data Assets available
+          in this object, using words like 'g_Statname' - the full list of available
+          vars is listed below.\nEverything starting with '//' till the end of the
+          line will be ignored as well as between those two: '/*', '*/'.\nYou also
+          can use Math C# library, for example: Math.Abs(-g_someglobalstat).\nList
+          of math formuls: Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which
+          use radians), Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick
+          the available variable below to add its name to the end o\u0430 the formula
+          (but be sure to the formula to be blured when clicked)."
+        dataAssets:
+        - {fileID: 1072615994}
+        names:
+        - Calculated
 --- !u!114 &1072615991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1754,7 +1795,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae2ae07a0b73f9649b7a13c51a23fece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  globalParameters: {fileID: 11400000, guid: 5d4617d111d780044a11ef89afed3579, type: 2}
+  globalParametersSettable: {fileID: 11400000, guid: 5d4617d111d780044a11ef89afed3579, type: 2}
+  playerMustHaveParamsSettable: {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+  enemyMustHaveParamsSettable: {fileID: 0}
+--- !u!114 &1072615994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072615989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6b5a57d200b6747bce3b0447048139, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FormulaDataMonoBase
 --- !u!1 &1100706172 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7171609009048594743, guid: ffebe18cba49acf4194303502af4f99a, type: 3}
@@ -1888,6 +1943,10 @@ PrefabInstance:
       propertyPath: 'formulaField.dataAssets.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: 5f36f30d5757d3a429ca2f909ff094dd, type: 2}
+    - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: 'managedReferences[1000].names.Array.data[0]'
+      value: CurrentPawn
+      objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'managedReferences[1000].dataAssets.Array.data[1]'
       value: 
@@ -2343,11 +2402,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: formulaField.formula
-      value: (c.AvailableDistance+c.AvailableDistance*8428.23)/c.Parameter3 g.M c.AvailableDistance
+      value: e_AvailableDistance
       objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: managedReferences[1000].formula
-      value: (c.AvailableDistance+c.AvailableDistance*8428.23)/c.Parameter3 g.M c.AvailableDistance
+      value: e_AvailableDistance
       objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'formulaField.dataAssets.Array.data[0]'
@@ -2357,6 +2416,10 @@ PrefabInstance:
       propertyPath: 'formulaField.dataAssets.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: 5f36f30d5757d3a429ca2f909ff094dd, type: 2}
+    - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: 'managedReferences[1000].names.Array.data[0]'
+      value: CurrentPawn
+      objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'managedReferences[1000].dataAssets.Array.data[0]'
       value: 
@@ -2485,11 +2548,176 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0ddf0fc9be90d34190d4ae61dbd08c8, type: 3}
+--- !u!54 &1238644121131078152
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230305945812372295}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!1 &2230305945812372295
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5917102312801102665}
+  - component: {fileID: 8535413144683599529}
+  - component: {fileID: 3152828478261742097}
+  - component: {fileID: 6158508223434767749}
+  - component: {fileID: 8025852395781873921}
+  - component: {fileID: 1238644121131078152}
+  - component: {fileID: 550913343}
+  m_Layer: 7
+  m_Name: Enemy
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!33 &3152828478261742097
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230305945812372295}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &5917102312801102665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230305945812372295}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.78, y: 0.92, z: 0.62}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &6031529313135793423 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2899142388244996334, guid: 88df709cf193f124ab216b91507b8b5d, type: 3}
   m_PrefabInstance: {fileID: 8547935123741617851}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &6158508223434767749
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230305945812372295}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &8025852395781873921
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230305945812372295}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!195 &8535413144683599529
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230305945812372295}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 2
 --- !u!1001 &8547935123741617851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2576,3 +2804,4 @@ SceneRoots:
   - {fileID: 1415234978}
   - {fileID: 1320843880}
   - {fileID: 1904320609}
+  - {fileID: 5917102312801102665}

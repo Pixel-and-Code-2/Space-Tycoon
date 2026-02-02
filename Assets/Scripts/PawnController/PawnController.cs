@@ -7,18 +7,23 @@ public enum ControlType
 }
 
 [RequireComponent(typeof(ISelectorBrain))]
+[RequireComponent(typeof(FormulaDataMonoBase))]
 public class PawnController : MonoBehaviour
 {
     private ISelectorBrain selector;
     private ISelectable selectedPawn = null;
-    private IWalkableSelectable selectedWalkablePawn = null;
+    private IControlableSelectable selectedWalkablePawn = null;
     private Vector3 lastHitPoint = Vector3.zero;
     private bool hitPointValid = false;
     [SerializeField]
     private PathDrawerWithText pathDrawerWithText;
     private ControlType controlType = ControlType.shoot;
-
     private bool pathFrozen = false;
+    [SerializeReference]
+    private FormulaField calculateShootAccuracy = new FormulaField();
+    public const string SHOOTING_DISTANCE_LABEL = "shootingDistance";
+    public const string WALL_DISTANCE_LABEL = "wallDistance";
+    private FormulaDataMonoBase shootingFormulaData;
 
     void Awake()
     {
@@ -52,8 +57,33 @@ public class PawnController : MonoBehaviour
         pathFrozen = false;
     }
 
+    void OnValidate()
+    {
+        if (calculateShootAccuracy == null)
+        {
+            calculateShootAccuracy = new FormulaField();
+        }
+        // shootingFormulaData = null;
+        if (shootingFormulaData == null)
+        {
+            Debug.Log("formulaData is null, reinitting");
+            shootingFormulaData = GetComponent<FormulaDataMonoBase>();
+        }
+        if (shootingFormulaData.parametersDict.Count < 2)
+        {
+            shootingFormulaData.FullFillWithParameters(new string[] { SHOOTING_DISTANCE_LABEL, WALL_DISTANCE_LABEL });
+        }
+        if (calculateShootAccuracy.names.Count == 0 || calculateShootAccuracy.dataAssets[0] != shootingFormulaData as Object)
+        {
+            calculateShootAccuracy.dataAssets.Clear();
+            calculateShootAccuracy.names.Clear();
+            calculateShootAccuracy.names.Add("Calculated");
+            calculateShootAccuracy.dataAssets.Add(shootingFormulaData as Object);
+        }
+    }
     void Update()
     {
+
 
         if (TurnManager.Instance != null && !TurnManager.Instance.IsPlayerTurn)
         {
@@ -77,11 +107,10 @@ public class PawnController : MonoBehaviour
         }
     }
 
-
     private void TryToTakeControlOfPawn()
     {
         ISelectable selectionClick = selector.GetSelectionClickValue();
-        if (selectionClick is IWalkableSelectable walkablePawn)
+        if (selectionClick is IControlableSelectable walkablePawn)
         {
             pathDrawerWithText.SetVisible(true);
             selectedWalkablePawn = walkablePawn;
@@ -100,9 +129,16 @@ public class PawnController : MonoBehaviour
         bool clicked = selector.GetSelectionClickState();
         if (clicked && hitPointValid && selectedWalkablePawn != null && !pathFrozen)
         {
-            selectedWalkablePawn.OnMove(lastHitPoint);
-            pathFrozen = true;
-            pathDrawerWithText.SetVisible(false);
+            if (controlType == ControlType.walk)
+            {
+                selectedWalkablePawn.OnMove(lastHitPoint);
+                pathFrozen = true;
+                pathDrawerWithText.SetVisible(false);
+            }
+            else if (controlType == ControlType.shoot)
+            {
+                selectedWalkablePawn.OnShoot(lastHitPoint);
+            }
         }
     }
 
@@ -154,7 +190,14 @@ public class PawnController : MonoBehaviour
                 {
                     pathDrawerWithText.SetText((PawnNavMesh.CalculateDistance(pointsAvailable) + PawnNavMesh.CalculateDistance(pointsOutOfRange)).ToString("F1") + "m", screenPoint);
                     pathDrawerWithText.SetPathPoints(pointsAvailable, pointsOutOfRange);
-
+                    if (pointsOutOfRange != null)
+                    {
+                        pathDrawerWithText.SetTextColor(Color.red);
+                    }
+                    else
+                    {
+                        pathDrawerWithText.SetTextColor(Color.green);
+                    }
                     if (!pathDrawerWithText.GetVisible())
                     {
                         pathDrawerWithText.SetVisible(true);
@@ -177,22 +220,68 @@ public class PawnController : MonoBehaviour
                 Vector3 originPoint = selectedWalkablePawn.GetTransform().position;
                 if (hit == PawnHitResult.PawnHit)
                 {
+                    float accuracy = GetShootAccuracy(worldPoint);
+                    float h = accuracy * 0.33f;
+                    pathDrawerWithText.SetTextColor(Color.HSVToRGB(h, 1f, 1f));
                     pathDrawerWithText.SetText(
-                        Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m" + " 94%",
+                        Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m" + (accuracy * 100f).ToString("F0") + "%",
                         screenPoint
                     );
                 }
                 else if (hit == PawnHitResult.FloorHit)
                 {
+                    pathDrawerWithText.SetTextColor(Color.red);
                     pathDrawerWithText.SetText(
-                        Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m" + " 0%",
+                        Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m",
                         screenPoint
                     );
                 }
                 pathDrawerWithText.SetPathPoints(new Vector3[] { selectedWalkablePawn.GetTransform().position, worldPoint }, null);
                 pathDrawerWithText.SetVisible(true);
+
+                lastHitPoint = worldPoint;
+                hitPointValid = true;
             }
         }
+    }
+
+    private float GetShootAccuracy(Vector3 targetPoint)
+    {
+        Vector3 origin = selectedWalkablePawn.GetTransform().position;
+        float distance = Vector3.Distance(origin, targetPoint);
+        shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = distance;
+
+        int wallLayer = LayerMask.NameToLayer("Wall");
+        int wallLayerMask = 1 << wallLayer;
+
+        Vector3 direction = (targetPoint - origin).normalized;
+
+        RaycastHit[] forwardHits = Physics.RaycastAll(origin, direction, distance, wallLayerMask);
+        float totalDistanceInWalls = 0;
+
+        foreach (var hit in forwardHits)
+        {
+            Ray backRay = new Ray(origin + direction * distance, -direction);
+            RaycastHit backHit;
+            if (hit.collider.Raycast(backRay, out backHit, distance))
+            {
+                float exitDist = distance - backHit.distance;
+                float entryDist = hit.distance;
+                if (exitDist > entryDist)
+                {
+                    totalDistanceInWalls += (exitDist - entryDist);
+                }
+            }
+        }
+
+        shootingFormulaData.parametersDict[WALL_DISTANCE_LABEL] = totalDistanceInWalls;
+        float res = calculateShootAccuracy.EvaluateFormula(
+            new System.Collections.Generic.Dictionary<string, float>[] {
+                shootingFormulaData.parametersDict
+            }
+        );
+        Debug.Log("Wall distance: " + totalDistanceInWalls + " Shoot accuracy: " + res);
+        return res;
     }
 
     private void UnSetAim()
@@ -200,10 +289,8 @@ public class PawnController : MonoBehaviour
         hitPointValid = false;
         lastHitPoint = Vector3.zero;
     }
-
     public void ChangeControlType(ControlType newControlType)
     {
         controlType = newControlType;
     }
-
 }

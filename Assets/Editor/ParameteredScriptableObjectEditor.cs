@@ -6,7 +6,22 @@ public class ParameteredScriptableObjectEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
+        serializedObject.Update();
+
+        SerializedProperty iterator = serializedObject.GetIterator();
+        bool enterChildren = true;
+        while (iterator.NextVisible(enterChildren))
+        {
+            enterChildren = false;
+            if (iterator.name == "m_Script") continue;
+
+            bool isContext = serializedObject.FindProperty("isContext").boolValue;
+            if (isContext && iterator.name == "mustHaveParameters") continue;
+
+            EditorGUILayout.PropertyField(iterator, true);
+        }
+
+        serializedObject.ApplyModifiedProperties();
 
         ParameteredScriptableObject data = (ParameteredScriptableObject)target;
 

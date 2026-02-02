@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface ISelectable
 {
-    void OnSelect();
-    void OnDeselect();
+    void OnSelect() { }
+    void OnDeselect() { }
     Transform GetTransform();
 }

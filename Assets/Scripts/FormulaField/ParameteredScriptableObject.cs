@@ -1,11 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[CreateAssetMenu(fileName = "Parameters", menuName = "Parameters", order = 1)]
 public class ParameteredScriptableObject : ScriptableObject, IFormulaData
 {
 
     [SerializeField]
     private List<NamedFloat> parameters = new List<NamedFloat>();
+
+    [SerializeField]
+    private bool isContext = false;
+
+    [SerializeField]
+    private List<ParameteredScriptableObject> mustHaveParameters = new List<ParameteredScriptableObject>();
     public List<NamedFloat> GetParameters()
     {
         return parameters;
@@ -44,7 +51,21 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
 
     protected virtual void AddBuiltInParameters()
     {
-
+        if (isContext) return;
+        foreach (var mustHaveParameter in mustHaveParameters)
+        {
+            if (mustHaveParameter == null) continue;
+            if (mustHaveParameter.isContext == false)
+            {
+                Debug.LogWarning("Must have parameter is not a context (just skipping): " + mustHaveParameter.name);
+                continue;
+            }
+            mustHaveParameter.RebuildParametersDict();
+            foreach (var kv in mustHaveParameter.parametersDict)
+            {
+                parametersDict[kv.Key] = kv.Value;
+            }
+        }
     }
 
 

@@ -57,7 +57,7 @@ public class FormulaFieldDrawer : PropertyDrawer
         var dataAssetsNamesProp = property.FindPropertyRelative("names");
         if (dataAssetsProp != null && dataAssetsNamesProp != null)
         {
-            y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            // y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 
             for (int i = 0; i < dataAssetsProp.arraySize; i++)
             {
@@ -72,9 +72,9 @@ public class FormulaFieldDrawer : PropertyDrawer
             }
         }
 
-        if (GlobalParameters.Instance != null)
+        if (HandleInittingGlobalVars.globalParameters != null)
         {
-            y = DrawDataAssetSectionWithData(position.x, width, y, "GlobalParameters", GlobalParameters.Instance, formulaProp, $"{property.propertyPath}.globalParameters");
+            y = DrawDataAssetSectionWithData(position.x, width, y, "GlobalParameters", HandleInittingGlobalVars.globalParameters, formulaProp, $"{property.propertyPath}.globalParameters");
         }
 
         DrawCompileFormulaButton(new Rect(position.x, y, width, EditorGUIUtility.singleLineHeight), property);
@@ -88,7 +88,7 @@ public class FormulaFieldDrawer : PropertyDrawer
         if (GUI.Button(position, "Compile Formula"))
         {
             var formulaField = property.managedReferenceValue as FormulaField;
-            
+
             if (formulaField != null)
             {
                 formulaField.CompileFormula();
@@ -210,16 +210,16 @@ public class FormulaFieldDrawer : PropertyDrawer
         var dataAssetsProp = property.FindPropertyRelative("dataAssets");
         if (dataAssetsProp != null)
         {
-            height += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+            // height += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
             for (int i = 0; i < dataAssetsProp.arraySize; i++)
             {
                 height += GetDataAssetHeight(width, dataAssetsProp.GetArrayElementAtIndex(i), $"{property.propertyPath}.dataAssets[{i}]");
             }
         }
 
-        if (GlobalParameters.Instance != null)
+        if (HandleInittingGlobalVars.globalParameters != null)
         {
-            height += GetDataAssetHeightWithData(width, GlobalParameters.Instance, $"{property.propertyPath}.globalParameters");
+            height += GetDataAssetHeightWithData(width, HandleInittingGlobalVars.globalParameters, $"{property.propertyPath}.globalParameters");
         }
 
         height += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
