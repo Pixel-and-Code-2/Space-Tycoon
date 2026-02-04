@@ -150,7 +150,7 @@ public class FormulaFieldDrawer : PropertyDrawer
 
         if (newExpanded && dataReference != null)
         {
-            var parameters = dataReference.GetParameters();
+            var parameters = dataReference.GetParameterNames();
             if (parameters != null && parameters.Count > 0)
             {
                 var buttonBaseY = y;
@@ -159,7 +159,7 @@ public class FormulaFieldDrawer : PropertyDrawer
                 for (int index = 0; index < parameters.Count; index++)
                 {
                     var parameter = parameters[index];
-                    var itemName = GetParameterName(title, parameter.name);
+                    var itemName = GetParameterName(title, parameter);
                     if (string.IsNullOrEmpty(itemName) || itemName == "")
                         continue;
                     var row = validButtons / ButtonsPerRow;
@@ -240,7 +240,7 @@ public class FormulaFieldDrawer : PropertyDrawer
         var dropdownKey = sectionKey + ".parameters";
         if (GetFoldoutState(dropdownKey, false) && dataReference != null)
         {
-            var parameters = dataReference.GetParameters();
+            var parameters = dataReference.GetParameterNames();
             if (parameters != null && parameters.Count > 0)
             {
                 var rows = Mathf.CeilToInt(parameters.Count / (float)ButtonsPerRow);

@@ -55,7 +55,7 @@ public class PathDrawerWithText : PathDrawer
 
     protected new void CheckVariables()
     {
-        Debug.Log("Checking variables");
+        // Debug.Log("Checking variables");
         if (canvas == null)
         {
             Debug.LogError("Canvas not found");

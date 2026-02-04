@@ -7,15 +7,29 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
 
     [SerializeField]
     private List<NamedFloat> parameters = new List<NamedFloat>();
-
     [SerializeField]
-    private bool isContext = false;
+    private List<NamedFormula> calculatedParameters = new List<NamedFormula>();
 
-    [SerializeField]
+    [SerializeField, Tooltip("Parameters which must be added to the parameters dictionary of the current object BEFORE ANY OF YOURS, you can override them! ")]
     private List<ParameteredScriptableObject> mustHaveParameters = new List<ParameteredScriptableObject>();
-    public List<NamedFloat> GetParameters()
+
+    [SerializeField, HideInInspector]
+    private bool isDirty = true; // Cache. If nothing is changed, we don't need to rebuild the dictionary
+    [SerializeField, HideInInspector]
+    private string parametersDictStateCache = string.Empty;
+
+    public List<string> GetParameterNames()
     {
-        return parameters;
+        var lst = new List<string>();
+        foreach (var calculatedParameter in calculatedParameters)
+        {
+            lst.Add(calculatedParameter.name);
+        }
+        foreach (var parameter in parameters)
+        {
+            lst.Add(parameter.name);
+        }
+        return lst;
     }
 
     public Dictionary<string, float> parametersDict { get; private set; } = new Dictionary<string, float>();
@@ -28,19 +42,51 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
 
     public string GetParametersDictState()
     {
+        if (!isDirty && !string.IsNullOrEmpty(parametersDictStateCache))
+        {
+            return parametersDictStateCache;
+        }
         RebuildParametersDict();
         if (parametersDict.Count == 0)
-            return "Parameters dictionary is empty";
+        {
+            parametersDictStateCache = "Parameters dictionary is empty";
+            return parametersDictStateCache;
+        }
         var sb = new System.Text.StringBuilder();
         foreach (var kv in parametersDict)
             sb.AppendLine(kv.Key + " = " + kv.Value.ToString("F2") + " (" + kv.Value.ToString("F2") + ")");
-        return sb.ToString();
+
+        parametersDictStateCache = sb.ToString();
+        // Debug.Log("Cache updated for: " + name);
+        return parametersDictStateCache;
+    }
+
+    public new void SetDirty()
+    {
+        isDirty = true;
     }
 
     public void RebuildParametersDict()
     {
+        if (!isDirty && parametersDict.Count > 0) return;
+        RebuildParametersDict(new HashSet<ParameteredScriptableObject>());
+        isDirty = false;
+    }
+
+    public void RebuildParametersDict(HashSet<ParameteredScriptableObject> visited)
+    {
+        if (visited.Contains(this)) return;
+        visited.Add(this);
+        // Debug.Log("Rebuilding parameters dict for: " + name);
         parametersDict.Clear();
-        AddBuiltInParameters();
+        CheckCalculatedParameters();
+        AddBuiltInParameters(visited);
+        AddParametersAsConsts(parameters);
+        AddParametersAsCalculatables(calculatedParameters);
+    }
+
+    private void AddParametersAsConsts(List<NamedFloat> parameters)
+    {
         foreach (var parameter in parameters)
         {
             parameter.name = processParameterName(parameter.name);
@@ -48,23 +94,44 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
                 parametersDict[parameter.name] = parameter.value;
         }
     }
-
-    protected virtual void AddBuiltInParameters()
+    private void AddParametersAsCalculatables(List<NamedFormula> calculatedParameters)
     {
-        if (isContext) return;
-        foreach (var mustHaveParameter in mustHaveParameters)
+        if (this.calculatedParameters != calculatedParameters)
         {
-            if (mustHaveParameter == null) continue;
-            if (mustHaveParameter.isContext == false)
+            foreach (var calculatedParameter in calculatedParameters)
             {
-                Debug.LogWarning("Must have parameter is not a context (just skipping): " + mustHaveParameter.name);
-                continue;
+                if (this.calculatedParameters.Find(x => x.name == calculatedParameter.name) == null)
+                {
+                    NamedFormula newCalculatedParameter = new NamedFormula();
+                    newCalculatedParameter.name = calculatedParameter.name;
+                    newCalculatedParameter.formula = calculatedParameter.formula;
+                    newCalculatedParameter.SetContext(this);
+                    this.calculatedParameters.Add(newCalculatedParameter);
+                }
             }
-            mustHaveParameter.RebuildParametersDict();
-            foreach (var kv in mustHaveParameter.parametersDict)
+        }
+        foreach (var calculatedParameter in calculatedParameters)
+        {
+            if (calculatedParameter.IsAvailable())
             {
-                parametersDict[kv.Key] = kv.Value;
+                parametersDict[calculatedParameter.name] = calculatedParameter.formula.EvaluateFormula(new Dictionary<string, float>[] { parametersDict });
             }
+            else
+            {
+                Debug.LogWarning("You are trying to use calculatable parameter which is not available (formula must be compiled): " + calculatedParameter.name);
+            }
+        }
+    }
+
+    private void AddBuiltInParameters(HashSet<ParameteredScriptableObject> visited)
+    {
+        for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
+        {
+            var mustHaveParameter = mustHaveParameters[i];
+            if (mustHaveParameter == null || mustHaveParameter == this) continue;
+            mustHaveParameter.RebuildParametersDict(visited);
+            AddParametersAsConsts(mustHaveParameter.parameters);
+            AddParametersAsCalculatables(mustHaveParameter.calculatedParameters);
         }
     }
 
@@ -83,5 +150,17 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
             }
         }
         return filtered.ToString();
+    }
+
+    void CheckCalculatedParameters()
+    {
+        foreach (var calculatedParameter in calculatedParameters)
+        {
+            if (calculatedParameter.IsContextSet() == false)
+            {
+                calculatedParameter.SetContext(this);
+            }
+            // Debug.Log("Calculated parameter: " + calculatedParameter.name + " is available: " + calculatedParameter.IsAvailable());
+        }
     }
 }

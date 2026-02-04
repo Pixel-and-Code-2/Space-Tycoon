@@ -7,6 +7,8 @@ public class FormulaField
     public FormulaField()
     {
         instruction = "Type a mathematical expression using common '+', '-', '*', '/', '(', ')'.\nYou also can provide variables from Data Assets available in this object, using words like 'g_Statname' - the full list of available vars is listed below.\nEverything starting with '//' till the end of the line will be ignored as well as between those two: '/*', '*/'.\nYou also can use Math C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls: Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians), Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available variable below to add its name to the end oа the formula (but be sure to the formula to be blured when clicked).";
+        dataAssets = new List<Object>();
+        names = new List<string>();
     }
     public string formula;
     public string instruction;
@@ -34,6 +36,11 @@ public class FormulaField
         return compiledFormulaAction(locals, HandleInittingGlobalVars.globalParameters.parametersDict);
     }
 
+    public bool GetCompiled()
+    {
+        return compiledFormulaAction != null;
+    }
+
 
     public string GetFormulaString()
     {
@@ -54,6 +61,19 @@ public class FormulaField
 
     public void CompileFormula()
     {
+        // ToDo: make it work
+#if UNITY_EDITOR
+        foreach (var asset in dataAssets)
+        {
+            if (asset is ParameteredScriptableObject pso)
+            {
+                pso.SetDirty();
+            }
+        }
+#else
+        Debug.LogError("Trying to compile formula in runtime?! Aborting...\n\n" + System.Environment.StackTrace);
+        return;
+#endif
         try
         {
             string formulaString = GetFormulaString();

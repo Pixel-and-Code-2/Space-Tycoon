@@ -6,24 +6,15 @@ public class ParameteredScriptableObjectEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        serializedObject.Update();
-
-        SerializedProperty iterator = serializedObject.GetIterator();
-        bool enterChildren = true;
-        while (iterator.NextVisible(enterChildren))
-        {
-            enterChildren = false;
-            if (iterator.name == "m_Script") continue;
-
-            bool isContext = serializedObject.FindProperty("isContext").boolValue;
-            if (isContext && iterator.name == "mustHaveParameters") continue;
-
-            EditorGUILayout.PropertyField(iterator, true);
-        }
-
-        serializedObject.ApplyModifiedProperties();
+        EditorGUI.BeginChangeCheck();
+        DrawDefaultInspector();
+        bool changed = EditorGUI.EndChangeCheck();
 
         ParameteredScriptableObject data = (ParameteredScriptableObject)target;
+        if (changed)
+        {
+            data.SetDirty();
+        }
 
         EditorGUILayout.Space(10);
         if (GUILayout.Button("Update dictionary"))

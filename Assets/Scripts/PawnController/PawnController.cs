@@ -77,7 +77,7 @@ public class PawnController : MonoBehaviour
         // shootingFormulaData = null;
         if (shootingFormulaData == null)
         {
-            Debug.Log("formulaData is null, reinitting");
+            Debug.LogWarning("formulaData is null, reinitting");
             shootingFormulaData = GetComponent<FormulaDataMonoBase>();
         }
         if (shootingFormulaData.parametersDict.Count < 2)

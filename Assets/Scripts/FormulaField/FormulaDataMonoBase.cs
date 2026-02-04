@@ -5,12 +5,12 @@ public class FormulaDataMonoBase : MonoBehaviour, IFormulaData
 {
     public Dictionary<string, float> parametersDict { get; private set; } = new Dictionary<string, float>();
 
-    public List<NamedFloat> GetParameters()
+    public List<string> GetParameterNames()
     {
-        var lst = new List<NamedFloat>();
+        var lst = new List<string>();
         foreach (var kv in parametersDict)
         {
-            lst.Add(new NamedFloat { name = kv.Key, value = kv.Value });
+            lst.Add(kv.Key);
         }
         return lst;
     }
