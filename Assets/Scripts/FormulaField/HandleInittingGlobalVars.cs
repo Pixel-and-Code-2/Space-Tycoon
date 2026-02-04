@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 
 public class HandleInittingGlobalVars : MonoBehaviour
@@ -6,37 +7,55 @@ public class HandleInittingGlobalVars : MonoBehaviour
     [SerializeField]
     private GlobalParameters globalParametersSettable;
     [SerializeField]
-    private PlayerData playerMustHaveParamsSettable;
-    [SerializeField]
-    private ParameteredScriptableObject enemyMustHaveParamsSettable;
-    public static ParameteredScriptableObject enemyMustHaveParams;
-    public static PlayerData playerMustHaveParams;
+    private PawnData pawnMustHaveParamsSettable;
+    public static PawnData pawnMustHaveParams;
     public static GlobalParameters globalParameters;
+    public static Action onParamsUpdated;
     void Awake()
     {
         if (globalParameters == null)
             globalParameters = Resources.Load<GlobalParameters>("GlobalParameters");
         GlobalParameters.InitWith(globalParameters);
-        if (playerMustHaveParams == null)
-            playerMustHaveParams = Resources.Load<PlayerData>("PlayerMustHaveParams");
-        if (enemyMustHaveParams == null)
-            enemyMustHaveParams = Resources.Load<ParameteredScriptableObject>("EnemyMustHaveParams");
+        if (pawnMustHaveParams == null)
+            pawnMustHaveParams = Resources.Load<PawnData>("PawnMustHaveParams");
+        onParamsUpdated?.Invoke();
     }
 
     void OnValidate()
     {
-        if (playerMustHaveParamsSettable != null && playerMustHaveParams != playerMustHaveParamsSettable)
+        bool doUpdate = false;
+        if (pawnMustHaveParamsSettable != null && pawnMustHaveParams != pawnMustHaveParamsSettable)
         {
-            playerMustHaveParams = playerMustHaveParamsSettable;
+            pawnMustHaveParams = pawnMustHaveParamsSettable;
+            doUpdate = true;
         }
-        if (enemyMustHaveParamsSettable != null && enemyMustHaveParams != enemyMustHaveParamsSettable)
+        if (pawnMustHaveParams == null)
         {
-            enemyMustHaveParams = enemyMustHaveParamsSettable;
+            pawnMustHaveParams = Resources.Load<PawnData>("PawnMustHaveParams");
+            doUpdate = true;
+        }
+        if (pawnMustHaveParamsSettable == null)
+        {
+            pawnMustHaveParamsSettable = pawnMustHaveParams;
         }
         if (globalParametersSettable != null && globalParameters != globalParametersSettable)
         {
             globalParameters = globalParametersSettable;
             GlobalParameters.InitWith(globalParameters);
+            doUpdate = true;
+        }
+        if (globalParameters == null)
+        {
+            globalParameters = Resources.Load<GlobalParameters>("GlobalParameters");
+            doUpdate = true;
+        }
+        if (globalParametersSettable == null)
+        {
+            globalParametersSettable = globalParameters;
+        }
+        if (doUpdate)
+        {
+            onParamsUpdated?.Invoke();
         }
     }
 }

@@ -1730,7 +1730,7 @@ MonoBehaviour:
       data:
         formula: 'Math.Max(g_M, Math.Min(100-g_M,
 
-          c_shootingDistance
+          (5/c_shootingDistance)*(1-(c_wallDistance/c_shootingDistance))*100
 
           ))/100'
         instruction: "Type a mathematical expression using common '+', '-', '*',
@@ -1745,8 +1745,12 @@ MonoBehaviour:
           (but be sure to the formula to be blured when clicked)."
         dataAssets:
         - {fileID: 1072615994}
+        - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+        - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
         names:
         - Calculated
+        - Initiator
+        - Target
 --- !u!114 &1072615991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1796,8 +1800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   globalParametersSettable: {fileID: 11400000, guid: 5d4617d111d780044a11ef89afed3579, type: 2}
-  playerMustHaveParamsSettable: {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
-  enemyMustHaveParamsSettable: {fileID: 0}
+  pawnMustHaveParamsSettable: {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
 --- !u!114 &1072615994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1926,7 +1929,7 @@ PrefabInstance:
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: initialPlayerData
       value: 
-      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: formulaField.formula
       value: (c_somemoer *c_AvailableDistance+ e_AvailableDistance + 3)/ g_M
@@ -2399,7 +2402,7 @@ PrefabInstance:
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: initialPlayerData
       value: 
-      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: formulaField.formula
       value: e_AvailableDistance

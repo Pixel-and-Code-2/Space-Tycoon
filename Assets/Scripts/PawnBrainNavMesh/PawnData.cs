@@ -10,13 +10,14 @@ public class NamedFloat
 
 
 [CreateAssetMenu(fileName = "PlayerData", menuName = "PlayerData", order = 1)]
-public class PlayerData : ParameteredScriptableObject
+public class PawnData : ParameteredScriptableObject
 {
     [Header("Additional Developing params")]
     [SerializeField, Tooltip("max distance from mouse to walkable area, to show path")]
     public float maxSampleDistance = 5f;
     public float obstaclePushForce = 10f;
     public float verticalPushOverride = 0.2f;
+
 
 
     public const string AVAILABLE_DISTANCE_KEY = "AvailableDistance";
@@ -31,6 +32,10 @@ public class PlayerData : ParameteredScriptableObject
 
     public Dictionary<string, float> GetCopyOfParameters()
     {
+        if (parametersDict.Count == 0)
+        {
+            RebuildParametersDict();
+        }
         return new Dictionary<string, float>(parametersDict);
     }
 }

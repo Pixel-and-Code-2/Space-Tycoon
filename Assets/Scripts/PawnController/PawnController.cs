@@ -57,6 +57,16 @@ public class PawnController : MonoBehaviour
         pathFrozen = false;
     }
 
+    private void OnParamsUpdated()
+    {
+        OnValidate();
+    }
+
+    void OnDestroy()
+    {
+        HandleInittingGlobalVars.onParamsUpdated -= OnParamsUpdated;
+    }
+
     void OnValidate()
     {
         if (calculateShootAccuracy == null)
@@ -73,13 +83,25 @@ public class PawnController : MonoBehaviour
         {
             shootingFormulaData.FullFillWithParameters(new string[] { SHOOTING_DISTANCE_LABEL, WALL_DISTANCE_LABEL });
         }
-        if (calculateShootAccuracy.names.Count == 0 || calculateShootAccuracy.dataAssets[0] != shootingFormulaData as Object)
+
+        if (
+            calculateShootAccuracy.names.Count < 3 ||
+            calculateShootAccuracy.dataAssets[0] != shootingFormulaData as Object ||
+            calculateShootAccuracy.dataAssets[1] != HandleInittingGlobalVars.pawnMustHaveParams as Object ||
+            calculateShootAccuracy.dataAssets[2] != HandleInittingGlobalVars.pawnMustHaveParams as Object
+            )
         {
             calculateShootAccuracy.dataAssets.Clear();
             calculateShootAccuracy.names.Clear();
             calculateShootAccuracy.names.Add("Calculated");
             calculateShootAccuracy.dataAssets.Add(shootingFormulaData as Object);
+            calculateShootAccuracy.names.Add("Initiator");
+            calculateShootAccuracy.dataAssets.Add(HandleInittingGlobalVars.pawnMustHaveParams as Object);
+            calculateShootAccuracy.names.Add("Target");
+            calculateShootAccuracy.dataAssets.Add(HandleInittingGlobalVars.pawnMustHaveParams as Object);
         }
+        HandleInittingGlobalVars.onParamsUpdated -= OnParamsUpdated;
+        HandleInittingGlobalVars.onParamsUpdated += OnParamsUpdated;
     }
     void Update()
     {
@@ -221,8 +243,19 @@ public class PawnController : MonoBehaviour
                 if (hit == PawnHitResult.PawnHit)
                 {
                     float accuracy = GetShootAccuracy(worldPoint);
-                    float h = accuracy * 0.33f;
-                    pathDrawerWithText.SetTextColor(Color.HSVToRGB(h, 1f, 1f));
+                    if (accuracy < 0.1f)
+                    {
+                        pathDrawerWithText.SetTextColor(Color.red);
+                    }
+                    else if (accuracy > 0.9f)
+                    {
+                        pathDrawerWithText.SetTextColor(Color.green);
+                    }
+                    else
+                    {
+                        float h = (accuracy - 0.1f) / 0.8f * 0.33f;
+                        pathDrawerWithText.SetTextColor(Color.HSVToRGB(h, 1f, 1f));
+                    }
                     pathDrawerWithText.SetText(
                         Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m" + (accuracy * 100f).ToString("F0") + "%",
                         screenPoint
@@ -280,10 +313,8 @@ public class PawnController : MonoBehaviour
                 shootingFormulaData.parametersDict
             }
         );
-        Debug.Log("Wall distance: " + totalDistanceInWalls + " Shoot accuracy: " + res);
         return res;
     }
-
     private void UnSetAim()
     {
         hitPointValid = false;

@@ -23,6 +23,7 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
     // These vars are used to prevent multiple click handles on the same button press
     private bool selectionClickHandled = false;
     private bool deselectionClickHandled = false;
+    public const float RAYCAST_DISTANCE = 100.0f;
     void OnValidate()
     {
         selectionClick.action.Enable();
@@ -76,13 +77,13 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Floor")))
+        if (Physics.Raycast(ray, out hit, RAYCAST_DISTANCE, LayerMask.GetMask("Floor")))
         {
             return (hit.point, mousePosition, FloorHitResult.FloorHit);
         }
         Plane groundPlane = new Plane(Vector3.up, Vector3.up * zeroPlaneHeight); // y={zeroPlaneHeight} plane
         float distance;
-        if (groundPlane.Raycast(ray, out distance))
+        if (groundPlane.Raycast(ray, out distance) && distance <= RAYCAST_DISTANCE)
         {
             Vector3 intersection = ray.GetPoint(distance);
             return (intersection, mousePosition, FloorHitResult.ZeroPlaneHit);
@@ -95,7 +96,7 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Pawn")))
+        if (Physics.Raycast(ray, out hit, RAYCAST_DISTANCE, LayerMask.GetMask("Pawn")))
         {
             return (hit.point, mousePosition, PawnHitResult.PawnHit);
         }

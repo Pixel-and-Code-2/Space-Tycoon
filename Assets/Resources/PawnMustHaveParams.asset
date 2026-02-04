@@ -9,12 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 288290ebe52f52840afc19b8632352d9, type: 3}
-  m_Name: PlayerMustHaveParams
+  m_Script: {fileID: 11500000, guid: 30ec4eb4d0c0cef48819b1a6bc1676aa, type: 3}
+  m_Name: PawnMustHaveParams
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
   parameters:
   - name: AvailableDistance
-    value: 12
+    value: 20
+  - name: STR
+    value: 5
+  - name: HT
+    value: 5
+  - name: BB
+    value: 1
+  - name: DX
+    value: 1
   isContext: 1
   mustHaveParameters: []
   maxSampleDistance: 5

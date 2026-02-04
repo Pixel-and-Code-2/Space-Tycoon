@@ -6,8 +6,8 @@ using System.Collections.Generic;
 public class PawnNavMesh : MonoBehaviour
 {
     [SerializeField]
-    protected PlayerData initialPlayerData;
-    private PlayerData playerDataCached;
+    protected PawnData initialPlayerData;
+    private PawnData playerDataCached;
     protected Dictionary<string, float> playerData;
     private NavMeshAgent navMeshAgent;
     protected float distanceTravelling = 0f;
@@ -38,6 +38,8 @@ public class PawnNavMesh : MonoBehaviour
         {
             TurnManager.Instance.OnPlayerTurnStart += ResetActionPoints;
         }
+
+        playerData = initialPlayerData.GetCopyOfParameters();
     }
 
     protected virtual void OnDestroy()
@@ -74,16 +76,16 @@ public class PawnNavMesh : MonoBehaviour
                 Vector3 pointNext = path.corners[i + 1];
                 float dist = Vector3.Distance(pointPrev, pointNext);
 
-                if (distanceTravelling + dist > playerData[PlayerData.AVAILABLE_DISTANCE_KEY])
+                if (distanceTravelling + dist > playerData[PawnData.AVAILABLE_DISTANCE_KEY])
                 {
-                    float sectionDistance = (playerData[PlayerData.AVAILABLE_DISTANCE_KEY] - distanceTravelling) / dist;
+                    float sectionDistance = (playerData[PawnData.AVAILABLE_DISTANCE_KEY] - distanceTravelling) / dist;
                     Vector3 pointInTheMiddleOfTheSection = Vector3.Lerp(pointPrev, pointNext, sectionDistance);
                     distanceTravelling += sectionDistance * dist;
 
                     navMeshAgent.SetDestination(pointInTheMiddleOfTheSection);
                     targetPosition = pointInTheMiddleOfTheSection;
 
-                    playerData[PlayerData.AVAILABLE_DISTANCE_KEY] = 0f;
+                    playerData[PawnData.AVAILABLE_DISTANCE_KEY] = 0f;
                     isMoving = true;
                     return;
                 }
@@ -93,7 +95,7 @@ public class PawnNavMesh : MonoBehaviour
             navMeshAgent.SetDestination(samplePosition);
             targetPosition = samplePosition;
 
-            playerData[PlayerData.AVAILABLE_DISTANCE_KEY] -= distanceTravelling;
+            playerData[PawnData.AVAILABLE_DISTANCE_KEY] -= distanceTravelling;
             isMoving = true;
         }
     }
@@ -148,7 +150,7 @@ public class PawnNavMesh : MonoBehaviour
 
     (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) DividePath(Vector3[] points)
     {
-        float limit = playerData[PlayerData.AVAILABLE_DISTANCE_KEY] + distanceTravelling;
+        float limit = playerData[PawnData.AVAILABLE_DISTANCE_KEY] + distanceTravelling;
 
         if (limit < 0f) return (points, null);
         if (limit == 0f) return (null, points);
@@ -199,7 +201,7 @@ public class PawnNavMesh : MonoBehaviour
 
         if (initialPlayerData == null)
         {
-            initialPlayerData = HandleInittingGlobalVars.playerMustHaveParams;
+            initialPlayerData = HandleInittingGlobalVars.pawnMustHaveParams;
         }
         if (playerDataCached != initialPlayerData)
         {
