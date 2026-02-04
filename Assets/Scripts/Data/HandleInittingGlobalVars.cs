@@ -5,20 +5,24 @@ using UnityEngine;
 public class HandleInittingGlobalVars : MonoBehaviour
 {
     [SerializeField]
-    private GlobalParameters globalParametersSettable;
+    private ParameteredScriptableObject globalParametersSettable;
     [SerializeField]
-    private PawnData pawnMustHaveParamsSettable;
-    public static PawnData pawnMustHaveParams;
-    public static GlobalParameters globalParameters;
+    private ParameteredScriptableObject pawnMustHaveParamsSettable;
+    public static ParameteredScriptableObject pawnMustHaveParams;
+    public static ParameteredScriptableObject globalParameters;
     public static Action onParamsUpdated;
     void Awake()
     {
         if (globalParameters == null)
-            globalParameters = Resources.Load<GlobalParameters>("GlobalParameters");
-        GlobalParameters.InitWith(globalParameters);
+            globalParameters = GetDataAsset("GlobalParameters");
         if (pawnMustHaveParams == null)
-            pawnMustHaveParams = Resources.Load<PawnData>("PawnMustHaveParams");
+            pawnMustHaveParams = GetDataAsset("PawnMustHaveParams");
         onParamsUpdated?.Invoke();
+    }
+
+    private ParameteredScriptableObject GetDataAsset(string fileName)
+    {
+        return Resources.Load<ParameteredScriptableObject>(fileName);
     }
 
     void OnValidate()
@@ -31,7 +35,7 @@ public class HandleInittingGlobalVars : MonoBehaviour
         }
         if (pawnMustHaveParams == null)
         {
-            pawnMustHaveParams = Resources.Load<PawnData>("PawnMustHaveParams");
+            pawnMustHaveParams = GetDataAsset("PawnMustHaveParams");
             doUpdate = true;
         }
         if (pawnMustHaveParamsSettable == null)
@@ -41,12 +45,11 @@ public class HandleInittingGlobalVars : MonoBehaviour
         if (globalParametersSettable != null && globalParameters != globalParametersSettable)
         {
             globalParameters = globalParametersSettable;
-            GlobalParameters.InitWith(globalParameters);
             doUpdate = true;
         }
         if (globalParameters == null)
         {
-            globalParameters = Resources.Load<GlobalParameters>("GlobalParameters");
+            globalParameters = GetDataAsset("GlobalParameters");
             doUpdate = true;
         }
         if (globalParametersSettable == null)

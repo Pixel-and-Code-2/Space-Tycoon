@@ -3,25 +3,29 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(PathDrawer))]
-public class PawnBrain : PawnNavMesh, IControlableSelectable
+[RequireComponent(typeof(PawnDataController))]
+[RequireComponent(typeof(PawnNavMesh))]
+public class PawnBrain : MonoBehaviour, IControlableSelectable
 {
     private PathDrawer pathDrawer;
+    private PawnDataController dataController;
+    private PawnNavMesh pawnNavMesh;
 
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
         pathDrawer = GetComponent<PathDrawer>();
+        dataController = GetComponent<PawnDataController>();
+        pawnNavMesh = GetComponent<PawnNavMesh>();
     }
 
-    protected override void Update()
+    void Update()
     {
-        base.Update();
-        if (isMoving)
+        if (pawnNavMesh.IsMoving())
         {
             if (!pathDrawer.GetVisible())
             {
                 pathDrawer.SetVisible(true);
-                pathDrawer.SetPathPoints(GetPathPointsTo(targetPosition).pointsAvailable, null);
+                pathDrawer.SetPathPoints(pawnNavMesh.GetPathPointsTo(pawnNavMesh.targetPosition).pointsAvailable, null);
             }
             else
             {
@@ -45,7 +49,17 @@ public class PawnBrain : PawnNavMesh, IControlableSelectable
 
     public void OnMove(Vector3 position)
     {
-        TravelToPosition(position);
+        pawnNavMesh.TravelToPosition(position);
+    }
+
+    public bool IsMoving()
+    {
+        return pawnNavMesh.IsMoving();
+    }
+
+    public (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) GetPathPointsTo(Vector3 position)
+    {
+        return pawnNavMesh.GetPathPointsTo(position);
     }
 
     public void OnShoot(Vector3 position)
@@ -60,7 +74,7 @@ public class PawnBrain : PawnNavMesh, IControlableSelectable
     {
         if (!other.rigidbody) return;
         Vector3 dir = -transform.position + other.transform.position;
-        if (initialPlayerData.verticalPushOverride != -1f) dir.y = initialPlayerData.verticalPushOverride;
-        other.rigidbody.AddForce(dir * initialPlayerData.obstaclePushForce, ForceMode.Impulse);
+        if (dataController.verticalPushOverride != -1f) dir.y = dataController.verticalPushOverride;
+        other.rigidbody.AddForce(dir * dataController.obstaclePushForce, ForceMode.Impulse);
     }
 }

@@ -1,18 +1,16 @@
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(PawnDataController))]
 public class PawnNavMesh : MonoBehaviour
 {
-    [SerializeField]
-    protected PawnData initialPlayerData;
-    private PawnData playerDataCached;
-    protected Dictionary<string, float> playerData;
+    private PawnDataController dataController;
     private NavMeshAgent navMeshAgent;
-    protected float distanceTravelling = 0f;
-    protected Vector3 targetPosition = Vector3.zero;
-    protected bool isMoving = false;
+    private float distanceTravelling = 0f;
+    [HideInInspector]
+    public Vector3 targetPosition { get; private set; } = Vector3.zero;
+    private bool isMoving = false;
     private Vector3 cachedTargetPosition = Vector3.zero;
     private Vector3[] cachedPointsAvailable = null;
     private Vector3[] cachedPointsOutOfRange = null;
@@ -23,43 +21,26 @@ public class PawnNavMesh : MonoBehaviour
         return isMoving;
     }
 
-    protected virtual void Awake()
+    void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        dataController = GetComponent<PawnDataController>();
+    }
 
-        playerData = initialPlayerData.GetCopyOfParameters();
-
+    void Start()
+    {
         navMeshAgent.stoppingDistance = 1.05f;
     }
 
-    protected virtual void Start()
+    private float GetAvDist()
     {
-        if (TurnManager.Instance != null)
-        {
-            TurnManager.Instance.OnPlayerTurnStart += ResetActionPoints;
-        }
-
-        playerData = initialPlayerData.GetCopyOfParameters();
-    }
-
-    protected virtual void OnDestroy()
-    {
-        if (TurnManager.Instance != null)
-        {
-            TurnManager.Instance.OnPlayerTurnStart -= ResetActionPoints;
-        }
-    }
-
-    private void ResetActionPoints()
-    {
-        playerData = initialPlayerData.GetCopyOfParameters();
-        //Debug.Log($"Pawn {name} points reset to {playerData["availableDistance"]}");
+        return dataController.GetParameterValue(PawnDataController.AVAILABLE_DISTANCE_KEY);
     }
 
     public void TravelToPosition(Vector3 position)
     {
         NavMeshHit navHit;
-        if (!NavMesh.SamplePosition(position, out navHit, initialPlayerData.maxSampleDistance, NavMesh.AllAreas))
+        if (!NavMesh.SamplePosition(position, out navHit, dataController.maxSampleDistance, NavMesh.AllAreas))
         {
             return;
         }
@@ -76,16 +57,16 @@ public class PawnNavMesh : MonoBehaviour
                 Vector3 pointNext = path.corners[i + 1];
                 float dist = Vector3.Distance(pointPrev, pointNext);
 
-                if (distanceTravelling + dist > playerData[PawnData.AVAILABLE_DISTANCE_KEY])
+                if (distanceTravelling + dist > GetAvDist())
                 {
-                    float sectionDistance = (playerData[PawnData.AVAILABLE_DISTANCE_KEY] - distanceTravelling) / dist;
+                    float sectionDistance = (GetAvDist() - distanceTravelling) / dist;
                     Vector3 pointInTheMiddleOfTheSection = Vector3.Lerp(pointPrev, pointNext, sectionDistance);
                     distanceTravelling += sectionDistance * dist;
 
                     navMeshAgent.SetDestination(pointInTheMiddleOfTheSection);
                     targetPosition = pointInTheMiddleOfTheSection;
 
-                    playerData[PawnData.AVAILABLE_DISTANCE_KEY] = 0f;
+                    dataController.SetParameterValue(PawnDataController.AVAILABLE_DISTANCE_KEY, 0f);
                     isMoving = true;
                     return;
                 }
@@ -95,7 +76,7 @@ public class PawnNavMesh : MonoBehaviour
             navMeshAgent.SetDestination(samplePosition);
             targetPosition = samplePosition;
 
-            playerData[PawnData.AVAILABLE_DISTANCE_KEY] -= distanceTravelling;
+            dataController.SetParameterValue(PawnDataController.AVAILABLE_DISTANCE_KEY, GetAvDist() - distanceTravelling);
             isMoving = true;
         }
     }
@@ -131,7 +112,7 @@ public class PawnNavMesh : MonoBehaviour
         }
 
         NavMeshHit navHit;
-        if (!NavMesh.SamplePosition(position, out navHit, initialPlayerData.maxSampleDistance, NavMesh.AllAreas))
+        if (!NavMesh.SamplePosition(position, out navHit, dataController.maxSampleDistance, NavMesh.AllAreas))
         {
             return (null, null);
         }
@@ -150,7 +131,7 @@ public class PawnNavMesh : MonoBehaviour
 
     (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) DividePath(Vector3[] points)
     {
-        float limit = playerData[PawnData.AVAILABLE_DISTANCE_KEY] + distanceTravelling;
+        float limit = GetAvDist() + distanceTravelling;
 
         if (limit < 0f) return (points, null);
         if (limit == 0f) return (null, points);
@@ -181,33 +162,4 @@ public class PawnNavMesh : MonoBehaviour
         }
         return (points, null);
     }
-
-    public static float CalculateDistance(Vector3[] points)
-    {
-        if (points == null || points.Length == 0)
-        {
-            return 0f;
-        }
-        float distance = 0f;
-        for (int i = 0; i < points.Length - 1; i++)
-        {
-            distance += Vector3.Distance(points[i], points[i + 1]);
-        }
-        return distance;
-    }
-
-    void OnValidate()
-    {
-
-        if (initialPlayerData == null)
-        {
-            initialPlayerData = HandleInittingGlobalVars.pawnMustHaveParams;
-        }
-        if (playerDataCached != initialPlayerData)
-        {
-            playerDataCached = initialPlayerData;
-            playerData = initialPlayerData.GetCopyOfParameters();
-        }
-    }
-
 }

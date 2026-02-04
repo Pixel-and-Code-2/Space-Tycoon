@@ -31,7 +31,7 @@ public class FormulaField
             }
         }
         // Debug.Log("GlobalParameters.Instance: " + GlobalParameters.Instance.GetParametersDictState() + "locals: " + locals[0].Count);
-        return compiledFormulaAction(locals, GlobalParameters.Instance.parametersDict);
+        return compiledFormulaAction(locals, HandleInittingGlobalVars.globalParameters.parametersDict);
     }
 
 

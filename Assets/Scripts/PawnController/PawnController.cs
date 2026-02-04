@@ -33,8 +33,7 @@ public class PawnController : MonoBehaviour
             Debug.LogError("PawnMoveUIController not found");
             return;
         }
-        pathDrawerWithText.SetVisible(false);
-        selector.OnControlTypeChange += ChangeControlType;
+        shootingFormulaData = GetComponent<FormulaDataMonoBase>();
     }
 
     private void Start()
@@ -43,6 +42,8 @@ public class PawnController : MonoBehaviour
         {
             TurnManager.Instance.OnPlayerTurnEnd += OnTurnEnd;
         }
+        selector.OnControlTypeChange += ChangeControlType;
+        pathDrawerWithText.SetVisible(false);
     }
 
     private void OnTurnEnd()
@@ -210,7 +211,7 @@ public class PawnController : MonoBehaviour
 
                 if (pointsAvailable != null || pointsOutOfRange != null)
                 {
-                    pathDrawerWithText.SetText((PawnNavMesh.CalculateDistance(pointsAvailable) + PawnNavMesh.CalculateDistance(pointsOutOfRange)).ToString("F1") + "m", screenPoint);
+                    pathDrawerWithText.SetText((PawnDataController.CalculateLineStringDistance(pointsAvailable) + PawnDataController.CalculateLineStringDistance(pointsOutOfRange)).ToString("F1") + "m", screenPoint);
                     pathDrawerWithText.SetPathPoints(pointsAvailable, pointsOutOfRange);
                     if (pointsOutOfRange != null)
                     {

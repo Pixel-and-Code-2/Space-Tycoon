@@ -1796,7 +1796,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1072615989}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae2ae07a0b73f9649b7a13c51a23fece, type: 3}
+  m_Script: {fileID: 11500000, guid: 2bdcd959cc456c14ca3bdbce31def15c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
   globalParametersSettable: {fileID: 11400000, guid: 5d4617d111d780044a11ef89afed3579, type: 2}
@@ -1918,6 +1918,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8515852256048443046, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: initialPlayerData
+      value: 
+      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: some_value
       value: 31.531532
@@ -1941,7 +1945,7 @@ PrefabInstance:
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'formulaField.dataAssets.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'formulaField.dataAssets.Array.data[1]'
       value: 
@@ -2395,6 +2399,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8515852256048443046, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: initialPlayerData
+      value: 
+      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: enemyDataExample
       value: 
@@ -2414,7 +2422,7 @@ PrefabInstance:
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'formulaField.dataAssets.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'formulaField.dataAssets.Array.data[1]'
       value: 
@@ -2426,7 +2434,7 @@ PrefabInstance:
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'managedReferences[1000].dataAssets.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8696655358907118961, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: 'managedReferences[1000].dataAssets.Array.data[1]'
       value: 
