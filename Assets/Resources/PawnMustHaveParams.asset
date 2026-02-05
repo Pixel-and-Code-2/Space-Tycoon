@@ -13,7 +13,189 @@ MonoBehaviour:
   m_Name: PawnMustHaveParams
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
   parameters:
-  - name: InitialAvailableDistance
+  - name: STR
     value: 5
-  isContext: 1
+  - name: DX
+    value: 5
+  - name: IQ
+    value: 5
+  - name: HT
+    value: 5
+  - name: SHT
+    value: 5
+  - name: BRW
+    value: 5
+  - name: THR
+    value: 5
+  - name: ENG
+    value: 5
+  - name: SCI
+    value: 5
+  - name: DDGB
+    value: 5
+  - name: SPDB
+    value: 5
+  calculatedParameters:
+  - name: HP
+    formula:
+      formula: p_STR + 5
+      instruction: "Type a mathematical expression using common '+', '-', '*', '/',
+        '(', ')'.\nYou also can provide variables from Data Assets available in this
+        object, using words like 'g_Statname' - the full list of available vars is
+        listed below.\nEverything starting with '//' till the end of the line will
+        be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
+        C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
+        Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians),
+        Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available
+        variable below to add its name to the end o\u0430 the formula (but be sure
+        to the formula to be blured when clicked)."
+      dataAssets:
+      - {fileID: 11400000}
+      names:
+      - Parameters
+  - name: PRC
+    formula:
+      formula: p_IQ+5
+      instruction: "Type a mathematical expression using common '+', '-', '*', '/',
+        '(', ')'.\nYou also can provide variables from Data Assets available in this
+        object, using words like 'g_Statname' - the full list of available vars is
+        listed below.\nEverything starting with '//' till the end of the line will
+        be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
+        C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
+        Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians),
+        Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available
+        variable below to add its name to the end o\u0430 the formula (but be sure
+        to the formula to be blured when clicked)."
+      dataAssets:
+      - {fileID: 11400000}
+      names:
+      - Parameters
+  - name: FP
+    formula:
+      formula: p_HT + 5
+      instruction: "Type a mathematical expression using common '+', '-', '*', '/',
+        '(', ')'.\nYou also can provide variables from Data Assets available in this
+        object, using words like 'g_Statname' - the full list of available vars is
+        listed below.\nEverything starting with '//' till the end of the line will
+        be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
+        C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
+        Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians),
+        Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available
+        variable below to add its name to the end o\u0430 the formula (but be sure
+        to the formula to be blured when clicked)."
+      dataAssets:
+      - {fileID: 11400000}
+      names:
+      - Parameters
+  - name: SPD
+    formula:
+      formula: (p_HT + p_DX + 5 + 5)/4+ p_SPDB
+      instruction: "Type a mathematical expression using common '+', '-', '*', '/',
+        '(', ')'.\nYou also can provide variables from Data Assets available in this
+        object, using words like 'g_Statname' - the full list of available vars is
+        listed below.\nEverything starting with '//' till the end of the line will
+        be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
+        C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
+        Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians),
+        Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available
+        variable below to add its name to the end o\u0430 the formula (but be sure
+        to the formula to be blured when clicked)."
+      dataAssets:
+      - {fileID: 11400000}
+      names:
+      - Parameters
+  - name: DDG
+    formula:
+      formula: p_SPD+p_DDGB+1
+      instruction: "Type a mathematical expression using common '+', '-', '*', '/',
+        '(', ')'.\nYou also can provide variables from Data Assets available in this
+        object, using words like 'g_Statname' - the full list of available vars is
+        listed below.\nEverything starting with '//' till the end of the line will
+        be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
+        C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
+        Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians),
+        Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available
+        variable below to add its name to the end o\u0430 the formula (but be sure
+        to the formula to be blured when clicked)."
+      dataAssets:
+      - {fileID: 11400000}
+      names:
+      - Parameters
+  - name: BCW
+    formula:
+      formula: p_SPD*2
+      instruction: "Type a mathematical expression using common '+', '-', '*', '/',
+        '(', ')'.\nYou also can provide variables from Data Assets available in this
+        object, using words like 'g_Statname' - the full list of available vars is
+        listed below.\nEverything starting with '//' till the end of the line will
+        be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
+        C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
+        Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians),
+        Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available
+        variable below to add its name to the end o\u0430 the formula (but be sure
+        to the formula to be blured when clicked)."
+      dataAssets:
+      - {fileID: 11400000}
+      names:
+      - Parameters
+  - name: BDMG
+    formula:
+      formula: p_STR+1
+      instruction: "Type a mathematical expression using common '+', '-', '*', '/',
+        '(', ')'.\nYou also can provide variables from Data Assets available in this
+        object, using words like 'g_Statname' - the full list of available vars is
+        listed below.\nEverything starting with '//' till the end of the line will
+        be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
+        C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
+        Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians),
+        Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available
+        variable below to add its name to the end o\u0430 the formula (but be sure
+        to the formula to be blured when clicked)."
+      dataAssets:
+      - {fileID: 11400000}
+      names:
+      - Parameters
   mustHaveParameters: []
+  isDirty: 0
+  parametersDictStateCache: 'STR = 5,00 (5,00)
+
+    DX = 5,00 (5,00)
+
+    IQ =
+    5,00 (5,00)
+
+    HT = 5,00 (5,00)
+
+    SHT = 5,00 (5,00)
+
+    BRW = 5,00 (5,00)
+
+    THR
+    = 5,00 (5,00)
+
+    ENG = 5,00 (5,00)
+
+    SCI = 5,00 (5,00)
+
+    DDGB = 5,00
+    (5,00)
+
+    SPDB = 5,00 (5,00)
+
+    HP = 10,00 (10,00)
+
+    PRC = 10,00 (10,00)
+
+    FP
+    = 10,00 (10,00)
+
+    SPD = 10,00 (10,00)
+
+    DDG = 16,00 (16,00)
+
+    BCW
+    = 20,00 (20,00)
+
+    BDMG = 6,00 (6,00)
+
+'

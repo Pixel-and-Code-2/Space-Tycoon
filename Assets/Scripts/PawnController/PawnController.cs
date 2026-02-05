@@ -19,10 +19,10 @@ public class PawnController : MonoBehaviour
     private PathDrawerWithText pathDrawerWithText;
     private ControlType controlType = ControlType.shoot;
     private bool pathFrozen = false;
-    [SerializeReference]
+    // [SerializeReference]
+    [SerializeField]
     private FormulaField calculateShootAccuracy = new FormulaField();
     public const string SHOOTING_DISTANCE_LABEL = "shootingDistance";
-    public const string WALL_DISTANCE_LABEL = "wallDistance";
     private FormulaDataMonoBase shootingFormulaData;
 
     void Awake()
@@ -82,7 +82,7 @@ public class PawnController : MonoBehaviour
         }
         if (shootingFormulaData.parametersDict.Count < 2)
         {
-            shootingFormulaData.FullFillWithParameters(new string[] { SHOOTING_DISTANCE_LABEL, WALL_DISTANCE_LABEL });
+            shootingFormulaData.FullFillWithParameters(new string[] { SHOOTING_DISTANCE_LABEL });
         }
 
         if (
@@ -160,6 +160,15 @@ public class PawnController : MonoBehaviour
             }
             else if (controlType == ControlType.shoot)
             {
+                float randomValue = Random.value;
+                if (randomValue < GetShootAccuracy(lastHitPoint))
+                {
+                    selectedWalkablePawn.OnShoot(lastHitPoint);
+                }
+                else
+                {
+                    selectedWalkablePawn.OnShoot(lastHitPoint);
+                }
                 selectedWalkablePawn.OnShoot(lastHitPoint);
             }
         }
@@ -281,40 +290,18 @@ public class PawnController : MonoBehaviour
 
     private float GetShootAccuracy(Vector3 targetPoint)
     {
-        Vector3 origin = selectedWalkablePawn.GetTransform().position;
-        float distance = Vector3.Distance(origin, targetPoint);
-        shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = distance;
-
-        int wallLayer = LayerMask.NameToLayer("Wall");
-        int wallLayerMask = 1 << wallLayer;
-
-        Vector3 direction = (targetPoint - origin).normalized;
-
-        RaycastHit[] forwardHits = Physics.RaycastAll(origin, direction, distance, wallLayerMask);
-        float totalDistanceInWalls = 0;
-
-        foreach (var hit in forwardHits)
-        {
-            Ray backRay = new Ray(origin + direction * distance, -direction);
-            RaycastHit backHit;
-            if (hit.collider.Raycast(backRay, out backHit, distance))
-            {
-                float exitDist = distance - backHit.distance;
-                float entryDist = hit.distance;
-                if (exitDist > entryDist)
-                {
-                    totalDistanceInWalls += (exitDist - entryDist);
-                }
-            }
-        }
-
-        shootingFormulaData.parametersDict[WALL_DISTANCE_LABEL] = totalDistanceInWalls;
+        shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = Vector3.Distance(selectedWalkablePawn.GetTransform().position, targetPoint);
         float res = calculateShootAccuracy.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
                 shootingFormulaData.parametersDict
             }
         );
         return res;
+    }
+
+    private float GetDefenceAccuracy()
+    {
+        return 0f;
     }
     private void UnSetAim()
     {

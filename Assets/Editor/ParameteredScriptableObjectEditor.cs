@@ -19,6 +19,7 @@ public class ParameteredScriptableObjectEditor : Editor
         EditorGUILayout.Space(10);
         if (GUILayout.Button("Update dictionary"))
         {
+            data.SetDirty();
             data.RebuildParametersDict();
             EditorUtility.SetDirty(data);
         }

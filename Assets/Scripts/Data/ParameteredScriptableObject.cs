@@ -42,10 +42,10 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
 
     public string GetParametersDictState()
     {
-        if (!isDirty && !string.IsNullOrEmpty(parametersDictStateCache))
-        {
-            return parametersDictStateCache;
-        }
+        // if (!isDirty && !string.IsNullOrEmpty(parametersDictStateCache))
+        // {
+        //     return parametersDictStateCache;
+        // }
         RebuildParametersDict();
         if (parametersDict.Count == 0)
         {
@@ -80,8 +80,9 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         // Debug.Log("Rebuilding parameters dict for: " + name);
         parametersDict.Clear();
         CheckCalculatedParameters();
-        AddBuiltInParameters(visited);
+        AddBuiltInConstParameters(visited);
         AddParametersAsConsts(parameters);
+        AddBuiltInCalculatedParameters(visited);
         AddParametersAsCalculatables(calculatedParameters);
     }
 
@@ -102,10 +103,7 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
             {
                 if (this.calculatedParameters.Find(x => x.name == calculatedParameter.name) == null)
                 {
-                    NamedFormula newCalculatedParameter = new NamedFormula();
-                    newCalculatedParameter.name = calculatedParameter.name;
-                    newCalculatedParameter.formula = calculatedParameter.formula;
-                    newCalculatedParameter.SetContext(this);
+                    NamedFormula newCalculatedParameter = new NamedFormula(calculatedParameter, this);
                     this.calculatedParameters.Add(newCalculatedParameter);
                 }
             }
@@ -123,7 +121,7 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         }
     }
 
-    private void AddBuiltInParameters(HashSet<ParameteredScriptableObject> visited)
+    private void AddBuiltInConstParameters(HashSet<ParameteredScriptableObject> visited)
     {
         for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
         {
@@ -131,7 +129,29 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
             if (mustHaveParameter == null || mustHaveParameter == this) continue;
             mustHaveParameter.RebuildParametersDict(visited);
             AddParametersAsConsts(mustHaveParameter.parameters);
-            AddParametersAsCalculatables(mustHaveParameter.calculatedParameters);
+        }
+    }
+
+    private void AddBuiltInCalculatedParameters(HashSet<ParameteredScriptableObject> visited)
+    {
+        for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
+        {
+            var mustHaveParameter = mustHaveParameters[i];
+            foreach (var calculatedParameter in mustHaveParameter.calculatedParameters)
+            {
+                if (calculatedParameter.IsAvailable())
+                {
+                    parametersDict[calculatedParameter.name] = calculatedParameter.formula.EvaluateFormula(new Dictionary<string, float>[] { parametersDict });
+                    Debug.Log("Evaluating calculated parameter: " + calculatedParameter.name);
+                    Debug.Log("Value: " + parametersDict[calculatedParameter.name]);
+                    Debug.Log("Formula: " + calculatedParameter.formula.formula);
+                    Debug.Log("Parameters: " + string.Join(", ", parametersDict.Keys));
+                    Debug.Log("Parameters values: " + string.Join(", ", parametersDict.Values));
+                    Debug.Log("Parameters dict: " + parametersDict.ToString());
+                    Debug.Log("Parameters dict state cache: " + parametersDictStateCache);
+                    Debug.Log("Parameters dict state cache: " + parametersDictStateCache);
+                }
+            }
         }
     }
 

@@ -15,5 +15,9 @@ MonoBehaviour:
   parameters:
   - name: M
     value: 6.66
-  isContext: 0
+  calculatedParameters: []
   mustHaveParameters: []
+  isDirty: 0
+  parametersDictStateCache: 'M = 6,66 (6,66)
+
+'

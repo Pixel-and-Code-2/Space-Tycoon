@@ -87,7 +87,7 @@ public class FormulaFieldDrawer : PropertyDrawer
     {
         if (GUI.Button(position, "Compile Formula"))
         {
-            var formulaField = property.managedReferenceValue as FormulaField;
+            var formulaField = GetFormulaFieldFromProperty(property);
 
             if (formulaField != null)
             {
@@ -96,9 +96,57 @@ public class FormulaFieldDrawer : PropertyDrawer
             }
             else
             {
-                Debug.LogError($"Could not find FormulaField instance via managedReferenceValue for property: {property.propertyPath}. Make sure the field has [SerializeReference] attribute.");
+                Debug.LogError($"Could not find FormulaField instance for property: {property.propertyPath}.");
             }
         }
+    }
+
+    private FormulaField GetFormulaFieldFromProperty(SerializedProperty property)
+    {
+        object obj = property.serializedObject.targetObject;
+        string[] path = property.propertyPath.Replace(".Array.data[", "[").Split('.');
+
+        foreach (var element in path)
+        {
+            if (obj == null) return null;
+
+            if (element.Contains("["))
+            {
+                var elementName = element.Substring(0, element.IndexOf("["));
+                var index = int.Parse(element.Substring(element.IndexOf("[")).Replace("[", "").Replace("]", ""));
+                obj = GetFieldValue(obj, elementName, index);
+            }
+            else
+            {
+                obj = GetFieldValue(obj, element);
+            }
+        }
+        return obj as FormulaField;
+    }
+
+    private object GetFieldValue(object source, string name)
+    {
+        if (source == null) return null;
+        var type = source.GetType();
+        while (type != null)
+        {
+            var field = type.GetField(name, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            if (field != null) return field.GetValue(source);
+            type = type.BaseType;
+        }
+        return null;
+    }
+
+    private object GetFieldValue(object source, string name, int index)
+    {
+        var enumerable = GetFieldValue(source, name) as System.Collections.IEnumerable;
+        if (enumerable == null) return null;
+        var enumerator = enumerable.GetEnumerator();
+        for (int i = 0; i <= index; i++)
+        {
+            if (!enumerator.MoveNext()) return null;
+        }
+        return enumerator.Current;
     }
 
     private IFormulaData GetObjectFromProperty(SerializedProperty property)

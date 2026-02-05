@@ -5,20 +5,15 @@ public class NamedFormula
 {
     public string name;
 
-    // ToDo: try to make it private
-    [SerializeReference]
     public FormulaField formula;
-    private bool formulaAvailable = false;
 
     public NamedFormula()
     {
-        formulaAvailable = false;
         formula = new FormulaField();
     }
 
     public NamedFormula(ParameteredScriptableObject context, string name)
     {
-        formulaAvailable = false;
         formula = new FormulaField();
         this.name = name;
         SetContext(context);
@@ -26,12 +21,18 @@ public class NamedFormula
 
     public bool IsAvailable()
     {
-        return formulaAvailable && formula.GetCompiled() == true;
+#if UNITY_EDITOR
+        if (!formula.GetCompiled() && !string.IsNullOrEmpty(formula.formula))
+        {
+            formula.CompileFormula();
+        }
+#endif
+        return IsContextSet() && formula.GetCompiled() == true;
     }
 
     public bool IsContextSet()
     {
-        return formulaAvailable;
+        return formula.dataAssets.Count > 0;
     }
 
     public void SetContext(ParameteredScriptableObject context)
@@ -50,6 +51,13 @@ public class NamedFormula
         formula.dataAssets.Add(context);
         formula.names.Clear();
         formula.names.Add("Parameters");
-        formulaAvailable = true;
+    }
+
+    public NamedFormula(NamedFormula other, ParameteredScriptableObject context)
+    {
+        this.name = other.name;
+        this.formula = new FormulaField();
+        this.formula.formula = other.formula.formula;
+        SetContext(context);
     }
 }
