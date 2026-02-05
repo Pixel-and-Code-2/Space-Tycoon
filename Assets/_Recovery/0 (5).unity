@@ -583,6 +583,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bfaf66cc5ba645f46ab55716c2bd8f4a, type: 3}
+--- !u!1001 &383693240
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2230305945013315322, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
+      propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
 --- !u!1 &392495504
 GameObject:
   m_ObjectHideFlags: 0
@@ -1099,63 +1156,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 524328144}
   m_CullTransparentMesh: 0
---- !u!1001 &574942603
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2230305945013315322, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
-      propertyPath: m_Name
-      value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.69
-      objectReference: {fileID: 0}
-    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 3.49
-      objectReference: {fileID: 0}
-    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5917102314145285876, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 714cb5ad39738e947a4982636e0a4a7b, type: 3}
 --- !u!1001 &627598361
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1769,7 +1769,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PawnController
   pathDrawerWithText: {fileID: 402519186}
   calculateShootAccuracy:
-    formula: "Math.Max(g_M, Math.Min(100-g_M, \n50\n))/100"
+    formula: 
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
       '(', ')'.\nYou also can provide variables from Data Assets available in this
       object, using words like 'g_Statname' - the full list of available vars is
@@ -1789,7 +1789,7 @@ MonoBehaviour:
     - Initiator
     - Target
   calculateShootDamage:
-    formula: g_M
+    formula: 
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
       '(', ')'.\nYou also can provide variables from Data Assets available in this
       object, using words like 'g_Statname' - the full list of available vars is
@@ -1809,7 +1809,7 @@ MonoBehaviour:
     - Initiator
     - Target
   calculateMeleeAccuracy:
-    formula: "Math.Max(g_M, Math.Min(100-g_M, \n(i_DX+4)*g_M\n))/100"
+    formula: 
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
       '(', ')'.\nYou also can provide variables from Data Assets available in this
       object, using words like 'g_Statname' - the full list of available vars is
@@ -2731,8 +2731,8 @@ SceneRoots:
   - {fileID: 1697071419}
   - {fileID: 2136693934}
   - {fileID: 997533539}
-  - {fileID: 574942603}
   - {fileID: 628362736}
   - {fileID: 1415234978}
+  - {fileID: 383693240}
   - {fileID: 1320843880}
   - {fileID: 1904320609}
