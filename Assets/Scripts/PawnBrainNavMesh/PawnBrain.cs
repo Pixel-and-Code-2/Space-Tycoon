@@ -80,7 +80,7 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
         other.rigidbody.AddForce(dir * dataController.obstaclePushForce, ForceMode.Impulse);
     }
 
-    public void OnGetShot(float damage)
+    public void OnDealDamage(float damage)
     {
         float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
         if (newHealth <= 0f)
@@ -97,6 +97,11 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
     public string GetHPText()
     {
         return $"{dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY)} / {dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY)}";
+    }
+
+    public IFormulaData GetFormulaData()
+    {
+        return dataController;
     }
 
 }

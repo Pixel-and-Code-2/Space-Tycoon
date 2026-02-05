@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PawnDataController : MonoBehaviour
+public class PawnDataController : MonoBehaviour, IFormulaData
 {
     // ToDo: action must vary based on the type of the pawn's team. It can be either player or enemy, but now it is ONLY player.
     // Static data storages
     [SerializeField]
     private ParameteredScriptableObject initialPawnData;
     private ParameteredScriptableObject pawnDataCached;
-
     // Additional developing params
     [Header("Additional Developing params")]
     [SerializeField, Tooltip("Max distance from mouse to walkable area, to show path")]
@@ -20,6 +19,7 @@ public class PawnDataController : MonoBehaviour
 
     // Dynamic parameters
     private Dictionary<string, float> dynamicParameters = new Dictionary<string, float>();
+
     public const string AVAILABLE_DISTANCE_KEY = "AvailableDistance";
     public const string INITIAL_HP_KEY = "HP";
     public const string INITIAL_AVAILABLE_DISTANCE_KEY = "SPD";
@@ -110,6 +110,19 @@ public class PawnDataController : MonoBehaviour
             distance += Vector3.Distance(points[i], points[i + 1]);
         }
         return distance;
+    }
+
+    public List<string> GetParameterNames()
+    {
+        return initialPawnData.GetParameterNames();
+    }
+
+    public Dictionary<string, float> parametersDict
+    {
+        get
+        {
+            return initialPawnData.parametersDict;
+        }
     }
 
 }

@@ -155,10 +155,16 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
 
     public void ChangeControlType()
     {
-        currentControlType = currentControlType == ControlType.walk ? ControlType.shoot : ControlType.walk;
+        currentControlType =
+            currentControlType == ControlType.walk ? ControlType.shoot :
+            currentControlType == ControlType.shoot ? ControlType.melee :
+            ControlType.walk;
         if (controlTypeText != null)
         {
-            controlTypeText.text = currentControlType == ControlType.walk ? "Control: Walk" : "Control: Shoot";
+            controlTypeText.text =
+                currentControlType == ControlType.walk ? "Control: Walk" :
+                currentControlType == ControlType.shoot ? "Control: Shoot" :
+                "Control: Melee";
         }
         OnControlTypeChange?.Invoke(currentControlType);
     }

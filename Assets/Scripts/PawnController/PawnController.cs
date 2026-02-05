@@ -1,9 +1,15 @@
+/*
+ * ATTENTION: This implementation of the pawn controller class is (shit) out of mature Architecture and made only for fast build of what we want to see!!
+ * ToDo: Delete this class and make 3 systems seperate instead: input system with logic of selection, state system with logic of abilities and pawn controller - the unifier of two others (it must do almost nothing).
+**/
+
 using UnityEngine;
 
 public enum ControlType
 {
     walk,
-    shoot
+    shoot,
+    melee
 }
 
 [RequireComponent(typeof(ISelectorBrain))]
@@ -24,6 +30,8 @@ public class PawnController : MonoBehaviour
     private FormulaField calculateShootAccuracy = new FormulaField();
     [SerializeField]
     private FormulaField calculateShootDamage = new FormulaField();
+    [SerializeField]
+    private FormulaField calculateMeleeAccuracy = new FormulaField();
     public const string SHOOTING_DISTANCE_LABEL = "shootingDistance";
     private FormulaDataMonoBase shootingFormulaData;
 
@@ -80,6 +88,10 @@ public class PawnController : MonoBehaviour
         {
             calculateShootDamage = new FormulaField();
         }
+        if (calculateMeleeAccuracy == null)
+        {
+            calculateMeleeAccuracy = new FormulaField();
+        }
         // shootingFormulaData = null;
         if (shootingFormulaData == null)
         {
@@ -122,6 +134,22 @@ public class PawnController : MonoBehaviour
             calculateShootDamage.dataAssets.Add(HandleInittingGlobalVars.pawnMustHaveParams as Object);
             calculateShootDamage.names.Add("Target");
             calculateShootDamage.dataAssets.Add(HandleInittingGlobalVars.pawnMustHaveParams as Object);
+        }
+        if (
+            calculateMeleeAccuracy.names.Count < 3 ||
+            calculateMeleeAccuracy.dataAssets[0] != shootingFormulaData as Object ||
+            calculateMeleeAccuracy.dataAssets[1] != HandleInittingGlobalVars.pawnMustHaveParams as Object ||
+            calculateMeleeAccuracy.dataAssets[2] != HandleInittingGlobalVars.pawnMustHaveParams as Object
+            )
+        {
+            calculateMeleeAccuracy.dataAssets.Clear();
+            calculateMeleeAccuracy.names.Clear();
+            calculateMeleeAccuracy.names.Add("Calculated");
+            calculateMeleeAccuracy.dataAssets.Add(shootingFormulaData as Object);
+            calculateMeleeAccuracy.names.Add("Initiator");
+            calculateMeleeAccuracy.dataAssets.Add(HandleInittingGlobalVars.pawnMustHaveParams as Object);
+            calculateMeleeAccuracy.names.Add("Target");
+            calculateMeleeAccuracy.dataAssets.Add(HandleInittingGlobalVars.pawnMustHaveParams as Object);
         }
         HandleInittingGlobalVars.onParamsUpdated -= OnParamsUpdated;
         HandleInittingGlobalVars.onParamsUpdated += OnParamsUpdated;
@@ -186,7 +214,19 @@ public class PawnController : MonoBehaviour
                 Debug.Log("targetPawn: " + targetPawn + " " + randomValue + " < " + GetShootAccuracy(lastHitPoint));
                 if (randomValue < GetShootAccuracy(lastHitPoint) && targetPawn != null)
                 {
-                    targetPawn.OnGetShot(GetShootDamage(lastHitPoint));
+                    targetPawn.OnDealDamage(GetShootDamage(lastHitPoint));
+                }
+            }
+            else if (controlType == ControlType.melee)
+            {
+                float distance = Vector3.Distance(selectedWalkablePawn.GetTransform().position, lastHitPoint);
+                if (distance > 2f) return;
+                float randomValue = Random.value;
+                ISelectable targetPawn = selector.GetSelectionValue();
+                Debug.Log("targetPawn: " + targetPawn + " " + randomValue + " < " + GetMeleeAccuarcy(lastHitPoint));
+                if (randomValue < GetMeleeAccuarcy(lastHitPoint) && targetPawn != null)
+                {
+                    targetPawn.OnDealDamage(GetShootDamage(lastHitPoint));
                 }
             }
         }
@@ -311,6 +351,61 @@ public class PawnController : MonoBehaviour
                 hitPointValid = true;
             }
         }
+        else if (controlType == ControlType.melee)
+        {
+            (Vector3 worldPoint, Vector2 screenPoint, PawnHitResult hit) = selector.GetShootSelectionValue();
+            if (hit != PawnHitResult.NoHit)
+            {
+                if (hit == PawnHitResult.PawnHit)
+                {
+                    ISelectable targetPawn = selector.GetSelectionValue();
+                    float distance = Vector3.Distance(selectedWalkablePawn.GetTransform().position, targetPawn.GetTransform().position);
+                    if (distance < 2f)
+                    {
+                        float accuracy = GetMeleeAccuarcy(worldPoint);
+                        if (accuracy < 0.1f)
+                        {
+                            pathDrawerWithText.SetTextColor(Color.red);
+                        }
+                        else if (accuracy > 0.9f)
+                        {
+                            pathDrawerWithText.SetTextColor(Color.green);
+                        }
+                        else
+                        {
+                            float h = (accuracy - 0.1f) / 0.8f * 0.33f;
+                            pathDrawerWithText.SetTextColor(Color.HSVToRGB(h, 1f, 1f));
+                        }
+                        accuracy *= 100f;
+                        pathDrawerWithText.SetText(
+                            Vector3.Distance(selectedWalkablePawn.GetTransform().position, worldPoint).ToString("F1") + "m " + accuracy.ToString("F1") + "% " + targetPawn.GetHPText() + " hp",
+                            screenPoint
+                        );
+                    }
+                    else
+                    {
+                        pathDrawerWithText.SetTextColor(Color.red);
+                        pathDrawerWithText.SetText(
+                            Vector3.Distance(selectedWalkablePawn.GetTransform().position, worldPoint).ToString("F1") + "m" + " too far",
+                            screenPoint
+                        );
+                    }
+                }
+                else if (hit == PawnHitResult.FloorHit)
+                {
+                    pathDrawerWithText.SetTextColor(Color.red);
+                    pathDrawerWithText.SetText(
+                        Vector3.Distance(selectedWalkablePawn.GetTransform().position, worldPoint).ToString("F1") + "m",
+                        screenPoint
+                    );
+                }
+                pathDrawerWithText.SetPathPoints(new Vector3[] { selectedWalkablePawn.GetTransform().position, worldPoint }, null);
+                pathDrawerWithText.SetVisible(true);
+
+                lastHitPoint = worldPoint;
+                hitPointValid = true;
+            }
+        }
     }
 
     private float GetShootAccuracy(Vector3 targetPoint)
@@ -328,9 +423,10 @@ public class PawnController : MonoBehaviour
         {
             return 0f;
         }
+        ISelectable targetPawn = selector.GetSelectionValue();
         float res = calculateShootAccuracy.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
-                shootingFormulaData.parametersDict
+                shootingFormulaData.parametersDict, selectedWalkablePawn.GetFormulaData().parametersDict, targetPawn.GetFormulaData().parametersDict
             }
         );
         return res;
@@ -339,15 +435,22 @@ public class PawnController : MonoBehaviour
     private float GetShootDamage(Vector3 targetPoint)
     {
         shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = Vector3.Distance(selectedWalkablePawn.GetTransform().position, targetPoint);
+        ISelectable targetPawn = selector.GetSelectionValue();
         return calculateShootDamage.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
-                shootingFormulaData.parametersDict
+                shootingFormulaData.parametersDict, selectedWalkablePawn.GetFormulaData().parametersDict, targetPawn.GetFormulaData().parametersDict
             }
         );
     }
-    private float GetDefenceAccuracy()
+    private float GetMeleeAccuarcy(Vector3 targetPoint)
     {
-        return 0f;
+        shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = Vector3.Distance(selectedWalkablePawn.GetTransform().position, targetPoint);
+        ISelectable targetPawn = selector.GetSelectionValue();
+        return calculateMeleeAccuracy.EvaluateFormula(
+            new System.Collections.Generic.Dictionary<string, float>[] {
+                shootingFormulaData.parametersDict, selectedWalkablePawn.GetFormulaData().parametersDict, targetPawn.GetFormulaData().parametersDict
+            }
+        );
     }
     private void UnSetAim()
     {
