@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6158508224242110520}
   - component: {fileID: 8025852397121735868}
   - component: {fileID: 1238644119791189941}
+  - component: {fileID: -5081689337321034913}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -161,10 +162,24 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-5081689337321034913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230305945013315322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd1d07adffbecc844bde61f2558981ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleEnemyAI
+  aggressionRange: 20
+  meleeRange: 1.5
 --- !u!1001 &6846910732322107018
 PrefabInstance:
   m_ObjectHideFlags: 0
