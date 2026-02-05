@@ -11,8 +11,6 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
     [SerializeField]
     private float aggressionRange = 20.0f;
 
-    public bool IsShootable => true;
-
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -65,6 +63,8 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
         return closestPlayer;
     }
 
+
+    // 05.02 AlbionVisual: ISelectable implementation
     public Transform GetTransform()
     {
         return transform;
@@ -75,7 +75,8 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
         float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
         if (newHealth <= 0f)
         {
-            Debug.Log("Dying" + name + " " + damage);
+            // Debug.Log("Dying" + name + " " + damage);
+            selectableType = SelectableType.Dead;
             newHealth = 0f;
         }
         dataController.SetParameterValue(
@@ -84,6 +85,9 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
         );
     }
 
+    public bool IsShootable => true;
+    private SelectableType selectableType = SelectableType.Enemy;
+    public SelectableType GetSelectableType() => selectableType;
     public string GetHPText()
     {
         return $"{dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY)} / {dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY)}";

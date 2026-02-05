@@ -181,6 +181,10 @@ public class PawnController : MonoBehaviour
     private void TryToTakeControlOfPawn()
     {
         ISelectable selectionClick = selector.GetSelectionClickValue();
+        if (
+            selectionClick == null ||
+            selectionClick.GetSelectableType() == SelectableType.Dead
+        ) return;
         if (selectionClick is IControlableSelectable walkablePawn)
         {
             pathDrawerWithText.SetVisible(true);
@@ -309,8 +313,15 @@ public class PawnController : MonoBehaviour
             {
                 Vector3 originPoint = selectedWalkablePawn.GetTransform().position;
                 ISelectable targetPawn = selector.GetSelectionValue();
+                if (hit == PawnHitResult.PawnHit && (
+                    targetPawn == selectedWalkablePawn ||
+                        targetPawn.GetSelectableType() == selectedWalkablePawn.GetSelectableType() ||
+                        targetPawn.GetSelectableType() == SelectableType.Dead
+                    )
+                ) hit = PawnHitResult.FloorHit;
                 if (hit == PawnHitResult.PawnHit)
                 {
+
                     float accuracy = GetShootAccuracy(worldPoint);
                     if (accuracy < 0.1f)
                     {
@@ -356,9 +367,15 @@ public class PawnController : MonoBehaviour
             (Vector3 worldPoint, Vector2 screenPoint, PawnHitResult hit) = selector.GetShootSelectionValue();
             if (hit != PawnHitResult.NoHit)
             {
+                ISelectable targetPawn = selector.GetSelectionValue();
+                if (hit == PawnHitResult.PawnHit && (
+                    targetPawn == selectedWalkablePawn ||
+                        targetPawn.GetSelectableType() == selectedWalkablePawn.GetSelectableType() ||
+                        targetPawn.GetSelectableType() == SelectableType.Dead
+                    )
+                ) hit = PawnHitResult.FloorHit;
                 if (hit == PawnHitResult.PawnHit)
                 {
-                    ISelectable targetPawn = selector.GetSelectionValue();
                     float distance = Vector3.Distance(selectedWalkablePawn.GetTransform().position, targetPawn.GetTransform().position);
                     if (distance < 2f)
                     {
@@ -431,7 +448,6 @@ public class PawnController : MonoBehaviour
         );
         return res;
     }
-
     private float GetShootDamage(Vector3 targetPoint)
     {
         shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = Vector3.Distance(selectedWalkablePawn.GetTransform().position, targetPoint);

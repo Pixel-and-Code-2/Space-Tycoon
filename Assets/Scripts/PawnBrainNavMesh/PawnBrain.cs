@@ -12,6 +12,8 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
     private PawnNavMesh pawnNavMesh;
 
     public bool IsShootable => true;
+    private SelectableType selectableType = SelectableType.Player;
+    public SelectableType GetSelectableType() => selectableType;
 
     void Awake()
     {
@@ -85,7 +87,8 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
         float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
         if (newHealth <= 0f)
         {
-            Debug.Log("Dying" + name + " " + damage);
+            // Debug.Log("Dying" + name + " " + damage);
+            selectableType = SelectableType.Dead;
             newHealth = 0f;
         }
         dataController.SetParameterValue(
