@@ -11,6 +11,8 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
     private PawnDataController dataController;
     private PawnNavMesh pawnNavMesh;
 
+    public bool IsShootable => true;
+
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
@@ -77,4 +79,24 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
         if (dataController.verticalPushOverride != -1f) dir.y = dataController.verticalPushOverride;
         other.rigidbody.AddForce(dir * dataController.obstaclePushForce, ForceMode.Impulse);
     }
+
+    public void OnGetShot(float damage)
+    {
+        float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
+        if (newHealth <= 0f)
+        {
+            Debug.Log("Dying" + name + " " + damage);
+            newHealth = 0f;
+        }
+        dataController.SetParameterValue(
+            PawnDataController.AVAILABLE_HEALTH_KEY,
+            newHealth
+        );
+    }
+
+    public string GetHPText()
+    {
+        return $"{dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY)} / {dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY)}";
+    }
+
 }

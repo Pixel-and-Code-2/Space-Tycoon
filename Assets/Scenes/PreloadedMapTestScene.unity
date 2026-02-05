@@ -727,6 +727,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1072615992}
     m_Modifications:
+    - target: {fileID: 2170051625715830724, guid: 5cf6c852cc7f7e5418f7397c987b1d5e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 6003430744880431015, guid: 5cf6c852cc7f7e5418f7397c987b1d5e, type: 3}
       propertyPath: m_Name
       value: PawnMoveUIController
@@ -1740,6 +1744,26 @@ MonoBehaviour:
     - Calculated
     - Initiator
     - Target
+  calculateShootDamage:
+    formula: g_M
+    instruction: "Type a mathematical expression using common '+', '-', '*', '/',
+      '(', ')'.\nYou also can provide variables from Data Assets available in this
+      object, using words like 'g_Statname' - the full list of available vars is
+      listed below.\nEverything starting with '//' till the end of the line will
+      be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
+      C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
+      Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians), Min,
+      Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available variable
+      below to add its name to the end o\u0430 the formula (but be sure to the formula
+      to be blured when clicked)."
+    dataAssets:
+    - {fileID: 1072615994}
+    - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+    - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+    names:
+    - Calculated
+    - Initiator
+    - Target
 --- !u!114 &1072615991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1907,6 +1931,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8515852256048443046, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: initialPawnData
+      value: 
+      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
     - target: {fileID: 8515852256048443046, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: initialPlayerData
       value: 
@@ -2389,6 +2417,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8515852256048443046, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
+      propertyPath: initialPawnData
+      value: 
+      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
+    - target: {fileID: 8515852256048443046, guid: ef64bb2cbe3e3824384a9bbc08b32764, type: 3}
       propertyPath: initialPlayerData
       value: 
       objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
@@ -2590,6 +2622,7 @@ GameObject:
   - component: {fileID: 8025852395781873921}
   - component: {fileID: 1238644121131078152}
   - component: {fileID: 550913343}
+  - component: {fileID: 8535413144683599530}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Player
@@ -2718,6 +2751,19 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
+--- !u!114 &8535413144683599530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230305945812372295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6119232c3cb8a0e459d4cf820a038e5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PawnDataController
+  initialPawnData: {fileID: 11400000, guid: 960e0f1c8e4ba2443af0a375167df3ac, type: 2}
 --- !u!1001 &8547935123741617851
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -3,16 +3,20 @@ using UnityEngine.AI;
 using System.Linq;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class SimpleEnemyAI : MonoBehaviour
+[RequireComponent(typeof(PawnDataController))]
+public class SimpleEnemyAI : MonoBehaviour, ISelectable
 {
     private NavMeshAgent agent;
-
+    private PawnDataController dataController;
     [SerializeField]
     private float aggressionRange = 20.0f;
+
+    public bool IsShootable => true;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        dataController = GetComponent<PawnDataController>();
     }
     void Start()
     {
@@ -59,5 +63,29 @@ public class SimpleEnemyAI : MonoBehaviour
             }
         }
         return closestPlayer;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public void OnGetShot(float damage)
+    {
+        float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
+        if (newHealth <= 0f)
+        {
+            Debug.Log("Dying" + name + " " + damage);
+            newHealth = 0f;
+        }
+        dataController.SetParameterValue(
+            PawnDataController.AVAILABLE_HEALTH_KEY,
+            newHealth
+        );
+    }
+
+    public string GetHPText()
+    {
+        return $"{dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY)} / {dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY)}";
     }
 }

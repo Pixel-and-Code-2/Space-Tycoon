@@ -5,6 +5,7 @@ public enum PawnHitResult { NoHit, PawnHit, FloorHit };
 public interface ISelectorBrain
 {
     ISelectable GetSelectionClickValue();
+    ISelectable GetSelectionValue();
     bool GetDeselectionClickState();
     bool GetSelectionClickState();
     (Vector3 worldPoint, Vector2 screenPoint, FloorHitResult hit) GetMoveSelectionValue();

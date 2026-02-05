@@ -6,8 +6,8 @@ public class PawnDataController : MonoBehaviour
     // ToDo: action must vary based on the type of the pawn's team. It can be either player or enemy, but now it is ONLY player.
     // Static data storages
     [SerializeField]
-    private ParameteredScriptableObject initialPlayerData;
-    private ParameteredScriptableObject playerDataCached;
+    private ParameteredScriptableObject initialPawnData;
+    private ParameteredScriptableObject pawnDataCached;
 
     // Additional developing params
     [Header("Additional Developing params")]
@@ -21,10 +21,28 @@ public class PawnDataController : MonoBehaviour
     // Dynamic parameters
     private Dictionary<string, float> dynamicParameters = new Dictionary<string, float>();
     public const string AVAILABLE_DISTANCE_KEY = "AvailableDistance";
+    public const string INITIAL_HP_KEY = "HP";
+    public const string INITIAL_AVAILABLE_DISTANCE_KEY = "SPD";
+    public const string AVAILABLE_HEALTH_KEY = "AvailableHealth";
+
+    private void ResetKeys()
+    {
+        var dict = initialPawnData.GetParametersDict();
+        dynamicParameters[AVAILABLE_DISTANCE_KEY] = 0f;
+        dynamicParameters[AVAILABLE_HEALTH_KEY] = 0f;
+        if (dict.ContainsKey(INITIAL_HP_KEY))
+        {
+            dynamicParameters[AVAILABLE_HEALTH_KEY] = dict[INITIAL_HP_KEY];
+        }
+        if (dict.ContainsKey(INITIAL_AVAILABLE_DISTANCE_KEY))
+        {
+            dynamicParameters[AVAILABLE_DISTANCE_KEY] = dict[INITIAL_AVAILABLE_DISTANCE_KEY];
+        }
+    }
 
     void Awake()
     {
-        dynamicParameters[AVAILABLE_DISTANCE_KEY] = 0f;
+        ResetKeys();
     }
 
     public float GetParameterValue(string parameterName)
@@ -33,9 +51,9 @@ public class PawnDataController : MonoBehaviour
         {
             return dynamicParameters[parameterName];
         }
-        if (initialPlayerData.parametersDict.ContainsKey(parameterName))
+        if (initialPawnData.parametersDict.ContainsKey(parameterName))
         {
-            return initialPlayerData.parametersDict[parameterName];
+            return initialPawnData.parametersDict[parameterName];
         }
         Debug.LogError($"Parameter {parameterName} not found in initialPlayerData");
         return 0f;
@@ -52,10 +70,10 @@ public class PawnDataController : MonoBehaviour
 
     void OnValidate()
     {
-        if (playerDataCached != initialPlayerData)
+        if (pawnDataCached != initialPawnData)
         {
-            playerDataCached = initialPlayerData;
-            dynamicParameters[AVAILABLE_DISTANCE_KEY] = 0f;
+            pawnDataCached = initialPawnData;
+            ResetKeys();
         }
     }
 

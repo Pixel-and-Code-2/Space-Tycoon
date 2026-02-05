@@ -17,6 +17,7 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
     private bool isDirty = true; // Cache. If nothing is changed, we don't need to rebuild the dictionary
     [SerializeField, HideInInspector]
     private string parametersDictStateCache = string.Empty;
+    public Dictionary<string, float> parametersDict { get; private set; } = new Dictionary<string, float>();
 
     public List<string> GetParameterNames()
     {
@@ -32,7 +33,6 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         return lst;
     }
 
-    public Dictionary<string, float> parametersDict { get; private set; } = new Dictionary<string, float>();
 
     public Dictionary<string, float> GetParametersDict()
     {
@@ -142,14 +142,6 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
                 if (calculatedParameter.IsAvailable())
                 {
                     parametersDict[calculatedParameter.name] = calculatedParameter.formula.EvaluateFormula(new Dictionary<string, float>[] { parametersDict });
-                    Debug.Log("Evaluating calculated parameter: " + calculatedParameter.name);
-                    Debug.Log("Value: " + parametersDict[calculatedParameter.name]);
-                    Debug.Log("Formula: " + calculatedParameter.formula.formula);
-                    Debug.Log("Parameters: " + string.Join(", ", parametersDict.Keys));
-                    Debug.Log("Parameters values: " + string.Join(", ", parametersDict.Values));
-                    Debug.Log("Parameters dict: " + parametersDict.ToString());
-                    Debug.Log("Parameters dict state cache: " + parametersDictStateCache);
-                    Debug.Log("Parameters dict state cache: " + parametersDictStateCache);
                 }
             }
         }

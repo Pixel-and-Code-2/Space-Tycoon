@@ -22,6 +22,8 @@ public class PawnController : MonoBehaviour
     // [SerializeReference]
     [SerializeField]
     private FormulaField calculateShootAccuracy = new FormulaField();
+    [SerializeField]
+    private FormulaField calculateShootDamage = new FormulaField();
     public const string SHOOTING_DISTANCE_LABEL = "shootingDistance";
     private FormulaDataMonoBase shootingFormulaData;
 
@@ -74,13 +76,17 @@ public class PawnController : MonoBehaviour
         {
             calculateShootAccuracy = new FormulaField();
         }
+        if (calculateShootDamage == null)
+        {
+            calculateShootDamage = new FormulaField();
+        }
         // shootingFormulaData = null;
         if (shootingFormulaData == null)
         {
             Debug.LogWarning("formulaData is null, reinitting");
             shootingFormulaData = GetComponent<FormulaDataMonoBase>();
         }
-        if (shootingFormulaData.parametersDict.Count < 2)
+        if (shootingFormulaData.parametersDict.Count < 1)
         {
             shootingFormulaData.FullFillWithParameters(new string[] { SHOOTING_DISTANCE_LABEL });
         }
@@ -101,13 +107,27 @@ public class PawnController : MonoBehaviour
             calculateShootAccuracy.names.Add("Target");
             calculateShootAccuracy.dataAssets.Add(HandleInittingGlobalVars.pawnMustHaveParams as Object);
         }
+        if (
+            calculateShootDamage.names.Count < 3 ||
+            calculateShootDamage.dataAssets[0] != shootingFormulaData as Object ||
+            calculateShootDamage.dataAssets[1] != HandleInittingGlobalVars.pawnMustHaveParams as Object ||
+            calculateShootDamage.dataAssets[2] != HandleInittingGlobalVars.pawnMustHaveParams as Object
+            )
+        {
+            calculateShootDamage.dataAssets.Clear();
+            calculateShootDamage.names.Clear();
+            calculateShootDamage.names.Add("Calculated");
+            calculateShootDamage.dataAssets.Add(shootingFormulaData as Object);
+            calculateShootDamage.names.Add("Initiator");
+            calculateShootDamage.dataAssets.Add(HandleInittingGlobalVars.pawnMustHaveParams as Object);
+            calculateShootDamage.names.Add("Target");
+            calculateShootDamage.dataAssets.Add(HandleInittingGlobalVars.pawnMustHaveParams as Object);
+        }
         HandleInittingGlobalVars.onParamsUpdated -= OnParamsUpdated;
         HandleInittingGlobalVars.onParamsUpdated += OnParamsUpdated;
     }
     void Update()
     {
-
-
         if (TurnManager.Instance != null && !TurnManager.Instance.IsPlayerTurn)
         {
             return;
@@ -161,15 +181,13 @@ public class PawnController : MonoBehaviour
             else if (controlType == ControlType.shoot)
             {
                 float randomValue = Random.value;
-                if (randomValue < GetShootAccuracy(lastHitPoint))
-                {
-                    selectedWalkablePawn.OnShoot(lastHitPoint);
-                }
-                else
-                {
-                    selectedWalkablePawn.OnShoot(lastHitPoint);
-                }
                 selectedWalkablePawn.OnShoot(lastHitPoint);
+                ISelectable targetPawn = selector.GetSelectionValue();
+                Debug.Log("targetPawn: " + targetPawn + " " + randomValue + " < " + GetShootAccuracy(lastHitPoint));
+                if (randomValue < GetShootAccuracy(lastHitPoint) && targetPawn != null)
+                {
+                    targetPawn.OnGetShot(GetShootDamage(lastHitPoint));
+                }
             }
         }
     }
@@ -250,6 +268,7 @@ public class PawnController : MonoBehaviour
             if (hit != PawnHitResult.NoHit)
             {
                 Vector3 originPoint = selectedWalkablePawn.GetTransform().position;
+                ISelectable targetPawn = selector.GetSelectionValue();
                 if (hit == PawnHitResult.PawnHit)
                 {
                     float accuracy = GetShootAccuracy(worldPoint);
@@ -266,8 +285,14 @@ public class PawnController : MonoBehaviour
                         float h = (accuracy - 0.1f) / 0.8f * 0.33f;
                         pathDrawerWithText.SetTextColor(Color.HSVToRGB(h, 1f, 1f));
                     }
+                    string hpText = "";
+
+                    if (targetPawn != null)
+                    {
+                        hpText = targetPawn.GetHPText();
+                    }
                     pathDrawerWithText.SetText(
-                        Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m" + (accuracy * 100f).ToString("F0") + "%",
+                        Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m, " + (accuracy * 100f).ToString("F0") + "%, " + hpText + " hp",
                         screenPoint
                     );
                 }
@@ -291,6 +316,18 @@ public class PawnController : MonoBehaviour
     private float GetShootAccuracy(Vector3 targetPoint)
     {
         shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = Vector3.Distance(selectedWalkablePawn.GetTransform().position, targetPoint);
+
+        RaycastHit hitInfo;
+        Vector3 origin = selectedWalkablePawn.GetTransform().position;
+        Vector3 direction = (targetPoint - origin).normalized;
+        float distance = Vector3.Distance(origin, targetPoint);
+
+        int wallLayer = LayerMask.NameToLayer("Wall");
+        int wallMask = 1 << wallLayer;
+        if (Physics.Raycast(origin, direction, out hitInfo, distance, wallMask))
+        {
+            return 0f;
+        }
         float res = calculateShootAccuracy.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
                 shootingFormulaData.parametersDict
@@ -299,6 +336,15 @@ public class PawnController : MonoBehaviour
         return res;
     }
 
+    private float GetShootDamage(Vector3 targetPoint)
+    {
+        shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = Vector3.Distance(selectedWalkablePawn.GetTransform().position, targetPoint);
+        return calculateShootDamage.EvaluateFormula(
+            new System.Collections.Generic.Dictionary<string, float>[] {
+                shootingFormulaData.parametersDict
+            }
+        );
+    }
     private float GetDefenceAccuracy()
     {
         return 0f;

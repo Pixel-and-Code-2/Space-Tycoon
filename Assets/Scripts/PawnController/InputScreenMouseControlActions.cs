@@ -58,6 +58,28 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
         return null;
     }
 
+    // public ISelectable GetSelectionClickValue()
+    // {
+    //     if (GetSelectionClickState())
+    //     {
+    //         GetSelectionValue();
+    //     }
+    //     return null;
+    // }
+
+    public ISelectable GetSelectionValue()
+    {
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Selectable", "Pawn")))
+        {
+            return hit.collider.GetComponent<ISelectable>();
+        }
+        return null;
+    }
+
     public bool GetDeselectionClickState()
     {
         if (deselectionClickHandled)
