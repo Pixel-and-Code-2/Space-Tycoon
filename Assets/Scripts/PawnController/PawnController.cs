@@ -16,6 +16,8 @@ public enum ControlType
 [RequireComponent(typeof(FormulaDataMonoBase))]
 public class PawnController : MonoBehaviour
 {
+    public static PawnController Instance { get; private set; }
+
     private ISelectorBrain selector;
     private ISelectable selectedPawn = null;
     private IControlableSelectable selectedWalkablePawn = null;
@@ -44,6 +46,7 @@ public class PawnController : MonoBehaviour
             return;
         }
         shootingFormulaData = GetComponent<FormulaDataMonoBase>();
+        Instance = this; 
     }
 
     private void Start()

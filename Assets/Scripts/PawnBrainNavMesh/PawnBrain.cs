@@ -87,8 +87,10 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
         float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
         if (newHealth <= 0f)
         {
-            // Debug.Log("Dying" + name + " " + damage);
+             Debug.Log("Dying" + name + " " + damage);
             selectableType = SelectableType.Dead;
+            transform.position -= transform.up*0.5f;
+            transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             newHealth = 0f;
         }
         dataController.SetParameterValue(

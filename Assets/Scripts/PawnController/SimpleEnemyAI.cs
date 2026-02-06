@@ -4,6 +4,8 @@ using System.Linq;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(PawnDataController))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(AnimatorBrainEnemy))]
 public class SimpleEnemyAI : MonoBehaviour, ISelectable
 {
     private NavMeshAgent agent;
@@ -27,6 +29,13 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
         {
             TurnManager.Instance.OnEnemyTurnStart += ExecuteTurn;
         }
+
+        // 06.02 AlbionVisual: EnemyAnimations
+        anim = GetComponent<Animator>();
+        animator = GetComponent<AnimatorBrainEnemy>();
+        animator.Initialize(1, EnemyAnimations.IDLE, anim, (layer) => animator.Play(EnemyAnimations.IDLE, layer, false, true));
+        animator.Play(EnemyAnimations.IDLE, 0, false, false);
+
     }
 
     private void OnDestroy()
@@ -48,6 +57,7 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
             if (pathDistance <= aggressionRange)
             {
                 agent.SetDestination(closestPlayer.transform.position);
+                animator.Play(EnemyAnimations.WALK, 0, false, false);
             }
         }
     }
@@ -67,6 +77,8 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
 
         foreach (var player in players)
         {
+            ISelectable pl = player.gameObject.GetComponent<ISelectable>();
+            if (pl == null || pl.GetSelectableType() != SelectableType.Player) continue;
             // —читаем путь до конкретного игрока
             if (agent.CalculatePath(player.transform.position, path))
             {
@@ -83,6 +95,7 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
                 }
             }
         }
+        attackTarget = closestPlayer.gameObject.GetComponent<ISelectable>();
         return closestPlayer;
     }
 
@@ -111,6 +124,7 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
         if (newHealth <= 0f)
         {
             // Debug.Log("Dying" + name + " " + damage);
+            animator.Play(EnemyAnimations.DEATH, 0, true, true);
             selectableType = SelectableType.Dead;
             newHealth = 0f;
         }
@@ -132,4 +146,39 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
     {
         return dataController;
     }
+
+    // 06.02 AlbionVisual: EnemyAnimations
+    private AnimatorBrainEnemy animator;
+    private Animator anim;
+    private ISelectable attackTarget;
+
+    void Update()
+    {
+        if (!agent.pathPending)
+        {
+            if (agent.remainingDistance <= agent.stoppingDistance)
+            {
+                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+                {
+                    HandleDestinationReached();
+                }
+            }
+        }
+    }
+
+    void HandleDestinationReached()
+    {
+        if(attackTarget != null)
+        {
+            animator.Play(EnemyAnimations.ATTACK, 0, true, false);
+            float randomValue = Random.value;
+            if (randomValue < 0.5)
+            {
+                attackTarget.OnDealDamage(6.66f);
+            }
+        }
+        attackTarget = null;
+    }
+
+
 }
