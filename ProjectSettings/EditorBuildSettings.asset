@@ -12,5 +12,5 @@ EditorBuildSettings:
     path: Assets/Scenes/PreloadedMapTestScene.unity
     guid: 94dd2e5c4b5bb1c49a4925e0727c0ce3
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   m_UseUCBPForAssetBundles: 0

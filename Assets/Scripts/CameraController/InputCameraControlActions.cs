@@ -12,12 +12,19 @@ public class InputCameraControlActions : MonoBehaviour, IActions
     [SerializeField]
     private InputActionReference lookActionReference;
 
-    void OnValidate()
+    void OnEnable()
     {
         lookReleaseActionReference.action.Enable();
         zoomActionReference.action.Enable();
         moveActionReference.action.Enable();
         lookActionReference.action.Enable();
+    }
+    void OnDisable()
+    {
+        lookReleaseActionReference.action.Disable();
+        zoomActionReference.action.Disable();
+        moveActionReference.action.Disable();
+        lookActionReference.action.Disable();
     }
     public float GetLookReleaseValue()
     {

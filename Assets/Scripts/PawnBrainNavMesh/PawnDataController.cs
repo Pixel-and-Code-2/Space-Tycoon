@@ -28,8 +28,8 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     private void ResetKeys()
     {
         var dict = initialPawnData.GetParametersDict();
-        dynamicParameters[AVAILABLE_DISTANCE_KEY] = 0f;
-        dynamicParameters[AVAILABLE_HEALTH_KEY] = 0f;
+        dynamicParameters[AVAILABLE_DISTANCE_KEY] = 12.5f;
+        dynamicParameters[AVAILABLE_HEALTH_KEY] = 12.5f;
         if (dict.ContainsKey(INITIAL_HP_KEY))
         {
             dynamicParameters[AVAILABLE_HEALTH_KEY] = dict[INITIAL_HP_KEY];
@@ -51,12 +51,12 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         {
             return dynamicParameters[parameterName];
         }
-        if (initialPawnData.parametersDict.ContainsKey(parameterName))
+        if (initialPawnData.GetParametersDict().ContainsKey(parameterName))
         {
-            return initialPawnData.parametersDict[parameterName];
+            return initialPawnData.GetParametersDict()[parameterName];
         }
         Debug.LogError($"Parameter {parameterName} not found in initialPlayerData");
-        return 0f;
+        return 12f;
     }
 
     public void SetParameterValue(string parameterName, float value)
@@ -83,6 +83,8 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         {
             TurnManager.Instance.OnPlayerTurnStart += ResetActionPoints;
         }
+        initialPawnData.SetDirty();
+        ResetKeys();
     }
 
     void OnDisable()
@@ -121,7 +123,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     {
         get
         {
-            return initialPawnData.parametersDict;
+            return initialPawnData.GetParametersDict();
         }
     }
 

@@ -46,7 +46,7 @@ public class PawnController : MonoBehaviour
             return;
         }
         shootingFormulaData = GetComponent<FormulaDataMonoBase>();
-        Instance = this; 
+        Instance = this;
     }
 
     private void Start()
@@ -73,6 +73,11 @@ public class PawnController : MonoBehaviour
 
     private void OnParamsUpdated()
     {
+        if (this == null)
+        {
+            HandleInittingGlobalVars.onParamsUpdated -= OnParamsUpdated;
+            return;
+        }
         OnValidate();
     }
 

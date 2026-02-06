@@ -21,12 +21,12 @@ public class NamedFormula
 
     public bool IsAvailable()
     {
-#if UNITY_EDITOR
+        // #if UNITY_EDITOR
         if (!formula.GetCompiled() && !string.IsNullOrEmpty(formula.formula))
         {
             formula.CompileFormula();
         }
-#endif
+        // #endif
         return IsContextSet() && formula.GetCompiled() == true;
     }
 

@@ -33,7 +33,7 @@ public class FormulaField
             }
         }
         // Debug.Log("GlobalParameters.Instance: " + GlobalParameters.Instance.GetParametersDictState() + "locals: " + locals[0].Count);
-        return compiledFormulaAction(locals, HandleInittingGlobalVars.globalParameters.parametersDict);
+        return compiledFormulaAction(locals, HandleInittingGlobalVars.globalParameters.GetParametersDict());
     }
 
     public bool GetCompiled()
@@ -62,7 +62,7 @@ public class FormulaField
     public void CompileFormula()
     {
         // ToDo: make it work
-#if UNITY_EDITOR
+        // #if UNITY_EDITOR
         foreach (var asset in dataAssets)
         {
             if (asset is ParameteredScriptableObject pso)
@@ -70,10 +70,10 @@ public class FormulaField
                 pso.SetDirty();
             }
         }
-#else
-        Debug.LogError("Trying to compile formula in runtime?! Aborting...\n\n" + System.Environment.StackTrace);
-        return;
-#endif
+        // #else
+        //         Debug.LogError("Trying to compile formula in runtime?! Aborting...\n\n" + System.Environment.StackTrace);
+        //         return;
+        // #endif
         try
         {
             string formulaString = GetFormulaString();

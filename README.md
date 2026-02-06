@@ -30,5 +30,3 @@ README.md                                   # вы находитесь здес
 ```
 
 ## SpaceTycoon
-
-Update project structure: make it cleaner and now it is more consistent with SOLID principles. Involved: pawn monobehaviour scripts, data asset scripts almost all, pawn controller script

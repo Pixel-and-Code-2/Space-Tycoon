@@ -15,6 +15,7 @@ public class HandleInittingGlobalVars : MonoBehaviour
     {
         if (globalParameters == null)
             globalParameters = GetDataAsset("GlobalParameters");
+        globalParameters.SetDirty();
         if (pawnMustHaveParams == null)
             pawnMustHaveParams = GetDataAsset("PawnMustHaveParams");
         onParamsUpdated?.Invoke();

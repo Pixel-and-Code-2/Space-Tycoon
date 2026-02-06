@@ -24,10 +24,15 @@ public class InputScreenMouseControlActions : MonoBehaviour, ISelectorBrain
     private bool selectionClickHandled = false;
     private bool deselectionClickHandled = false;
     public const float RAYCAST_DISTANCE = 100.0f;
-    void OnValidate()
+    void OnEnable()
     {
         selectionClick.action.Enable();
         deselectionClick.action.Enable();
+    }
+    void OnDisable()
+    {
+        selectionClick.action.Disable();
+        deselectionClick.action.Disable();
     }
 
     void Update()

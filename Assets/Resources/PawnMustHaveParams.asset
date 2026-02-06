@@ -158,7 +158,7 @@ MonoBehaviour:
       names:
       - Parameters
   mustHaveParameters: []
-  isDirty: 0
+  isDirty: 1
   parametersDictStateCache: 'STR = 5,00 (5,00)
 
     DX = 5,00 (5,00)
