@@ -15,11 +15,19 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
     private SelectableType selectableType = SelectableType.Player;
     public SelectableType GetSelectableType() => selectableType;
 
+    private AnimatorBrainPlayer animatorBrainPlayer;
+    private Animator anim;
+
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
         dataController = GetComponent<PawnDataController>();
         pawnNavMesh = GetComponent<PawnNavMesh>();
+
+        animatorBrainPlayer = GetComponentInChildren<AnimatorBrainPlayer>();
+        anim = GetComponentInChildren<Animator>();
+        animatorBrainPlayer.Initialize(1, PlayerAnimations.IDLE, anim, (layer) => animatorBrainPlayer.Play(PlayerAnimations.IDLE, layer, false, false));
+        animatorBrainPlayer.Play(PlayerAnimations.IDLE, 0, false, false);
     }
 
     void Update()
@@ -39,6 +47,10 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
         }
         else
         {
+            if (animatorBrainPlayer.GetCurrentAnimation(0) != PlayerAnimations.IDLE)
+            {
+                animatorBrainPlayer.Play(PlayerAnimations.IDLE, 0, false, false);
+            }
             if (pathDrawer.GetVisible())
             {
                 pathDrawer.SetVisible(false);
@@ -54,6 +66,7 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
     public void OnMove(Vector3 position)
     {
         pawnNavMesh.TravelToPosition(position);
+        animatorBrainPlayer.Play(PlayerAnimations.WALK, 0, false, false);
     }
 
     public bool IsMoving()
@@ -70,8 +83,9 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
     {
         Debug.Log("OnShoot: " + position);
         transform.LookAt(position);
+        animatorBrainPlayer.Play(PlayerAnimations.ATTACK, 0, true, false);
         // transform.position += Vector3.up * 10f;
-        transform.position += transform.forward * 0.2f;
+        // transform.position += transform.forward * 0.2f;
     }
 
     void OnCollisionEnter(Collision other)
@@ -91,6 +105,7 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
             selectableType = SelectableType.Dead;
             transform.position -= transform.up * 0.5f;
             transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            animatorBrainPlayer.Play(PlayerAnimations.DEATH, 0, true, true);
             newHealth = 0f;
         }
         dataController.SetParameterValue(

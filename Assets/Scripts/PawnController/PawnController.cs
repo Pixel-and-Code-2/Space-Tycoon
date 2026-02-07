@@ -234,6 +234,7 @@ public class PawnController : MonoBehaviour
                 float distance = Vector3.Distance(selectedWalkablePawn.GetTransform().position, lastHitPoint);
                 if (distance > 2f) return;
                 float randomValue = Random.value;
+                selectedWalkablePawn.OnShoot(lastHitPoint);
                 ISelectable targetPawn = selector.GetSelectionValue();
                 Debug.Log("targetPawn: " + targetPawn + " " + randomValue + " < " + GetMeleeAccuarcy(lastHitPoint));
                 if (randomValue < GetMeleeAccuarcy(lastHitPoint) && targetPawn != null)
