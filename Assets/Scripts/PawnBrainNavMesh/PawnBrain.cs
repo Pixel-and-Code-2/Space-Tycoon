@@ -5,16 +5,15 @@ using UnityEngine;
 [RequireComponent(typeof(PathDrawer))]
 [RequireComponent(typeof(PawnDataController))]
 [RequireComponent(typeof(PawnNavMesh))]
-public class PawnBrain : MonoBehaviour, IControlableSelectable
+public class PawnBrain : IControlableSelectable
 {
     private PathDrawer pathDrawer;
     private PawnDataController dataController;
     private PawnNavMesh pawnNavMesh;
 
-    public bool IsShootable => true;
     [SerializeField]
     private SelectableType selectableType = SelectableType.Player;
-    public SelectableType GetSelectableType() => selectableType;
+    public override SelectableType GetSelectableType() => selectableType;
 
     private AnimatorBrainPlayer animatorBrainPlayer;
     private Animator anim;
@@ -59,28 +58,28 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
         }
     }
 
-    public Transform GetTransform()
+    public override Transform GetTransform()
     {
         return transform;
     }
 
-    public void OnMove(Vector3 position)
+    public override void OnMove(Vector3 position)
     {
         pawnNavMesh.TravelToPosition(position);
         animatorBrainPlayer.Play(PlayerAnimations.WALK, 0, false, false);
     }
 
-    public bool IsMoving()
+    public override bool IsMoving()
     {
         return pawnNavMesh.IsMoving();
     }
 
-    public (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) GetPathPointsTo(Vector3 position)
+    public override (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) GetPathPointsTo(Vector3 position)
     {
         return pawnNavMesh.GetPathPointsTo(position);
     }
 
-    public void OnShoot(Vector3 position)
+    public override void OnShoot(Vector3 position)
     {
         Debug.Log("OnShoot: " + position);
         transform.LookAt(position);
@@ -97,7 +96,7 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
         other.rigidbody.AddForce(dir * dataController.obstaclePushForce, ForceMode.Impulse);
     }
 
-    public void OnGetHit(float damage)
+    public override void OnGetHit(float damage)
     {
         float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
         if (newHealth <= 0f)
@@ -115,12 +114,7 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
         );
     }
 
-    public string GetHPText()
-    {
-        return $"{dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY)} / {dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY)}";
-    }
-
-    public IFormulaData GetFormulaData()
+    public override IFormulaData GetFormulaData()
     {
         return dataController;
     }

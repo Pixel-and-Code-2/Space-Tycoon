@@ -10,15 +10,13 @@ public class PawnStatusVisualizer : MonoBehaviour
     [SerializeField] private Color enemyColor = Color.red;
     [SerializeField] private Color deadColor = Color.gray;
 
-    private SimpleEnemyAI enemyAI;
-    private PawnBrain playerAI;
+    private PawnBrain pawnBrain;
 
     void Awake()
     {
         if (objectRenderer == null) objectRenderer = GetComponent<Renderer>();
 
-        enemyAI = GetComponentInParent<SimpleEnemyAI>();
-        playerAI = GetComponentInParent<PawnBrain>();
+        pawnBrain = GetComponentInParent<PawnBrain>();
     }
 
     void Start()
@@ -37,28 +35,19 @@ public class PawnStatusVisualizer : MonoBehaviour
 
         Color targetColor = Color.white;
 
-        if (enemyAI != null)
+        if (pawnBrain.GetSelectableType() == SelectableType.Enemy)
         {
-            if (enemyAI.GetSelectableType() == SelectableType.Dead)
-            {
-                targetColor = deadColor;
-            }
-            else
-            {
-                targetColor = enemyColor;
-            }
+            targetColor = enemyColor;
         }
-        else if (playerAI != null)
+        else if (pawnBrain.GetSelectableType() == SelectableType.Player)
         {
-            if (playerAI.GetSelectableType() == SelectableType.Dead)
-            {
-                targetColor = deadColor;
-            }
-            else
-            {
-                targetColor = allyColor;
-            }
+            targetColor = allyColor;
         }
+        else
+        {
+            targetColor = deadColor;
+        }
+
 
         if (objectRenderer.material.color != targetColor)
         {

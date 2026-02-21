@@ -42,8 +42,8 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     void Awake()
     {
         meleeState = GetComponent<MeleeState>();
-        shootState = GetComponent<ShootState>();
         walkState = GetComponent<WalkState>();
+        shootState = GetComponent<ShootState>();
         OnValidate();
     }
 

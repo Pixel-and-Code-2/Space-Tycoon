@@ -5,6 +5,14 @@ using UnityEngine;
 public class TurnManager : MonoBehaviour
 {
     public static TurnManager Instance { get; private set; } // Singleton instance
+    // TurnManager()
+    // {
+    //     if (Instance == null) Instance = this;
+    //     else
+    //     {
+    //         Debug.LogError("Constructor met second TurnManager instance");
+    //     }
+    // }
 
     // Actions to contoller and pawns to notify turn changes
     public event Action OnPlayerTurnStart;
@@ -53,18 +61,18 @@ public class TurnManager : MonoBehaviour
         OnPlayerTurnEnd?.Invoke();
         Debug.Log("PLAYER TURN END");
         //Enemy Turn
-        StartCoroutine(EnemyTurn());
+        EnemyTurn();
     }
 
-    private IEnumerator EnemyTurn()
+    private void EnemyTurn()
     {
         OnEnemyTurnStart?.Invoke();
+        Debug.Log("Enemy is making its move");
+    }
 
-        Debug.Log("Enemy is thinking");
-        yield return new WaitForSeconds(4.0f); // Simulate enemy thinking time
-
+    public void EndEnemyTurn()
+    {
         OnEnemyTurnEnd?.Invoke();
-        // Back to Player Turn
         StartPlayerTurn();
     }
 }

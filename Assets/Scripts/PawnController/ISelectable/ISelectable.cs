@@ -6,9 +6,9 @@ public enum SelectableType
     Neutral,
     Dead
 }
-public interface ISelectable
+public abstract class ISelectable : MonoBehaviour
 {
-    SelectableType GetSelectableType();
-    Transform GetTransform();
-    IFormulaData GetFormulaData();
+    public abstract SelectableType GetSelectableType();
+    public abstract Transform GetTransform();
+    public abstract IFormulaData GetFormulaData();
 }

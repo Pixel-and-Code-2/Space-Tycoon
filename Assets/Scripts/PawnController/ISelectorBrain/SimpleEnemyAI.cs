@@ -1,177 +1,308 @@
-// using UnityEngine;
-// using UnityEngine.AI;
-// using System.Linq;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
-// public class SimpleEnemyAI : MonoBehaviour, ISelectorBrain
-// {
-//     private PawnDataController dataController;
-//     [SerializeField]
-//     private float aggressionRange = 20.0f;
-//     [SerializeField]
-//     private float checkInterval = 2.0f;
+public enum EnemyCapabilities
+{
+    // you can use all whenever you want, if the enemy is too far you just won't shoot or attack. If you want to go further, than pawn can move, but you'll go only available part of path.
+    Move,
+    Melee,
+    WaitMovement
+}
 
-//     private void Awake()
-//     {
-//         agent = GetComponent<NavMeshAgent>();
-//         dataController = GetComponent<PawnDataController>();
-//         agent.autoBraking = true;
-//         agent.stoppingDistance = checkInterval;
-//     }
+public enum DetailedScenarioElementType
+{
+    SelectPawn,
+    DeselectPawn,
+    MovePawn,
+    SetMoveState,
+    AttackPawn,
+    SetAttackState,
+    WaitMovement
+}
 
-//     void Start()
-//     {
-//         if (TurnManager.Instance != null)
-//         {
-//             TurnManager.Instance.OnEnemyTurnStart += ExecuteTurn;
-//         }
+public class SimpleEnemyAI : ISelectorBrain
+{
+    // controlledPawn not null
+    // targetPawn null when you want to hardcoded vector instead or to find closest target
+    // position Vector3.zero when you want to use "closest target" feature instead, otherwise hardcode position
+    [System.Serializable]
+    public class ScenarioElement
+    {
+        [SerializeField]
+        public IControlableSelectable controlledPawn;
+        [SerializeField]
+        public IControlableSelectable targetPawn;
+        [SerializeField]
+        public Vector3 position;
+    }
+    [System.Serializable]
+    public class EnemyScenarioElement : ScenarioElement
+    {
+        [SerializeField]
+        public EnemyCapabilities capability;
+    }
+    public class DetailedScenarioElement : ScenarioElement
+    {
+        [SerializeField]
+        public DetailedScenarioElementType type;
+    }
 
-//         // 06.02 AlbionVisual: EnemyAnimations
-//         anim = GetComponent<Animator>();
-//         animator = GetComponent<AnimatorBrainEnemy>();
-//         animator.Initialize(1, EnemyAnimations.IDLE, anim, (layer) => animator.Play(EnemyAnimations.IDLE, layer, false, true));
-//         animator.Play(EnemyAnimations.IDLE, 0, false, false);
+    [SerializeField]
+    private IPawnState meleeState;
+    [SerializeField]
+    private IPawnState walkState;
+    [SerializeField]
+    private List<EnemyScenarioElement> scenario = new List<EnemyScenarioElement>();
+    private List<DetailedScenarioElement> detailedScenario = new List<DetailedScenarioElement>();
+    private int currentScenarioIndex = -1; // -1 means no scenario is running, if this var is bigger than completedScenarioIndex, then local methods (not polls ones) are waiting for sth, otherwise scenario is stopped to make a poll return
+    private int completedScenarioIndex = -2;
 
-//     }
+    void Awake()
+    {
+        meleeState = GetComponent<MeleeState>();
+        walkState = GetComponent<WalkState>();
+    }
 
-//     private void OnDestroy()
-//     {
-//         if (TurnManager.Instance != null)
-//         {
-//             TurnManager.Instance.OnEnemyTurnStart -= ExecuteTurn;
-//         }
-//     }
+    void Start()
+    {
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
+        }
+    }
+    void OnDestroy()
+    {
+        TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
+    }
 
-//     private void ExecuteTurn()
-//     {
-//         // 1. ���� ������ � �������� ����� ��������� ���� �� ���� (out pathDistance)
-//         PawnNavMesh closestPlayer = FindClosestPlayer(out float pathDistance);
 
-//         if (closestPlayer != null)
-//         {
-//             // 2. ���������� aggressionRange � �������� ����, � �� ��������
-//             if (pathDistance <= aggressionRange)
-//             {
-//                 agent.SetDestination(closestPlayer.transform.position);
-//                 animator.Play(EnemyAnimations.WALK, 0, false, false);
-//             }
-//         }
-//     }
+    private float timeStack = 0.0f;
+    void Update()
+    {
+        if (completedScenarioIndex == -2) return;
+        if (currentScenarioIndex >= detailedScenario.Count)
+        {
+            completedScenarioIndex = -2;
+            currentScenarioIndex = -1;
+            TurnManager.Instance.EndEnemyTurn();
+            return;
+        }
+        Debug.Log("SimpleEnemyAI Update " + currentScenarioIndex + " >= " + completedScenarioIndex);
+        if (completedScenarioIndex + 1 == currentScenarioIndex)
+        {
+            timeStack = 0.0f;
+            switch (detailedScenario[currentScenarioIndex].type)
+            {
+                case DetailedScenarioElementType.MovePawn:
+                    MovePawn(detailedScenario[currentScenarioIndex]);
+                    break;
+                case DetailedScenarioElementType.WaitMovement:
+                    WaitMovement(detailedScenario[currentScenarioIndex]);
+                    break;
+                case DetailedScenarioElementType.AttackPawn:
+                    AttackPawn(detailedScenario[currentScenarioIndex]);
+                    break;
+                default:
+                    completedScenarioIndex++;
+                    break;
+            }
+        }
+        if (completedScenarioIndex == currentScenarioIndex)
+        {
+            timeStack += Time.deltaTime;
+            if (timeStack >= 3f)
+            {
+                Debug.LogError("Time stack is greater than 3 seconds, it's " + timeStack + " seconds... Sth wrong, skipping");
+                currentScenarioIndex++;
+            }
+        }
+        if (currentScenarioIndex != completedScenarioIndex + 1 && currentScenarioIndex != completedScenarioIndex)
+        {
+            Debug.LogError("Current scenario index is not valid, it's " + currentScenarioIndex + " when completed scenario index is " + completedScenarioIndex);
+        }
+    }
 
-//     // ����� ������ ���������� � �����, � ����� ���� �� ��
-//     private PawnNavMesh FindClosestPlayer(out float shortestDistance)
-//     {
-//         PawnNavMesh[] players = FindObjectsByType<PawnNavMesh>(FindObjectsSortMode.None)
-//             .Where(p => p.CompareTag("Player")).ToArray();
+    public override IControlableSelectable PollSelectPawn()
+    {
+        if (currentScenarioIndex == completedScenarioIndex)
+        {
+            switch (detailedScenario[currentScenarioIndex].type)
+            {
+                case DetailedScenarioElementType.SelectPawn:
+                    currentScenarioIndex++;
+                    return detailedScenario[currentScenarioIndex].controlledPawn;
+                case DetailedScenarioElementType.DeselectPawn:
+                    currentScenarioIndex++;
+                    return null;
+                default:
+                    return PawnController.Instance.currentSelectedPawn;
+            }
+        }
+        else
+        {
+            return PawnController.Instance.currentSelectedPawn;
+        }
+    }
 
-//         shortestDistance = float.MaxValue;
+    public override (ISelectable selectable, Vector3 worldPoint) PollSelectPosForState()
+    {
+        if (currentScenarioIndex == completedScenarioIndex)
+        {
+            var el = detailedScenario[currentScenarioIndex];
+            switch (el.type)
+            {
+                case DetailedScenarioElementType.MovePawn:
+                    currentScenarioIndex++;
+                    Vector3 answer = Vector3.zero;
+                    if (el.targetPawn == null)
+                    {
+                        if (el.position == Vector3.zero)
+                        {
+                            answer = FindClosestPlayer(out float shortestDistance).GetTransform().position;
+                        }
+                        else
+                        {
+                            answer = el.position;
+                        }
+                    }
+                    else
+                    {
+                        answer = el.targetPawn.GetTransform().position;
+                    }
+                    return (null, answer);
+                case DetailedScenarioElementType.AttackPawn:
+                    IControlableSelectable answer2;
+                    currentScenarioIndex++;
+                    if (el.targetPawn == null)
+                    {
+                        answer2 = FindClosestPlayer(out float shortestDistance);
+                    }
+                    else
+                    {
+                        answer2 = el.targetPawn;
+                    }
+                    return (answer2, answer2.GetTransform().position);
+                default:
+                    return (null, Vector3.zero);
+            }
+        }
+        else
+        {
+            return (null, Vector3.zero);
+        }
+    }
 
-//         if (players.Length == 0) return null;
+    public override IPawnState PollChangeState()
+    {
+        if (currentScenarioIndex == completedScenarioIndex)
+        {
+            switch (detailedScenario[currentScenarioIndex].type)
+            {
+                case DetailedScenarioElementType.SetMoveState:
+                    currentScenarioIndex++;
+                    return walkState;
+                case DetailedScenarioElementType.SetAttackState:
+                    currentScenarioIndex++;
+                    return meleeState;
+                default:
+                    return null;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-//         PawnNavMesh closestPlayer = null;
-//         NavMeshPath path = new NavMeshPath(); // ������� ���� ���, ����� �� ��������
+    void OnEnemyTurnStart()
+    {
+        currentScenarioIndex = 0;
+        completedScenarioIndex = -1;
+        BuildDetailedScenario();
+        Debug.Log("SimpleEnemyAI OnEnemyTurnStart " + detailedScenario.Count);
+    }
 
-//         foreach (var player in players)
-//         {
-//             ISelectable pl = player.gameObject.GetComponent<ISelectable>();
-//             if (pl == null || pl.GetSelectableType() != SelectableType.Player) continue;
-//             // ������� ���� �� ����������� ������
-//             if (agent.CalculatePath(player.transform.position, path))
-//             {
-//                 // (�����������) ���������� ���, �� ���� ������ ����� ���������
-//                 if (path.status != NavMeshPathStatus.PathComplete) continue;
+    private void BuildDetailedScenario()
+    {
+        detailedScenario.Clear();
+        foreach (var element in scenario)
+        {
+            if (element.controlledPawn.GetSelectableType() != SelectableType.Enemy) continue;
+            AddDetailedScenarioElement(DetailedScenarioElementType.SelectPawn, element);
+            switch (element.capability)
+            {
+                case EnemyCapabilities.Move:
+                    AddDetailedScenarioElement(DetailedScenarioElementType.SetMoveState, element);
+                    AddDetailedScenarioElement(DetailedScenarioElementType.MovePawn, element);
+                    break;
+                case EnemyCapabilities.Melee:
+                    AddDetailedScenarioElement(DetailedScenarioElementType.SetAttackState, element);
+                    AddDetailedScenarioElement(DetailedScenarioElementType.AttackPawn, element);
+                    break;
+                case EnemyCapabilities.WaitMovement:
+                    AddDetailedScenarioElement(DetailedScenarioElementType.WaitMovement, element);
+                    break;
+            }
+            AddDetailedScenarioElement(DetailedScenarioElementType.DeselectPawn, element);
+        }
+    }
 
-//                 // ������� ����� �� ����� ����
-//                 float distance = CalculatePathLength(path);
+    private void AddDetailedScenarioElement(DetailedScenarioElementType type, ScenarioElement element)
+    {
+        if (element.controlledPawn == null)
+        {
+            Debug.LogError("Controlled pawn is null, make sure you select one everywhere");
+            return;
+        }
+        DetailedScenarioElement detailedElement = new DetailedScenarioElement();
+        detailedElement.type = type;
+        detailedElement.controlledPawn = element.controlledPawn;
+        detailedElement.targetPawn = element.targetPawn;
+        detailedElement.position = element.position;
+        detailedScenario.Add(detailedElement);
+    }
 
-//                 if (distance < shortestDistance)
-//                 {
-//                     shortestDistance = distance;
-//                     closestPlayer = player;
-//                 }
-//             }
-//         }
-//         attackTarget = closestPlayer.gameObject.GetComponent<ISelectable>();
-//         return closestPlayer;
-//     }
+    private void MovePawn(ScenarioElement element)
+    {
+        completedScenarioIndex++;
+    }
 
-//     // ��������������� ����� ��� ������� ������� ����� NavMesh ����
-//     private float CalculatePathLength(NavMeshPath path)
-//     {
-//         float length = 0f;
-//         if (path.corners.Length < 2) return 0f;
+    private void WaitMovement(ScenarioElement element)
+    {
+        if (element.targetPawn == null || !element.targetPawn.IsMoving()) completedScenarioIndex++;
+    }
 
-//         for (int i = 0; i < path.corners.Length - 1; i++)
-//         {
-//             length += Vector3.Distance(path.corners[i], path.corners[i + 1]);
-//         }
-//         return length;
-//     }
+    private void AttackPawn(ScenarioElement element)
+    {
+        completedScenarioIndex++;
+    }
 
-//     // 05.02 AlbionVisual: ISelectable implementation
-//     public Transform GetTransform()
-//     {
-//         return transform;
-//     }
+    private IControlableSelectable FindClosestPlayer(out float shortestDistance)
+    {
+        shortestDistance = float.MaxValue;
 
-//     public void OnDealDamage(float damage)
-//     {
-//         float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
-//         if (newHealth <= 0f)
-//         {
-//             // Debug.Log("Dying" + name + " " + damage);
-//             animator.Play(EnemyAnimations.DEATH, 0, true, true);
-//             selectableType = SelectableType.Dead;
-//             newHealth = 0f;
-//         }
-//         dataController.SetParameterValue(
-//             PawnDataController.AVAILABLE_HEALTH_KEY,
-//             newHealth
-//         );
-//     }
+        IControlableSelectable controlledPawn = PawnController.Instance.currentSelectedPawn;
+        if (controlledPawn == null)
+        {
+            return null;
+        }
 
-//     public bool IsShootable => true;
-//     private SelectableType selectableType = SelectableType.Enemy;
-//     public SelectableType GetSelectableType() => selectableType;
-//     public string GetHPText()
-//     {
-//         return $"{dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY)} / {dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY)}";
-//     }
+        PawnBrain[] pawns = FindObjectsByType<PawnBrain>(FindObjectsSortMode.None);
+        PawnBrain[] players = pawns.Where(p => p.GetSelectableType() == SelectableType.Player).ToArray();
+        IControlableSelectable[] controlablePlayers = players.Select(p => p as IControlableSelectable).ToArray();
 
-//     public IFormulaData GetFormulaData()
-//     {
-//         return dataController;
-//     }
-
-//     // 06.02 AlbionVisual: EnemyAnimations
-//     private AnimatorBrainEnemy animator;
-//     private Animator anim;
-//     private ISelectable attackTarget;
-
-//     void Update()
-//     {
-//         if (!agent.pathPending)
-//         {
-//             if (agent.remainingDistance <= agent.stoppingDistance)
-//             {
-//                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
-//                 {
-//                     HandleDestinationReached();
-//                 }
-//             }
-//         }
-//     }
-
-//     void HandleDestinationReached()
-//     {
-//         if (attackTarget != null)
-//         {
-//             animator.Play(EnemyAnimations.ATTACK, 0, true, false);
-//             float randomValue = Random.value;
-//             if (randomValue < 0.5)
-//             {
-//                 attackTarget.OnDealDamage(6.66f);
-//             }
-//         }
-//         attackTarget = null;
-//     }
-// }
+        IControlableSelectable closestPlayer = null;
+        foreach (var player in controlablePlayers)
+        {
+            (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) = controlledPawn.GetPathPointsTo(player.GetTransform().position);
+            float distance = PawnDataController.CalculateLineStringDistance(pointsAvailable) + PawnDataController.CalculateLineStringDistance(pointsOutOfRange);
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                closestPlayer = player;
+            }
+        }
+        return closestPlayer;
+    }
+}

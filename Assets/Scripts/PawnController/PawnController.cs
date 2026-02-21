@@ -132,6 +132,7 @@ public class PawnController : MonoBehaviour
     {
         currentSelectorWithUICached = null;
         currentSelector = newSelectorBrain;
+        Debug.Log("SetSelectorBrain " + newSelectorBrain.name);
         if (newSelectorBrain is ISelectorBrainWithUI selectorWithUI)
         {
             currentSelectorWithUICached = selectorWithUI;

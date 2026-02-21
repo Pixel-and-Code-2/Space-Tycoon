@@ -1,7 +1,7 @@
 using UnityEngine;
 
-public interface IAttackableSelectable : ISelectable
+public abstract class IAttackableSelectable : ISelectable
 {
-    bool IsAttackable => true;
-    void OnGetHit(float damage);
+    public virtual bool IsAttackable => true;
+    public abstract void OnGetHit(float damage);
 }
