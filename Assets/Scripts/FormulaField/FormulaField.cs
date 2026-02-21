@@ -41,7 +41,6 @@ public class FormulaField
         return compiledFormulaAction != null;
     }
 
-
     public string GetFormulaString()
     {
         if (string.IsNullOrEmpty(formula))

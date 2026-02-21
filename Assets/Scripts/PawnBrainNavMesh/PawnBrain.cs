@@ -12,6 +12,7 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
     private PawnNavMesh pawnNavMesh;
 
     public bool IsShootable => true;
+    [SerializeField]
     private SelectableType selectableType = SelectableType.Player;
     public SelectableType GetSelectableType() => selectableType;
 
@@ -96,7 +97,7 @@ public class PawnBrain : MonoBehaviour, IControlableSelectable
         other.rigidbody.AddForce(dir * dataController.obstaclePushForce, ForceMode.Impulse);
     }
 
-    public void OnDealDamage(float damage)
+    public void OnGetHit(float damage)
     {
         float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
         if (newHealth <= 0f)

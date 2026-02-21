@@ -28,8 +28,8 @@ public class PathDrawer : MonoBehaviour
         {
             if (pathLineWalkable.positionCount > 0)
             {
-                pathEndObject.transform.position = pathLineWalkable.GetPosition(pathLineWalkable.positionCount - 1);
-                pathStartObject.transform.position = pathLineWalkable.GetPosition(0);
+                if (pathEndObject != null) pathEndObject.transform.position = pathLineWalkable.GetPosition(pathLineWalkable.positionCount - 1);
+                if (pathStartObject != null) pathStartObject.transform.position = pathLineWalkable.GetPosition(0);
             }
         }
     }
@@ -75,23 +75,23 @@ public class PathDrawer : MonoBehaviour
     {
         if (pointsAvailable != null)
         {
-            pathStartObject.transform.position = pointsAvailable[0];
+            if (pathStartObject != null) pathStartObject.transform.position = pointsAvailable[0];
             ColorStartTo(false);
         }
         else
         {
-            pathStartObject.transform.position = pointsOutOfRange[0];
+            if (pathStartObject != null) pathStartObject.transform.position = pointsOutOfRange[0];
             ColorStartTo(true);
         }
 
         if (pointsOutOfRange != null)
         {
-            pathEndObject.transform.position = pointsOutOfRange[^1];
+            if (pathEndObject != null) pathEndObject.transform.position = pointsOutOfRange[^1];
             ColorEndTo(true);
         }
         else
         {
-            pathEndObject.transform.position = pointsAvailable[^1];
+            if (pathEndObject != null) pathEndObject.transform.position = pointsAvailable[^1];
             ColorEndTo(false);
         }
     }
@@ -100,12 +100,12 @@ public class PathDrawer : MonoBehaviour
     {
         if (isOutOfRange)
         {
-            pathEndObjectRenderer.material = pathOutOfRangeMaterial;
+            if (pathEndObjectRenderer != null) pathEndObjectRenderer.material = pathOutOfRangeMaterial;
             pathLineOutOfRange.enabled = true;
         }
         else
         {
-            pathEndObjectRenderer.material = pathWalkableMaterial;
+            if (pathEndObjectRenderer != null) pathEndObjectRenderer.material = pathWalkableMaterial;
             pathLineOutOfRange.enabled = false;
         }
     }
@@ -114,13 +114,13 @@ public class PathDrawer : MonoBehaviour
     {
         if (isOutOfRange)
         {
-            pathStartObjectRenderer.material = pathOutOfRangeMaterial;
+            if (pathStartObjectRenderer != null) pathStartObjectRenderer.material = pathOutOfRangeMaterial;
             pathLineOutOfRange.enabled = true;
             pathLineWalkable.enabled = false;
         }
         else
         {
-            pathStartObjectRenderer.material = pathWalkableMaterial;
+            if (pathStartObjectRenderer != null) pathStartObjectRenderer.material = pathWalkableMaterial;
             pathLineWalkable.enabled = true;
         }
     }
@@ -160,9 +160,10 @@ public class PathDrawer : MonoBehaviour
 
     public virtual void SetVisible(bool visible)
     {
+        if (this.visible == visible) return;
         this.visible = visible;
-        pathStartObject.gameObject.SetActive(visible);
-        pathEndObject.gameObject.SetActive(visible);
+        if (pathStartObject != null) pathStartObject.gameObject.SetActive(visible);
+        if (pathEndObject != null) pathEndObject.gameObject.SetActive(visible);
         if (visible == false)
         {
             pathLineOutOfRange.enabled = false;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-interface IControlableSelectable : ISelectable
+public interface IControlableSelectable : IAttackableSelectable
 {
     void OnMove(Vector3 position);
     void OnShoot(Vector3 position);

@@ -10,6 +10,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomPropertyDrawer(typeof(FormulaField))]
+[CustomPropertyDrawer(typeof(FormulaFieldWithMemo))]
 public class FormulaFieldDrawer : PropertyDrawer
 {
     private const float MinFormulaHeight = 80f;

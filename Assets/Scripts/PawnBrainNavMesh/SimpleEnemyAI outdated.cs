@@ -6,8 +6,9 @@ using System.Linq;
 [RequireComponent(typeof(PawnDataController))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(AnimatorBrainEnemy))]
-public class SimpleEnemyAI : MonoBehaviour, ISelectable
+public class SimpleEnemyAI : MonoBehaviour, IAttackableSelectable
 {
+    public bool IsAttackable => true;
     private NavMeshAgent agent;
     private PawnDataController dataController;
     [SerializeField]
@@ -48,12 +49,12 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
 
     private void ExecuteTurn()
     {
-        // 1. Ищем игрока и получаем сразу дистанцию пути до него (out pathDistance)
+        // 1. пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ (out pathDistance)
         PawnNavMesh closestPlayer = FindClosestPlayer(out float pathDistance);
 
         if (closestPlayer != null)
         {
-            // 2. Сравниваем aggressionRange с реальным путём, а не радиусом
+            // 2. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ aggressionRange пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (pathDistance <= aggressionRange)
             {
                 agent.SetDestination(closestPlayer.transform.position);
@@ -62,7 +63,7 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
         }
     }
 
-    // Метод теперь возвращает и Пешку, и длину пути до неё
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ
     private PawnNavMesh FindClosestPlayer(out float shortestDistance)
     {
         PawnNavMesh[] players = FindObjectsByType<PawnNavMesh>(FindObjectsSortMode.None)
@@ -73,19 +74,19 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
         if (players.Length == 0) return null;
 
         PawnNavMesh closestPlayer = null;
-        NavMeshPath path = new NavMeshPath(); // Создаем один раз, чтобы не мусорить
+        NavMeshPath path = new NavMeshPath(); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
         foreach (var player in players)
         {
             ISelectable pl = player.gameObject.GetComponent<ISelectable>();
             if (pl == null || pl.GetSelectableType() != SelectableType.Player) continue;
-            // Считаем путь до конкретного игрока
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
             if (agent.CalculatePath(player.transform.position, path))
             {
-                // (Опционально) Игнорируем тех, до кого нельзя дойти физически
+                // (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 if (path.status != NavMeshPathStatus.PathComplete) continue;
 
-                // Считаем длину по углам пути
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
                 float distance = CalculatePathLength(path);
 
                 if (distance < shortestDistance)
@@ -95,11 +96,11 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
                 }
             }
         }
-        attackTarget = closestPlayer.gameObject.GetComponent<ISelectable>();
+        attackTarget = closestPlayer.gameObject.GetComponent<IAttackableSelectable>();
         return closestPlayer;
     }
 
-    // Вспомогательный метод для точного расчета длины NavMesh пути
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ NavMesh пїЅпїЅпїЅпїЅ
     private float CalculatePathLength(NavMeshPath path)
     {
         float length = 0f;
@@ -118,7 +119,7 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
         return transform;
     }
 
-    public void OnDealDamage(float damage)
+    public void OnGetHit(float damage)
     {
         float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
         if (newHealth <= 0f)
@@ -150,7 +151,7 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
     // 06.02 AlbionVisual: EnemyAnimations
     private AnimatorBrainEnemy animator;
     private Animator anim;
-    private ISelectable attackTarget;
+    private IAttackableSelectable attackTarget;
 
     void Update()
     {
@@ -168,13 +169,13 @@ public class SimpleEnemyAI : MonoBehaviour, ISelectable
 
     void HandleDestinationReached()
     {
-        if(attackTarget != null)
+        if (attackTarget != null)
         {
             animator.Play(EnemyAnimations.ATTACK, 0, true, false);
             float randomValue = Random.value;
             if (randomValue < 0.5)
             {
-                attackTarget.OnDealDamage(6.66f);
+                attackTarget.OnGetHit(6.66f);
             }
         }
         attackTarget = null;
