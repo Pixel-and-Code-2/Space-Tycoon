@@ -77,7 +77,7 @@ public class PathDrawerWithText : PathDrawer
 
     public override void SetVisible(bool visible)
     {
-        canvas.enabled = visible;
+        uiText.enabled = visible;
         base.SetVisible(visible);
     }
 

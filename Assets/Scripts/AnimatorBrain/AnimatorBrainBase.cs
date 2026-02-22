@@ -12,7 +12,7 @@ public class AnimatorBrainBase : MonoBehaviour
         ATTACK = 3,
         DEATH = 4
     }
-    protected static int[] animations = { 0 };
+    protected static int[] animations = { 0, 0, 0, 0, 0 };
     protected Animator animator;
     protected int[] currentAnimation;
     protected bool[] layerLocked;

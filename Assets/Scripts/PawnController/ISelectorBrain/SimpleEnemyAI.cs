@@ -75,11 +75,18 @@ public class SimpleEnemyAI : ISelectorBrain
     {
         TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
     }
-
-
+    // private int csiCached = -1;
+    // private int cciCached = -1;
     private float timeStack = 0.0f;
     void Update()
     {
+        // if (csiCached != currentScenarioIndex || cciCached != completedScenarioIndex)
+        // {
+        //     csiCached = currentScenarioIndex;
+        //     cciCached = completedScenarioIndex;
+        //     Debug.Log("SimpleEnemyAI Update: calculated " + detailedScenario[currentScenarioIndex].type + " completed " + detailedScenario[completedScenarioIndex].type);
+        // }
+
         if (completedScenarioIndex == -2) return;
         if (currentScenarioIndex >= detailedScenario.Count)
         {
@@ -88,7 +95,6 @@ public class SimpleEnemyAI : ISelectorBrain
             TurnManager.Instance.EndEnemyTurn();
             return;
         }
-        Debug.Log("SimpleEnemyAI Update " + currentScenarioIndex + " >= " + completedScenarioIndex);
         if (completedScenarioIndex + 1 == currentScenarioIndex)
         {
             timeStack = 0.0f;
@@ -220,7 +226,7 @@ public class SimpleEnemyAI : ISelectorBrain
         currentScenarioIndex = 0;
         completedScenarioIndex = -1;
         BuildDetailedScenario();
-        Debug.Log("SimpleEnemyAI OnEnemyTurnStart " + detailedScenario.Count);
+        // Debug.Log("SimpleEnemyAI OnEnemyTurnStart " + detailedScenario.Count);
     }
 
     private void BuildDetailedScenario()
@@ -270,7 +276,11 @@ public class SimpleEnemyAI : ISelectorBrain
 
     private void WaitMovement(ScenarioElement element)
     {
-        if (element.targetPawn == null || !element.targetPawn.IsMoving()) completedScenarioIndex++;
+        if (element.controlledPawn == null || !element.controlledPawn.IsMoving())
+        {
+            completedScenarioIndex++;
+            currentScenarioIndex++;
+        }
     }
 
     private void AttackPawn(ScenarioElement element)

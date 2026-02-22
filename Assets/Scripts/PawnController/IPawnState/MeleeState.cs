@@ -93,7 +93,7 @@ public class MeleeState : IPawnState
         }
         if (meleeFormulaData.parametersDict.Count < 1)
         {
-            Debug.LogWarning("formulaData is empty" + gameObject.name);
+            // Debug.LogWarning("formulaData is empty" + gameObject.name);
             meleeFormulaData.FullFillWithParameters(new string[] { MELEE_DISTANCE_LABEL });
         }
         if (calculateMeleeAccuracy == null)

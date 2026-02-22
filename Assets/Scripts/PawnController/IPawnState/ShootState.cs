@@ -37,7 +37,7 @@ public class ShootState : IPawnState
         }
         if (shootingFormulaData.parametersDict.Count < 1)
         {
-            Debug.LogWarning("formulaData is empty");
+            // Debug.LogWarning("formulaData is empty");
             shootingFormulaData.FullFillWithParameters(new string[] { SHOOTING_DISTANCE_LABEL });
         }
         RefillFormulas();

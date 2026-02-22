@@ -11,9 +11,7 @@ public class PawnBrain : IControlableSelectable
     private PawnDataController dataController;
     private PawnNavMesh pawnNavMesh;
 
-    [SerializeField]
-    private SelectableType selectableType = SelectableType.Player;
-    public override SelectableType GetSelectableType() => selectableType;
+    public override SelectableType GetSelectableType() => dataController.selectableType;
 
     [SerializeField]
     private AnimatorBrainBase animatorBrain;
@@ -29,6 +27,11 @@ public class PawnBrain : IControlableSelectable
         anim = GetComponentInChildren<Animator>();
         animatorBrain.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
         animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
+    }
+
+    void Start()
+    {
+        UI3DManager.Instance.RegisterPawn(gameObject);
     }
 
     void Update()
@@ -103,7 +106,7 @@ public class PawnBrain : IControlableSelectable
         if (newHealth <= 0f)
         {
             //  Debug.Log("Dying" + name + " " + damage);
-            selectableType = SelectableType.Dead;
+            dataController.selectableType = SelectableType.Dead;
             transform.position -= transform.up * 0.5f;
             transform.rotation = Quaternion.Euler(0f, 0f, 90f);
             animatorBrain.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);

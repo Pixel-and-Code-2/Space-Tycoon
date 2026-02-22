@@ -24,12 +24,14 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     public const string INITIAL_HP_KEY = "HP";
     public const string INITIAL_AVAILABLE_DISTANCE_KEY = "SPD";
     public const string AVAILABLE_HEALTH_KEY = "AvailableHealth";
+    [SerializeField]
+    public SelectableType selectableType = SelectableType.Player;
 
     private void ResetKeys()
     {
         var dict = initialPawnData.GetParametersDict();
-        dynamicParameters[AVAILABLE_DISTANCE_KEY] = 12.5f;
-        dynamicParameters[AVAILABLE_HEALTH_KEY] = 12.5f;
+        // dynamicParameters[AVAILABLE_DISTANCE_KEY] = 12.5f;
+        // dynamicParameters[AVAILABLE_HEALTH_KEY] = 12.5f;
         if (dict.ContainsKey(INITIAL_HP_KEY))
         {
             dynamicParameters[AVAILABLE_HEALTH_KEY] = dict[INITIAL_HP_KEY];
@@ -38,11 +40,6 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         {
             dynamicParameters[AVAILABLE_DISTANCE_KEY] = dict[INITIAL_AVAILABLE_DISTANCE_KEY];
         }
-    }
-
-    void Awake()
-    {
-        ResetKeys();
     }
 
     public float GetParameterValue(string parameterName)
@@ -55,8 +52,9 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         {
             return initialPawnData.GetParametersDict()[parameterName];
         }
-        Debug.LogError($"Parameter {parameterName} not found in initialPlayerData");
-        return 12f;
+        // Debug.LogError($"Parameter {parameterName} not found in initialPlayerData");
+        // return 12f;
+        throw new System.Exception($"Parameter {parameterName} not found in initialPlayerData");
     }
 
     public void SetParameterValue(string parameterName, float value)
