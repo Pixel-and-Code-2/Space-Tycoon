@@ -1,12 +1,17 @@
-//Author: Small Hedge Games
-//Date: 21/03/2024
-
 using UnityEngine;
-using System;
 
-public class AnimatorBrainPlayer : MonoBehaviour
+
+public class AnimatorBrainPlayer : AnimatorBrainBase
 {
-    private readonly static int[] animations =
+    public new enum Animations
+    {
+        NONE = 0,
+        IDLE = 1,
+        WALK = 2,
+        ATTACK = 3,
+        DEATH = 4,
+    }
+    protected new readonly static int[] animations =
     {
         0,
         Animator.StringToHash("root|Z_A_IA_IDLE"),
@@ -15,63 +20,12 @@ public class AnimatorBrainPlayer : MonoBehaviour
         Animator.StringToHash("root|Z_A_IA_DEATH"),
     };
 
-    private Animator animator;
-    private PlayerAnimations[] currentAnimation;
-    private bool[] layerLocked;
-    private Action<int> DefaultAnimation;
-
-    public void Initialize(int layers, PlayerAnimations startingAnimation, Animator animator, Action<int> DefaultAnimation)
+    protected override void HandleBypassLock(int layer)
     {
-        layerLocked = new bool[layers];
-        currentAnimation = new PlayerAnimations[layers];
-        this.animator = animator;
-        this.DefaultAnimation = DefaultAnimation;
-
-        for (int i = 0; i < layers; i++)
+        foreach (var item in animator.GetBehaviours<OnExitPlayer>())
         {
-            layerLocked[i] = false;
-            currentAnimation[i] = startingAnimation;
+            if (item.layerIndex == layer)
+                item.cancel = true;
         }
     }
-
-    public PlayerAnimations GetCurrentAnimation(int layer)
-    {
-        return currentAnimation[layer];
-    }
-
-    public void SetLocked(bool lockLayer, int layer)
-    {
-        layerLocked[layer] = lockLayer;
-    }
-
-    public void Play(PlayerAnimations animation, int layer, bool lockLayer, bool bypassLock, float crossfade = 0.2f)
-    {
-        if (animation == PlayerAnimations.NONE)
-        {
-            DefaultAnimation(layer);
-            return;
-        }
-
-        if (layerLocked[layer] && !bypassLock) return;
-        layerLocked[layer] = lockLayer;
-
-        if (bypassLock)
-            foreach (var item in animator.GetBehaviours<OnExitPlayer>())
-                if (item.layerIndex == layer)
-                    item.cancel = true;
-
-        if (currentAnimation[layer] == animation) return;
-
-        currentAnimation[layer] = animation;
-        animator.CrossFade(animations[(int)currentAnimation[layer]], crossfade, layer);
-    }
-}
-
-public enum PlayerAnimations
-{
-    NONE,
-    IDLE,
-    WALK,
-    ATTACK,
-    DEATH
 }

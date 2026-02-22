@@ -1,10 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class OnExitPlayer : StateMachineBehaviour
 {
-    [SerializeField] private PlayerAnimations animation;
+    [SerializeField] private int animation;
     [SerializeField] private bool lockLayer;
     [SerializeField] private float crossfade = 0.2f;
     [HideInInspector] public bool cancel = false;

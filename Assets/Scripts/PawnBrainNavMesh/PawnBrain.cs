@@ -15,7 +15,8 @@ public class PawnBrain : IControlableSelectable
     private SelectableType selectableType = SelectableType.Player;
     public override SelectableType GetSelectableType() => selectableType;
 
-    private AnimatorBrainPlayer animatorBrainPlayer;
+    [SerializeField]
+    private AnimatorBrainBase animatorBrain;
     private Animator anim;
 
     void Awake()
@@ -24,10 +25,10 @@ public class PawnBrain : IControlableSelectable
         dataController = GetComponent<PawnDataController>();
         pawnNavMesh = GetComponent<PawnNavMesh>();
 
-        animatorBrainPlayer = GetComponentInChildren<AnimatorBrainPlayer>();
+        animatorBrain = GetComponentInChildren<AnimatorBrainBase>();
         anim = GetComponentInChildren<Animator>();
-        animatorBrainPlayer.Initialize(1, PlayerAnimations.IDLE, anim, (layer) => animatorBrainPlayer.Play(PlayerAnimations.IDLE, layer, false, false));
-        animatorBrainPlayer.Play(PlayerAnimations.IDLE, 0, false, false);
+        animatorBrain.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
+        animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
     }
 
     void Update()
@@ -47,9 +48,9 @@ public class PawnBrain : IControlableSelectable
         }
         else
         {
-            if (animatorBrainPlayer.GetCurrentAnimation(0) != PlayerAnimations.IDLE)
+            if (animatorBrain.GetCurrentAnimation(0) != (int)AnimatorBrainBase.Animations.IDLE)
             {
-                animatorBrainPlayer.Play(PlayerAnimations.IDLE, 0, false, false);
+                animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
             }
             if (pathDrawer.GetVisible())
             {
@@ -66,7 +67,7 @@ public class PawnBrain : IControlableSelectable
     public override void OnMove(Vector3 position)
     {
         pawnNavMesh.TravelToPosition(position);
-        animatorBrainPlayer.Play(PlayerAnimations.WALK, 0, false, false);
+        animatorBrain.Play((int)AnimatorBrainBase.Animations.WALK, 0, false, false);
     }
 
     public override bool IsMoving()
@@ -83,7 +84,7 @@ public class PawnBrain : IControlableSelectable
     {
         Debug.Log("OnShoot: " + position);
         transform.LookAt(position);
-        animatorBrainPlayer.Play(PlayerAnimations.ATTACK, 0, true, false);
+        animatorBrain.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
         // transform.position += Vector3.up * 10f;
         // transform.position += transform.forward * 0.2f;
     }
@@ -105,7 +106,7 @@ public class PawnBrain : IControlableSelectable
             selectableType = SelectableType.Dead;
             transform.position -= transform.up * 0.5f;
             transform.rotation = Quaternion.Euler(0f, 0f, 90f);
-            animatorBrainPlayer.Play(PlayerAnimations.DEATH, 0, true, true);
+            animatorBrain.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
             newHealth = 0f;
         }
         dataController.SetParameterValue(

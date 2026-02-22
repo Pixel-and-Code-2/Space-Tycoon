@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OnExitEnemy : StateMachineBehaviour
 {
-    [SerializeField] private EnemyAnimations animation;
+    [SerializeField] private int animation;
     [SerializeField] private bool lockLayer;
     [SerializeField] private float crossfade = 0.2f;
     [HideInInspector] public bool cancel = false;
