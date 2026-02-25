@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PawnDataController : MonoBehaviour, IFormulaData
 {
-    // ToDo: action must vary based on the type of the pawn's team. It can be either player or enemy, but now it is ONLY player.
+    // ToDo (deprecated?): action must vary based on the type of the pawn's team. It can be either player or enemy, but now it is ONLY player.
     // Static data storages
     [SerializeField]
     private ParameteredScriptableObject initialPawnData;

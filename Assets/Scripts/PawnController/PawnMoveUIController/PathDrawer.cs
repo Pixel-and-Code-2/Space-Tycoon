@@ -164,6 +164,8 @@ public class PathDrawer : MonoBehaviour
         this.visible = visible;
         if (pathStartObject != null) pathStartObject.gameObject.SetActive(visible);
         if (pathEndObject != null) pathEndObject.gameObject.SetActive(visible);
+        // if (pathStartObject != null) pathStartObject.GetComponent<Renderer>().enabled = visible;
+        // if (pathEndObject != null) pathEndObject.GetComponent<Renderer>().enabled = visible;
         if (visible == false)
         {
             pathLineOutOfRange.enabled = false;

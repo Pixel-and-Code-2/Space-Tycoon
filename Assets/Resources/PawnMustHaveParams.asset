@@ -37,6 +37,8 @@ MonoBehaviour:
     value: 5
   - name: DMG
     value: 5
+  - name: ShootAmount
+    value: 3
   calculatedParameters:
   - name: HP
     formula:
@@ -186,20 +188,23 @@ MonoBehaviour:
 
     DMG = 5,00 (5,00)
 
+    ShootAmount = 3,00
+    (3,00)
+
     HP = 10,00 (10,00)
 
-    PRC
-    = 10,00 (10,00)
+    PRC = 10,00 (10,00)
 
     FP = 10,00 (10,00)
 
-    SPD = 10,00 (10,00)
+    SPD
+    = 10,00 (10,00)
 
-    DDG
-    = 16,00 (16,00)
+    DDG = 16,00 (16,00)
 
     BCW = 20,00 (20,00)
 
-    BDMG = 6,00 (6,00)
+    BDMG
+    = 6,00 (6,00)
 
 '
