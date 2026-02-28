@@ -25,7 +25,7 @@ public class FormulaField
     {
         if (compiledFormulaAction == null)
         {
-            Debug.LogWarning("Program is trying to use formula which is not compiled?!\nFormula: " + formula);
+            // Debug.LogWarning("Program is trying to use formula which is not compiled?!\nFormula: " + formula);
             CompileFormula();
             if (compiledFormulaAction == null)
             {
@@ -121,7 +121,7 @@ public class FormulaField
             compiledFormulaAction = interpreter.Parse(processedFormula, localParam, globalParam)
                 .Compile<System.Func<Dictionary<string, float>[], Dictionary<string, float>, float>>();
 
-            Debug.Log($"Compiled formula: {formulaString} -> {processedFormula}");
+            // Debug.Log($"Compiled formula: {formulaString} -> {processedFormula}");
         }
         catch (System.Exception ex)
         {

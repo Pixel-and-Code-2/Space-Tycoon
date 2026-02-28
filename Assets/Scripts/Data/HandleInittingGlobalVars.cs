@@ -8,9 +8,13 @@ public class HandleInittingGlobalVars : MonoBehaviour
     private ParameteredScriptableObject globalParametersSettable;
     [SerializeField]
     private ParameteredScriptableObject pawnMustHaveParamsSettable;
+    [SerializeField]
+    private ParameteredScriptableObject calculatableParametersSettable;
     public static ParameteredScriptableObject pawnMustHaveParams;
     public static ParameteredScriptableObject globalParameters;
     public static Action onParamsUpdated;
+    public const string PAWN_DISTANCE_LABEL = "pawnDistance";
+    public static FormulaDataMonoBase mainCalculatedFormulaData;
     void Awake()
     {
         if (globalParameters == null)
@@ -18,6 +22,8 @@ public class HandleInittingGlobalVars : MonoBehaviour
         globalParameters.SetDirty();
         if (pawnMustHaveParams == null)
             pawnMustHaveParams = GetDataAsset("PawnMustHaveParams");
+        if (mainCalculatedFormulaData == null)
+            mainCalculatedFormulaData = GetComponent<FormulaDataMonoBase>();
         onParamsUpdated?.Invoke();
     }
 
@@ -28,6 +34,11 @@ public class HandleInittingGlobalVars : MonoBehaviour
 
     void OnValidate()
     {
+        if (mainCalculatedFormulaData == null)
+        {
+            mainCalculatedFormulaData = GetComponent<FormulaDataMonoBase>();
+            mainCalculatedFormulaData.AddParameter(PAWN_DISTANCE_LABEL);
+        }
         bool doUpdate = false;
         if (pawnMustHaveParamsSettable != null && pawnMustHaveParams != pawnMustHaveParamsSettable)
         {

@@ -14,17 +14,41 @@ public class ClickableItem : ISelectable
     {
         public string text;
         public AvailableActions action;
+        public FormulaFieldWithMemo chanceToLaunch = new FormulaFieldWithMemo();
+        public FormulaFieldWithMemo progressPerRound = new FormulaFieldWithMemo();
     }
 
     [SerializeField]
-    private bool requirePawn = true;
-    [SerializeField]
     private List<InspectorContextMenuItem> availableActions = new List<InspectorContextMenuItem>();
+
+    void OnValidate()
+    {
+        foreach (InspectorContextMenuItem action in availableActions)
+        {
+            UpdateFormula(action.chanceToLaunch);
+            UpdateFormula(action.progressPerRound);
+        }
+    }
+
+    void UpdateFormula(FormulaFieldWithMemo formula)
+    {
+        if (formula.memorySize != 2)
+        {
+            formula.ClearMemorizedDatasets();
+            formula.AddMemorizedDataset(() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated"));
+            formula.AddMemorizedDataset(() => (PawnController.Instance.currentSelectedPawn == null ? HandleInittingGlobalVars.pawnMustHaveParams : PawnController.Instance.currentSelectedPawn.GetFormulaData(), "Player"));
+        }
+        formula.OnParamsUpdated();
+    }
 
     public override void OnSelect()
     {
-        if (requirePawn && PawnController.Instance.currentSelectedPawn == null) return;
         ClickableItemsController.Instance.OnContextMenu();
+    }
+
+    private void StartWorkAction()
+    {
+        Debug.Log("Start Work");
     }
 
     public override List<ContextMenuItem> OnContextMenu()
@@ -38,14 +62,28 @@ public class ClickableItem : ISelectable
                 case AvailableActions.StartWork:
                     actionDelegate = () =>
                     {
-                        Debug.Log("Start Work");
+                        if (action.chanceToLaunch.EvaluateFormula() >= UnityEngine.Random.Range(0f, 1f))
+                        {
+                            StartWorkAction();
+                        }
+                        else
+                        {
+                            UI3DManager.Instance.ShowMessage("Not started", transform.position, Color.red);
+                        }
                         ClickableItemsController.Instance.OnDeselect();
                     };
                     break;
                 case AvailableActions.MoveHere:
                     actionDelegate = () =>
                     {
-                        Debug.Log("Move Here");
+                        if (action.chanceToLaunch.EvaluateFormula() >= UnityEngine.Random.Range(0f, 1f))
+                        {
+                            // Debug.Log("Move Here");
+                        }
+                        else
+                        {
+                            UI3DManager.Instance.ShowMessage("Not moved", transform.position, Color.red);
+                        }
                         ClickableItemsController.Instance.OnDeselect();
                     };
                     break;

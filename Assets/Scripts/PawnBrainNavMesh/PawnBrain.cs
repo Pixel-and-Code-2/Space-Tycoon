@@ -83,14 +83,6 @@ public class PawnBrain : IControlableSelectable
         return pawnNavMesh.GetPathPointsTo(position);
     }
 
-    public override void OnShoot(Vector3 position)
-    {
-        Debug.Log("OnShoot: " + position);
-        transform.LookAt(position);
-        animatorBrain.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
-        // transform.position += Vector3.up * 10f;
-        // transform.position += transform.forward * 0.2f;
-    }
 
     void OnCollisionEnter(Collision other)
     {
@@ -100,12 +92,19 @@ public class PawnBrain : IControlableSelectable
         other.rigidbody.AddForce(dir * dataController.obstaclePushForce, ForceMode.Impulse);
     }
 
+    public override void OnShoot(Vector3 position)
+    {
+        // Debug.Log("OnShoot: " + position);
+        transform.LookAt(position);
+        animatorBrain.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
+    }
     public override void OnGetHit(float damage)
     {
         float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
+        UI3DManager.Instance.ShowMessage("-" + damage.ToString("F1"), transform.position, Color.red);
         if (newHealth <= 0f)
         {
-            //  Debug.Log("Dying" + name + " " + damage);
+            UI3DManager.Instance.ShowMessage("Kill", transform.position, Color.red);
             dataController.selectableType = SelectableType.Dead;
             transform.position -= transform.up * 0.5f;
             transform.rotation = Quaternion.Euler(0f, 0f, 90f);

@@ -1,8 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using TMPro;
 public class UI3DManager : MonoBehaviour
 {
+    private class MessageItem
+    {
+        public string message;
+        public Vector3 position;
+        public Color color;
+    }
     public static UI3DManager Instance { get; private set; }
     [SerializeField]
     private GameObject sliderPrefab;
@@ -13,9 +19,30 @@ public class UI3DManager : MonoBehaviour
     [SerializeField]
     private Canvas canvas;
     [SerializeField]
+    private GameObject messageObject = null;
+    [SerializeField]
+    private float messageDuration = 1f;
+    private GameObject messageObjectCached = null;
+    private RectTransform messageRectTransform;
+    private TextMeshProUGUI messageText;
+    private Queue<MessageItem> messageItems = new Queue<MessageItem>();
+
+    [SerializeField]
     private Vector3 uiOffset = new Vector3(0f, 1f, 0f);
 
     private Dictionary<GameObject, SliderToPawnConnector> pawnsInScene = new Dictionary<GameObject, SliderToPawnConnector>();
+
+    void OnValidate()
+    {
+        if (messageObject == null) messageObject = GetComponentInChildren<TextMeshProUGUI>().gameObject;
+        if (messageObjectCached != messageObject)
+        {
+            messageObjectCached = messageObject;
+            messageRectTransform = messageObject.GetComponent<RectTransform>();
+            messageText = messageObject.GetComponent<TextMeshProUGUI>();
+        }
+        if (messageObject.activeSelf) messageObject.SetActive(false);
+    }
 
     void Awake()
     {
@@ -60,6 +87,52 @@ public class UI3DManager : MonoBehaviour
     }
     void Update()
     {
+        UpdateSliderPositions();
+        UpdateMessagePosition();
+
+        if (contextMenuController.gameObject.activeSelf)
+        {
+            contextMenuController.UpdateAttach(canvas);
+        }
+    }
+
+    private float messageTimeShown = 0f;
+    private void UpdateMessagePosition()
+    {
+        if (messageItems.Count > 0)
+        {
+            if (!messageObject.activeSelf)
+            {
+                messageObject.SetActive(true);
+                messageText.text = messageItems.Peek().message;
+                messageText.color = messageItems.Peek().color;
+                messageTimeShown = 0f;
+            }
+            messageTimeShown += Time.deltaTime;
+            if (messageTimeShown >= messageDuration)
+            {
+                messageObject.SetActive(false);
+                messageTimeShown = 0f;
+                messageItems.Dequeue();
+                return;
+            }
+            Vector3 worldPosition = messageItems.Peek().position + uiOffset;
+            Vector3 screenPosition = canvas.worldCamera.WorldToScreenPoint(worldPosition);
+            Vector2 localPoint;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.GetComponent<RectTransform>(),
+                new Vector2(screenPosition.x, screenPosition.y),
+                canvas.worldCamera,
+                out localPoint))
+            {
+                messageRectTransform.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
+            }
+        }
+
+    }
+
+    private void UpdateSliderPositions()
+    {
         foreach (GameObject pawnObject in pawnsInScene.Keys)
         {
             if (pawnObject == null || pawnsInScene[pawnObject] == null)
@@ -78,19 +151,12 @@ public class UI3DManager : MonoBehaviour
                 canvas.worldCamera,
                 out localPoint))
             {
-                // uiElementRect.localPosition = localPoint;
-                uiElementRect.localPosition = new Vector3(localPoint.x, localPoint.y, 0.1f);
+                uiElementRect.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
             }
             else
             {
                 Debug.LogWarning($"Could not convert screen point to local point for {pawnObject.name}");
             }
-            // pawnsInScene[pawnObject].rectTransform.position = canvas.worldCamera.WorldToScreenPoint(pawnObject.transform.position + uiOffset);
-        }
-
-        if (contextMenuController.gameObject.activeSelf)
-        {
-            contextMenuController.UpdateAttach(canvas);
         }
     }
 
@@ -126,5 +192,10 @@ public class UI3DManager : MonoBehaviour
         sliderToPawnConnector.pawn = pawnObject.GetComponent<PawnDataController>();
         if (sliderToPawnConnector.pawn == null) throw new System.Exception("CreateSliderForPawn: PawnDataController not found");
         return sliderToPawnConnector;
+    }
+
+    public void ShowMessage(string message, Vector3 position, Color color)
+    {
+        messageItems.Enqueue(new MessageItem { message = message, position = position, color = color });
     }
 }

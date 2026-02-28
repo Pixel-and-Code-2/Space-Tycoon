@@ -80,6 +80,11 @@ public class PawnController : MonoBehaviour
         ISelectable selectable = currentSelector.PollSelectClickableItem(clickableItemsController.currentSelectedItem);
         if (selectable != null)
         {
+            HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] =
+                Vector3.Distance(
+                    currentSelectedPawn.GetTransform().position,
+                    selectable.GetTransform().position
+                );
             if (selectable != clickableItemsController.currentSelectedItem)
             {
                 clickableItemsController.OnSelect(selectable);
@@ -103,6 +108,11 @@ public class PawnController : MonoBehaviour
             (ISelectable selectable2, Vector3 worldPoint) = currentSelector.PollSelectPosForState();
             if (selectable2 != null || worldPoint != Vector3.zero)
             {
+                HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] =
+                    Vector3.Distance(
+                        currentSelectedPawn.GetTransform().position,
+                        worldPoint
+                    );
                 currentState.HandleDoingSth(worldPoint, selectable2);
             }
 

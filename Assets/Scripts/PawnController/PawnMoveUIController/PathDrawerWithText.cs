@@ -8,6 +8,7 @@ public class PathDrawerWithText : PathDrawer
     private GameObject canvasObject;
     private Canvas canvas;
     private RectTransform canvasRect;
+    [SerializeField]
     private TextMeshProUGUI uiText;
     [SerializeField]
     private Vector2 uiTextOffset = new Vector2(0f, 10f);
@@ -27,13 +28,13 @@ public class PathDrawerWithText : PathDrawer
             out Vector2 localPoint
         );
         textRect.anchoredPosition = localPoint + uiTextOffset;
+        // textRect.anchoredPosition = screenPoint + uiTextOffset;
     }
 
     new void Awake()
     {
         canvas = canvasObject.GetComponent<Canvas>();
         canvasRect = canvas.GetComponent<RectTransform>();
-        uiText = canvas.GetComponentInChildren<TextMeshProUGUI>();
         base.Awake();
     }
 
@@ -47,7 +48,7 @@ public class PathDrawerWithText : PathDrawer
         {
             canvas = canvasObject.GetComponent<Canvas>();
             canvasRect = canvas.GetComponent<RectTransform>();
-            uiText = canvas.GetComponentInChildren<TextMeshProUGUI>();
+            // uiText = canvas.GetComponentInChildren<TextMeshProUGUI>();
         }
 
         base.OnValidate();

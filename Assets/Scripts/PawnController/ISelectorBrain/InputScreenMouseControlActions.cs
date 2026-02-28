@@ -77,7 +77,6 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     {
         if (selectionClickHandled && selectionClick.action.ReadValue<float>() != 1.0f)
         {
-            Debug.Log("Selection handled debounced");
             selectionClickHandled = false;
         }
         if (deselectionClickHandled && deselectionClick.action.ReadValue<float>() != 1.0f)
@@ -256,7 +255,6 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
     public void SetClickAsHandled()
     {
-        Debug.Log("SetClickAsHandled");
         selectionClickHandled = true;
     }
 

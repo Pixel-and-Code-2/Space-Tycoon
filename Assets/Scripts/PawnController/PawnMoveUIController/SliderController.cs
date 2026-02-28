@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 [RequireComponent(typeof(Slider))]
 public class SliderController : MonoBehaviour
@@ -12,17 +11,7 @@ public class SliderController : MonoBehaviour
     private Image fillImage;
     [SerializeField]
     private Image backgroundImage;
-    [Header("Text value")]
-    [SerializeField]
-    private bool showText = true;
-    [SerializeField]
-    private TextMeshProUGUI textValue = null;
-    [SerializeField]
-    private Color textValueColorRaised = Color.green;
-    [SerializeField]
-    private Color textValueColorLowered = Color.red;
-    [SerializeField]
-    private float textShowTime = 1f;
+
     [Header("Slider values")]
     [SerializeField]
     private float minValue = 0f;
@@ -41,7 +30,6 @@ public class SliderController : MonoBehaviour
         slider = GetComponent<Slider>();
         slider.minValue = minValue;
         slider.maxValue = maxValue;
-        if (textValue != null) textValue.enabled = false;
     }
 
     void OnValidate()
@@ -77,44 +65,13 @@ public class SliderController : MonoBehaviour
         }
     }
 
-    private float timeTextShown = 0f;
-    void Update()
-    {
-        if (textValue != null && textValue.enabled)
-        {
-            timeTextShown += Time.deltaTime;
-            if (timeTextShown >= textShowTime)
-            {
-                textValue.enabled = false;
-                timeTextShown = 0f;
-            }
-        }
-    }
-
     private float cachedValue = 0f;
     public void SetValue(float value)
     {
         if (slider == null) return;
-        SetText(value, cachedValue < value);
         if (value == cachedValue) return;
         cachedValue = value;
         slider.value = value;
-    }
-
-    public void SetText(float value, bool raised = false)
-    {
-        if (textValue == null || !showText) return;
-        textValue.enabled = true;
-        if (raised)
-        {
-            textValue.color = textValueColorRaised;
-            textValue.text = "+" + value.ToString("F1");
-        }
-        else
-        {
-            textValue.color = textValueColorLowered;
-            textValue.text = "-" + value.ToString("F1");
-        }
     }
 
     public void SetClass(SelectableType selectableType)

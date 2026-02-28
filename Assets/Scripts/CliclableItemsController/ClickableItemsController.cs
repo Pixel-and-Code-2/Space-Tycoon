@@ -14,7 +14,6 @@ public class ClickableItemsController : MonoBehaviour
     {
         if (currentSelectedItem == null)
         {
-            Debug.Log("OnSelect: " + selectable.name + " first time");
             currentSelectedItem = selectable;
             currentSelectedItem.OnSelect();
         }
@@ -23,7 +22,6 @@ public class ClickableItemsController : MonoBehaviour
             if (currentSelectedItem != selectable)
             {
                 OnDeselect();
-                Debug.Log("OnSelect: " + selectable.name + " second time");
                 currentSelectedItem = selectable;
                 currentSelectedItem.OnSelect();
             }

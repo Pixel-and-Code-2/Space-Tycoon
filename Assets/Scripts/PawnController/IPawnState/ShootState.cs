@@ -6,15 +6,13 @@ public class ShootState : IPawnState
     private PathDrawerWithText pathDrawer => PawnController.Instance.pathDrawer;
     private IControlableSelectable controlableSelectable => PawnController.Instance.currentSelectedPawn;
     private IAttackableSelectable lastAttackableSelectableCached = null;
-    private FormulaDataMonoBase shootingFormulaData;
+    // private FormulaDataMonoBase shootingFormulaData;
     [SerializeField]
     private FormulaFieldWithMemo calculateShootDamage;
     [SerializeField]
     private FormulaFieldWithMemo calculateShootAccuracy;
-    public static readonly string SHOOTING_DISTANCE_LABEL = "shootingDistance";
 
-
-    public (IFormulaData, string) GetShootFormulaData() => (shootingFormulaData, "Calculated");
+    public (IFormulaData, string) GetShootFormulaData() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated");
     private IFormulaData initiatorFormulaData => controlableSelectable == null ? HandleInittingGlobalVars.pawnMustHaveParams : controlableSelectable.GetFormulaData();
     public (IFormulaData, string) GetInitiatorFormulaData() => (initiatorFormulaData, "Initiator");
     private IFormulaData lastAttackableSelectableFormulaData => lastAttackableSelectableCached == null ? HandleInittingGlobalVars.pawnMustHaveParams : lastAttackableSelectableCached.GetFormulaData();
@@ -22,24 +20,24 @@ public class ShootState : IPawnState
 
     void Awake()
     {
-        if (shootingFormulaData == null || shootingFormulaData.owner != this)
-        {
-            shootingFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
-        }
+        // if (shootingFormulaData == null || shootingFormulaData.owner != this)
+        // {
+        //     shootingFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
+        // }
         RefillFormulas();
     }
 
     void OnValidate()
     {
-        if (shootingFormulaData == null || shootingFormulaData.owner != this)
-        {
-            shootingFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
-        }
-        if (shootingFormulaData.parametersDict.Count < 1)
-        {
-            // Debug.LogWarning("formulaData is empty");
-            shootingFormulaData.FullFillWithParameters(new string[] { SHOOTING_DISTANCE_LABEL });
-        }
+        // if (shootingFormulaData == null || shootingFormulaData.owner != this)
+        // {
+        //     shootingFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
+        // }
+        // if (shootingFormulaData.parametersDict.Count < 1)
+        // {
+        //     // Debug.LogWarning("formulaData is empty");
+        //     shootingFormulaData.FullFillWithParameters(new string[] { SHOOTING_DISTANCE_LABEL });
+        // }
         RefillFormulas();
         calculateShootAccuracy.OnParamsUpdated();
         calculateShootDamage.OnParamsUpdated();
@@ -89,6 +87,10 @@ public class ShootState : IPawnState
                 if (randomValue < GetShootAccuracy(attackableSelectable) && attackableSelectable != null)
                 {
                     attackableSelectable.OnGetHit(GetShootDamage(attackableSelectable));
+                }
+                else
+                {
+                    UI3DManager.Instance.ShowMessage("Miss", worldPoint, Color.yellow);
                 }
             }
         }
@@ -142,10 +144,13 @@ public class ShootState : IPawnState
 
     private float GetShootDamage(IAttackableSelectable attackableSelectable)
     {
-        shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = Vector3.Distance(controlableSelectable.GetTransform().position, attackableSelectable.GetTransform().position);
+        // shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = Vector3.Distance(controlableSelectable.GetTransform().position, attackableSelectable.GetTransform().position);
+        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = Vector3.Distance(controlableSelectable.GetTransform().position, attackableSelectable.GetTransform().position);
         return calculateShootDamage.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
-                shootingFormulaData.parametersDict, controlableSelectable.GetFormulaData().parametersDict, attackableSelectable.GetFormulaData().parametersDict,
+                // shootingFormulaData.parametersDict,
+                HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict,
+                controlableSelectable.GetFormulaData().parametersDict, attackableSelectable.GetFormulaData().parametersDict,
             }
         );
     }
@@ -158,7 +163,8 @@ public class ShootState : IPawnState
         Vector3 targetPoint = attackableSelectable.GetTransform().position;
         Vector3 direction = (targetPoint - origin).normalized;
         float distance = Vector3.Distance(origin, targetPoint);
-        shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = distance;
+        // shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = distance;
+        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = distance;
 
         int wallLayer = LayerMask.NameToLayer("Wall");
         int wallMask = 1 << wallLayer;
@@ -168,7 +174,9 @@ public class ShootState : IPawnState
         }
         float res = calculateShootAccuracy.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
-                shootingFormulaData.parametersDict, controlableSelectable.GetFormulaData().parametersDict, attackableSelectable.GetFormulaData().parametersDict
+                // shootingFormulaData.parametersDict,
+                HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict,
+                controlableSelectable.GetFormulaData().parametersDict, attackableSelectable.GetFormulaData().parametersDict
             }
         );
         return res;

@@ -3,99 +3,44 @@ using UnityEngine;
 [RequireComponent(typeof(FormulaDataMonoBase))]
 public class MeleeState : IPawnState
 {
-    private PathDrawerWithText pathDrawer => PawnController.Instance?.pathDrawer ?? throw new System.Exception("PathDrawer not found");
-    private IControlableSelectable controlableSelectable
-    {
-        get
-        {
-            if (PawnController.Instance == null)
-            {
-                Debug.LogError("PawnController.Instance is null " + gameObject.name);
-                return null;
-            }
-            return PawnController.Instance.currentSelectedPawn;
-        }
-    }
+    private PathDrawerWithText pathDrawer => PawnController.Instance.pathDrawer;
+    private IControlableSelectable controlableSelectable => PawnController.Instance.currentSelectedPawn;
 
     private IAttackableSelectable lastAttackableSelectableCached = null;
-    private FormulaDataMonoBase meleeFormulaData;
+    // private FormulaDataMonoBase meleeFormulaData;
     [SerializeField]
     private FormulaFieldWithMemo calculateMeleeDamage;
     [SerializeField]
     private FormulaFieldWithMemo calculateMeleeAccuracy;
-    public static readonly string MELEE_DISTANCE_LABEL = "meleeDistance";
+
+    public (IFormulaData, string) GetMeleeFormulaData() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated");
+    private IFormulaData initiatorFormulaData => controlableSelectable == null ? HandleInittingGlobalVars.pawnMustHaveParams : controlableSelectable.GetFormulaData();
+    public (IFormulaData, string) GetInitiatorFormulaData() => (initiatorFormulaData, "Initiator");
+    private IFormulaData lastAttackableSelectableFormulaData => lastAttackableSelectableCached == null ? HandleInittingGlobalVars.pawnMustHaveParams : lastAttackableSelectableCached.GetFormulaData();
+    public (IFormulaData, string) GetTargetFormulaData() => (lastAttackableSelectableFormulaData, "Target");
 
 
-    public (IFormulaData, string) GetMeleeFormulaData()
-    {
-        if (this == null)
-        {
-            Debug.LogError("MeleeState is null " + gameObject.name);
-            return (HandleInittingGlobalVars.pawnMustHaveParams, "Calculated");
-        }
-        if (meleeFormulaData == null)
-        {
-            meleeFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
-        }
-        return (meleeFormulaData, "Calculated");
-    }
-    public (IFormulaData, string) GetInitiatorFormulaData()
-    {
-        if (this == null)
-        {
-            Debug.LogError("MeleeState is null " + gameObject.name);
-            return (HandleInittingGlobalVars.pawnMustHaveParams, "Initiator");
-        }
-        if (controlableSelectable == null)
-        {
-            return (HandleInittingGlobalVars.pawnMustHaveParams, "Initiator");
-        }
-        IFormulaData formulaData = controlableSelectable.GetFormulaData();
-        if (formulaData == null)
-        {
-            return (HandleInittingGlobalVars.pawnMustHaveParams, "Initiator");
-        }
-        return (formulaData, "Initiator");
-    }
-    public (IFormulaData, string) GetTargetFormulaData()
-    {
-        if (this == null)
-        {
-            Debug.LogError("MeleeState is null " + gameObject.name);
-            return (HandleInittingGlobalVars.pawnMustHaveParams, "Target");
-        }
-        if (lastAttackableSelectableCached == null)
-        {
-            return (HandleInittingGlobalVars.pawnMustHaveParams, "Target");
-        }
-        IFormulaData formulaData = lastAttackableSelectableCached.GetFormulaData();
-        if (formulaData == null)
-        {
-            return (HandleInittingGlobalVars.pawnMustHaveParams, "Target");
-        }
-        return (formulaData, "Target");
-    }
 
     void Awake()
     {
-        if (meleeFormulaData == null || meleeFormulaData.owner != this)
-        {
-            meleeFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
-        }
+        // if (meleeFormulaData == null || meleeFormulaData.owner != this)
+        // {
+        //     meleeFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
+        // }
         RefillFormulas();
     }
 
     void OnValidate()
     {
-        if (meleeFormulaData == null || meleeFormulaData.owner != this)
-        {
-            meleeFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
-        }
-        if (meleeFormulaData.parametersDict.Count < 1)
-        {
-            // Debug.LogWarning("formulaData is empty" + gameObject.name);
-            meleeFormulaData.FullFillWithParameters(new string[] { MELEE_DISTANCE_LABEL });
-        }
+        // if (meleeFormulaData == null || meleeFormulaData.owner != this)
+        // {
+        //     meleeFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
+        // }
+        // if (meleeFormulaData.parametersDict.Count < 1)
+        // {
+        //     // Debug.LogWarning("formulaData is empty" + gameObject.name);
+        //     meleeFormulaData.FullFillWithParameters(new string[] { MELEE_DISTANCE_LABEL });
+        // }
         if (calculateMeleeAccuracy == null)
         {
             Debug.LogWarning("calculateMeleeAccuracy is null" + gameObject.name);
@@ -151,6 +96,10 @@ public class MeleeState : IPawnState
                 {
                     attackableSelectable.OnGetHit(GetShootDamage(attackableSelectable));
                 }
+                else
+                {
+                    UI3DManager.Instance.ShowMessage("Miss", worldPoint, Color.yellow);
+                }
             }
         }
     }
@@ -203,10 +152,11 @@ public class MeleeState : IPawnState
 
     private float GetShootDamage(IAttackableSelectable attackableSelectable)
     {
-        meleeFormulaData.parametersDict[MELEE_DISTANCE_LABEL] = Vector3.Distance(controlableSelectable.GetTransform().position, attackableSelectable.GetTransform().position);
+        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = Vector3.Distance(controlableSelectable.GetTransform().position, attackableSelectable.GetTransform().position);
         return calculateMeleeDamage.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
-                meleeFormulaData.parametersDict,
+                // meleeFormulaData.parametersDict,
+                HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict,
                 controlableSelectable.GetFormulaData().parametersDict, attackableSelectable.GetFormulaData().parametersDict,
             }
         );
@@ -220,7 +170,7 @@ public class MeleeState : IPawnState
         Vector3 targetPoint = attackableSelectable.GetTransform().position;
         Vector3 direction = (targetPoint - origin).normalized;
         float distance = Vector3.Distance(origin, targetPoint);
-        meleeFormulaData.parametersDict[MELEE_DISTANCE_LABEL] = distance;
+        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = distance;
 
         int wallLayer = LayerMask.NameToLayer("Wall");
         int wallMask = 1 << wallLayer;
@@ -230,7 +180,8 @@ public class MeleeState : IPawnState
         }
         float res = calculateMeleeAccuracy.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
-                meleeFormulaData.parametersDict,
+                // meleeFormulaData.parametersDict,
+                HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict,
                 controlableSelectable.GetFormulaData().parametersDict, attackableSelectable.GetFormulaData().parametersDict
             }
         );
