@@ -129,7 +129,7 @@ public class SimpleEnemyAI : ISelectorBrain
         }
     }
 
-    public override IControlableSelectable PollSelectPawn()
+    public override IControlableSelectable PollSelectPawn(IControlableSelectable defaultPawn)
     {
         if (currentScenarioIndex == completedScenarioIndex)
         {
@@ -142,12 +142,12 @@ public class SimpleEnemyAI : ISelectorBrain
                     currentScenarioIndex++;
                     return null;
                 default:
-                    return PawnController.Instance.currentSelectedPawn;
+                    return defaultPawn;
             }
         }
         else
         {
-            return PawnController.Instance.currentSelectedPawn;
+            return defaultPawn;
         }
     }
 

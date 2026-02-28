@@ -9,6 +9,8 @@ public class UI3DManager : MonoBehaviour
     [SerializeField]
     private Transform sliderParent;
     [SerializeField]
+    private ContextMenuController contextMenuController;
+    [SerializeField]
     private Canvas canvas;
     [SerializeField]
     private Vector3 uiOffset = new Vector3(0f, 1f, 0f);
@@ -22,6 +24,8 @@ public class UI3DManager : MonoBehaviour
             Debug.LogError("Awake met second UI3DManager instance " + Instance.name + " and " + this.name);
         }
         Instance = this;
+        if (contextMenuController == null) contextMenuController = GetComponentInChildren<ContextMenuController>();
+        contextMenuController.gameObject.SetActive(false);
     }
     void Start()
     {
@@ -54,7 +58,7 @@ public class UI3DManager : MonoBehaviour
             }
         }
     }
-    void LateUpdate()
+    void Update()
     {
         foreach (GameObject pawnObject in pawnsInScene.Keys)
         {
@@ -74,7 +78,7 @@ public class UI3DManager : MonoBehaviour
                 canvas.worldCamera,
                 out localPoint))
             {
-                uiElementRect.localPosition = localPoint;
+                // uiElementRect.localPosition = localPoint;
                 uiElementRect.localPosition = new Vector3(localPoint.x, localPoint.y, 0.1f);
             }
             else
@@ -83,6 +87,11 @@ public class UI3DManager : MonoBehaviour
             }
             // pawnsInScene[pawnObject].rectTransform.position = canvas.worldCamera.WorldToScreenPoint(pawnObject.transform.position + uiOffset);
         }
+
+        if (contextMenuController.gameObject.activeSelf)
+        {
+            contextMenuController.UpdateAttach(canvas);
+        }
     }
 
     public void RegisterPawn(GameObject pawnObject)
@@ -90,6 +99,23 @@ public class UI3DManager : MonoBehaviour
         if (pawnObject == null) throw new System.Exception("RegisterPawn: pawnObject is null");
         if (pawnsInScene.ContainsKey(pawnObject)) return;
         pawnsInScene.Add(pawnObject, CreateSliderForPawn(pawnObject));
+    }
+
+    public void ShowContextMenu(Vector3 position, List<ContextMenuItem> items)
+    {
+        contextMenuController.ClearButtons();
+        contextMenuController.AddButtons(items);
+        ShowContextMenu(position);
+    }
+    public void ShowContextMenu(Vector3 position)
+    {
+        contextMenuController.attachToPosition = position;
+        contextMenuController.gameObject.SetActive(true);
+    }
+
+    public void HideContextMenu()
+    {
+        contextMenuController.gameObject.SetActive(false);
     }
 
     private SliderToPawnConnector CreateSliderForPawn(GameObject pawnObject)

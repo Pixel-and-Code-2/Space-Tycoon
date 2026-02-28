@@ -12,7 +12,7 @@ public abstract class CameraSettings : MonoBehaviour
     private float cameraBottomOffsetCache = -5f;
     [SerializeField] private float cameraInitialDegreeHeight = 15f;
     [SerializeField] private float cameraInitialHorizontalDegree = 15f;
-    [SerializeField] private float cameraHorizontalDegreeLimitation = 15f;
+    [SerializeField, Range(0f, 180f)] private float cameraHorizontalDegreeLimitation = 15f;
 
     [Header("References")]
     [SerializeField] public CinemachineOrbitalFollow orbitalFollow;
@@ -53,12 +53,13 @@ public abstract class CameraSettings : MonoBehaviour
             orbitalFollow.HorizontalAxis.Value = cameraInitialHorizontalDegree;
             orbitalFollow.HorizontalAxis.Range[0] = cameraInitialHorizontalDegree - cameraHorizontalDegreeLimitation;
             orbitalFollow.HorizontalAxis.Range[1] = cameraInitialHorizontalDegree + cameraHorizontalDegreeLimitation;
+            if (cameraInitialHorizontalDegree == 180f) orbitalFollow.HorizontalAxis.Wrap = true;
+            else orbitalFollow.HorizontalAxis.Wrap = false;
             lookTarget.localRotation = Quaternion.Euler(0f, cameraInitialHorizontalDegree, 0f);
         }
 
         if (2 * cameraHorizontalDegreeLimitation != orbitalFollow.HorizontalAxis.Range[1] - orbitalFollow.HorizontalAxis.Range[0])
         {
-            cameraHorizontalDegreeLimitation = Mathf.Clamp(cameraHorizontalDegreeLimitation, 0, 180);
             orbitalFollow.HorizontalAxis.Range[0] = cameraInitialHorizontalDegree - cameraHorizontalDegreeLimitation;
             orbitalFollow.HorizontalAxis.Range[1] = cameraInitialHorizontalDegree + cameraHorizontalDegreeLimitation;
         }

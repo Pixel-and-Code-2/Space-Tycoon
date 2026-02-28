@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using TMPro;
 
 [RequireComponent(typeof(Slider))]
-
 public class SliderController : MonoBehaviour
 {
     [Header("Slider links")]

@@ -11,10 +11,10 @@ TagManager:
   - Floor
   - Water
   - UI
-  - Selectable
-  - Pawn
+  - ClickableItem
+  - Player
   - Wall
-  - 
+  - Hitable
   - 
   - 
   - 

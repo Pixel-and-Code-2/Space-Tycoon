@@ -49,7 +49,11 @@ public class CameraController : CameraSettings
             float currentX = orbitalFollow.HorizontalAxis.Value;
             float mouseX = mouseMove.x * rotationSpeeds.x;
             float mouseY = mouseMove.y * rotationSpeeds.y;
-            float clampedMouseX = Mathf.Clamp(currentX + mouseX, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]) - currentX;
+            float clampedMouseX = mouseX;
+            if (!orbitalFollow.HorizontalAxis.Wrap)
+            {
+                clampedMouseX = Mathf.Clamp(currentX + mouseX, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]) - currentX;
+            }
             orbitalFollow.HorizontalAxis.Value += clampedMouseX;
             float clampedMouseY = Mathf.Clamp(orbitalFollow.VerticalAxis.Value + mouseY, orbitalFollow.VerticalAxis.Range[0], orbitalFollow.VerticalAxis.Range[1]) - orbitalFollow.VerticalAxis.Value;
             orbitalFollow.VerticalAxis.Value += clampedMouseY;

@@ -2,9 +2,11 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(ISelectorBrain))]
+[RequireComponent(typeof(ClickableItemsController))]
 public class PawnController : MonoBehaviour
 {
     public static PawnController Instance { get; private set; }
+    public ClickableItemsController clickableItemsController { get; private set; }
     PawnController()
     {
         if (Instance == null) Instance = this;
@@ -50,6 +52,7 @@ public class PawnController : MonoBehaviour
             Debug.LogError("Awake met second PawnController instance");
         }
         SetSelectorBrain(GetComponent<ISelectorBrain>());
+        clickableItemsController = GetComponent<ClickableItemsController>();
     }
 
     void Start()
@@ -72,7 +75,22 @@ public class PawnController : MonoBehaviour
                 return;
             }
         }
-        currentSelectedPawn = currentSelector.PollSelectPawn();
+
+        currentSelectedPawn = currentSelector.PollSelectPawn(currentSelectedPawn);
+        ISelectable selectable = currentSelector.PollSelectClickableItem(clickableItemsController.currentSelectedItem);
+        if (selectable != null)
+        {
+            if (selectable != clickableItemsController.currentSelectedItem)
+            {
+                clickableItemsController.OnSelect(selectable);
+            }
+        }
+        else
+        {
+            clickableItemsController.OnDeselect();
+            UI3DManager.Instance.HideContextMenu();
+        }
+
         IPawnState newState = currentSelector.PollChangeState();
         if (newState != null)
         {
@@ -82,16 +100,16 @@ public class PawnController : MonoBehaviour
         }
         if (currentState != null)
         {
-            (ISelectable selectable, Vector3 worldPoint) = currentSelector.PollSelectPosForState();
-            if (selectable != null || worldPoint != Vector3.zero)
+            (ISelectable selectable2, Vector3 worldPoint) = currentSelector.PollSelectPosForState();
+            if (selectable2 != null || worldPoint != Vector3.zero)
             {
-                currentState.HandleDoingSth(worldPoint, selectable);
+                currentState.HandleDoingSth(worldPoint, selectable2);
             }
 
             if (currentSelectorWithUICached != null)
             {
-                (ISelectable selectable2, Vector3 worldPoint2, Vector2 screenPoint, ScreenCastHitResult hit) = currentSelectorWithUICached.PollForIntermidiateAiming();
-                currentState.HandleUIDrawing(selectable2, worldPoint2, screenPoint, hit);
+                (ISelectable selectable3, Vector3 worldPoint2, Vector2 screenPoint, ScreenCastHitResult hit) = currentSelectorWithUICached.PollForIntermidiateAiming();
+                currentState.HandleUIDrawing(selectable3, worldPoint2, screenPoint, hit);
             }
         }
     }

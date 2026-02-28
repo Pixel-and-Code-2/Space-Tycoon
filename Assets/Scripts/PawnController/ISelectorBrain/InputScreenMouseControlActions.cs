@@ -73,10 +73,11 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         deselectionClick.action.Disable();
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (selectionClickHandled && selectionClick.action.ReadValue<float>() != 1.0f)
         {
+            Debug.Log("Selection handled debounced");
             selectionClickHandled = false;
         }
         if (deselectionClickHandled && deselectionClick.action.ReadValue<float>() != 1.0f)
@@ -85,8 +86,17 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         }
     }
 
+    void Start()
+    {
+        ButtonStopPropagation.OnUIClickHandled += SetClickAsHandled;
+    }
+    void OnDestroy()
+    {
+        ButtonStopPropagation.OnUIClickHandled -= SetClickAsHandled;
+    }
+
     // ISelectorBrain methods
-    public override IControlableSelectable PollSelectPawn()
+    public override IControlableSelectable PollSelectPawn(IControlableSelectable defaultPawn)
     {
         if (IsPawnSelected())
         {
@@ -94,14 +104,14 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
             {
                 return null;
             }
-            return PawnController.Instance.currentSelectedPawn;
+            return defaultPawn;
         }
         if (GetSelectionClickState())
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Selectable", "Pawn")))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Player")))
             {
                 IControlableSelectable controlableSelectable = hit.collider.GetComponent<IControlableSelectable>();
                 if (
@@ -114,6 +124,35 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
             }
         }
         return null;
+    }
+
+    public override ISelectable PollSelectClickableItem(ISelectable defaultSelectable)
+    {
+        if (!IsPawnSelected())
+        {
+            return null;
+        }
+        if (GetSelectionClickState())
+        {
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("ClickableItem")))
+            {
+                ISelectable selectable = hit.collider.GetComponent<ISelectable>();
+                if (
+                    selectable != null &&
+                    selectable.GetSelectableType() == SelectableType.Neutral
+                )
+                {
+                    return selectable;
+                }
+            }
+            // kostil'
+            selectionClickHandled = false;
+            return null;
+        }
+        return defaultSelectable;
     }
 
     public override IPawnState PollChangeState()
@@ -168,7 +207,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         if (
             (currentControlType == ControlType.shoot || currentControlType == ControlType.melee) &&
-            Physics.Raycast(ray, out raycastHitCached, RAYCAST_DISTANCE, LayerMask.GetMask("Selectable", "Pawn")))
+            Physics.Raycast(ray, out raycastHitCached, RAYCAST_DISTANCE, LayerMask.GetMask("Hitable")))
         {
             selectableCached = raycastHitCached.collider.GetComponent<ISelectable>();
             worldPointCached = raycastHitCached.point;
@@ -213,6 +252,12 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
             selectionClickHandled = true;
         }
         return clicked;
+    }
+
+    public void SetClickAsHandled()
+    {
+        Debug.Log("SetClickAsHandled");
+        selectionClickHandled = true;
     }
 
     private bool GetDeselectionClickState()

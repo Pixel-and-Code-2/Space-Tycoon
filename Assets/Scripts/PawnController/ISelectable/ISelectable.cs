@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 public enum SelectableType
 {
@@ -10,5 +11,7 @@ public abstract class ISelectable : MonoBehaviour
 {
     public abstract SelectableType GetSelectableType();
     public abstract Transform GetTransform();
-    public abstract IFormulaData GetFormulaData();
+    public virtual List<ContextMenuItem> OnContextMenu() { return null; }
+    public virtual void OnSelect() { }
+    public virtual void OnDeselect() { }
 }

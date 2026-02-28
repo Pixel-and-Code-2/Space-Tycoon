@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Net.Security;
 
 [System.Serializable]
 public class FormulaField
@@ -32,6 +33,8 @@ public class FormulaField
                 return 0f;
             }
         }
+        if (locals == null) locals = new Dictionary<string, float>[0];
+        if (HandleInittingGlobalVars.globalParameters == null) return -1;
         // Debug.Log("GlobalParameters.Instance: " + GlobalParameters.Instance.GetParametersDictState() + "locals: " + locals[0].Count);
         return compiledFormulaAction(locals, HandleInittingGlobalVars.globalParameters.GetParametersDict());
     }
