@@ -1859,7 +1859,7 @@ MonoBehaviour:
   globalParametersSettable: {fileID: 11400000, guid: 5d4617d111d780044a11ef89afed3579, type: 2}
   pawnMustHaveParamsSettable: {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   calculatableParametersSettable: {fileID: 0}
-  sliderSettingsAssetsSettable: {fileID: 11400000, guid: 2bdb8b41969b1644eb36824d9d63f5c7, type: 2}
+  sliderSettingsAssetsSettable: {fileID: 11400000, guid: 30e0f586f197a9a4d9ccaca1db6103fb, type: 2}
 --- !u!114 &1569542976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2926,6 +2926,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7648259315497169475, guid: c0043e4be16301845b27936eaf8f404d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 011923277306ae44483c5e68048de42d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
