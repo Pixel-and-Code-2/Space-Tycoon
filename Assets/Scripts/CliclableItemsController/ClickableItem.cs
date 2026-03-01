@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider))]
 public class ClickableItem : ISelectable
 {
     private enum AvailableActions
@@ -34,6 +35,7 @@ public class ClickableItem : ISelectable
     [SerializeField]
     private List<InspectorContextMenuItem> availableActions = new List<InspectorContextMenuItem>();
 
+
     void OnValidate()
     {
         foreach (InspectorContextMenuItem action in availableActions)
@@ -43,19 +45,14 @@ public class ClickableItem : ISelectable
         }
     }
 
+    void Start()
+    {
+
+        TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
+    }
     void OnEnable()
     {
         TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
-    }
-    void OnDisable()
-    {
-        if (progressBarCached != null)
-        {
-            UI3DManager.Instance.UnregisterSlider(transform);
-            progressBarCached = null;
-            actionCached = null;
-        }
-        TurnManager.Instance.OnPlayerTurnEnd -= OnPlayerTurnEnd;
     }
     void OnDestroy()
     {
@@ -86,6 +83,7 @@ public class ClickableItem : ISelectable
 
     private SliderController progressBarCached = null;
     private InspectorContextMenuItem actionCached = null;
+    public override bool IsWorking() => progressBarCached != null;
     private void StartWorkAction(InspectorContextMenuItem action)
     {
         actionCached = action;
@@ -97,6 +95,8 @@ public class ClickableItem : ISelectable
             progressBarCached = null;
             return;
         }
+        TurnManager.Instance.OnPlayerTurnEnd -= OnPlayerTurnEnd;
+        TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
         progressBarCached.SetBounds(0f, 100f);
         progressBarCached.SetValue(0f);
         progressBarCached.SetClass(SelectableType.Neutral);
@@ -111,19 +111,21 @@ public class ClickableItem : ISelectable
             float progress = progressBarCached.GetValue();
             progress += actionCached.progressPerRound.EvaluateFormula();
             progressBarCached.SetValue(progress);
+            Debug.Log("Progress: " + progress + " " + actionCached.progressPerRound.EvaluateFormula());
             if (progress >= 100f)
             {
                 UI3DManager.Instance.UnregisterSlider(transform);
                 progressBarCached = null;
                 actionCached = null;
                 UI3DManager.Instance.ShowMessage("Completed", transform.position, Color.green);
+                ClickableItemsController.Instance.OnCompleteTask(this);
             }
         }
     }
 
     public override List<ContextMenuItem> OnContextMenu()
     {
-        if (progressBarCached != null)
+        if (IsWorking())
         {
             return null;
         }

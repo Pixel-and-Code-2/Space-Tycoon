@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
   - name: STR
-    value: 8
+    value: 5
   - name: BRW
     value: 4
   - name: THR
@@ -31,7 +31,7 @@ MonoBehaviour:
   mustHaveParameters:
   - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   isDirty: 0
-  parametersDictStateCache: 'STR = 8,00 (8,00)
+  parametersDictStateCache: 'STR = 5,00 (5,00)
 
     DX = 5,00 (5,00)
 
@@ -61,7 +61,7 @@ MonoBehaviour:
     ShootAmount = 3,00
     (3,00)
 
-    HP = 13,00 (13,00)
+    HP = 10,00 (10,00)
 
     PRC = 12,00 (12,00)
 
@@ -75,6 +75,6 @@ MonoBehaviour:
     BCW = 10,00 (10,00)
 
     BDMG =
-    9,00 (9,00)
+    6,00 (6,00)
 
 '

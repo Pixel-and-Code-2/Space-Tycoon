@@ -11,7 +11,10 @@ public class PawnBrain : IControlableSelectable
     private PawnDataController dataController;
     private PawnNavMesh pawnNavMesh;
 
-    public override SelectableType GetSelectableType() => dataController.selectableType;
+    public override SelectableType GetSelectableType()
+    {
+        return dataController.selectableType;
+    }
 
     [SerializeField]
     private AnimatorBrainBase animatorBrain;

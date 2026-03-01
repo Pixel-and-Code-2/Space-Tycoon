@@ -14,4 +14,5 @@ public abstract class ISelectable : MonoBehaviour
     public virtual List<ContextMenuItem> OnContextMenu() { return null; }
     public virtual void OnSelect() { }
     public virtual void OnDeselect() { }
+    public virtual bool IsWorking() { return false; }
 }
