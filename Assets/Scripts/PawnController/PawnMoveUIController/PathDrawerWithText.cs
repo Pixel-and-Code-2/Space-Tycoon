@@ -28,7 +28,6 @@ public class PathDrawerWithText : PathDrawer
             out Vector2 localPoint
         );
         textRect.anchoredPosition = localPoint + uiTextOffset;
-        // textRect.anchoredPosition = screenPoint + uiTextOffset;
     }
 
     new void Awake()
@@ -48,7 +47,6 @@ public class PathDrawerWithText : PathDrawer
         {
             canvas = canvasObject.GetComponent<Canvas>();
             canvasRect = canvas.GetComponent<RectTransform>();
-            // uiText = canvas.GetComponentInChildren<TextMeshProUGUI>();
         }
 
         base.OnValidate();
@@ -56,23 +54,6 @@ public class PathDrawerWithText : PathDrawer
 
     protected new void CheckVariables()
     {
-        // Debug.Log("Checking variables");
-        if (canvas == null)
-        {
-            Debug.LogError("Canvas not found");
-            return;
-        }
-        if (canvasRect == null)
-        {
-
-            Debug.LogError("Canvas rect not found");
-            return;
-        }
-        if (uiText == null)
-        {
-            Debug.LogError("Distance text not found");
-            return;
-        }
         base.CheckVariables();
     }
 

@@ -1293,6 +1293,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoundsCalculator
   buttonToRecalculateBounds: 1
+--- !u!1 &1221826970 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2330917501888746684, guid: c0043e4be16301845b27936eaf8f404d, type: 3}
+  m_PrefabInstance: {fileID: 2082539462280390453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1221826974
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221826970}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.16165513, y: 0.30303663, z: 0.001026317}
+  m_Center: {x: 0.000040333718, y: -0.010110309, z: -0.011131814}
 --- !u!20 &1278369826 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 9071548494154860063, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
@@ -1533,7 +1559,7 @@ MonoBehaviour:
   deselectionClick: {fileID: 953123044832444067, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   zeroPlaneHeight: -1.15
   showZeroPlane: 1
-  controlTypeText: {fileID: 2143056131}
+  controlTypeText: {fileID: 1682947669}
 --- !u!114 &1569542974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1985,6 +2011,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1682947669 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8535353172621039782, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+  m_PrefabInstance: {fileID: 2742994513151523351}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1001 &1782063237
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2613,6 +2650,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 694155713534579190, guid: c0043e4be16301845b27936eaf8f404d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2082539462280390459}
+    - targetCorrespondingSourceObject: {fileID: 2330917501888746684, guid: c0043e4be16301845b27936eaf8f404d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1221826974}
   m_SourcePrefab: {fileID: 100100000, guid: c0043e4be16301845b27936eaf8f404d, type: 3}
 --- !u!1 &2082539462280390454 stripped
 GameObject:
