@@ -2204,7 +2204,7 @@ PrefabInstance:
     - target: {fileID: 8515852256048443046, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: initialPawnData
       value: 
-      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
+      objectReference: {fileID: 11400000, guid: 8d782a5936574ae44808baf6f8e2392b, type: 2}
     - target: {fileID: 8696655358907118961, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: animatorBrain
       value: 
@@ -2674,38 +2674,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
   availableActions:
-  - text: Do sth
+  - text: Start computer
     action: 0
     chanceToLaunch:
-      formula: '(c_pawnDistance > 4 ? 0 : g_M) / g_M'
-      instruction: "Type a mathematical expression using common '+', '-', '*', '/',
-        '(', ')'.\nYou also can provide variables from Data Assets available in this
-        object, using words like 'g_Statname' - the full list of available vars is
-        listed below.\nEverything starting with '//' till the end of the line will
-        be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
-        C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
-        Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians),
-        Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available
-        variable below to add its name to the end o\u0430 the formula (but be sure
-        to the formula to be blured when clicked)."
+      formula: '(p_IQ<5?-g_e:
+
+        c_pawnDistance >= 3? -2*g_e:
+
+        g_e)'
+      instruction: 
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+    exitCodes:
+    - message: Not enough IQ
+      color: {r: 1, g: 0, b: 0, a: 1}
+      code: -1
+    - message: Too far
+      color: {r: 1, g: 0, b: 0, a: 1}
+      code: -2
     progressPerRound:
       formula: p_IQ*5
-      instruction: "Type a mathematical expression using common '+', '-', '*', '/',
-        '(', ')'.\nYou also can provide variables from Data Assets available in this
-        object, using words like 'g_Statname' - the full list of available vars is
-        listed below.\nEverything starting with '//' till the end of the line will
-        be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
-        C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
-        Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians),
-        Min, Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available
-        variable below to add its name to the end o\u0430 the formula (but be sure
-        to the formula to be blured when clicked)."
+      instruction: 
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}

@@ -12,9 +12,22 @@ public class ClickableItem : ISelectable
     [System.Serializable]
     private class InspectorContextMenuItem
     {
+        [System.Serializable]
+        public struct ExitCode
+        {
+            private static float eps = 0.001f;
+            public string message;
+            public Color color;
+            public float code;
+            public bool IsEqual(float other)
+            {
+                return Mathf.Abs(code - other) < eps;
+            }
+        }
         public string text;
         public AvailableActions action;
         public FormulaFieldWithMemo chanceToLaunch = new FormulaFieldWithMemo();
+        public List<ExitCode> exitCodes;
         public FormulaFieldWithMemo progressPerRound = new FormulaFieldWithMemo();
     }
 
@@ -75,7 +88,6 @@ public class ClickableItem : ISelectable
     private InspectorContextMenuItem actionCached = null;
     private void StartWorkAction(InspectorContextMenuItem action)
     {
-        Debug.Log("Start Work");
         actionCached = action;
         progressBarCached = UI3DManager.Instance.RegisterSlider(transform);
         if (progressBarCached == null)
@@ -124,13 +136,23 @@ public class ClickableItem : ISelectable
                 case AvailableActions.StartWork:
                     actionDelegate = () =>
                     {
-                        if (action.chanceToLaunch.EvaluateFormula() >= UnityEngine.Random.Range(0f, 1f))
+                        float chance = action.chanceToLaunch.EvaluateFormula();
+                        Debug.Log("Chance: " + chance);
+                        foreach (InspectorContextMenuItem.ExitCode exitCode in action.exitCodes)
+                        {
+                            if (exitCode.IsEqual(chance))
+                            {
+                                UI3DManager.Instance.ShowMessage(exitCode.message, transform.position, exitCode.color);
+                            }
+                        }
+                        if (chance >= UnityEngine.Random.Range(0f, 1f))
                         {
                             StartWorkAction(action);
                         }
                         else
                         {
-                            UI3DManager.Instance.ShowMessage("Not started", transform.position, Color.red);
+                            if (chance <= 1f && chance >= 0f)
+                                UI3DManager.Instance.ShowMessage("Not started", transform.position, Color.red);
                         }
                         ClickableItemsController.Instance.OnDeselect();
                     };

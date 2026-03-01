@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41cf6bcf5f35067458db9c0a1798ba1e, type: 3}
-  m_Name: PlayerRabbit
+  m_Name: PlayerRabbitClever
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
   - name: STR
@@ -26,7 +26,7 @@ MonoBehaviour:
   - name: SPDB
     value: 0
   - name: IQ
-    value: 4
+    value: 7
   calculatedParameters: []
   mustHaveParameters:
   - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
@@ -36,7 +36,7 @@ MonoBehaviour:
     DX = 5,00 (5,00)
 
     IQ =
-    4,00 (4,00)
+    7,00 (7,00)
 
     HT = 5,00 (5,00)
 
@@ -63,7 +63,7 @@ MonoBehaviour:
 
     HP = 13,00 (13,00)
 
-    PRC = 9,00 (9,00)
+    PRC = 12,00 (12,00)
 
     FP = 10,00 (10,00)
 
