@@ -14,18 +14,37 @@ public class ClickableItemsController : MonoBehaviour
         else Debug.LogError("ClickableItemsController instance already exists");
     }
 
+    void Start()
+    {
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
+            TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
+        }
+    }
+
     void OnEnable()
     {
-        TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
+            TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
+        }
     }
     void OnDisable()
     {
-        TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
+        }
     }
 
     void OnDestroy()
     {
-        TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
+        }
     }
     public void OnSelect(ISelectable selectable)
     {

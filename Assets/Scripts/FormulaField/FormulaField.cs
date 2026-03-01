@@ -76,6 +76,7 @@ public class FormulaField
         //         Debug.LogError("Trying to compile formula in runtime?! Aborting...\n\n" + System.Environment.StackTrace);
         //         return;
         // #endif
+        string processedFormula = "";
         try
         {
             string formulaString = GetFormulaString();
@@ -83,7 +84,7 @@ public class FormulaField
 
             // 1. Препроцессинг: заменяем p_Stat на прямой доступ к словарю
             // Паттерн ищет "X_Word", где X - одна буква
-            string processedFormula = System.Text.RegularExpressions.Regex.Replace(
+            processedFormula = System.Text.RegularExpressions.Regex.Replace(
                 formulaString,
                 @"\b([a-zA-Z])_(\w+)\b",
                 match =>
@@ -125,7 +126,7 @@ public class FormulaField
         }
         catch (System.Exception ex)
         {
-            Debug.LogError($"Error compiling formula '{formula}': {ex.Message}");
+            Debug.LogError($"Error compiling formula '{processedFormula}': {ex.Message}");
             compiledFormulaAction = null;
         }
     }

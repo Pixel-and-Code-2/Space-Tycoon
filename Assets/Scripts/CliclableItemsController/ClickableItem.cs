@@ -51,6 +51,7 @@ public class ClickableItem : ISelectable
         {
             TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
         }
+        OnValidate();
     }
     void OnEnable()
     {
@@ -58,6 +59,7 @@ public class ClickableItem : ISelectable
         {
             TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
         }
+        OnValidate();
     }
     void OnDestroy()
     {

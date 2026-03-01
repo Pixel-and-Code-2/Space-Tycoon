@@ -44,6 +44,8 @@ public class UI3DManager : MonoBehaviour
             messageRectTransform = messageObject.GetComponent<RectTransform>();
             messageText = messageObject.GetComponent<TextMeshProUGUI>();
         }
+        if (messageRectTransform == null) messageRectTransform = messageObject.GetComponent<RectTransform>();
+        if (messageText == null) messageText = messageObject.GetComponent<TextMeshProUGUI>();
         if (messageObject.activeSelf) messageObject.SetActive(false);
     }
 
@@ -56,6 +58,7 @@ public class UI3DManager : MonoBehaviour
         Instance = this;
         if (contextMenuController == null) contextMenuController = GetComponentInChildren<ContextMenuController>();
         contextMenuController.gameObject.SetActive(false);
+        OnValidate();
     }
     void Start()
     {
@@ -129,6 +132,7 @@ public class UI3DManager : MonoBehaviour
                 canvas.worldCamera,
                 out localPoint))
             {
+                if (messageRectTransform == null || messageText == null) OnValidate();
                 messageRectTransform.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
             }
         }

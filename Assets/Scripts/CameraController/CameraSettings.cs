@@ -107,8 +107,10 @@ public abstract class CameraSettings : MonoBehaviour
         orbitalFollow.Orbits.Bottom.Height = cameraBottomOffset;
         ApplyNewRadius();
         lookTarget.localRotation = Quaternion.Euler(0f, cameraInitialHorizontalDegree, 0f);
+        OnValidate();
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         if (boundsGetter != null)
@@ -136,4 +138,5 @@ public abstract class CameraSettings : MonoBehaviour
 
         Gizmos.DrawLine(startX, endX);
     }
+#endif
 }
