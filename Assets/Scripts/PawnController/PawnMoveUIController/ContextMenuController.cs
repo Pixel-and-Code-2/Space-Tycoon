@@ -42,14 +42,15 @@ public class ContextMenuController : MonoBehaviour
     }
     public void AddButton(string text, System.Action action)
     {
-        lastUnused++;
         if (lastUnused < buttons.Count)
         {
             buttons[lastUnused].button.SetActive(true);
             buttons[lastUnused].textComponent.text = text;
             buttons[lastUnused].buttonComponent.onClick.AddListener(() => action());
+            lastUnused++;
             return;
         }
+        lastUnused = buttons.Count;
         GameObject button = Instantiate(buttonPrefab, transform);
         ButtonCache newButton = new ButtonCache();
         newButton.button = button;

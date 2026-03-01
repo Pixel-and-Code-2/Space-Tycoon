@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3626279406457637129}
   - component: {fileID: 2498330188060175414}
   - component: {fileID: 1513497965970453833}
+  - component: {fileID: 7971527510221578212}
   m_Layer: 0
   m_Name: ButtonExample
   m_TagString: Untagged
@@ -121,6 +122,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7971527510221578212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5634905935380291930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffd4dd977b3f87448b42890b9aebc0b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonStopPropagation
 --- !u!1 &7599488695450650672
 GameObject:
   m_ObjectHideFlags: 0

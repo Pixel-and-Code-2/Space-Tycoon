@@ -6,14 +6,13 @@ public class SliderToPawnConnector : MonoBehaviour
 {
     [SerializeField]
     private SliderController sliderController;
-    public RectTransform rectTransform;
+    public RectTransform rectTransform => sliderController.rectTransform;
 
     public PawnDataController pawn;
     private PawnDataController pawnCached;
     void Awake()
     {
         if (sliderController == null) sliderController = GetComponent<SliderController>();
-        if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
 
     }
 
@@ -46,7 +45,6 @@ public class SliderToPawnConnector : MonoBehaviour
     }
     void OnValidate()
     {
-        if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
         if (sliderController == null) sliderController = GetComponent<SliderController>();
         if (pawn != null && pawn != pawnCached)
         {

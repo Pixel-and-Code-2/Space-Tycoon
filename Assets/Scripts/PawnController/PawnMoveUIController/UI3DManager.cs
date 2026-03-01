@@ -13,6 +13,8 @@ public class UI3DManager : MonoBehaviour
     [SerializeField]
     private GameObject sliderPrefab;
     [SerializeField]
+    private GameObject transformSliderPrefab;
+    [SerializeField]
     private Transform sliderParent;
     [SerializeField]
     private ContextMenuController contextMenuController;
@@ -31,6 +33,7 @@ public class UI3DManager : MonoBehaviour
     private Vector3 uiOffset = new Vector3(0f, 1f, 0f);
 
     private Dictionary<GameObject, SliderToPawnConnector> pawnsInScene = new Dictionary<GameObject, SliderToPawnConnector>();
+    private Dictionary<Transform, SliderController> slidersOnTransform = new Dictionary<Transform, SliderController>();
 
     void OnValidate()
     {
@@ -89,6 +92,7 @@ public class UI3DManager : MonoBehaviour
     {
         UpdateSliderPositions();
         UpdateMessagePosition();
+        UpdateTransformSlidersPositions();
 
         if (contextMenuController.gameObject.activeSelf)
         {
@@ -160,11 +164,50 @@ public class UI3DManager : MonoBehaviour
         }
     }
 
+    private void UpdateTransformSlidersPositions()
+    {
+        foreach (Transform transform in slidersOnTransform.Keys)
+        {
+            SliderController controller = slidersOnTransform[transform];
+            RectTransform uiElementRect = controller.rectTransform;
+            Vector3 worldPosition = transform.position + uiOffset;
+            Vector3 screenPosition = canvas.worldCamera.WorldToScreenPoint(worldPosition);
+            Vector2 localPoint;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.GetComponent<RectTransform>(),
+                new Vector2(screenPosition.x, screenPosition.y),
+                canvas.worldCamera,
+                out localPoint))
+            {
+                uiElementRect.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
+            }
+            else
+            {
+                Debug.LogWarning($"Could not convert screen point to local point for {transform.name}");
+            }
+        }
+    }
+
     public void RegisterPawn(GameObject pawnObject)
     {
         if (pawnObject == null) throw new System.Exception("RegisterPawn: pawnObject is null");
         if (pawnsInScene.ContainsKey(pawnObject)) return;
         pawnsInScene.Add(pawnObject, CreateSliderForPawn(pawnObject));
+    }
+
+    public SliderController RegisterSlider(Transform transform)
+    {
+        if (slidersOnTransform.ContainsKey(transform)) return slidersOnTransform[transform];
+        SliderController sliderController = CreateSliderForTransform(transform);
+        slidersOnTransform.Add(transform, sliderController);
+        return sliderController;
+    }
+
+    public void UnregisterSlider(Transform transform)
+    {
+        if (!slidersOnTransform.ContainsKey(transform)) return;
+        Destroy(slidersOnTransform[transform].gameObject);
+        slidersOnTransform.Remove(transform);
     }
 
     public void ShowContextMenu(Vector3 position, List<ContextMenuItem> items)
@@ -188,10 +231,15 @@ public class UI3DManager : MonoBehaviour
     {
         GameObject sliderObject = Instantiate(sliderPrefab, sliderParent);
         SliderToPawnConnector sliderToPawnConnector = sliderObject.GetComponent<SliderToPawnConnector>();
-        if (sliderToPawnConnector == null) throw new System.Exception("CreateSliderForPawn: sliderToPawnConnector not found");
         sliderToPawnConnector.pawn = pawnObject.GetComponent<PawnDataController>();
-        if (sliderToPawnConnector.pawn == null) throw new System.Exception("CreateSliderForPawn: PawnDataController not found");
         return sliderToPawnConnector;
+    }
+
+    private SliderController CreateSliderForTransform(Transform transform)
+    {
+        GameObject sliderObject = Instantiate(transformSliderPrefab, sliderParent);
+        SliderController sliderController = sliderObject.GetComponent<SliderController>();
+        return sliderController;
     }
 
     public void ShowMessage(string message, Vector3 position, Color color)

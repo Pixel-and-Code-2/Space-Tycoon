@@ -17,23 +17,19 @@ public class SliderController : MonoBehaviour
     private float minValue = 0f;
     [SerializeField]
     private float maxValue = 100f;
-
-    [System.Serializable]
-    public struct SliderClassColors { public SelectableType selectableType; public Color colorFront; public Color colorBack; }
-    [Header("Slider colors")]
-    [SerializeField]
-    private List<SliderClassColors> sliderClassColors = new List<SliderClassColors>();
-    private static Dictionary<SelectableType, SliderClassColors> sliderClassColorsDict = new Dictionary<SelectableType, SliderClassColors>();
+    public RectTransform rectTransform;
 
     void Awake()
     {
         slider = GetComponent<Slider>();
         slider.minValue = minValue;
         slider.maxValue = maxValue;
+        if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
     }
 
     void OnValidate()
     {
+        if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
         if (slider == null) slider = GetComponent<Slider>();
         slider.minValue = minValue;
         slider.maxValue = maxValue;
@@ -52,17 +48,7 @@ public class SliderController : MonoBehaviour
                 return;
             }
         }
-        foreach (SliderClassColors sliderClassColor in sliderClassColors)
-        {
-            sliderClassColorsDict[sliderClassColor.selectableType] = sliderClassColor;
-        }
-        foreach (var kv in sliderClassColorsDict)
-        {
-            if (!sliderClassColors.Exists(x => x.selectableType == kv.Key))
-            {
-                sliderClassColors.Add(kv.Value);
-            }
-        }
+
     }
 
     private float cachedValue = 0f;
@@ -74,13 +60,18 @@ public class SliderController : MonoBehaviour
         slider.value = value;
     }
 
+    public float GetValue()
+    {
+        return cachedValue;
+    }
+
     public void SetClass(SelectableType selectableType)
     {
-        if (sliderClassColorsDict.TryGetValue(selectableType, out SliderClassColors sliderClassColor))
+        SliderSettingsAssets.SliderClassColors sliderClassColor = HandleInittingGlobalVars.sliderSettingsAssets.GetSliderClassColors(selectableType);
+        if (sliderClassColor.selectableType == selectableType)
         {
             fillImage.color = sliderClassColor.colorFront;
             backgroundImage.color = sliderClassColor.colorBack;
-            return;
         }
         else
         {
@@ -95,6 +86,6 @@ public class SliderController : MonoBehaviour
         this.maxValue = maxValue;
         slider.minValue = minValue;
         slider.maxValue = maxValue;
-        slider.value = maxValue;
+        SetValue(maxValue);
     }
 }

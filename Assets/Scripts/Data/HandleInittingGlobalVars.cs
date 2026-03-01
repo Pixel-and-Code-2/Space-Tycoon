@@ -10,8 +10,11 @@ public class HandleInittingGlobalVars : MonoBehaviour
     private ParameteredScriptableObject pawnMustHaveParamsSettable;
     [SerializeField]
     private ParameteredScriptableObject calculatableParametersSettable;
+    [SerializeField]
+    private SliderSettingsAssets sliderSettingsAssetsSettable;
     public static ParameteredScriptableObject pawnMustHaveParams;
     public static ParameteredScriptableObject globalParameters;
+    public static SliderSettingsAssets sliderSettingsAssets;
     public static Action onParamsUpdated;
     public const string PAWN_DISTANCE_LABEL = "pawnDistance";
     public static FormulaDataMonoBase mainCalculatedFormulaData;
@@ -24,6 +27,8 @@ public class HandleInittingGlobalVars : MonoBehaviour
             pawnMustHaveParams = GetDataAsset("PawnMustHaveParams");
         if (mainCalculatedFormulaData == null)
             mainCalculatedFormulaData = GetComponent<FormulaDataMonoBase>();
+        if (sliderSettingsAssets == null)
+            sliderSettingsAssets = Resources.Load<SliderSettingsAssets>("SliderSettingsAssets");
         onParamsUpdated?.Invoke();
     }
 
@@ -67,6 +72,19 @@ public class HandleInittingGlobalVars : MonoBehaviour
         if (globalParametersSettable == null)
         {
             globalParametersSettable = globalParameters;
+        }
+        if (sliderSettingsAssetsSettable != null && sliderSettingsAssets != sliderSettingsAssetsSettable)
+        {
+            sliderSettingsAssets = sliderSettingsAssetsSettable;
+            doUpdate = true;
+        }
+        if (sliderSettingsAssets == null)
+        {
+            sliderSettingsAssets = Resources.Load<SliderSettingsAssets>("SliderSettingsAssets");
+        }
+        if (sliderSettingsAssetsSettable == null)
+        {
+            sliderSettingsAssetsSettable = sliderSettingsAssets;
         }
         if (doUpdate)
         {

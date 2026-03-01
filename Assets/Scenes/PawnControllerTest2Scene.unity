@@ -1591,6 +1591,7 @@ MonoBehaviour:
   globalParametersSettable: {fileID: 11400000, guid: 5d4617d111d780044a11ef89afed3579, type: 2}
   pawnMustHaveParamsSettable: {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   calculatableParametersSettable: {fileID: 0}
+  sliderSettingsAssetsSettable: {fileID: 11400000, guid: 2bdb8b41969b1644eb36824d9d63f5c7, type: 2}
 --- !u!114 &1569542976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1723,6 +1724,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   sliderPrefab: {fileID: 8949078235207085745, guid: 4a5e8d63b7e892c4c9e7882becdce87c, type: 3}
+  transformSliderPrefab: {fileID: 8949078235207085745, guid: 9933e15ca902c614388c29be286c3583, type: 3}
   sliderParent: {fileID: 1989210707}
   contextMenuController: {fileID: 1630805095}
   canvas: {fileID: 3157779775542635030}
@@ -2675,7 +2677,7 @@ MonoBehaviour:
   - text: Do sth
     action: 0
     chanceToLaunch:
-      formula: '(c_pawnDistance > 2 ? 0 : g_M) / g_M'
+      formula: '(c_pawnDistance > 4 ? 0 : g_M) / g_M'
       instruction: "Type a mathematical expression using common '+', '-', '*', '/',
         '(', ')'.\nYou also can provide variables from Data Assets available in this
         object, using words like 'g_Statname' - the full list of available vars is
@@ -2693,7 +2695,7 @@ MonoBehaviour:
       - Calculated
       - Player
     progressPerRound:
-      formula: p_IQ
+      formula: p_IQ*5
       instruction: "Type a mathematical expression using common '+', '-', '*', '/',
         '(', ')'.\nYou also can provide variables from Data Assets available in this
         object, using words like 'g_Statname' - the full list of available vars is
@@ -2884,11 +2886,11 @@ PrefabInstance:
     - {fileID: 7972258391708643209, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4244262784304019153, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 1630805094}
-    - targetCorrespondingSourceObject: {fileID: 4244262784304019153, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
-      insertIndex: -1
+      insertIndex: 1
       addedObject: {fileID: 1641658863}
+    - targetCorrespondingSourceObject: {fileID: 4244262784304019153, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 1630805094}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 13819608150087886, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       insertIndex: -1

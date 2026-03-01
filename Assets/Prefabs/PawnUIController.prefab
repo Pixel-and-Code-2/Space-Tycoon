@@ -165,9 +165,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1506075505192252476}
+  - {fileID: 1678611611790751086}
   - {fileID: 1050059341371483648}
   - {fileID: 4107522247465841245}
-  - {fileID: 1678611611790751086}
   m_Father: {fileID: 5497987245476901017}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -601,6 +601,7 @@ MonoBehaviour:
   availableDistance: 1.15
   updateStillnesOfEndPoints: 0
   canvasObject: {fileID: 3197535195784643579}
+  uiText: {fileID: 0}
   uiTextOffset: {x: 0, y: 10}
   textColor: {r: 0, g: 1, b: 0, a: 1}
   outOfRangeTextColor: {r: 1, g: 0, b: 0, a: 1}

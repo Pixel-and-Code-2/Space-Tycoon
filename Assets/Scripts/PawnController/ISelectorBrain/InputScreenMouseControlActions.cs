@@ -73,7 +73,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         deselectionClick.action.Disable();
     }
 
-    void LateUpdate()
+    void Update()
     {
         if (selectionClickHandled && selectionClick.action.ReadValue<float>() != 1.0f)
         {
