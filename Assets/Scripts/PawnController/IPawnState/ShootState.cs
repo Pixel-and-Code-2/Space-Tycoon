@@ -146,6 +146,10 @@ public class ShootState : IPawnState
     {
         // shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = Vector3.Distance(controlableSelectable.GetTransform().position, attackableSelectable.GetTransform().position);
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = Vector3.Distance(controlableSelectable.GetTransform().position, attackableSelectable.GetTransform().position);
+
+        controlableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
+        attackableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.PREY_PREFIX);
+
         return calculateShootDamage.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
                 // shootingFormulaData.parametersDict,
@@ -163,8 +167,11 @@ public class ShootState : IPawnState
         Vector3 targetPoint = attackableSelectable.GetTransform().position;
         Vector3 direction = (targetPoint - origin).normalized;
         float distance = Vector3.Distance(origin, targetPoint);
-        // shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = distance;
+
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = distance;
+
+        controlableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
+        attackableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.PREY_PREFIX);
 
         int wallLayer = LayerMask.NameToLayer("Wall");
         int wallMask = 1 << wallLayer;

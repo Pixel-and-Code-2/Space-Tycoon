@@ -97,9 +97,21 @@ public class PawnBrain : IControlableSelectable
 
     public override void OnShoot(Vector3 position)
     {
-        // Debug.Log("OnShoot: " + position);
         transform.LookAt(position);
         animatorBrain.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
+        dataController.SetParameterValue(
+            PawnDataController.SHOOTED_AMOUNT_KEY,
+            dataController.GetParameterValue(PawnDataController.SHOOTED_AMOUNT_KEY) + 1
+        );
+    }
+    public override void OnMelee(Vector3 position)
+    {
+        transform.LookAt(position);
+        animatorBrain.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
+        dataController.SetParameterValue(
+            PawnDataController.MELEE_AMOUNT_KEY,
+            dataController.GetParameterValue(PawnDataController.MELEE_AMOUNT_KEY) + 1
+        );
     }
     public override void OnGetHit(float damage)
     {
@@ -125,4 +137,8 @@ public class PawnBrain : IControlableSelectable
         return dataController;
     }
 
+    public override void FillFormulaData(FormulaDataMonoBase formulaData, string prefix)
+    {
+        dataController.FillFormulaData(formulaData, prefix);
+    }
 }

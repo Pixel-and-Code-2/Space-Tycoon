@@ -47,12 +47,17 @@ public class ClickableItem : ISelectable
 
     void Start()
     {
-
-        TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
+        }
     }
     void OnEnable()
     {
-        TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
+        }
     }
     void OnDestroy()
     {
@@ -62,7 +67,10 @@ public class ClickableItem : ISelectable
             progressBarCached = null;
             actionCached = null;
         }
-        TurnManager.Instance.OnPlayerTurnEnd -= OnPlayerTurnEnd;
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnEnd -= OnPlayerTurnEnd;
+        }
     }
 
     void UpdateFormula(FormulaFieldWithMemo formula)
@@ -111,7 +119,6 @@ public class ClickableItem : ISelectable
             float progress = progressBarCached.GetValue();
             progress += actionCached.progressPerRound.EvaluateFormula();
             progressBarCached.SetValue(progress);
-            Debug.Log("Progress: " + progress + " " + actionCached.progressPerRound.EvaluateFormula());
             if (progress >= 100f)
             {
                 UI3DManager.Instance.UnregisterSlider(transform);
@@ -139,7 +146,6 @@ public class ClickableItem : ISelectable
                     actionDelegate = () =>
                     {
                         float chance = action.chanceToLaunch.EvaluateFormula();
-                        Debug.Log("Chance: " + chance);
                         foreach (InspectorContextMenuItem.ExitCode exitCode in action.exitCodes)
                         {
                             if (exitCode.IsEqual(chance))

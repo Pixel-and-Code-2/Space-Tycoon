@@ -90,7 +90,7 @@ public class MeleeState : IPawnState
             if (worldPoint != Vector3.zero && selectable != null)
             {
                 float randomValue = Random.value;
-                controlableSelectable.OnShoot(worldPoint);
+                controlableSelectable.OnMelee(worldPoint);
                 // Debug.Log("targetPawn: " + attackableSelectable + " " + randomValue + " < " + GetShootAccuracy(lastHitPoint));
                 if (randomValue < GetShootAccuracy(attackableSelectable) && attackableSelectable != null)
                 {
@@ -153,6 +153,10 @@ public class MeleeState : IPawnState
     private float GetShootDamage(IAttackableSelectable attackableSelectable)
     {
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = Vector3.Distance(controlableSelectable.GetTransform().position, attackableSelectable.GetTransform().position);
+
+        controlableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
+        attackableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.PREY_PREFIX);
+
         return calculateMeleeDamage.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
                 // meleeFormulaData.parametersDict,
@@ -171,6 +175,9 @@ public class MeleeState : IPawnState
         Vector3 direction = (targetPoint - origin).normalized;
         float distance = Vector3.Distance(origin, targetPoint);
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = distance;
+
+        controlableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
+        attackableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.PREY_PREFIX);
 
         int wallLayer = LayerMask.NameToLayer("Wall");
         int wallMask = 1 << wallLayer;

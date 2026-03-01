@@ -88,10 +88,12 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     void Start()
     {
         ButtonStopPropagation.OnUIClickHandled += SetClickAsHandled;
+        TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
     }
     void OnDestroy()
     {
         ButtonStopPropagation.OnUIClickHandled -= SetClickAsHandled;
+        TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
     }
 
     // ISelectorBrain methods
@@ -286,6 +288,12 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         return PawnController.Instance.currentSelectedPawn != null;
     }
 
+    private void OnPlayerTurnStart()
+    {
+        controlTypeChangeEventSent = false;
+        UpdateButtonName();
+    }
+
     public void ChangeControlType()
     {
         currentControlType =
@@ -293,6 +301,11 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
             currentControlType == ControlType.shoot ? ControlType.melee :
             ControlType.walk;
         controlTypeChangeEventSent = false;
+        UpdateButtonName();
+    }
+
+    private void UpdateButtonName()
+    {
         if (controlTypeText != null)
         {
             controlTypeText.text =

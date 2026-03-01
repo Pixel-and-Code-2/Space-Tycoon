@@ -43,6 +43,8 @@ public class HandleInittingGlobalVars : MonoBehaviour
         {
             mainCalculatedFormulaData = GetComponent<FormulaDataMonoBase>();
             mainCalculatedFormulaData.AddParameter(PAWN_DISTANCE_LABEL);
+            PawnDataController.PreFillFormulaData(mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
+            PawnDataController.PreFillFormulaData(mainCalculatedFormulaData, PawnController.PREY_PREFIX);
         }
         bool doUpdate = false;
         if (pawnMustHaveParamsSettable != null && pawnMustHaveParams != pawnMustHaveParamsSettable)

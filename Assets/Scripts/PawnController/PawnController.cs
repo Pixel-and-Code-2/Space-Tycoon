@@ -45,6 +45,9 @@ public class PawnController : MonoBehaviour
             }
         }
     }
+    public const string ATTACKER_PREFIX = "Attacker";
+    public const string PREY_PREFIX = "Prey";
+
     void Awake()
     {
         if (Instance != null && Instance != this)

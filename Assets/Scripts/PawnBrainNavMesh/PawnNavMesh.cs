@@ -66,7 +66,7 @@ public class PawnNavMesh : MonoBehaviour
                     navMeshAgent.SetDestination(pointInTheMiddleOfTheSection);
                     targetPosition = pointInTheMiddleOfTheSection;
 
-                    dataController.SetParameterValue(PawnDataController.AVAILABLE_DISTANCE_KEY, 0f);
+                    AddWalkedDistance(GetAvDist());
                     isMoving = true;
                     return;
                 }
@@ -76,9 +76,18 @@ public class PawnNavMesh : MonoBehaviour
             navMeshAgent.SetDestination(samplePosition);
             targetPosition = samplePosition;
 
-            dataController.SetParameterValue(PawnDataController.AVAILABLE_DISTANCE_KEY, GetAvDist() - distanceTravelling);
+            AddWalkedDistance(distanceTravelling);
             isMoving = true;
         }
+    }
+
+    private void AddWalkedDistance(float distance)
+    {
+        dataController.SetParameterValue(PawnDataController.AVAILABLE_DISTANCE_KEY, GetAvDist() - distance);
+        dataController.SetParameterValue(
+            PawnDataController.WALKED_KEY,
+            dataController.GetParameterValue(PawnDataController.WALKED_KEY) + distance
+        );
     }
 
     protected virtual void Update()

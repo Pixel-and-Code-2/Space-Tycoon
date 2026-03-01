@@ -12,7 +12,7 @@ public class WalkState : IPawnState
 
     public override void HandleDoingSth(Vector3 worldPoint, ISelectable selectable)
     {
-        if (worldPoint != Vector3.zero)
+        if (worldPoint != Vector3.zero && !controlableSelectable.IsMoving())
         {
             controlableSelectable.OnMove(worldPoint);
             pathDrawer.SetVisible(false);
