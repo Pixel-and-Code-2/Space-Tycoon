@@ -11,12 +11,11 @@ public class HandleInittingGlobalVars : MonoBehaviour
     [SerializeField]
     private ParameteredScriptableObject calculatableParametersSettable;
     [SerializeField]
-    private SliderSettingsAssets sliderSettingsAssetsSettable;
+    private GlobalSettingsAssets globalSettingsAssetsSettable;
     public static ParameteredScriptableObject pawnMustHaveParams;
     public static ParameteredScriptableObject globalParameters;
-    public static SliderSettingsAssets sliderSettingsAssets;
+    public static GlobalSettingsAssets globalSettingsAssets;
     public static Action onParamsUpdated;
-    public const string PAWN_DISTANCE_LABEL = "pawnDistance";
     public static FormulaDataMonoBase mainCalculatedFormulaData;
     void Awake()
     {
@@ -27,8 +26,8 @@ public class HandleInittingGlobalVars : MonoBehaviour
             pawnMustHaveParams = GetDataAsset("PawnMustHaveParams");
         if (mainCalculatedFormulaData == null)
             mainCalculatedFormulaData = GetComponent<FormulaDataMonoBase>();
-        if (sliderSettingsAssets == null)
-            sliderSettingsAssets = Resources.Load<SliderSettingsAssets>("SliderSettingsAssets");
+        if (globalSettingsAssets == null)
+            globalSettingsAssets = Resources.Load<GlobalSettingsAssets>("GlobalSettings");
         onParamsUpdated?.Invoke();
     }
 
@@ -42,7 +41,10 @@ public class HandleInittingGlobalVars : MonoBehaviour
         if (mainCalculatedFormulaData == null)
         {
             mainCalculatedFormulaData = GetComponent<FormulaDataMonoBase>();
-            mainCalculatedFormulaData.AddParameter(PAWN_DISTANCE_LABEL);
+            foreach (var key in PawnController.ALL_KEYS)
+            {
+                mainCalculatedFormulaData.AddParameter(key);
+            }
             PawnDataController.PreFillFormulaData(mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
             PawnDataController.PreFillFormulaData(mainCalculatedFormulaData, PawnController.PREY_PREFIX);
         }
@@ -75,18 +77,18 @@ public class HandleInittingGlobalVars : MonoBehaviour
         {
             globalParametersSettable = globalParameters;
         }
-        if (sliderSettingsAssetsSettable != null && sliderSettingsAssets != sliderSettingsAssetsSettable)
+        if (globalSettingsAssetsSettable != null && globalSettingsAssets != globalSettingsAssetsSettable)
         {
-            sliderSettingsAssets = sliderSettingsAssetsSettable;
+            globalSettingsAssets = globalSettingsAssetsSettable;
             doUpdate = true;
         }
-        if (sliderSettingsAssets == null)
+        if (globalSettingsAssets == null)
         {
-            sliderSettingsAssets = Resources.Load<SliderSettingsAssets>("SliderSettingsAssets");
+            globalSettingsAssets = Resources.Load<GlobalSettingsAssets>("GlobalSettings");
         }
-        if (sliderSettingsAssetsSettable == null)
+        if (globalSettingsAssetsSettable == null)
         {
-            sliderSettingsAssetsSettable = sliderSettingsAssets;
+            globalSettingsAssetsSettable = globalSettingsAssets;
         }
         if (doUpdate)
         {

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(FormulaDataMonoBase))]
 public class ShootState : IPawnState
@@ -6,11 +7,11 @@ public class ShootState : IPawnState
     private PathDrawerWithText pathDrawer => PawnController.Instance.pathDrawer;
     private IControlableSelectable controlableSelectable => PawnController.Instance.currentSelectedPawn;
     private IAttackableSelectable lastAttackableSelectableCached = null;
-    // private FormulaDataMonoBase shootingFormulaData;
     [SerializeField]
     private FormulaFieldWithMemo calculateShootDamage;
     [SerializeField]
     private FormulaFieldWithMemo calculateShootAccuracy;
+    public List<ExitCode> exitCodes;
 
     public (IFormulaData, string) GetShootFormulaData() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated");
     private IFormulaData initiatorFormulaData => controlableSelectable == null ? HandleInittingGlobalVars.pawnMustHaveParams : controlableSelectable.GetFormulaData();
@@ -20,24 +21,11 @@ public class ShootState : IPawnState
 
     void Awake()
     {
-        // if (shootingFormulaData == null || shootingFormulaData.owner != this)
-        // {
-        //     shootingFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
-        // }
         RefillFormulas();
     }
 
     void OnValidate()
     {
-        // if (shootingFormulaData == null || shootingFormulaData.owner != this)
-        // {
-        //     shootingFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
-        // }
-        // if (shootingFormulaData.parametersDict.Count < 1)
-        // {
-        //     // Debug.LogWarning("formulaData is empty");
-        //     shootingFormulaData.FullFillWithParameters(new string[] { SHOOTING_DISTANCE_LABEL });
-        // }
         RefillFormulas();
         calculateShootAccuracy.OnParamsUpdated();
         calculateShootDamage.OnParamsUpdated();
@@ -83,14 +71,22 @@ public class ShootState : IPawnState
             {
                 float randomValue = Random.value;
                 controlableSelectable.OnShoot(worldPoint);
-                // Debug.Log("targetPawn: " + attackableSelectable + " " + randomValue + " < " + GetShootAccuracy(lastHitPoint));
-                if (randomValue < GetShootAccuracy(attackableSelectable) && attackableSelectable != null)
+                float chance = GetShootAccuracy(attackableSelectable);
+                (string message, Color color) = GetMessage(chance);
+                if (message != null)
+                {
+                    UI3DManager.Instance.ShowMessage(message, worldPoint, color);
+                }
+                if (randomValue < chance)
                 {
                     attackableSelectable.OnGetHit(GetShootDamage(attackableSelectable));
                 }
                 else
                 {
-                    UI3DManager.Instance.ShowMessage("Miss", worldPoint, Color.yellow);
+                    if (message == null)
+                    {
+                        UI3DManager.Instance.ShowMessage("Miss", worldPoint, Color.yellow);
+                    }
                 }
             }
         }
@@ -112,23 +108,35 @@ public class ShootState : IPawnState
         if (hit == ScreenCastHitResult.SelectableHit)
         {
             float accuracy = GetShootAccuracy(selectable as IAttackableSelectable);
-            if (accuracy < 0.1f)
+            (string message, Color color) = GetMessage(accuracy);
+            if (message != null)
             {
-                pathDrawer.SetTextColor(Color.red);
-            }
-            else if (accuracy > 0.9f)
-            {
-                pathDrawer.SetTextColor(Color.green);
+                pathDrawer.SetTextColor(color);
+                pathDrawer.SetText(
+                    Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m, " + message,
+                    screenPoint
+                );
             }
             else
             {
-                float h = (accuracy - 0.1f) / 0.8f * 0.33f;
-                pathDrawer.SetTextColor(Color.HSVToRGB(h, 1f, 1f));
+                if (accuracy < 0.1f)
+                {
+                    pathDrawer.SetTextColor(Color.red);
+                }
+                else if (accuracy > 0.9f)
+                {
+                    pathDrawer.SetTextColor(Color.green);
+                }
+                else
+                {
+                    float h = (accuracy - 0.1f) / 0.8f * 0.33f;
+                    pathDrawer.SetTextColor(Color.HSVToRGB(h, 1f, 1f));
+                }
+                pathDrawer.SetText(
+                    Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m, " + (accuracy * 100f).ToString("F0") + "%",
+                    screenPoint
+                );
             }
-            pathDrawer.SetText(
-                Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m, " + (accuracy * 100f).ToString("F0") + "%",
-                screenPoint
-            );
         }
         else if (hit == ScreenCastHitResult.FloorHit)
         {
@@ -144,11 +152,7 @@ public class ShootState : IPawnState
 
     private float GetShootDamage(IAttackableSelectable attackableSelectable)
     {
-        // shootingFormulaData.parametersDict[SHOOTING_DISTANCE_LABEL] = Vector3.Distance(controlableSelectable.GetTransform().position, attackableSelectable.GetTransform().position);
-        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = Vector3.Distance(controlableSelectable.GetTransform().position, attackableSelectable.GetTransform().position);
-
-        controlableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
-        attackableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.PREY_PREFIX);
+        PawnController.SetCalculatableParamsForTwoPawns(controlableSelectable, attackableSelectable);
 
         return calculateShootDamage.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
@@ -161,24 +165,8 @@ public class ShootState : IPawnState
 
     private float GetShootAccuracy(IAttackableSelectable attackableSelectable)
     {
+        PawnController.SetCalculatableParamsForTwoPawns(controlableSelectable, attackableSelectable);
 
-        RaycastHit hitInfo;
-        Vector3 origin = controlableSelectable.GetTransform().position;
-        Vector3 targetPoint = attackableSelectable.GetTransform().position;
-        Vector3 direction = (targetPoint - origin).normalized;
-        float distance = Vector3.Distance(origin, targetPoint);
-
-        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = distance;
-
-        controlableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
-        attackableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.PREY_PREFIX);
-
-        int wallLayer = LayerMask.NameToLayer("Wall");
-        int wallMask = 1 << wallLayer;
-        if (Physics.Raycast(origin, direction, out hitInfo, distance, wallMask))
-        {
-            return 0f;
-        }
         float res = calculateShootAccuracy.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
                 // shootingFormulaData.parametersDict,
@@ -187,5 +175,16 @@ public class ShootState : IPawnState
             }
         );
         return res;
+    }
+    private (string, Color) GetMessage(float chance)
+    {
+        foreach (ExitCode exitCode in exitCodes)
+        {
+            if (exitCode.IsEqual(chance))
+            {
+                return (exitCode.message, exitCode.color);
+            }
+        }
+        return (null, Color.white);
     }
 }

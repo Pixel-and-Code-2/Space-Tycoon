@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(FormulaDataMonoBase))]
 public class MeleeState : IPawnState
@@ -7,40 +8,24 @@ public class MeleeState : IPawnState
     private IControlableSelectable controlableSelectable => PawnController.Instance.currentSelectedPawn;
 
     private IAttackableSelectable lastAttackableSelectableCached = null;
-    // private FormulaDataMonoBase meleeFormulaData;
     [SerializeField]
     private FormulaFieldWithMemo calculateMeleeDamage;
     [SerializeField]
     private FormulaFieldWithMemo calculateMeleeAccuracy;
-
+    public List<ExitCode> exitCodes;
     public (IFormulaData, string) GetMeleeFormulaData() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated");
     private IFormulaData initiatorFormulaData => controlableSelectable == null ? HandleInittingGlobalVars.pawnMustHaveParams : controlableSelectable.GetFormulaData();
     public (IFormulaData, string) GetInitiatorFormulaData() => (initiatorFormulaData, "Initiator");
     private IFormulaData lastAttackableSelectableFormulaData => lastAttackableSelectableCached == null ? HandleInittingGlobalVars.pawnMustHaveParams : lastAttackableSelectableCached.GetFormulaData();
     public (IFormulaData, string) GetTargetFormulaData() => (lastAttackableSelectableFormulaData, "Target");
 
-
-
     void Awake()
     {
-        // if (meleeFormulaData == null || meleeFormulaData.owner != this)
-        // {
-        //     meleeFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
-        // }
         RefillFormulas();
     }
 
     void OnValidate()
     {
-        // if (meleeFormulaData == null || meleeFormulaData.owner != this)
-        // {
-        //     meleeFormulaData = FormulaDataMonoBase.GetValidFormulaData(this);
-        // }
-        // if (meleeFormulaData.parametersDict.Count < 1)
-        // {
-        //     // Debug.LogWarning("formulaData is empty" + gameObject.name);
-        //     meleeFormulaData.FullFillWithParameters(new string[] { MELEE_DISTANCE_LABEL });
-        // }
         if (calculateMeleeAccuracy == null)
         {
             Debug.LogWarning("calculateMeleeAccuracy is null" + gameObject.name);
@@ -91,14 +76,22 @@ public class MeleeState : IPawnState
             {
                 float randomValue = Random.value;
                 controlableSelectable.OnMelee(worldPoint);
-                // Debug.Log("targetPawn: " + attackableSelectable + " " + randomValue + " < " + GetShootAccuracy(lastHitPoint));
-                if (randomValue < GetShootAccuracy(attackableSelectable) && attackableSelectable != null)
+                float chance = GetMeleeAccuracy(attackableSelectable);
+                (string message, Color color) = GetMessage(chance);
+                if (message != null)
                 {
-                    attackableSelectable.OnGetHit(GetShootDamage(attackableSelectable));
+                    UI3DManager.Instance.ShowMessage(message, worldPoint, color);
+                }
+                if (randomValue < chance)
+                {
+                    attackableSelectable.OnGetHit(GetMeleeDamage(attackableSelectable));
                 }
                 else
                 {
-                    UI3DManager.Instance.ShowMessage("Miss", worldPoint, Color.yellow);
+                    if (message == null)
+                    {
+                        UI3DManager.Instance.ShowMessage("Miss", worldPoint, Color.yellow);
+                    }
                 }
             }
         }
@@ -119,24 +112,36 @@ public class MeleeState : IPawnState
 
         if (hit == ScreenCastHitResult.SelectableHit)
         {
-            float accuracy = GetShootAccuracy(selectable as IAttackableSelectable);
-            if (accuracy < 0.1f)
+            float accuracy = GetMeleeAccuracy(selectable as IAttackableSelectable);
+            (string message, Color color) = GetMessage(accuracy);
+            if (message != null)
             {
-                pathDrawer.SetTextColor(Color.red);
-            }
-            else if (accuracy > 0.9f)
-            {
-                pathDrawer.SetTextColor(Color.green);
+                pathDrawer.SetTextColor(color);
+                pathDrawer.SetText(
+                    Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m, " + message,
+                    screenPoint
+                );
             }
             else
             {
-                float h = (accuracy - 0.1f) / 0.8f * 0.33f;
-                pathDrawer.SetTextColor(Color.HSVToRGB(h, 1f, 1f));
+                if (accuracy < 0.1f)
+                {
+                    pathDrawer.SetTextColor(Color.red);
+                }
+                else if (accuracy > 0.9f)
+                {
+                    pathDrawer.SetTextColor(Color.green);
+                }
+                else
+                {
+                    float h = (accuracy - 0.1f) / 0.8f * 0.33f;
+                    pathDrawer.SetTextColor(Color.HSVToRGB(h, 1f, 1f));
+                }
+                pathDrawer.SetText(
+                    Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m, " + (accuracy * 100f).ToString("F0") + "%",
+                    screenPoint
+                );
             }
-            pathDrawer.SetText(
-                Vector3.Distance(originPoint, worldPoint).ToString("F1") + "m, " + (accuracy * 100f).ToString("F0") + "%",
-                screenPoint
-            );
         }
         else if (hit == ScreenCastHitResult.FloorHit)
         {
@@ -150,41 +155,24 @@ public class MeleeState : IPawnState
         pathDrawer.SetVisible(true);
     }
 
-    private float GetShootDamage(IAttackableSelectable attackableSelectable)
+    private float GetMeleeDamage(IAttackableSelectable attackableSelectable)
     {
-        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = Vector3.Distance(controlableSelectable.GetTransform().position, attackableSelectable.GetTransform().position);
-
-        controlableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
-        attackableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.PREY_PREFIX);
+        PawnController.SetCalculatableParamsForTwoPawns(controlableSelectable, attackableSelectable);
 
         return calculateMeleeDamage.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
                 // meleeFormulaData.parametersDict,
                 HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict,
-                controlableSelectable.GetFormulaData().parametersDict, attackableSelectable.GetFormulaData().parametersDict,
+                controlableSelectable.GetFormulaData().parametersDict,
+                attackableSelectable.GetFormulaData().parametersDict,
             }
         );
     }
 
-    private float GetShootAccuracy(IAttackableSelectable attackableSelectable)
+    private float GetMeleeAccuracy(IAttackableSelectable attackableSelectable)
     {
+        PawnController.SetCalculatableParamsForTwoPawns(controlableSelectable, attackableSelectable);
 
-        RaycastHit hitInfo;
-        Vector3 origin = controlableSelectable.GetTransform().position;
-        Vector3 targetPoint = attackableSelectable.GetTransform().position;
-        Vector3 direction = (targetPoint - origin).normalized;
-        float distance = Vector3.Distance(origin, targetPoint);
-        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] = distance;
-
-        controlableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
-        attackableSelectable.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.PREY_PREFIX);
-
-        int wallLayer = LayerMask.NameToLayer("Wall");
-        int wallMask = 1 << wallLayer;
-        if (Physics.Raycast(origin, direction, out hitInfo, distance, wallMask))
-        {
-            return 0f;
-        }
         float res = calculateMeleeAccuracy.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
                 // meleeFormulaData.parametersDict,
@@ -193,5 +181,17 @@ public class MeleeState : IPawnState
             }
         );
         return res;
+    }
+
+    private (string, Color) GetMessage(float chance)
+    {
+        foreach (ExitCode exitCode in exitCodes)
+        {
+            if (exitCode.IsEqual(chance))
+            {
+                return (exitCode.message, exitCode.color);
+            }
+        }
+        return (null, Color.white);
     }
 }

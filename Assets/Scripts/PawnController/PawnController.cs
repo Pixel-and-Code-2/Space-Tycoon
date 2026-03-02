@@ -47,6 +47,9 @@ public class PawnController : MonoBehaviour
     }
     public const string ATTACKER_PREFIX = "Attacker";
     public const string PREY_PREFIX = "Prey";
+    public const string IS_WALLS_BETWEEN_KEY = "isWallsBetween";
+    public const string PAWN_DISTANCE_LABEL = "pawnDistance";
+    public static string[] ALL_KEYS = new string[] { IS_WALLS_BETWEEN_KEY, PAWN_DISTANCE_LABEL };
 
     void Awake()
     {
@@ -83,7 +86,7 @@ public class PawnController : MonoBehaviour
         ISelectable selectable = currentSelector.PollSelectClickableItem(clickableItemsController.currentSelectedItem);
         if (selectable != null)
         {
-            HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] =
+            HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PAWN_DISTANCE_LABEL] =
                 Vector3.Distance(
                     currentSelectedPawn.GetTransform().position,
                     selectable.GetTransform().position
@@ -111,11 +114,7 @@ public class PawnController : MonoBehaviour
             (ISelectable selectable2, Vector3 worldPoint) = currentSelector.PollSelectPosForState();
             if (selectable2 != null || worldPoint != Vector3.zero)
             {
-                HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.PAWN_DISTANCE_LABEL] =
-                    Vector3.Distance(
-                        currentSelectedPawn.GetTransform().position,
-                        worldPoint
-                    );
+                SetCalculatableParamsForTwoPawns(currentSelectedPawn, selectable2 == null ? worldPoint : selectable2.GetTransform().position);
                 currentState.HandleDoingSth(worldPoint, selectable2);
             }
 
@@ -125,6 +124,8 @@ public class PawnController : MonoBehaviour
                 currentState.HandleUIDrawing(selectable3, worldPoint2, screenPoint, hit);
             }
         }
+        isValidStage1 = false;
+        isValidStage2 = false;
     }
 
     void OnValidate()
@@ -177,5 +178,34 @@ public class PawnController : MonoBehaviour
     void OnEnemyTurn()
     {
         ChangeSelectorBrain(enemySelectorBrain);
+    }
+
+    public static bool isValidStage1 = false;
+    public static void SetCalculatableParamsForTwoPawns(IControlableSelectable attacker, Vector3 target)
+    {
+        if (isValidStage1) return;
+        Vector3 origin = attacker.GetTransform().position;
+        Vector3 direction = (target - origin).normalized;
+        float distance = Vector3.Distance(origin, target);
+        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PAWN_DISTANCE_LABEL] = distance;
+
+        RaycastHit hitInfo;
+        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[IS_WALLS_BETWEEN_KEY] =
+            Physics.Raycast(origin, direction, out hitInfo, distance, LayerMask.GetMask("Wall")) ? 1f : 0f;
+
+        attacker.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
+
+        isValidStage1 = true;
+    }
+
+    public static bool isValidStage2 = false;
+    public static void SetCalculatableParamsForTwoPawns(IControlableSelectable attacker, IAttackableSelectable prey)
+    {
+        if (isValidStage2) return;
+
+        SetCalculatableParamsForTwoPawns(attacker, prey.GetTransform().position);
+        prey.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.PREY_PREFIX);
+
+        isValidStage2 = true;
     }
 }

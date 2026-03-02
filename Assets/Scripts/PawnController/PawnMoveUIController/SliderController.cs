@@ -67,7 +67,7 @@ public class SliderController : MonoBehaviour
 
     public void SetClass(SelectableType selectableType)
     {
-        SliderSettingsAssets.SliderClassColors sliderClassColor = HandleInittingGlobalVars.sliderSettingsAssets.GetSliderClassColors(selectableType);
+        GlobalSettingsAssets.SliderClassColors sliderClassColor = HandleInittingGlobalVars.globalSettingsAssets.GetSliderClassColors(selectableType);
         if (sliderClassColor.selectableType == selectableType)
         {
             fillImage.color = sliderClassColor.colorFront;

@@ -4,11 +4,7 @@ public class PawnStatusVisualizer : MonoBehaviour
 {
     [Header("Visuals")]
     [SerializeField] private Renderer objectRenderer;
-
-    [Header("Colors")]
-    [SerializeField] private Color allyColor = Color.green;
-    [SerializeField] private Color enemyColor = Color.red;
-    [SerializeField] private Color deadColor = Color.gray;
+    private GlobalSettingsAssets settings => HandleInittingGlobalVars.globalSettingsAssets;
 
     private PawnBrain pawnBrain;
 
@@ -34,19 +30,21 @@ public class PawnStatusVisualizer : MonoBehaviour
         if (objectRenderer == null) return;
 
         Color targetColor = Color.white;
+        IControlableSelectable current = PawnController.Instance.currentSelectedPawn;
 
         if (pawnBrain.GetSelectableType() == SelectableType.Enemy)
         {
-            targetColor = enemyColor;
+            targetColor = current == pawnBrain ? settings.selectedColorEnemy : settings.enemyColor;
         }
         else if (pawnBrain.GetSelectableType() == SelectableType.Player)
         {
-            targetColor = allyColor;
+            targetColor = current == pawnBrain ? settings.selectedColorAlly : settings.allyColor;
         }
         else
         {
-            targetColor = deadColor;
+            targetColor = settings.deadColor;
         }
+
 
 
         if (objectRenderer.material.color != targetColor)

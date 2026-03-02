@@ -13,18 +13,6 @@ public class ClickableItem : ISelectable
     [System.Serializable]
     private class InspectorContextMenuItem
     {
-        [System.Serializable]
-        public struct ExitCode
-        {
-            private static float eps = 0.001f;
-            public string message;
-            public Color color;
-            public float code;
-            public bool IsEqual(float other)
-            {
-                return Mathf.Abs(code - other) < eps;
-            }
-        }
         public string text;
         public AvailableActions action;
         public FormulaFieldWithMemo chanceToLaunch = new FormulaFieldWithMemo();
@@ -148,7 +136,7 @@ public class ClickableItem : ISelectable
                     actionDelegate = () =>
                     {
                         float chance = action.chanceToLaunch.EvaluateFormula();
-                        foreach (InspectorContextMenuItem.ExitCode exitCode in action.exitCodes)
+                        foreach (ExitCode exitCode in action.exitCodes)
                         {
                             if (exitCode.IsEqual(chance))
                             {

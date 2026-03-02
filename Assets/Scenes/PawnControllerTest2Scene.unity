@@ -1198,7 +1198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.37
+      value: -0.51
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1206,7 +1206,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 13.28
+      value: 13.46
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1743,7 +1743,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeState
   calculateMeleeDamage:
-    formula: 4 - c_pawnDistance
+    formula: '(c_isWallsBetween > 0 ? 0 :
+
+      4 - c_pawnDistance
+
+      )'
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
       '(', ')'.\nYou also can provide variables from Data Assets available in this
       object, using words like 'g_Statname' - the full list of available vars is
@@ -1763,7 +1767,16 @@ MonoBehaviour:
     - Initiator
     - Target
   calculateMeleeAccuracy:
-    formula: '(c_pawnDistance > 4 ? 0 : 100 - g_M) / 100'
+    formula: '(c_isWallsBetween > 0 ? -1 :
+
+      c_pawnDistance > 4 ? -2 :
+
+      c_AttackerMeleeAmount
+      > 3 ? -3 :
+
+      (100 - g_M) / 100
+
+      )'
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
       '(', ')'.\nYou also can provide variables from Data Assets available in this
       object, using words like 'g_Statname' - the full list of available vars is
@@ -1782,6 +1795,16 @@ MonoBehaviour:
     - Calculated
     - Initiator
     - Target
+  exitCodes:
+  - message: Too far
+    color: {r: 1, g: 0, b: 0, a: 1}
+    code: -2
+  - message: Unreachable
+    color: {r: 1, g: 0, b: 0, a: 1}
+    code: -1
+  - message: Meleed too much
+    color: {r: 1, g: 0, b: 0, a: 1}
+    code: -3
 --- !u!114 &1569542970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1859,7 +1882,7 @@ MonoBehaviour:
   globalParametersSettable: {fileID: 11400000, guid: 5d4617d111d780044a11ef89afed3579, type: 2}
   pawnMustHaveParamsSettable: {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   calculatableParametersSettable: {fileID: 0}
-  sliderSettingsAssetsSettable: {fileID: 11400000, guid: 30e0f586f197a9a4d9ccaca1db6103fb, type: 2}
+  globalSettingsAssetsSettable: {fileID: 11400000, guid: 30e0f586f197a9a4d9ccaca1db6103fb, type: 2}
 --- !u!114 &1569542976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1873,7 +1896,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShootState
   calculateShootDamage:
-    formula: g_M
+    formula: "(c_isWallsBetween > 0 ? 0 : \ng_M\n)"
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
       '(', ')'.\nYou also can provide variables from Data Assets available in this
       object, using words like 'g_Statname' - the full list of available vars is
@@ -1893,11 +1916,8 @@ MonoBehaviour:
     - Initiator
     - Target
   calculateShootAccuracy:
-    formula: 'Math.Max(g_M, Math.Min(100-g_M,
-
-      (10 - c_pawnDistance)*10
-
-      ))/100'
+    formula: "(c_isWallsBetween > 0 ? 0 : \n(c_AttackerShotAmount > 3 ? -1 :\nMath.Max(g_M,
+      Math.Min(100-g_M,\n(10 - c_pawnDistance)*10\n))/100\n))"
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
       '(', ')'.\nYou also can provide variables from Data Assets available in this
       object, using words like 'g_Statname' - the full list of available vars is
@@ -1916,6 +1936,13 @@ MonoBehaviour:
     - Calculated
     - Initiator
     - Target
+  exitCodes:
+  - message: Unreachable
+    color: {r: 1, g: 0, b: 0, a: 1}
+    code: 0
+  - message: Shot too much
+    color: {r: 1, g: 0, b: 0, a: 1}
+    code: -1
 --- !u!114 &1569542977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1997,7 +2024,7 @@ MonoBehaviour:
   contextMenuController: {fileID: 1630805095}
   canvas: {fileID: 3157779775542635030}
   messageObject: {fileID: 1641658860}
-  messageDuration: 1.5
+  messageDuration: 0.5
   uiOffset: {x: 0, y: 1, z: 0}
 --- !u!114 &1569542980
 MonoBehaviour:
@@ -2296,6 +2323,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &1754330725 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5033595900302108423, guid: c0043e4be16301845b27936eaf8f404d, type: 3}
+  m_PrefabInstance: {fileID: 2082539462280390453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1754330729
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754330725}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: -1
+  m_Mesh: {fileID: -3435065194724078486, guid: cb5740d57b74ff6409b1bea1ac1d37f9, type: 3}
 --- !u!1001 &1782063237
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2443,7 +2497,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.76
+      value: -1.46
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2451,7 +2505,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.76
+      value: 8.62
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2934,6 +2988,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5033595900302108423, guid: c0043e4be16301845b27936eaf8f404d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1754330729}
     - targetCorrespondingSourceObject: {fileID: 694155713534579190, guid: c0043e4be16301845b27936eaf8f404d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2082539462280390455}
