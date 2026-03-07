@@ -18,7 +18,7 @@ public class PathDrawer : MonoBehaviour
     private Material pathOutOfRangeMaterial;
     public float availableDistance = 0f;
     [System.NonSerialized]
-    private bool visible = false;
+    private bool visible = true;
     [SerializeField]
     private bool updateStillnesOfEndPoints = false;
 
@@ -132,6 +132,10 @@ public class PathDrawer : MonoBehaviour
         if (pathEndObject != null)
             pathEndObjectRenderer = pathEndObject.GetComponent<Renderer>();
         CheckVariables();
+    }
+
+    void Start()
+    {
         SetVisible(false);
     }
 

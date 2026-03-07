@@ -259,6 +259,10 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     {
         selectionClickHandled = true;
     }
+    public override void SetClickAsUnhandled()
+    {
+        selectionClickHandled = false;
+    }
 
     private bool GetDeselectionClickState()
     {

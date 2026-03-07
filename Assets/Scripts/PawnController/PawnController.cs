@@ -93,7 +93,11 @@ public class PawnController : MonoBehaviour
                 );
             if (selectable != clickableItemsController.currentSelectedItem)
             {
-                clickableItemsController.OnSelect(selectable);
+                bool selecting = clickableItemsController.OnSelect(selectable);
+                if (!selecting)
+                {
+                    currentSelector.SetClickAsUnhandled();
+                }
             }
         }
         else

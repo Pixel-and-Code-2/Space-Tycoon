@@ -46,7 +46,7 @@ public class ClickableItemsController : MonoBehaviour
             TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
         }
     }
-    public void OnSelect(ISelectable selectable)
+    public bool OnSelect(ISelectable selectable)
     {
         bool selecting = true;
         if (taskScenario.Count != 0)
@@ -77,6 +77,7 @@ public class ClickableItemsController : MonoBehaviour
                 }
             }
         }
+        return selecting;
     }
     public void OnDeselect()
     {

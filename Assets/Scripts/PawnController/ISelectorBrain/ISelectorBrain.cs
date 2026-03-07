@@ -10,4 +10,5 @@ public abstract class ISelectorBrain : MonoBehaviour
     {
         return defaultSelectable;
     }
+    public virtual void SetClickAsUnhandled() { }
 }
