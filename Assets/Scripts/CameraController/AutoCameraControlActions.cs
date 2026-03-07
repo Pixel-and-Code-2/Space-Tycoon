@@ -1,23 +1,31 @@
 using UnityEngine;
 
-class AutoCameraControlActions : MonoBehaviour, IActions
+class AutoCameraControlActions : IActions
 {
-    public float GetLookReleaseValue()
+    public override float GetLookReleaseValue()
     {
         return 0f;
     }
-    public float GetZoomValue()
+    public override float GetZoomValue()
     {
         return 0f;
     }
-    public Vector2 GetMoveValue()
+    public override Vector2 GetMoveValue()
     {
         float moveX = Random.Range(-1f, 1f);
         float moveZ = Random.Range(-1f, 1f);
         return new Vector2(moveX, moveZ);
     }
-    public Vector2 GetLookValue()
+    public override Vector2 GetLookValue()
     {
         return Vector2.zero;
+    }
+    public override float GetRotPositive()
+    {
+        return 0f;
+    }
+    public override float GetRotNegative()
+    {
+        return 0f;
     }
 }

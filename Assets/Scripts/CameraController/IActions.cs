@@ -1,9 +1,11 @@
 using UnityEngine;
 
-public interface IActions
+public abstract class IActions : MonoBehaviour
 {
-    float GetLookReleaseValue();
-    float GetZoomValue();
-    Vector2 GetMoveValue();
-    Vector2 GetLookValue();
+    public abstract float GetLookReleaseValue();
+    public abstract float GetZoomValue();
+    public abstract Vector2 GetMoveValue();
+    public abstract Vector2 GetLookValue();
+    public abstract float GetRotPositive();
+    public abstract float GetRotNegative();
 }

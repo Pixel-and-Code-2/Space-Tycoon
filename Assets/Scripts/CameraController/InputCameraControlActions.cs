@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputCameraControlActions : MonoBehaviour, IActions
+public class InputCameraControlActions : IActions
 {
     [SerializeField]
     private InputActionReference lookReleaseActionReference;
@@ -11,37 +11,60 @@ public class InputCameraControlActions : MonoBehaviour, IActions
     private InputActionReference moveActionReference;
     [SerializeField]
     private InputActionReference lookActionReference;
+    [SerializeField]
+    private InputActionReference rotPositive;
+    [SerializeField]
+    private InputActionReference rotNegative;
 
     void OnEnable()
     {
-        lookReleaseActionReference.action.Enable();
-        zoomActionReference.action.Enable();
-        moveActionReference.action.Enable();
-        lookActionReference.action.Enable();
+        if (lookReleaseActionReference != null) lookReleaseActionReference.action.Enable();
+        if (zoomActionReference != null) zoomActionReference.action.Enable();
+        if (moveActionReference != null) moveActionReference.action.Enable();
+        if (lookActionReference != null) lookActionReference.action.Enable();
+        if (rotPositive != null) rotPositive.action.Enable();
+        if (rotNegative != null) rotNegative.action.Enable();
     }
     void OnDisable()
     {
-        lookReleaseActionReference.action.Disable();
-        zoomActionReference.action.Disable();
-        moveActionReference.action.Disable();
-        lookActionReference.action.Disable();
+        if (lookReleaseActionReference != null) lookReleaseActionReference.action.Disable();
+        if (zoomActionReference != null) zoomActionReference.action.Disable();
+        if (moveActionReference != null) moveActionReference.action.Disable();
+        if (lookActionReference != null) lookActionReference.action.Disable();
+        if (rotPositive != null) rotPositive.action.Disable();
+        if (rotNegative != null) rotNegative.action.Disable();
     }
-    public float GetLookReleaseValue()
+    public override float GetLookReleaseValue()
     {
-        return lookReleaseActionReference.action.ReadValue<float>();
+        if (lookReleaseActionReference != null) return lookReleaseActionReference.action.ReadValue<float>();
+        return 0f;
     }
-    public float GetZoomValue()
+    public override float GetZoomValue()
     {
-        return zoomActionReference.action.ReadValue<Vector2>().y;
+        if (zoomActionReference != null) return zoomActionReference.action.ReadValue<Vector2>().y;
+        return 0f;
     }
-    public Vector2 GetMoveValue()
+    public override Vector2 GetMoveValue()
     {
-        Vector2 move = moveActionReference.action.ReadValue<Vector2>();
+        Vector2 move = Vector2.zero;
+        if (moveActionReference != null) move = moveActionReference.action.ReadValue<Vector2>();
         Vector2 inversedMove = new Vector2(move.y, move.x);
         return inversedMove;
     }
-    public Vector2 GetLookValue()
+    public override Vector2 GetLookValue()
     {
-        return lookActionReference.action.ReadValue<Vector2>();
+        Vector2 look = Vector2.zero;
+        if (lookActionReference != null) look = lookActionReference.action.ReadValue<Vector2>();
+        return look;
+    }
+    public override float GetRotPositive()
+    {
+        if (rotPositive != null) return rotPositive.action.ReadValue<float>();
+        return 0f;
+    }
+    public override float GetRotNegative()
+    {
+        if (rotNegative != null) return rotNegative.action.ReadValue<float>();
+        return 0f;
     }
 }

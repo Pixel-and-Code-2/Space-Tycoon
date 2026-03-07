@@ -19,7 +19,14 @@ public abstract class CameraSettings : MonoBehaviour
     [SerializeField] public CinemachineCamera virtualCamera;
     [SerializeField] public MonoBehaviour boundsGetterRef;
     public IBoundsGetter boundsGetter { get; private set; } = null;
-    [SerializeField] public Transform lookTarget;
+    [SerializeField] protected ILookTarget lookTarget;
+
+
+    public void SetLookTarget(ILookTarget lookTarget)
+    {
+        this.lookTarget = lookTarget;
+        virtualCamera.Follow = lookTarget.GetTransform();
+    }
 
     public IBoundsGetter GetBoundsGetter()
     {
@@ -44,7 +51,6 @@ public abstract class CameraSettings : MonoBehaviour
         {
             cameraInitialDegreeHeight = Mathf.Clamp(cameraInitialDegreeHeight, orbitalFollow.VerticalAxis.Range[0], orbitalFollow.VerticalAxis.Range[1]);
             orbitalFollow.VerticalAxis.Value = cameraInitialDegreeHeight;
-            lookTarget.localRotation = Quaternion.Euler(0f, 0f, cameraInitialDegreeHeight);
         }
 
         if (cameraInitialHorizontalDegree != orbitalFollow.HorizontalAxis.Value)
@@ -55,7 +61,6 @@ public abstract class CameraSettings : MonoBehaviour
             orbitalFollow.HorizontalAxis.Range[1] = cameraInitialHorizontalDegree + cameraHorizontalDegreeLimitation;
             if (cameraInitialHorizontalDegree == 180f) orbitalFollow.HorizontalAxis.Wrap = true;
             else orbitalFollow.HorizontalAxis.Wrap = false;
-            lookTarget.localRotation = Quaternion.Euler(0f, cameraInitialHorizontalDegree, 0f);
         }
 
         if (2 * cameraHorizontalDegreeLimitation != orbitalFollow.HorizontalAxis.Range[1] - orbitalFollow.HorizontalAxis.Range[0])
@@ -106,7 +111,6 @@ public abstract class CameraSettings : MonoBehaviour
         orbitalFollow.Orbits.Top.Height = cameraTopOffset;
         orbitalFollow.Orbits.Bottom.Height = cameraBottomOffset;
         ApplyNewRadius();
-        lookTarget.localRotation = Quaternion.Euler(0f, cameraInitialHorizontalDegree, 0f);
         OnValidate();
     }
 
