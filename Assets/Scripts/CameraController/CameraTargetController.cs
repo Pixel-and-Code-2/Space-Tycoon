@@ -6,6 +6,7 @@ public class CameraTargetController : MonoBehaviour
     [SerializeField] private IActions defaultActions;
     [SerializeField] private IActions onPawnActions;
     [SerializeField] private ILookTarget defaultLookTarget;
+    [SerializeField] private bool listenOnlyPlayerControls = true;
     private CameraController cameraController;
     private ILookTarget currentLookTarget;
     void Awake()
@@ -22,6 +23,10 @@ public class CameraTargetController : MonoBehaviour
 
     void Update()
     {
+        if (listenOnlyPlayerControls)
+        {
+            if (PawnController.Instance.currentSelector != PawnController.Instance.playerSelectorBrain) return;
+        }
         if (ClickableItemsController.Instance.currentSelectedItem != null)
         {
             if (currentLookTarget != ClickableItemsController.Instance.currentSelectedItem)

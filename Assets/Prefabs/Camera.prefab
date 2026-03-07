@@ -89,7 +89,7 @@ MonoBehaviour:
   virtualCamera: {fileID: 3219692792882578697}
   boundsGetterRef: {fileID: 5010313767339960598}
   lookTarget: {fileID: 1550519869933098387}
-  cameraControlActionsRef: {fileID: 6309733935719371799}
+  cameraControlActions: {fileID: 0}
   rotationSpeeds: {x: 0.3, y: -1}
   panSpeed: 4.42
   zoomSensitivity: 0.1
@@ -118,6 +118,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  discreteRotationStep: 90
 --- !u!114 &6309733935719371799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,6 +135,8 @@ MonoBehaviour:
   zoomActionReference: {fileID: -7317863640907986851, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   moveActionReference: {fileID: 8439316055708601252, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   lookActionReference: {fileID: 768050417373404248, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  rotPositive: {fileID: 0}
+  rotNegative: {fileID: 0}
 --- !u!1 &6383040990635429009
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,7 +148,6 @@ GameObject:
   - component: {fileID: 3840838322773846342}
   - component: {fileID: 3219692792882578697}
   - component: {fileID: 830074181484065406}
-  - component: {fileID: 3301072042079733173}
   - component: {fileID: 7900692449112272228}
   - component: {fileID: 8030756999474288071}
   - component: {fileID: 9071548494154860063}
@@ -261,7 +263,7 @@ MonoBehaviour:
   VerticalAxis:
     Value: 27.7
     Center: 0
-    Range: {x: -90, y: 90}
+    Range: {x: -14.477511, y: 71.80512}
     Wrap: 0
     Recentering:
       Enabled: 0
@@ -278,35 +280,6 @@ MonoBehaviour:
       Wait: 1
       Time: 2
     Restrictions: 0
---- !u!114 &3301072042079733173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6383040990635429009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f38bda98361e1de48a4ca2bd86ea3c17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineRotationComposer
-  Composition:
-    ScreenPosition: {x: 0, y: 0.0010256171}
-    DeadZone:
-      Enabled: 0
-      Size: {x: 0.2, y: 0.2}
-    HardLimits:
-      Enabled: 0
-      Size: {x: 0.8, y: 0.8}
-      Offset: {x: 0, y: 0}
-  CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 0, z: 0}
-  Damping: {x: 0.5, y: 0.5}
-  Lookahead:
-    Enabled: 0
-    Time: 0
-    Smoothing: 0
-    IgnoreY: 0
 --- !u!114 &7900692449112272228
 MonoBehaviour:
   m_ObjectHideFlags: 0

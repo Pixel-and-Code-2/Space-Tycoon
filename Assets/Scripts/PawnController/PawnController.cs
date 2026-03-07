@@ -17,9 +17,9 @@ public class PawnController : MonoBehaviour
     }
 
     [SerializeField]
-    private ISelectorBrain playerSelectorBrain;
+    public ISelectorBrain playerSelectorBrain;
     [SerializeField]
-    private ISelectorBrain enemySelectorBrain;
+    public ISelectorBrain enemySelectorBrain;
     [SerializeField]
     public PathDrawerWithText pathDrawer; // { get; private set; }
 

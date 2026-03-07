@@ -54,7 +54,7 @@ public class ClickableItemsController : MonoBehaviour
             selecting = false;
             if (currentTaskScenarioIndex < taskScenario.Count)
             {
-                if (taskScenario[currentTaskScenarioIndex] == selectable)
+                if (taskScenario[currentTaskScenarioIndex] == selectable && !taskScenario[currentTaskScenarioIndex].IsWorking())
                 {
                     selecting = true;
                 }
