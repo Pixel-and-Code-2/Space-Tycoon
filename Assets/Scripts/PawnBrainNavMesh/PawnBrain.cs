@@ -19,7 +19,6 @@ public class PawnBrain : IControlableSelectable
     [SerializeField]
     private AnimatorBrainBase animatorBrain;
     private Animator anim;
-
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
@@ -30,11 +29,16 @@ public class PawnBrain : IControlableSelectable
         anim = GetComponentInChildren<Animator>();
         animatorBrain.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
         animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
+
     }
 
     void Start()
     {
         UI3DManager.Instance.RegisterPawn(gameObject);
+        TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
+        TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
+        pawnNavMesh.SetTypeOfModifierVolumes(dataController.selectableType == SelectableType.Player ? 1 : 0, 0, 0);
+
     }
 
     void Update()
@@ -48,7 +52,7 @@ public class PawnBrain : IControlableSelectable
             }
             else
             {
-                // we can update route runtime, but it's epensive
+                // we can update route runtime, but it's expensive
                 // pathDrawer.SetPathPoints(GetPathPointsTo(targetPosition).pointsAvailable, null);
             }
         }
@@ -68,6 +72,26 @@ public class PawnBrain : IControlableSelectable
     public override Transform GetTransform()
     {
         return transform;
+    }
+
+    public override void OnSelect()
+    {
+        pawnNavMesh.SetTypeOfModifierVolumes(-1, 1);
+        TurnManager.Instance.UpdateNavMesh();
+    }
+
+    public override void OnDeselect()
+    {
+        pawnNavMesh.SetTypeOfModifierVolumes(-1, 0);
+        TurnManager.Instance.UpdateNavMesh();
+    }
+    private void OnPlayerTurnStart()
+    {
+        pawnNavMesh.SetTypeOfModifierVolumes(dataController.selectableType == SelectableType.Player ? 1 : 0, -1);
+    }
+    private void OnEnemyTurnStart()
+    {
+        pawnNavMesh.SetTypeOfModifierVolumes(dataController.selectableType == SelectableType.Enemy ? 1 : 0, -1);
     }
 
     public override void OnMove(Vector3 position)
@@ -121,6 +145,8 @@ public class PawnBrain : IControlableSelectable
         {
             UI3DManager.Instance.ShowMessage("Kill", transform.position, Color.red);
             dataController.selectableType = SelectableType.Dead;
+            gameObject.layer = LayerMask.NameToLayer("DeadPawn");
+            pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
             transform.position -= transform.up * 0.5f;
             transform.rotation = Quaternion.Euler(0f, 0f, 90f);
             animatorBrain.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);

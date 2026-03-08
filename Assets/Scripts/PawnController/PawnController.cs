@@ -82,7 +82,14 @@ public class PawnController : MonoBehaviour
             }
         }
 
-        currentSelectedPawn = currentSelector.PollSelectPawn(currentSelectedPawn);
+        IControlableSelectable newSelection = currentSelector.PollSelectPawn(currentSelectedPawn);
+        if (newSelection != currentSelectedPawn)
+        {
+            if (currentSelectedPawn != null) currentSelectedPawn.OnDeselect();
+            currentSelectedPawn = newSelection;
+            if (newSelection != null) newSelection.OnSelect();
+        }
+
         ISelectable selectable = currentSelector.PollSelectClickableItem(clickableItemsController.currentSelectedItem);
         if (selectable != null)
         {
@@ -115,6 +122,7 @@ public class PawnController : MonoBehaviour
         }
         if (currentState != null)
         {
+
             (ISelectable selectable2, Vector3 worldPoint) = currentSelector.PollSelectPosForState();
             if (selectable2 != null || worldPoint != Vector3.zero)
             {

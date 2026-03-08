@@ -1,3 +1,4 @@
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,7 +7,7 @@ using UnityEngine.AI;
 public class PawnNavMesh : MonoBehaviour
 {
     private PawnDataController dataController;
-    private NavMeshAgent navMeshAgent;
+    public NavMeshAgent navMeshAgent;
     private float distanceTravelling = 0f;
     [HideInInspector]
     public Vector3 targetPosition { get; private set; } = Vector3.zero;
@@ -15,6 +16,44 @@ public class PawnNavMesh : MonoBehaviour
     private Vector3[] cachedPointsAvailable = null;
     private Vector3[] cachedPointsOutOfRange = null;
     private bool cachedTargetPositionValid = false;
+    [System.Serializable]
+    private class ScriptEnabler
+    {
+        public MonoBehaviour script;
+        [Range(-1, 1)]
+        public int onlyMyTurn = -1;
+        [Range(-1, 1)]
+        public int onlySelected = -1;
+        [Range(-1, 1)]
+        public int onlyOnMove = -1;
+        [Range(-1, 1)]
+        public int onlyOnDeath = -1;
+        public bool CheckEnabled(int isMyTeamsTurn, int isSelected, int isMoving, int isDeath)
+        {
+            if (onlyMyTurn != -1 && isMyTeamsTurn != onlyMyTurn) return false;
+            if (onlySelected != -1 && isSelected != onlySelected) return false;
+            if (onlyOnMove != -1 && isMoving != onlyOnMove) return false;
+            if (onlyOnDeath != -1 && isDeath != onlyOnDeath) return false;
+            return true;
+        }
+    }
+    [SerializeField]
+    private ScriptEnabler[] scriptEnablers;
+
+    private int isMyTeamsTurn = -1;
+    private int isSelected = -1;
+    private int isDeath = -1;
+    public void SetTypeOfModifierVolumes(int isMyTeamsTurn = -1, int isSelected = -1, int isDeath = -1)
+    {
+        if (isMyTeamsTurn != -1) this.isMyTeamsTurn = isMyTeamsTurn;
+        if (isSelected != -1) this.isSelected = isSelected;
+        if (isDeath != -1) this.isDeath = isDeath;
+        foreach (var scriptEnabler in scriptEnablers)
+        {
+            bool newVal = scriptEnabler.CheckEnabled(this.isMyTeamsTurn, this.isSelected, isMoving ? 1 : 0, this.isDeath);
+            if (scriptEnabler.script != null) scriptEnabler.script.enabled = newVal;
+        }
+    }
 
     public bool IsMoving()
     {
@@ -89,7 +128,6 @@ public class PawnNavMesh : MonoBehaviour
             dataController.GetParameterValue(PawnDataController.WALKED_KEY) + distance
         );
     }
-
     protected virtual void Update()
     {
         if (isMoving)
@@ -101,6 +139,7 @@ public class PawnNavMesh : MonoBehaviour
                     if (!navMeshAgent.hasPath || navMeshAgent.velocity.sqrMagnitude == 0f)
                     {
                         isMoving = false;
+                        SetTypeOfModifierVolumes(-1, -1);
                         navMeshAgent.ResetPath();
                         distanceTravelling = 0f;
                     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class TurnManager : MonoBehaviour
@@ -22,6 +23,8 @@ public class TurnManager : MonoBehaviour
     public event Action OnEnemyTurnEnd;
 
     public bool IsPlayerTurn { get; private set; } = true;
+    [SerializeField]
+    private NavMeshSurface navMeshSurface;
 
     private void Awake()
     {
@@ -45,7 +48,7 @@ public class TurnManager : MonoBehaviour
     private IEnumerator StartFirstTurn()
     {
         yield return null; // Wait one frame to ensure all components are initialized
-        StartPlayerTurn();
+        EndEnemyTurn();
     }
 
     public void StartPlayerTurn()
@@ -60,8 +63,16 @@ public class TurnManager : MonoBehaviour
         IsPlayerTurn = false;
         OnPlayerTurnEnd?.Invoke();
         Debug.Log("PLAYER TURN END");
-        //Enemy Turn
+        StartCoroutine(StartEnemyTurnWithDelay());
+    }
+
+    private IEnumerator StartEnemyTurnWithDelay()
+    {
+        // yield return new WaitForSeconds(0.1f);
+        UpdateNavMesh();
+        // yield return new WaitForSeconds(0.1f);
         EnemyTurn();
+        yield return null;
     }
 
     private void EnemyTurn()
@@ -73,6 +84,20 @@ public class TurnManager : MonoBehaviour
     public void EndEnemyTurn()
     {
         OnEnemyTurnEnd?.Invoke();
+        StartCoroutine(StartPlayerTurnWithDelay());
+    }
+
+    private IEnumerator StartPlayerTurnWithDelay()
+    {
+        // yield return new WaitForSeconds(0.1f);
+        UpdateNavMesh();
+        // yield return new WaitForSeconds(0.1f);
         StartPlayerTurn();
+        yield return null;
+    }
+
+    public void UpdateNavMesh()
+    {
+        navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData);
     }
 }

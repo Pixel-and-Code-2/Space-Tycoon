@@ -57,6 +57,7 @@ public class SimpleEnemyAI : ISelectorBrain
     private List<DetailedScenarioElement> detailedScenario = new List<DetailedScenarioElement>();
     private int currentScenarioIndex = -1; // -1 means no scenario is running, if this var is bigger than completedScenarioIndex, then local methods (not polls ones) are waiting for sth, otherwise scenario is stopped to make a poll return
     private int completedScenarioIndex = -2;
+    private int currentScenarioIndexBeforeUpdate = -1;
 
     void Awake()
     {
@@ -80,6 +81,7 @@ public class SimpleEnemyAI : ISelectorBrain
     private float timeStack = 0.0f;
     void Update()
     {
+        currentScenarioIndexBeforeUpdate = currentScenarioIndex;
         // if (csiCached != currentScenarioIndex || cciCached != completedScenarioIndex)
         // {
         //     csiCached = currentScenarioIndex;
@@ -165,7 +167,11 @@ public class SimpleEnemyAI : ISelectorBrain
                     {
                         if (el.position == Vector3.zero)
                         {
-                            answer = FindClosestPlayer(out float shortestDistance).GetTransform().position;
+                            IControlableSelectable closestPlayer = FindClosestPlayer(out float shortestDistance);
+                            if (closestPlayer != null)
+                            {
+                                answer = closestPlayer.GetTransform().position;
+                            }
                         }
                         else
                         {
@@ -188,7 +194,14 @@ public class SimpleEnemyAI : ISelectorBrain
                     {
                         answer2 = el.targetPawn;
                     }
-                    return (answer2, answer2.GetTransform().position);
+                    if (answer2 != null)
+                    {
+                        return (answer2, answer2.GetTransform().position);
+                    }
+                    else
+                    {
+                        return (null, Vector3.zero);
+                    }
                 default:
                     return (null, Vector3.zero);
             }
@@ -219,6 +232,11 @@ public class SimpleEnemyAI : ISelectorBrain
         {
             return null;
         }
+    }
+
+    public override void SetClickAsUnhandled()
+    {
+        currentScenarioIndex = currentScenarioIndexBeforeUpdate;
     }
 
     void OnEnemyTurnStart()
@@ -293,10 +311,7 @@ public class SimpleEnemyAI : ISelectorBrain
         shortestDistance = float.MaxValue;
 
         IControlableSelectable controlledPawn = PawnController.Instance.currentSelectedPawn;
-        if (controlledPawn == null)
-        {
-            return null;
-        }
+        if (controlledPawn == null) return null;
 
         PawnBrain[] pawns = FindObjectsByType<PawnBrain>(FindObjectsSortMode.None);
         PawnBrain[] players = pawns.Where(p => p.GetSelectableType() == SelectableType.Player).ToArray();
@@ -306,6 +321,7 @@ public class SimpleEnemyAI : ISelectorBrain
         foreach (var player in controlablePlayers)
         {
             (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) = controlledPawn.GetPathPointsTo(player.GetTransform().position);
+            if (pointsAvailable == null && pointsOutOfRange == null) return null;
             float distance = PawnDataController.CalculateLineStringDistance(pointsAvailable) + PawnDataController.CalculateLineStringDistance(pointsOutOfRange);
             if (distance < shortestDistance)
             {

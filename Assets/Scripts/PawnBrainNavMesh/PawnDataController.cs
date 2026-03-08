@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PawnDataController : MonoBehaviour, IFormulaData
 {
-    // ToDo (deprecated?): action must vary based on the type of the pawn's team. It can be either player or enemy, but now it is ONLY player.
     // Static data storages
     [SerializeField]
     private ParameteredScriptableObject initialPawnData;
@@ -20,10 +19,10 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     // Dynamic parameters
     public Dictionary<string, float> dynamicParameters = new Dictionary<string, float>();
 
-    public const string AVAILABLE_DISTANCE_KEY = "AvailableDistance"; // working
+    public const string AVAILABLE_DISTANCE_KEY = "AvailableDistance";
     public const string INITIAL_HP_KEY = "HP";
     public const string INITIAL_AVAILABLE_DISTANCE_KEY = "SPD";
-    public const string AVAILABLE_HEALTH_KEY = "AvailableHealth";  // working
+    public const string AVAILABLE_HEALTH_KEY = "AvailableHealth";
     public const string LAST_ROUND_WALKED_KEY = "LastRoundWalked";
     public const string WALKED_KEY = "WalkedDistance";
     public const string LAST_ROUND_SHOOTED_AMOUNT_KEY = "LastRoundShotAmount";
@@ -32,6 +31,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     public const string MELEE_AMOUNT_KEY = "MeleeAmount";
     [SerializeField]
     public SelectableType selectableType = SelectableType.Player;
+
 
     private void ResetKeys()
     {
