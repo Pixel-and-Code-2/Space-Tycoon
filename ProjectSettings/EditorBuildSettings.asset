@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/PreloadedMapTestScene.unity
     guid: 94dd2e5c4b5bb1c49a4925e0727c0ce3
   - enabled: 1
-    path: Assets/Scenes/PawnControllerTest2Scene.unity
+    path: Assets/Scenes/TaskTest.unity
     guid: 494ff7b392f8c7749adb4302c373c297
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}

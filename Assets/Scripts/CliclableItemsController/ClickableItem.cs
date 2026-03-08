@@ -40,6 +40,7 @@ public class ClickableItem : ISelectable
             TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
         }
         OnValidate();
+        this.gameObject.layer = LayerMask.NameToLayer("ClickableItem");
     }
     void OnEnable()
     {
@@ -99,10 +100,16 @@ public class ClickableItem : ISelectable
         progressBarCached.SetValue(0f);
         progressBarCached.SetClass(SelectableType.Neutral);
         ClickableItemsController.Instance.OnDeselect();
-        UI3DManager.Instance.ShowMessage("Started", transform.position, Color.yellow);
+        BoostProgressBar();
+        // UI3DManager.Instance.ShowMessage("Started", transform.position, Color.yellow);
     }
 
     private void OnPlayerTurnEnd()
+    {
+        BoostProgressBar();
+    }
+
+    private void BoostProgressBar()
     {
         if (progressBarCached != null)
         {

@@ -17,6 +17,10 @@ public class UI3DManager : MonoBehaviour
     [SerializeField]
     private Transform sliderParent;
     [SerializeField]
+    private GameObject actionBoxPrefab;
+    [SerializeField]
+    private Transform actionBoxParent;
+    [SerializeField]
     private ContextMenuController contextMenuController;
     [SerializeField]
     private Canvas canvas;
@@ -26,6 +30,7 @@ public class UI3DManager : MonoBehaviour
     private float messageDuration = 1f;
     private GameObject messageObjectCached = null;
     private RectTransform messageRectTransform;
+    private RectTransform canvasRectTransformCached;
     private TextMeshProUGUI messageText;
     private Queue<MessageItem> messageItems = new Queue<MessageItem>();
 
@@ -33,6 +38,7 @@ public class UI3DManager : MonoBehaviour
     private Vector3 uiOffset = new Vector3(0f, 1f, 0f);
 
     private Dictionary<GameObject, SliderToPawnConnector> pawnsInScene = new Dictionary<GameObject, SliderToPawnConnector>();
+    private Dictionary<ISelectable, SelectableToBoxConnector> selectablesInScene = new Dictionary<ISelectable, SelectableToBoxConnector>();
     private Dictionary<Transform, SliderController> slidersOnTransform = new Dictionary<Transform, SliderController>();
 
     void OnValidate()
@@ -59,6 +65,7 @@ public class UI3DManager : MonoBehaviour
         if (contextMenuController == null) contextMenuController = GetComponentInChildren<ContextMenuController>();
         contextMenuController.gameObject.SetActive(false);
         OnValidate();
+        canvasRectTransformCached = canvas.GetComponent<RectTransform>();
     }
     void Start()
     {
@@ -96,6 +103,7 @@ public class UI3DManager : MonoBehaviour
         UpdateSliderPositions();
         UpdateMessagePosition();
         UpdateTransformSlidersPositions();
+        UpdateActionBoxPositions();
 
         if (contextMenuController.gameObject.activeSelf)
         {
@@ -127,7 +135,7 @@ public class UI3DManager : MonoBehaviour
             Vector3 screenPosition = canvas.worldCamera.WorldToScreenPoint(worldPosition);
             Vector2 localPoint;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.GetComponent<RectTransform>(),
+                canvasRectTransformCached,
                 new Vector2(screenPosition.x, screenPosition.y),
                 canvas.worldCamera,
                 out localPoint))
@@ -143,27 +151,42 @@ public class UI3DManager : MonoBehaviour
     {
         foreach (GameObject pawnObject in pawnsInScene.Keys)
         {
-            if (pawnObject == null || pawnsInScene[pawnObject] == null)
-            {
-                Debug.LogWarning("LateUpdate: pawnObject or pawnsInScene[pawnObject] is null, skipping");
-                continue;
-            }
             SliderToPawnConnector controller = pawnsInScene[pawnObject];
             RectTransform uiElementRect = controller.rectTransform;
             Vector3 worldPosition = pawnObject.transform.position + uiOffset;
             Vector3 screenPosition = canvas.worldCamera.WorldToScreenPoint(worldPosition);
             Vector2 localPoint;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.GetComponent<RectTransform>(),
+                canvasRectTransformCached,
                 new Vector2(screenPosition.x, screenPosition.y),
                 canvas.worldCamera,
                 out localPoint))
             {
                 uiElementRect.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
             }
-            else
+        }
+    }
+
+    private void UpdateActionBoxPositions()
+    {
+        foreach (ISelectable selectable in selectablesInScene.Keys)
+        {
+            // if (!selectablesInScene[selectable].gameObject.activeSelf)
+            // {
+            //     selectablesInScene[selectable].gameObject.SetActive(true);
+            // }
+            SelectableToBoxConnector controller = selectablesInScene[selectable];
+            RectTransform uiElementRect = controller.rectTransform;
+            Vector3 worldPosition = selectable.GetTransform().position + uiOffset;
+            Vector3 screenPosition = canvas.worldCamera.WorldToScreenPoint(worldPosition);
+            Vector2 localPoint;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRectTransformCached,
+                new Vector2(screenPosition.x, screenPosition.y),
+                canvas.worldCamera,
+                out localPoint))
             {
-                Debug.LogWarning($"Could not convert screen point to local point for {pawnObject.name}");
+                uiElementRect.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
             }
         }
     }
@@ -178,16 +201,12 @@ public class UI3DManager : MonoBehaviour
             Vector3 screenPosition = canvas.worldCamera.WorldToScreenPoint(worldPosition);
             Vector2 localPoint;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.GetComponent<RectTransform>(),
+                canvasRectTransformCached,
                 new Vector2(screenPosition.x, screenPosition.y),
                 canvas.worldCamera,
                 out localPoint))
             {
                 uiElementRect.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
-            }
-            else
-            {
-                Debug.LogWarning($"Could not convert screen point to local point for {transform.name}");
             }
         }
     }
@@ -212,6 +231,23 @@ public class UI3DManager : MonoBehaviour
         if (!slidersOnTransform.ContainsKey(transform)) return;
         Destroy(slidersOnTransform[transform].gameObject);
         slidersOnTransform.Remove(transform);
+    }
+
+    public SelectableToBoxConnector RegisterSelectable(ISelectable selectable, string text)
+    {
+        if (selectablesInScene.ContainsKey(selectable)) return selectablesInScene[selectable];
+        SelectableToBoxConnector selectableToBoxConnector = CreateActionBoxForSelectable(selectable, text);
+        // selectableToBoxConnector.gameObject.SetActive(false);
+        selectablesInScene.Add(selectable, selectableToBoxConnector);
+        UpdateActionBoxPositions();
+        return selectableToBoxConnector;
+    }
+
+    public void UnregisterSelectable(ISelectable selectable)
+    {
+        if (!selectablesInScene.ContainsKey(selectable)) return;
+        Destroy(selectablesInScene[selectable].gameObject);
+        selectablesInScene.Remove(selectable);
     }
 
     public void ShowContextMenu(Vector3 position, List<ContextMenuItem> items)
@@ -244,6 +280,15 @@ public class UI3DManager : MonoBehaviour
         GameObject sliderObject = Instantiate(transformSliderPrefab, sliderParent);
         SliderController sliderController = sliderObject.GetComponent<SliderController>();
         return sliderController;
+    }
+
+    private SelectableToBoxConnector CreateActionBoxForSelectable(ISelectable selectable, string text)
+    {
+        GameObject actionBoxObject = Instantiate(actionBoxPrefab, actionBoxParent);
+        SelectableToBoxConnector selectableToBoxConnector = actionBoxObject.GetComponent<SelectableToBoxConnector>();
+        selectableToBoxConnector.selectable = selectable;
+        selectableToBoxConnector.text = text;
+        return selectableToBoxConnector;
     }
 
     public void ShowMessage(string message, Vector3 position, Color color)
