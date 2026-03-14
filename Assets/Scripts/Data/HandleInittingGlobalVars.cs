@@ -1,6 +1,8 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class HandleInittingGlobalVars : MonoBehaviour
 {
@@ -17,11 +19,20 @@ public class HandleInittingGlobalVars : MonoBehaviour
     public static GlobalSettingsAssets globalSettingsAssets;
     public static Action onParamsUpdated;
     public static FormulaDataMonoBase mainCalculatedFormulaData;
+    private const string IS_SHOOT_ON_MOVE_KEY = "IsShootOnMove";
+    [SerializeField]
+    private Button toggleShootOnMoveButton;
+    [SerializeField]
+    private Color buttonColorOn;
+    [SerializeField]
+    private Color buttonColorOff;
+    [SerializeField]
+    private InputActionReference toggleShootOnMoveAction;
     void Awake()
     {
         if (globalParameters == null)
             globalParameters = GetDataAsset("GlobalParameters");
-        globalParameters.SetDirty();
+        globalParameters.AddParameter(IS_SHOOT_ON_MOVE_KEY);
         if (pawnMustHaveParams == null)
             pawnMustHaveParams = GetDataAsset("PawnMustHaveParams");
         if (mainCalculatedFormulaData == null)
@@ -29,6 +40,34 @@ public class HandleInittingGlobalVars : MonoBehaviour
         if (globalSettingsAssets == null)
             globalSettingsAssets = Resources.Load<GlobalSettingsAssets>("GlobalSettings");
         onParamsUpdated?.Invoke();
+    }
+    void Start()
+    {
+        UpdateButtonColor();
+    }
+    void OnEnable()
+    {
+        if (toggleShootOnMoveAction != null) toggleShootOnMoveAction.action.Enable();
+    }
+    void OnDisable()
+    {
+        if (toggleShootOnMoveAction != null) toggleShootOnMoveAction.action.Disable();
+    }
+    void Update()
+    {
+        if (toggleShootOnMoveAction != null && toggleShootOnMoveAction.action.triggered)
+        {
+            ToggleShootOnMove();
+        }
+    }
+    public void ToggleShootOnMove()
+    {
+        globalParameters.parametersDict[IS_SHOOT_ON_MOVE_KEY] = globalParameters.parametersDict[IS_SHOOT_ON_MOVE_KEY] == 0f ? 1f : 0f;
+        UpdateButtonColor();
+    }
+    private void UpdateButtonColor()
+    {
+        toggleShootOnMoveButton.image.color = Mathf.Abs(globalParameters.parametersDict[IS_SHOOT_ON_MOVE_KEY] - 0f) < 0.1f ? buttonColorOff : buttonColorOn;
     }
 
     private ParameteredScriptableObject GetDataAsset(string fileName)

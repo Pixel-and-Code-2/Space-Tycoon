@@ -32,8 +32,12 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         }
         return lst;
     }
-
-
+    public void AddParameter(string name)
+    {
+        if (parameters.Find(x => x.name == name) != null) return;
+        parameters.Add(new NamedFloat(name, 0f));
+        SetDirty();
+    }
     public Dictionary<string, float> GetParametersDict()
     {
         RebuildParametersDict();

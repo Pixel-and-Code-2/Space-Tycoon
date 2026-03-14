@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 4702315125008643062}
   - component: {fileID: 1954549480452778492}
   - component: {fileID: 6309733935719371799}
+  - component: {fileID: 550354606863573953}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -79,19 +80,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa101e95de2c26041bb71e90eb6257a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  maxCameraRadius: 40
-  cameraTopOffset: 38
-  cameraBottomOffset: -10
-  cameraInitialDegreeHeight: 27.7
-  cameraInitialHorizontalDegree: 72.9
-  cameraHorizontalDegreeLimitation: 30
+  maxCameraRadius: 27.5
+  cameraTopOffset: 26.125
+  cameraBottomOffset: 5.54
+  cameraInitialDegreeHeight: 43.1
+  cameraInitialHorizontalDegree: 101.9
+  cameraHorizontalDegreeLimitation: 180
   orbitalFollow: {fileID: 830074181484065406}
   virtualCamera: {fileID: 3219692792882578697}
-  boundsGetterRef: {fileID: 5010313767339960598}
-  lookTarget: {fileID: 1550519869933098387}
+  boundsGetterRef: {fileID: 0}
+  lookTarget: {fileID: 0}
   cameraControlActions: {fileID: 0}
-  rotationSpeeds: {x: 0.3, y: -1}
-  panSpeed: 4.42
+  rotationSpeeds: {x: 0.3, y: 0}
+  panSpeed: 10
   zoomSensitivity: 0.1
   minCameraRadiusCoef: 0.2
   zoomChangeCurve:
@@ -118,7 +119,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  discreteRotationStep: 90
+  discreteRotationStep: 1.5
 --- !u!114 &6309733935719371799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,8 +136,25 @@ MonoBehaviour:
   zoomActionReference: {fileID: -7317863640907986851, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   moveActionReference: {fileID: 8439316055708601252, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   lookActionReference: {fileID: 768050417373404248, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
-  rotPositive: {fileID: 0}
-  rotNegative: {fileID: 0}
+  rotPositive: {fileID: 9055761755586328353, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  rotNegative: {fileID: -1870017170588784536, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+--- !u!114 &550354606863573953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5637859099870763945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ce36424953285747a47fa74ac52b6be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraTargetController
+  defaultActions: {fileID: 6309733935719371799}
+  onPawnActions: {fileID: 6309733935719371799}
+  defaultLookTarget: {fileID: 0}
+  listenOnlyPlayerControls: 1
+  lockTargetAction: {fileID: -361045016904779170, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
 --- !u!1 &6383040990635429009
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,20 +258,20 @@ MonoBehaviour:
   Radius: 5
   Orbits:
     Top:
-      Radius: 12.489996
-      Height: 38
+      Radius: 8.586872
+      Height: 26.125
     Center:
-      Radius: 37.46999
-      Height: 14
+      Radius: 22.48515
+      Height: 15.8325
     Bottom:
-      Radius: 38.72983
-      Height: -10
+      Radius: 26.936192
+      Height: 5.54
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 72.9
+    Value: 101.9
     Center: 60.000004
-    Range: {x: 42.9, y: 102.9}
+    Range: {x: -78.1, y: 281.9}
     Wrap: 1
     Recentering:
       Enabled: 0
@@ -261,9 +279,9 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 27.7
-    Center: 0
-    Range: {x: -14.477511, y: 71.80512}
+    Value: 43.1
+    Center: 11.62203
+    Range: {x: 11.62203, y: 71.80512}
     Wrap: 0
     Recentering:
       Enabled: 0

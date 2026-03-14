@@ -167,6 +167,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleShootOnMove",
+                    "type": "Button",
+                    "id": "d289f21c-06e2-4128-8a1d-e381c743e0ee",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -195,7 +204,7 @@
                 {
                     "name": "",
                     "id": "472f771f-6787-4697-95e2-809d9b8dcb56",
-                    "path": "<Mouse>/middleButton",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -261,7 +270,18 @@
                 {
                     "name": "",
                     "id": "b5fafb82-d57b-4ec5-b1f5-c9b663658b96",
-                    "path": "<Keyboard>/k",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PawnDeselection3D",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "42d88302-646f-416a-9af8-f9d60a5216e5",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -305,7 +325,7 @@
                 {
                     "name": "",
                     "id": "be6dd4ab-5f6a-423c-8523-e489125f8e26",
-                    "path": "<Mouse>/leftButton",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -316,7 +336,7 @@
                 {
                     "name": "",
                     "id": "ba494246-758c-45e0-8db7-1a68a3d5975c",
-                    "path": "<Mouse>/leftButton",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -326,30 +346,8 @@
                 },
                 {
                     "name": "",
-                    "id": "c5d9bc9b-5c49-458b-8c29-95f7e7997951",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "WalkButton",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b23c5414-e407-47c4-a59d-08fed83ec9e2",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "AttackButton",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "f3c93ae1-d649-4f24-9564-4eb79102e2ea",
-                    "path": "<Keyboard>/3",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -360,7 +358,7 @@
                 {
                     "name": "",
                     "id": "95ae0156-b6a6-4024-95f1-f70dcb220d96",
-                    "path": "",
+                    "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -371,7 +369,7 @@
                 {
                     "name": "",
                     "id": "da148b56-2aa5-4ae2-a9d9-b09c5f544df2",
-                    "path": "",
+                    "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -382,7 +380,7 @@
                 {
                     "name": "",
                     "id": "1d7b110c-9c9c-44b8-bf8d-1c5a246dd36f",
-                    "path": "",
+                    "path": "<Keyboard>/3",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -398,6 +396,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "LockOnTarget",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe2e0030-9acd-482a-8e67-9376fbfa2da2",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PawnSelection3D",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "56c3d5a9-08b5-4f89-b195-621a90b00f46",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WalkButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b33da6f5-5b7f-4326-a8a3-c597f241b35a",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AttackButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "52fb89fd-839c-42fa-a4fb-459916c5ea2c",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleShootOnMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
