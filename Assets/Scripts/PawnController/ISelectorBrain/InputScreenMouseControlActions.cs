@@ -5,8 +5,7 @@ using TMPro;
 public enum ControlType
 {
     walk,
-    shoot,
-    melee
+    attack
 }
 
 [RequireComponent(typeof(IPawnState))]
@@ -34,7 +33,6 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     // These vars are used to prevent multiple click handles on the same button press
     private bool selectionClickHandled = false;
     private bool deselectionClickHandled = false;
-    private bool controlTypeChangeEventSent = false;
     public const float RAYCAST_DISTANCE = 100.0f;
     private ControlType currentControlType = ControlType.walk;
 
@@ -158,13 +156,23 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
     public override IPawnState PollChangeState()
     {
-        if (!controlTypeChangeEventSent)
+        IPawnState newState = null;
+        if (currentControlType == ControlType.attack)
         {
-            controlTypeChangeEventSent = true;
-            IPawnState newState =
-                currentControlType == ControlType.walk ? walkState :
-                currentControlType == ControlType.shoot ? shootState :
-                meleeState;
+            (ISelectable selectable, Vector3 worldPoint, Vector2 screenPoint, ScreenCastHitResult hit) = PollForIntermidiateAiming();
+            if (selectable != null && selectable is IAttackableSelectable attackableSelectable && !meleeState.IsErrorChance(attackableSelectable))
+            {
+                newState = meleeState;
+            }
+            else
+            {
+                newState = shootState;
+            }
+        }
+        else newState = walkState;
+        if (newState != PawnController.Instance.currentState)
+        {
+            UpdateButtonName();
             return newState;
         }
         return null;
@@ -199,7 +207,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         {
             return (null, Vector3.zero, mousePosition, ScreenCastHitResult.NoHit);
         }
-        if (mousePosition == mousePositionCached && mousePositionCached != Vector2.zero)
+        if (mousePosition == mousePositionCached && mousePositionCached != Vector2.zero) // cache is turned off when it's commented
         {
             return (selectableCached, worldPointCached, mousePositionCached, hitCached);
         }
@@ -207,7 +215,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         if (
-            (currentControlType == ControlType.shoot || currentControlType == ControlType.melee) &&
+            (currentControlType == ControlType.attack) &&
             Physics.Raycast(ray, out raycastHitCached, RAYCAST_DISTANCE, LayerMask.GetMask("Hitable")))
         {
             selectableCached = raycastHitCached.collider.GetComponent<ISelectable>();
@@ -263,6 +271,10 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     {
         selectionClickHandled = false;
     }
+    public override void SetUICacheAsDirty()
+    {
+        mousePositionCached = Vector2.zero;
+    }
 
     private bool GetDeselectionClickState()
     {
@@ -294,17 +306,13 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
     private void OnPlayerTurnStart()
     {
-        controlTypeChangeEventSent = false;
         UpdateButtonName();
     }
 
     public void ChangeControlType()
     {
         currentControlType =
-            currentControlType == ControlType.walk ? ControlType.shoot :
-            currentControlType == ControlType.shoot ? ControlType.melee :
-            ControlType.walk;
-        controlTypeChangeEventSent = false;
+            currentControlType == ControlType.walk ? ControlType.attack : ControlType.walk;
         UpdateButtonName();
     }
 
@@ -313,9 +321,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         if (controlTypeText != null)
         {
             controlTypeText.text =
-                currentControlType == ControlType.walk ? "Control: Walk" :
-                currentControlType == ControlType.shoot ? "Control: Shoot" :
-                "Control: Melee";
+                currentControlType == ControlType.walk ? "Control: Walk" : "Control: Attack";
         }
     }
 }

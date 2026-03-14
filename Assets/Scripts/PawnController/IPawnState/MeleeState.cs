@@ -183,6 +183,16 @@ public class MeleeState : IPawnState
         return res;
     }
 
+    public override bool IsErrorChance(IAttackableSelectable attackableSelectable)
+    {
+        (string message, Color color) = GetMessage(GetMeleeAccuracy(attackableSelectable));
+        if (message != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
     private (string, Color) GetMessage(float chance)
     {
         foreach (ExitCode exitCode in exitCodes)

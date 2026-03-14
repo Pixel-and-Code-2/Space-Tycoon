@@ -14,7 +14,7 @@ public class CameraController : CameraSettings
     private float minCameraRadiusCoefCache = 0.2f;
     private const float maxCameraRaduisCoef = 1f;
     [SerializeField] private AnimationCurve zoomChangeCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-    [SerializeField] private float discreteRotationStep = 90f;
+    [SerializeField] private float discreteRotationStep = 0.1f;
 
     new void OnValidate()
     {
@@ -42,44 +42,32 @@ public class CameraController : CameraSettings
         HandleZoomInput();
     }
 
-    private bool isRotPosHandled = false;
-    private bool isRotNegHandled = false;
     void HandleDiscreteRotationInput()
     {
         if (cameraControlActions == null) return;
         if (cameraControlActions.GetRotPositive() != 0f)
         {
-            if (isRotPosHandled) return;
-            isRotPosHandled = true;
             float rotation = cameraControlActions.GetRotPositive();
-            float newValue = orbitalFollow.HorizontalAxis.Value - rotation * discreteRotationStep;
-            if (!orbitalFollow.HorizontalAxis.Wrap)
-            {
-                newValue = Mathf.Clamp(newValue, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]);
-            }
-            orbitalFollow.HorizontalAxis.Center = newValue;
-            orbitalFollow.HorizontalAxis.TriggerRecentering();
-        }
-        else
-        {
-            isRotPosHandled = false;
-        }
-        if (cameraControlActions.GetRotNegative() != 0f)
-        {
-            if (isRotNegHandled) return;
-            isRotNegHandled = true;
-            float rotation = cameraControlActions.GetRotNegative();
             float newValue = orbitalFollow.HorizontalAxis.Value + rotation * discreteRotationStep;
             if (!orbitalFollow.HorizontalAxis.Wrap)
             {
                 newValue = Mathf.Clamp(newValue, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]);
             }
-            orbitalFollow.HorizontalAxis.Center = newValue;
-            orbitalFollow.HorizontalAxis.TriggerRecentering();
+            // orbitalFollow.HorizontalAxis.Center = newValue;
+            // orbitalFollow.HorizontalAxis.TriggerRecentering();
+            orbitalFollow.HorizontalAxis.Value = newValue;
         }
-        else
+        if (cameraControlActions.GetRotNegative() != 0f)
         {
-            isRotNegHandled = false;
+            float rotation = cameraControlActions.GetRotNegative();
+            float newValue = orbitalFollow.HorizontalAxis.Value - rotation * discreteRotationStep;
+            if (!orbitalFollow.HorizontalAxis.Wrap)
+            {
+                newValue = Mathf.Clamp(newValue, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]);
+            }
+            // orbitalFollow.HorizontalAxis.Center = newValue;
+            // orbitalFollow.HorizontalAxis.TriggerRecentering();
+            orbitalFollow.HorizontalAxis.Value = newValue;
         }
     }
     void HandleRotationInput()

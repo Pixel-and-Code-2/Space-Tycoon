@@ -25,7 +25,7 @@ public class PawnController : MonoBehaviour
 
 
     public ISelectorBrain currentSelector { get; private set; }
-    private ISelectorBrainWithUI currentSelectorWithUICached;
+    public ISelectorBrainWithUI currentSelectorWithUICached { get; private set; }
     public IPawnState currentState { get; private set; }
     public IControlableSelectable _currentSelectedPawn;
     public IControlableSelectable currentSelectedPawn
@@ -75,11 +75,6 @@ public class PawnController : MonoBehaviour
         if (currentSelector == null)
         {
             SetSelectorBrain(GetComponent<ISelectorBrain>());
-            if (currentSelector == null)
-            {
-                Debug.LogError("Current selector is null and somehow doesn't exist");
-                return;
-            }
         }
 
         IControlableSelectable newSelection = currentSelector.PollSelectPawn(currentSelectedPawn);
