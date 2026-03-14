@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using UnityEngine.InputSystem.Controls;
 
 public enum ControlType
 {
@@ -25,6 +27,29 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     [SerializeField]
     private InputActionReference deselectionClick;
     [SerializeField]
+    private InputActionReference walkClick;
+    [SerializeField]
+    private InputActionReference attackClick;
+    [SerializeField]
+    private InputActionReference secondarySelectionClick;
+    [SerializeField]
+    private InputActionReference walkButtonClick;
+    [SerializeField]
+    private InputActionReference attackButtonClick;
+    [SerializeField]
+    private InputActionReference endTurnButtonClick;
+    [System.Serializable]
+    struct PlayerActions
+    {
+        [SerializeField]
+        public InputActionReference whenSelect;
+        [SerializeField]
+        public IControlableSelectable playerToSelect;
+    }
+    [SerializeField]
+    private List<PlayerActions> playerActions = new List<PlayerActions>();
+
+    [SerializeField]
     private float zeroPlaneHeight = 0f;
     [SerializeField]
     private bool showZeroPlane = false;
@@ -37,9 +62,9 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     [SerializeField]
     private Color attackButtonColor;
     private IControlableSelectable forcedSelectedPlayer = null;
-    // These vars are used to prevent multiple click handles on the same button press
-    private bool selectionClickHandled = false;
-    private bool deselectionClickHandled = false;
+    private List<InputActionReference> actions = new List<InputActionReference>();
+    // here we tracking certain keys, to prevent multiple click handles on the same button press
+    private Dictionary<InputControl, bool> handledControls = new Dictionary<InputControl, bool>();
     public const float RAYCAST_DISTANCE = 100.0f;
     private ControlType currentControlType = ControlType.walk;
 
@@ -50,6 +75,27 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         walkState = GetComponent<WalkState>();
         shootState = GetComponent<ShootState>();
         OnValidate();
+        if (actions.Count != 8 + playerActions.Count)
+        {
+            actions.Clear();
+            actions.Add(selectionClick);
+            actions.Add(deselectionClick);
+            actions.Add(walkButtonClick);
+            actions.Add(attackClick);
+            actions.Add(secondarySelectionClick);
+            actions.Add(endTurnButtonClick);
+            actions.Add(walkClick);
+            actions.Add(attackButtonClick);
+            foreach (var playerAction in playerActions)
+            {
+                actions.Add(playerAction.whenSelect);
+            }
+        }
+        foreach (var action in actions)
+        {
+            if (action != null && action.action.controls.Count > 0)
+                handledControls[action.action.controls[0]] = false;
+        }
     }
 
     void OnValidate()
@@ -69,25 +115,32 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     }
     void OnEnable()
     {
-        selectionClick.action.Enable();
-        deselectionClick.action.Enable();
+        foreach (var action in actions)
+        {
+            if (action != null)
+                action.action.Enable();
+        }
     }
     void OnDisable()
     {
-        selectionClick.action.Disable();
-        deselectionClick.action.Disable();
+        foreach (var action in actions)
+        {
+            if (action != null)
+                action.action.Disable();
+        }
     }
 
     void Update()
     {
-        if (selectionClickHandled && selectionClick.action.ReadValue<float>() != 1.0f)
+        foreach (var action in actions)
         {
-            selectionClickHandled = false;
+            if (action != null)
+                if (action.action.ReadValue<float>() != 1.0f)
+                {
+                    SetHandleClick(action, false);
+                }
         }
-        if (deselectionClickHandled && deselectionClick.action.ReadValue<float>() != 1.0f)
-        {
-            deselectionClickHandled = false;
-        }
+        CheckAdditionalButtonClicks();
     }
 
     void Start()
@@ -112,13 +165,13 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         }
         if (IsPawnSelected())
         {
-            if (GetDeselectionClickState())
+            if (GetClickState(deselectionClick))
             {
                 return null;
             }
             return defaultPawn;
         }
-        if (GetSelectionClickState())
+        if (GetClickState(selectionClick))
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
@@ -134,6 +187,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
                     return controlableSelectable;
                 }
             }
+            SetHandleClick(selectionClick, false);
         }
         return null;
     }
@@ -144,7 +198,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         {
             return null;
         }
-        if (GetSelectionClickState())
+        if (GetClickState(secondarySelectionClick))
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
@@ -160,8 +214,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
                     return selectable;
                 }
             }
-            // kostil'
-            selectionClickHandled = false;
+            // SetHandleClick(secondarySelectionClick, false);
             return null;
         }
         return defaultSelectable;
@@ -197,12 +250,12 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         {
             return (null, Vector3.zero);
         }
-        if (GetSelectionClickState())
+        if (currentControlType == ControlType.walk && GetClickState(walkClick) || currentControlType == ControlType.attack && GetClickState(attackClick))
         {
-            Debug.Log("Selecting position");
             (ISelectable selectable, Vector3 worldPoint, Vector2 screenPoint, ScreenCastHitResult hit) = PollForIntermidiateAiming();
             if (hit != ScreenCastHitResult.SelectableHit)
             {
+                SetHandleClick(currentControlType == ControlType.walk ? walkClick : attackClick, false);
                 return (null, worldPoint);
             }
             return (selectable, worldPoint);
@@ -264,45 +317,60 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     }
 
     // Helper methods
-    private bool GetSelectionClickState()
+    private void CheckAdditionalButtonClicks()
     {
-        if (selectionClickHandled)
+        foreach (var playerAction in playerActions)
+        {
+            if (GetClickState(playerAction.whenSelect))
+            {
+                SelectPlayer(playerAction.playerToSelect);
+            }
+        }
+        if (GetClickState(endTurnButtonClick))
+        {
+            TurnManager.Instance.EndPlayerTurn();
+        }
+        if (GetClickState(walkButtonClick))
+        {
+            SetControlTypeTo(true);
+        }
+        if (GetClickState(attackButtonClick))
+        {
+            SetControlTypeTo(false);
+        }
+    }
+    private void SetHandleClick(InputActionReference action, bool value)
+    {
+        if (action != null && action.action.controls.Count > 0 && handledControls[action.action.controls[0]] != value)
+        {
+            handledControls[action.action.controls[0]] = value;
+        }
+    }
+    private bool GetClickState(InputActionReference action)
+    {
+        if (action.action.controls.Count > 0 && handledControls[action.action.controls[0]])
         {
             return false;
         }
-        bool clicked = selectionClick.action.ReadValue<float>() == 1.0f;
+        bool clicked = action.action.ReadValue<float>() == 1.0f;
         if (clicked)
         {
-            selectionClickHandled = true;
+            SetHandleClick(action, true);
         }
         return clicked;
     }
 
     public void SetClickAsHandled()
     {
-        selectionClickHandled = true;
+        SetHandleClick(selectionClick, true);
     }
     public override void SetClickAsUnhandled()
     {
-        selectionClickHandled = false;
+        SetHandleClick(selectionClick, false);
     }
     public override void SetUICacheAsDirty()
     {
         mousePositionCached = Vector2.zero;
-    }
-
-    private bool GetDeselectionClickState()
-    {
-        if (deselectionClickHandled)
-        {
-            return false;
-        }
-        bool clicked = deselectionClick.action.ReadValue<float>() == 1.0f;
-        if (clicked)
-        {
-            deselectionClickHandled = true;
-        }
-        return clicked;
     }
 
     void OnDrawGizmos()

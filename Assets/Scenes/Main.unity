@@ -1873,6 +1873,7 @@ MonoBehaviour:
   onPawnActions: {fileID: 1066974134}
   defaultLookTarget: {fileID: 1066974138}
   listenOnlyPlayerControls: 1
+  lockTargetAction: {fileID: -361045016904779170, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
 --- !u!114 &1066974138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3923,6 +3924,7 @@ MonoBehaviour:
     - Calculated
     - Initiator
     - Target
+  tooFarCode: -2
   exitCodes:
   - message: Too far
     color: {r: 1, g: 0, b: 0, a: 1}
@@ -3976,6 +3978,19 @@ MonoBehaviour:
   walkState: {fileID: 1569542977}
   selectionClick: {fileID: 7174379006826799452, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   deselectionClick: {fileID: 953123044832444067, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  walkClick: {fileID: 8042755569159477090, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  attackClick: {fileID: -3235628571494567595, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  secondarySelectionClick: {fileID: -8789761610624312178, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  walkButtonClick: {fileID: -5556182949091268691, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  attackButtonClick: {fileID: -6752706109245560631, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  endTurnButtonClick: {fileID: -9175213733596566376, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  playerActions:
+  - whenSelect: {fileID: 3619046272969493343, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+    playerToSelect: {fileID: 1175933365}
+  - whenSelect: {fileID: 6161536518998778937, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+    playerToSelect: {fileID: 824540571}
+  - whenSelect: {fileID: -7910908495225067249, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+    playerToSelect: {fileID: 1899494926}
   zeroPlaneHeight: -1.15
   showZeroPlane: 1
   walkButton: {fileID: 1764747765}

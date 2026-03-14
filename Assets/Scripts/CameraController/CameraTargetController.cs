@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CameraController))]
 public class CameraTargetController : MonoBehaviour
@@ -7,6 +8,7 @@ public class CameraTargetController : MonoBehaviour
     [SerializeField] private IActions onPawnActions;
     [SerializeField] private ILookTarget defaultLookTarget;
     [SerializeField] private bool listenOnlyPlayerControls = true;
+    [SerializeField] private InputActionReference lockTargetAction;
     private CameraController cameraController;
     private ILookTarget currentLookTarget;
     private bool isLockedOnTarget = false;
@@ -20,6 +22,18 @@ public class CameraTargetController : MonoBehaviour
         cameraController.SetLookTarget(defaultLookTarget);
         cameraController.cameraControlActions = defaultActions;
         defaultActions.enabled = true;
+    }
+
+    void OnEnable()
+    {
+        if (lockTargetAction != null)
+            lockTargetAction.action.Enable();
+    }
+
+    void OnDisable()
+    {
+        if (lockTargetAction != null)
+            lockTargetAction.action.Disable();
     }
 
     void Update()
@@ -53,18 +67,21 @@ public class CameraTargetController : MonoBehaviour
                 PawnController.Instance.currentSelectorWithUICached.SetUICacheAsDirty();
             }
         }
+        if (lockTargetAction != null && !isLockedOnTarget && currentLookTarget != null && lockTargetAction.action.ReadValue<float>() == 1.0f)
+        {
+            LockTarget();
+        }
     }
 
-    public void SetPawnTarget(ILookTarget lookTarget)
+    private void SetPawnTarget(ILookTarget lookTarget)
     {
         currentLookTarget = lookTarget;
-        cameraController.SetLookTarget(lookTarget);
         cameraController.cameraControlActions = onPawnActions;
         defaultActions.enabled = false;
         onPawnActions.enabled = true;
-        isLockedOnTarget = true;
+        LockTarget();
     }
-    public void UnsetPawnTarget()
+    private void UnsetPawnTarget()
     {
         UnlockTarget();
         currentLookTarget = null;
@@ -72,10 +89,16 @@ public class CameraTargetController : MonoBehaviour
         onPawnActions.enabled = false;
         defaultActions.enabled = true;
     }
-    public void UnlockTarget()
+    private void UnlockTarget()
     {
         isLockedOnTarget = false;
         defaultLookTarget.GetTransform().position = currentLookTarget.GetTransform().position;
         cameraController.SetLookTarget(defaultLookTarget);
+    }
+    private void LockTarget()
+    {
+        isLockedOnTarget = true;
+        if (cameraController != null)
+            cameraController.SetLookTarget(currentLookTarget);
     }
 }

@@ -12,6 +12,8 @@ public class MeleeState : IPawnState
     private FormulaFieldWithMemo calculateMeleeDamage;
     [SerializeField]
     private FormulaFieldWithMemo calculateMeleeAccuracy;
+    [SerializeField]
+    private int tooFarCode = -1;
     public List<ExitCode> exitCodes;
     public (IFormulaData, string) GetMeleeFormulaData() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated");
     private IFormulaData initiatorFormulaData => controlableSelectable == null ? HandleInittingGlobalVars.pawnMustHaveParams : controlableSelectable.GetFormulaData();
@@ -185,8 +187,8 @@ public class MeleeState : IPawnState
 
     public override bool IsErrorChance(IAttackableSelectable attackableSelectable)
     {
-        (string message, Color color) = GetMessage(GetMeleeAccuracy(attackableSelectable));
-        if (message != null)
+        float accuracy = GetMeleeAccuracy(attackableSelectable);
+        if (Mathf.Abs(accuracy - tooFarCode) < 0.01f)
         {
             return true;
         }
