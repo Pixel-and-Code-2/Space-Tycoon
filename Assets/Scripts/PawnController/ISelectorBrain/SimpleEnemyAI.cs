@@ -86,7 +86,7 @@ public class SimpleEnemyAI : ISelectorBrain
         // {
         //     csiCached = currentScenarioIndex;
         //     cciCached = completedScenarioIndex;
-        //     Debug.Log("SimpleEnemyAI Update: calculated " + detailedScenario[currentScenarioIndex].type + " completed " + detailedScenario[completedScenarioIndex].type);
+        // Debug.Log("SimpleEnemyAI Update: calculated " + detailedScenario[currentScenarioIndex].type + " completed " + detailedScenario[completedScenarioIndex].type);
         // }
 
         if (completedScenarioIndex == -2) return;

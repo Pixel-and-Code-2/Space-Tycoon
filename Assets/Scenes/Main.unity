@@ -3893,6 +3893,7 @@ MonoBehaviour:
   walkButtonClick: {fileID: -5556182949091268691, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   attackButtonClick: {fileID: -6752706109245560631, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   endTurnButtonClick: {fileID: -9175213733596566376, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  toggleMainMenu: {fileID: -2221508905919505455, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   playerActions:
   - whenSelect: {fileID: 3619046272969493343, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
     playerToSelect: {fileID: 1175933365}
@@ -3938,6 +3939,7 @@ MonoBehaviour:
   toggleShootOnMoveButton: {fileID: 1764747765}
   buttonColorOn: {r: 1, g: 0.68019176, b: 0.31132078, a: 1}
   buttonColorOff: {r: 0.2971698, g: 0.2971698, b: 0.2971698, a: 1}
+  toggleShootOnMoveAction: {fileID: -8480799163055771326, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
 --- !u!114 &1569542976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5532,6 +5534,10 @@ PrefabInstance:
     - target: {fileID: 5737310400721376647, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: IControlableSelectable, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6501960671996821730, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7674540831974941421, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

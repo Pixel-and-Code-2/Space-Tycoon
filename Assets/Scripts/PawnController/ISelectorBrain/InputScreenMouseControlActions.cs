@@ -30,6 +30,8 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     private InputActionReference attackButtonClick;
     [SerializeField]
     private InputActionReference endTurnButtonClick;
+    [SerializeField]
+    private InputActionReference toggleMainMenu;
     [System.Serializable]
     struct PlayerActions
     {
@@ -60,7 +62,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         walkState = GetComponent<WalkState>();
         shootState = GetComponent<ShootState>();
         OnValidate();
-        if (actions.Count != 8 + playerActions.Count)
+        if (actions.Count != 9 + playerActions.Count)
         {
             actions.Clear();
             actions.Add(selectionClick);
@@ -71,6 +73,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
             actions.Add(endTurnButtonClick);
             actions.Add(walkClick);
             actions.Add(attackButtonClick);
+            actions.Add(toggleMainMenu);
             foreach (var playerAction in playerActions)
             {
                 actions.Add(playerAction.whenSelect);
@@ -320,6 +323,10 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         {
             SetControlTypeTo(false);
         }
+        if (!IsPawnSelected() && GetClickState(toggleMainMenu))
+        {
+            MainMenu.Instance.ToggleMainMenu();
+        }
     }
     private void SetHandleClick(InputActionReference action, bool value)
     {
@@ -336,7 +343,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
                     handledControls[control] = false;
                 }
             }
-            Debug.Log("SetHandleClick: " + action.action.name + " " + value + " " + currentControlType);
+            // Debug.Log("SetHandleClick: " + action.action.name + " " + value + " " + currentControlType);
         }
     }
     private bool GetClickState(InputActionReference action)

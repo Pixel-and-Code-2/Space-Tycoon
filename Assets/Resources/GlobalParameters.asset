@@ -17,11 +17,16 @@ MonoBehaviour:
     value: 6.66
   - name: e
     value: 1
+  - name: IsShootOnMove
+    value: 0
   calculatedParameters: []
   mustHaveParameters: []
   isDirty: 0
   parametersDictStateCache: 'M = 6,66 (6,66)
 
     e = 1,00 (1,00)
+
+    IsShootOnMove
+    = 1,00 (1,00)
 
 '
