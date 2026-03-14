@@ -76,6 +76,13 @@ public class PawnController : MonoBehaviour
         {
             SetSelectorBrain(GetComponent<ISelectorBrain>());
         }
+        IPawnState newState = currentSelector.PollChangeState();
+        if (newState != null)
+        {
+            if (currentState != null) currentState.enabled = false;
+            currentState = newState;
+            currentState.enabled = true;
+        }
 
         IControlableSelectable newSelection = currentSelector.PollSelectPawn(currentSelectedPawn);
         if (newSelection != currentSelectedPawn)
@@ -108,13 +115,6 @@ public class PawnController : MonoBehaviour
             UI3DManager.Instance.HideContextMenu();
         }
 
-        IPawnState newState = currentSelector.PollChangeState();
-        if (newState != null)
-        {
-            if (currentState != null) currentState.enabled = false;
-            currentState = newState;
-            currentState.enabled = true;
-        }
         if (currentState != null)
         {
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.UI;
 
 public enum ControlType
 {
@@ -27,9 +28,15 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     private float zeroPlaneHeight = 0f;
     [SerializeField]
     private bool showZeroPlane = false;
-
     [SerializeField]
-    private TextMeshProUGUI controlTypeText;
+    private Button walkButton;
+    [SerializeField]
+    private Color walkButtonColor;
+    [SerializeField]
+    private Button attackButton;
+    [SerializeField]
+    private Color attackButtonColor;
+    private IControlableSelectable forcedSelectedPlayer = null;
     // These vars are used to prevent multiple click handles on the same button press
     private bool selectionClickHandled = false;
     private bool deselectionClickHandled = false;
@@ -97,6 +104,12 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     // ISelectorBrain methods
     public override IControlableSelectable PollSelectPawn(IControlableSelectable defaultPawn)
     {
+        if (forcedSelectedPlayer != null)
+        {
+            IControlableSelectable pl = forcedSelectedPlayer;
+            forcedSelectedPlayer = null;
+            return pl;
+        }
         if (IsPawnSelected())
         {
             if (GetDeselectionClickState())
@@ -156,6 +169,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
     public override IPawnState PollChangeState()
     {
+
         IPawnState newState = null;
         if (currentControlType == ControlType.attack)
         {
@@ -172,7 +186,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         else newState = walkState;
         if (newState != PawnController.Instance.currentState)
         {
-            UpdateButtonName();
+            UpdateControlButtons();
             return newState;
         }
         return null;
@@ -185,6 +199,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         }
         if (GetSelectionClickState())
         {
+            Debug.Log("Selecting position");
             (ISelectable selectable, Vector3 worldPoint, Vector2 screenPoint, ScreenCastHitResult hit) = PollForIntermidiateAiming();
             if (hit != ScreenCastHitResult.SelectableHit)
             {
@@ -306,22 +321,35 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
     private void OnPlayerTurnStart()
     {
-        UpdateButtonName();
+        UpdateControlButtons();
     }
 
-    public void ChangeControlType()
+    private void UpdateControlButtons()
     {
-        currentControlType =
-            currentControlType == ControlType.walk ? ControlType.attack : ControlType.walk;
-        UpdateButtonName();
-    }
-
-    private void UpdateButtonName()
-    {
-        if (controlTypeText != null)
+        if (currentControlType == ControlType.walk)
         {
-            controlTypeText.text =
-                currentControlType == ControlType.walk ? "Control: Walk" : "Control: Attack";
+            walkButton.interactable = false;
+            walkButton.image.color = Color.gray;
+            attackButton.interactable = true;
+            attackButton.image.color = attackButtonColor;
+        }
+        else
+        {
+            attackButton.interactable = false;
+            attackButton.image.color = Color.gray;
+            walkButton.interactable = true;
+            walkButton.image.color = walkButtonColor;
         }
     }
+    public void SetControlTypeTo(bool isWalk)
+    {
+        currentControlType = isWalk ? ControlType.walk : ControlType.attack;
+        UpdateControlButtons();
+    }
+
+    public void SelectPlayer(IControlableSelectable pl)
+    {
+        forcedSelectedPlayer = pl;
+    }
+
 }
