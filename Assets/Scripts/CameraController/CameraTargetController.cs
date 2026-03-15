@@ -4,8 +4,6 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CameraController))]
 public class CameraTargetController : MonoBehaviour
 {
-    [SerializeField] private IActions defaultActions;
-    [SerializeField] private IActions onPawnActions;
     [SerializeField] private ILookTarget defaultLookTarget;
     [SerializeField] private bool listenOnlyPlayerControls = true;
     [SerializeField] private InputActionReference lockTargetAction;
@@ -20,8 +18,6 @@ public class CameraTargetController : MonoBehaviour
     void Start()
     {
         cameraController.SetLookTarget(defaultLookTarget);
-        cameraController.cameraControlActions = defaultActions;
-        defaultActions.enabled = true;
     }
 
     void OnEnable()
@@ -40,7 +36,11 @@ public class CameraTargetController : MonoBehaviour
     {
         if (listenOnlyPlayerControls)
         {
-            if (PawnController.Instance.currentSelector != PawnController.Instance.playerSelectorBrain) return;
+            if (PawnController.Instance.currentSelector != PawnController.Instance.playerSelectorBrain)
+            {
+                UnsetPawnTarget();
+                return;
+            }
         }
         // if (ClickableItemsController.Instance.currentSelectedItem != null)
         // {
@@ -53,8 +53,8 @@ public class CameraTargetController : MonoBehaviour
         // else
         if (currentLookTarget != PawnController.Instance.currentSelectedPawn)
         {
-            if (PawnController.Instance.currentSelectedPawn == null) UnsetPawnTarget();
-            else SetPawnTarget(PawnController.Instance.currentSelectedPawn);
+            if (currentLookTarget != null) UnsetPawnTarget();
+            if (PawnController.Instance.currentSelectedPawn != null) SetPawnTarget(PawnController.Instance.currentSelectedPawn);
         }
         if (cameraController.cameraControlActions.GetMoveValue() != Vector2.zero)
         {
@@ -76,27 +76,23 @@ public class CameraTargetController : MonoBehaviour
     private void SetPawnTarget(ILookTarget lookTarget)
     {
         currentLookTarget = lookTarget;
-        cameraController.cameraControlActions = onPawnActions;
-        defaultActions.enabled = false;
-        onPawnActions.enabled = true;
         LockTarget();
     }
     private void UnsetPawnTarget()
     {
         UnlockTarget();
         currentLookTarget = null;
-        cameraController.cameraControlActions = defaultActions;
-        onPawnActions.enabled = false;
-        defaultActions.enabled = true;
     }
     private void UnlockTarget()
     {
+        if (!isLockedOnTarget) return;
         isLockedOnTarget = false;
         defaultLookTarget.GetTransform().position = currentLookTarget.GetTransform().position;
         cameraController.SetLookTarget(defaultLookTarget);
     }
     private void LockTarget()
     {
+        if (isLockedOnTarget) return;
         isLockedOnTarget = true;
         if (cameraController != null)
             cameraController.SetLookTarget(currentLookTarget);
