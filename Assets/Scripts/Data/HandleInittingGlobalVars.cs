@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 
@@ -19,6 +18,7 @@ public class HandleInittingGlobalVars : MonoBehaviour
     public static FormulaDataMonoBase mainCalculatedFormulaData;
     public const string IS_STEP_BY_STEP_KEY = "IsStepByStep";
     public const string MELEE_ATTACK_DISTANCE_KEY = "MeleeDST";
+    public const string RANDOM_KEY = "Random";
 
     void Awake()
     {
@@ -26,6 +26,7 @@ public class HandleInittingGlobalVars : MonoBehaviour
             globalParameters = GetDataAsset("GlobalParameters");
         globalParameters.AddParameter(IS_STEP_BY_STEP_KEY);
         globalParameters.AddParameter(MELEE_ATTACK_DISTANCE_KEY);
+        globalParameters.AddParameter(RANDOM_KEY);
         if (pawnMustHaveParams == null)
             pawnMustHaveParams = GetDataAsset("PawnMustHaveParams");
         if (mainCalculatedFormulaData == null)
