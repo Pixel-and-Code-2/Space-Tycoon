@@ -38,7 +38,7 @@ MonoBehaviour:
   calculatedParameters: []
   mustHaveParameters:
   - {fileID: 11400000, guid: 7d19a2bbc433f5f46b883786d18f1fdd, type: 2}
-  - {fileID: 11400000, guid: 52f1062fd6d074c4a87160d90aaa59b0, type: 2}
+  - {fileID: 11400000, guid: 3b50b5aaf3770924db86c96c6418b0d7, type: 2}
   - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   isDirty: 0
   parametersDictStateCache: 'DMG = 0,00 (0,00)
@@ -62,19 +62,19 @@ MonoBehaviour:
     MovesToReload
     = 1,00 (1,00)
 
-    TotalAmmo = 40,00 (40,00)
+    TotalAmmo = 0,00 (0,00)
 
-    DMR = 4,00 (4,00)
+    DMR = 0,00 (0,00)
 
     DMM
-    = 2,00 (2,00)
+    = 0,00 (0,00)
 
-    DR = 50,00 (50,00)
+    DR = 18,00 (18,00)
 
-    MDR = 50,00 (50,00)
+    MDR = 6,00 (6,00)
 
     ARMMASS
-    = 29,00 (29,00)
+    = 14,00 (14,00)
 
     STR = 10,00 (10,00)
 
