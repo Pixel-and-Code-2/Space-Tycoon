@@ -3950,9 +3950,9 @@ MonoBehaviour:
       ((i_DMG  < 2 * t_DR) ?
 
       (int)Math.Floor((i_DMG
-      - t_DR)/10) :
+      )/10) :
 
-      (i_DMG - t_DR)))'
+      (i_DMG - t_DR+(int)Math.Floor((t_DR )/10))))'
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
       '(', ')'.\nYou also can provide variables from Data Assets available in this
       object, using words like 'g_Statname' - the full list of available vars is
