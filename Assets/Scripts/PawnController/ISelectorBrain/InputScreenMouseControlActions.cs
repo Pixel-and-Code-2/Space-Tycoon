@@ -213,7 +213,6 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
         IPawnState newState;
         (ISelectable selectable, Vector3 _, Vector2 _, ScreenCastHitResult _) = PollForIntermidiateAiming();
-        if (selectable != null) Debug.Log("PollChangeState: " + selectable + " " + selectable.GetSelectableType());
         if (selectable != null && selectable is IAttackableSelectable attackableSelectable && !meleeState.IsErrorChance(attackableSelectable))
         {
             newState = meleeState;

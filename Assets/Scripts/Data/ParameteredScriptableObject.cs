@@ -22,13 +22,18 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
     public List<string> GetParameterNames()
     {
         var lst = new List<string>();
-        foreach (var calculatedParameter in calculatedParameters)
+        // foreach (var calculatedParameter in calculatedParameters)
+        // {
+        //     lst.Add(calculatedParameter.name);
+        // }
+        // foreach (var parameter in parameters)
+        // {
+        //     lst.Add(parameter.name);
+        // }
+        RebuildParametersDict();
+        foreach (var kv in parametersDict)
         {
-            lst.Add(calculatedParameter.name);
-        }
-        foreach (var parameter in parameters)
-        {
-            lst.Add(parameter.name);
+            lst.Add(kv.Key);
         }
         return lst;
     }
@@ -81,13 +86,71 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
     {
         if (visited.Contains(this)) return;
         visited.Add(this);
-        // Debug.Log("Rebuilding parameters dict for: " + name);
         parametersDict.Clear();
         CheckCalculatedParameters();
-        AddBuiltInConstParameters(visited);
+
+        for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
+        {
+            var dep = mustHaveParameters[i];
+            if (dep == null || dep == this) continue;
+            var depConst = dep.GetRecursiveConstParametersDict(new HashSet<ParameteredScriptableObject>());
+            foreach (var kv in depConst)
+                parametersDict[kv.Key] = kv.Value;
+        }
         AddParametersAsConsts(parameters);
-        AddBuiltInCalculatedParameters(visited);
-        AddParametersAsCalculatables(calculatedParameters);
+
+        var formulas = new List<NamedFormula>();
+        for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
+        {
+            var dep = mustHaveParameters[i];
+            if (dep == null || dep == this) continue;
+            dep.CollectCalculatedFormulas(visited, formulas);
+        }
+        foreach (var cf in calculatedParameters)
+            formulas.Add(cf);
+        foreach (var cf in formulas)
+        {
+            if (cf.IsAvailable())
+                parametersDict[cf.name] = cf.formula.EvaluateFormula(new Dictionary<string, float>[] { parametersDict });
+            else
+                Debug.LogWarning("Calculated parameter formula not available (must be compiled): " + cf.name);
+        }
+    }
+
+    public Dictionary<string, float> GetRecursiveConstParametersDict(HashSet<ParameteredScriptableObject> visited)
+    {
+        if (visited.Contains(this)) return new Dictionary<string, float>();
+        visited.Add(this);
+        var result = new Dictionary<string, float>();
+        for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
+        {
+            var dep = mustHaveParameters[i];
+            if (dep == null || dep == this) continue;
+            var depConst = dep.GetRecursiveConstParametersDict(visited);
+            foreach (var kv in depConst)
+                result[kv.Key] = kv.Value;
+        }
+        foreach (var p in parameters)
+        {
+            var key = processParameterName(p.name);
+            if (!string.IsNullOrEmpty(key))
+                result[key] = p.value;
+        }
+        return result;
+    }
+
+    private void CollectCalculatedFormulas(HashSet<ParameteredScriptableObject> visited, List<NamedFormula> outFormulas)
+    {
+        if (visited.Contains(this)) return;
+        visited.Add(this);
+        for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
+        {
+            var dep = mustHaveParameters[i];
+            if (dep == null || dep == this) continue;
+            dep.CollectCalculatedFormulas(visited, outFormulas);
+        }
+        foreach (var cf in calculatedParameters)
+            outFormulas.Add(cf);
     }
 
     private void AddParametersAsConsts(List<NamedFloat> parameters)
@@ -97,57 +160,6 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
             parameter.name = processParameterName(parameter.name);
             if (parameter.name != null && parameter.name != "")
                 parametersDict[parameter.name] = parameter.value;
-        }
-    }
-    private void AddParametersAsCalculatables(List<NamedFormula> calculatedParameters)
-    {
-        if (this.calculatedParameters != calculatedParameters)
-        {
-            foreach (var calculatedParameter in calculatedParameters)
-            {
-                if (this.calculatedParameters.Find(x => x.name == calculatedParameter.name) == null)
-                {
-                    NamedFormula newCalculatedParameter = new NamedFormula(calculatedParameter, this);
-                    this.calculatedParameters.Add(newCalculatedParameter);
-                }
-            }
-        }
-        foreach (var calculatedParameter in calculatedParameters)
-        {
-            if (calculatedParameter.IsAvailable())
-            {
-                parametersDict[calculatedParameter.name] = calculatedParameter.formula.EvaluateFormula(new Dictionary<string, float>[] { parametersDict });
-            }
-            else
-            {
-                Debug.LogWarning("You are trying to use calculatable parameter which is not available (formula must be compiled): " + calculatedParameter.name);
-            }
-        }
-    }
-
-    private void AddBuiltInConstParameters(HashSet<ParameteredScriptableObject> visited)
-    {
-        for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
-        {
-            var mustHaveParameter = mustHaveParameters[i];
-            if (mustHaveParameter == null || mustHaveParameter == this) continue;
-            mustHaveParameter.RebuildParametersDict(visited);
-            AddParametersAsConsts(mustHaveParameter.parameters);
-        }
-    }
-
-    private void AddBuiltInCalculatedParameters(HashSet<ParameteredScriptableObject> visited)
-    {
-        for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
-        {
-            var mustHaveParameter = mustHaveParameters[i];
-            foreach (var calculatedParameter in mustHaveParameter.calculatedParameters)
-            {
-                if (calculatedParameter.IsAvailable())
-                {
-                    parametersDict[calculatedParameter.name] = calculatedParameter.formula.EvaluateFormula(new Dictionary<string, float>[] { parametersDict });
-                }
-            }
         }
     }
 

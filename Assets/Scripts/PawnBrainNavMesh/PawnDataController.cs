@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class PawnDataController : MonoBehaviour, IFormulaData
 {
@@ -29,6 +31,14 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     public const string SHOOTED_AMOUNT_KEY = "ShotAmount";
     public const string LAST_ROUND_MELEE_AMOUNT_KEY = "LastRoundMeleeAmount";
     public const string MELEE_AMOUNT_KEY = "MeleeAmount";
+    public const string MOVES_TO_SKIP_KEY = "MovesToSkip";
+    public const string IS_SHOOT_ON_MOVE_KEY = "IsShootOnMove";
+    public const string INITIAL_MAG_AMOUNT_KEY = "MAG";
+    public const string INITIAL_TOTAL_AMMO_KEY = "TotalAmmo";
+    public const string MAG_AMOUNT_KEY = "CurrentMag";
+    public const string TOTAL_AMMO_KEY = "AvailableAmmo";
+    public const string INITIAL_MOVES_TO_RELOAD_KEY = "MovesToReload";
+
     [SerializeField]
     public SelectableType selectableType = SelectableType.Player;
 
@@ -46,6 +56,14 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         {
             dynamicParameters[AVAILABLE_DISTANCE_KEY] = dict[INITIAL_AVAILABLE_DISTANCE_KEY];
         }
+        if (!dynamicParameters.ContainsKey(MAG_AMOUNT_KEY))
+        {
+            dynamicParameters[MAG_AMOUNT_KEY] = dict[INITIAL_MAG_AMOUNT_KEY];
+        }
+        if (!dynamicParameters.ContainsKey(TOTAL_AMMO_KEY))
+        {
+            dynamicParameters[TOTAL_AMMO_KEY] = dict[INITIAL_TOTAL_AMMO_KEY];
+        }
         dynamicParameters[LAST_ROUND_WALKED_KEY] = 0f;
         dynamicParameters[WALKED_KEY] = 0f;
 
@@ -54,6 +72,8 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
         dynamicParameters[LAST_ROUND_MELEE_AMOUNT_KEY] = 0f;
         dynamicParameters[MELEE_AMOUNT_KEY] = 0f;
+        dynamicParameters[MOVES_TO_SKIP_KEY] = 0f;
+        dynamicParameters[IS_SHOOT_ON_MOVE_KEY] = 0f;
     }
 
     public void FillFormulaData(FormulaDataMonoBase formulaData, string prefix)
@@ -64,6 +84,10 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         formulaData.parametersDict[prefix + SHOOTED_AMOUNT_KEY] = dynamicParameters[SHOOTED_AMOUNT_KEY];
         formulaData.parametersDict[prefix + LAST_ROUND_MELEE_AMOUNT_KEY] = dynamicParameters[LAST_ROUND_MELEE_AMOUNT_KEY];
         formulaData.parametersDict[prefix + MELEE_AMOUNT_KEY] = dynamicParameters[MELEE_AMOUNT_KEY];
+        formulaData.parametersDict[prefix + MOVES_TO_SKIP_KEY] = dynamicParameters[MOVES_TO_SKIP_KEY];
+        formulaData.parametersDict[prefix + IS_SHOOT_ON_MOVE_KEY] = dynamicParameters[IS_SHOOT_ON_MOVE_KEY];
+        formulaData.parametersDict[prefix + MAG_AMOUNT_KEY] = dynamicParameters[MAG_AMOUNT_KEY];
+        formulaData.parametersDict[prefix + TOTAL_AMMO_KEY] = dynamicParameters[TOTAL_AMMO_KEY];
     }
 
     public static void PreFillFormulaData(FormulaDataMonoBase formulaData, string prefix)
@@ -74,6 +98,10 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         formulaData.parametersDict[prefix + SHOOTED_AMOUNT_KEY] = 0f;
         formulaData.parametersDict[prefix + LAST_ROUND_MELEE_AMOUNT_KEY] = 0f;
         formulaData.parametersDict[prefix + MELEE_AMOUNT_KEY] = 0f;
+        formulaData.parametersDict[prefix + MOVES_TO_SKIP_KEY] = 0f;
+        formulaData.parametersDict[prefix + IS_SHOOT_ON_MOVE_KEY] = 0f;
+        formulaData.parametersDict[prefix + MAG_AMOUNT_KEY] = 0f;
+        formulaData.parametersDict[prefix + TOTAL_AMMO_KEY] = 0f;
     }
 
     public float GetParameterValue(string parameterName)
@@ -138,6 +166,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
                 TurnManager.Instance.OnEnemyTurnStart += ResetActionPoints;
             }
         }
+        if (PawnController.Instance.toggleShootOnMoveAction != null) PawnController.Instance.toggleShootOnMoveAction.action.Enable();
     }
 
     void OnDisable()
@@ -147,6 +176,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
             TurnManager.Instance.OnPlayerTurnStart -= ResetActionPoints;
             TurnManager.Instance.OnEnemyTurnStart -= ResetActionPoints;
         }
+        if (PawnController.Instance.toggleShootOnMoveAction != null) PawnController.Instance.toggleShootOnMoveAction.action.Disable();
     }
 
     private void ResetActionPoints()
@@ -161,6 +191,11 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
         SetParameterValue(LAST_ROUND_MELEE_AMOUNT_KEY, GetParameterValue(MELEE_AMOUNT_KEY));
         SetParameterValue(MELEE_AMOUNT_KEY, 0f);
+
+        float movesToSkip = GetParameterValue(MOVES_TO_SKIP_KEY);
+        SetParameterValue(MOVES_TO_SKIP_KEY, movesToSkip > 0 ? movesToSkip - 1 : 0);
+
+        SetParameterValue(IS_SHOOT_ON_MOVE_KEY, 0f);
     }
 
     public static float CalculateLineStringDistance(Vector3[] points)

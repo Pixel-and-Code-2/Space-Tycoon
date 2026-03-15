@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41cf6bcf5f35067458db9c0a1798ba1e, type: 3}
+  m_Name: EnemyTvar
+  m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
+  parameters:
+  - name: STR
+    value: 10
+  - name: DX
+    value: 4
+  - name: IQ
+    value: 1
+  - name: HT
+    value: 3
+  - name: SHT
+    value: 0
+  - name: BRW
+    value: 3
+  - name: THR
+    value: 0
+  - name: ENG
+    value: 0
+  - name: SCI
+    value: 0
+  - name: DDGB
+    value: 0
+  - name: SPDB
+    value: 0
+  calculatedParameters: []
+  mustHaveParameters:
+  - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+  - {fileID: 11400000, guid: 7d19a2bbc433f5f46b883786d18f1fdd, type: 2}
+  - {fileID: 11400000, guid: 52f1062fd6d074c4a87160d90aaa59b0, type: 2}
+  isDirty: 0
+  parametersDictStateCache: 'DMR = 0,00 (0,00)
+
+    DMM = 0,00 (0,00)
+
+    DR =
+    0,00 (0,00)
+
+    MDR = 0,00 (0,00)
+
+    ARMMASS = 0,00 (0,00)
+
+    DMG = 5,00
+    (5,00)
+
+    MDMG = 0,00 (0,00)
+
+    ROF = 0,00 (0,00)
+
+    ACC = 0,00 (0,00)
+
+    MAG
+    = 0,00 (0,00)
+
+    BULK = 0,00 (0,00)
+
+    RCL = 0,00 (0,00)
+
+    WPMASS =
+    0,00 (0,00)
+
+    MovesToReload = 1,00 (1,00)
+
+    TotalAmmo = 40,00 (40,00)
+
+    STR
+    = 10,00 (10,00)
+
+    DX = 4,00 (4,00)
+
+    IQ = 1,00 (1,00)
+
+    HT = 3,00
+    (3,00)
+
+    SHT = 0,00 (0,00)
+
+    BRW = 3,00 (3,00)
+
+    THR = 0,00 (0,00)
+
+    ENG
+    = 0,00 (0,00)
+
+    SCI = 0,00 (0,00)
+
+    DDGB = 0,00 (0,00)
+
+    SPDB = 0,00
+    (0,00)
+
+    ShootAmount = 3,00 (3,00)
+
+    HP = 15,00 (15,00)
+
+    PRC = 6,00
+    (6,00)
+
+    FP = 8,00 (8,00)
+
+    SPD = 4,25 (4,25)
+
+    DDG = 5,25 (5,25)
+
+    BCW
+    = 8,50 (8,50)
+
+    BDMG = 11,00 (11,00)
+
+'

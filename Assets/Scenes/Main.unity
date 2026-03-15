@@ -194,7 +194,7 @@ PrefabInstance:
     - target: {fileID: 8515852256048443046, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: initialPawnData
       value: 
-      objectReference: {fileID: 11400000, guid: 960e0f1c8e4ba2443af0a375167df3ac, type: 2}
+      objectReference: {fileID: 11400000, guid: 46d3bae482eea6545a86bd0b114e44d6, type: 2}
     - target: {fileID: 8535413143347903252, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_AgentTypeID
       value: 0
@@ -1287,7 +1287,7 @@ PrefabInstance:
     - target: {fileID: 8515852256048443046, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: initialPawnData
       value: 
-      objectReference: {fileID: 11400000, guid: 960e0f1c8e4ba2443af0a375167df3ac, type: 2}
+      objectReference: {fileID: 11400000, guid: 46d3bae482eea6545a86bd0b114e44d6, type: 2}
     - target: {fileID: 8535413143347903252, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_AgentTypeID
       value: 0
@@ -1372,7 +1372,7 @@ PrefabInstance:
     - target: {fileID: 8515852256048443046, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: initialPawnData
       value: 
-      objectReference: {fileID: 11400000, guid: 02989a6d6083e494e8fafa9094986a6c, type: 2}
+      objectReference: {fileID: 11400000, guid: 5306bc6049004db4880fea0669dc3ac2, type: 2}
     - target: {fileID: 8696655358907118961, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: animatorBrain
       value: 
@@ -1535,6 +1535,10 @@ PrefabInstance:
       propertyPath: boundsGetterRef
       value: 
       objectReference: {fileID: 1187009918}
+    - target: {fileID: 1954549480452778492, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
+      propertyPath: rotationSpeeds.y
+      value: -0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 3219692792882578697, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: Priority.Enabled
       value: 0
@@ -3799,11 +3803,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeState
   calculateMeleeDamage:
-    formula: '(c_isWallsBetween > 0 ? 0 :
+    formula: 'Math.Max(0,
 
-      4 - c_pawnDistance
+      ((i_STR + g_e*2 + i_MDMG  < 2 * t_DR) ?
 
-      )'
+      (int)Math.Floor((i_STR
+      + 2 + i_MDMG - t_DR)/10) :
+
+      (i_STR + g_e*2 + i_MDMG - t_DR)))'
     instruction: 
     dataAssets:
     - {fileID: 1569542970}
@@ -3814,16 +3821,10 @@ MonoBehaviour:
     - Initiator
     - Target
   calculateMeleeAccuracy:
-    formula: '(c_isWallsBetween > 0 ? -1 :
-
-      c_pawnDistance > 4 ? -2 :
-
-      c_AttackerMeleeAmount
-      > 0.5 ? -3 :
-
-      (100 - g_M) / 100
-
-      )'
+    formula: "(c_isWallsBetween > 0 ? -1 :\nc_pawnDistance > g_MeleeDST ? -2 :\nc_AttackerMeleeAmount
+      > 0.5 ? -3 :\nc_AttackerShotAmount > 0.5 ? -4 :\nMath.Max(g_M, Math.Min(100
+      - g_M, \n(i_DX + i_BRW + (c_AttackerIsShootOnMove > 0.1 ? 1 : 4)) * g_M\n))
+      / 100\n)"
     instruction: 
     dataAssets:
     - {fileID: 1569542970}
@@ -3835,15 +3836,19 @@ MonoBehaviour:
     - Target
   tooFarCode: -2
   exitCodes:
-  - message: Too far
-    color: {r: 1, g: 0, b: 0, a: 1}
+  - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+    color: {r: 1, g: 0, b: 0, a: 0.2784314}
     code: -2
-  - message: Unreachable
-    color: {r: 1, g: 0, b: 0, a: 1}
+  - message: "\u0426\u0435\u043B\u044C \u043D\u0435\u0434\u043E\u0441\u044F\u0433\u0430\u0435\u043C\u0430
+      (melee)"
+    color: {r: 1, g: 0, b: 0, a: 0.47058824}
     code: -1
-  - message: Meleed too much
-    color: {r: 1, g: 0, b: 0, a: 1}
+  - message: "\u0423\u0436\u0435 \u0431\u044B\u043B \u0443\u0434\u0430\u0440"
+    color: {r: 1, g: 0, b: 0, a: 0.2784314}
     code: -3
+  - message: "\u0412 \u0440\u0443\u043A\u0430\u0445 \u043E\u0440\u0443\u0436\u0438\u0435"
+    color: {r: 1, g: 0, b: 0, a: 0.2784314}
+    code: -4
 --- !u!114 &1569542970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3919,6 +3924,13 @@ MonoBehaviour:
   playerSelectorBrain: {fileID: 1569542973}
   enemySelectorBrain: {fileID: 1569542978}
   pathDrawer: {fileID: 1317397245437049300}
+  toggleShootOnMoveButton: {fileID: 1764747765}
+  buttonColorOn: {r: 0.9811321, g: 0.63383746, b: 0.26842293, a: 1}
+  buttonColorOff: {r: 0.43867922, g: 0.43867922, b: 0.43867922, a: 0.6745098}
+  toggleShootOnMoveAction: {fileID: -8480799163055771326, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  startReloadButton: {fileID: 1919313458}
+  buttonColorStartReloadOn: {r: 1, g: 1, b: 1, a: 1}
+  buttonColorStartReloadOff: {r: 0.25943398, g: 0.25943398, b: 0.25943398, a: 0.6627451}
   _currentSelectedPawn: {fileID: 0}
 --- !u!114 &1569542975
 MonoBehaviour:
@@ -3936,10 +3948,6 @@ MonoBehaviour:
   pawnMustHaveParamsSettable: {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   calculatableParametersSettable: {fileID: 0}
   globalSettingsAssetsSettable: {fileID: 11400000, guid: 30e0f586f197a9a4d9ccaca1db6103fb, type: 2}
-  toggleShootOnMoveButton: {fileID: 1764747765}
-  buttonColorOn: {r: 1, g: 0.68019176, b: 0.31132078, a: 1}
-  buttonColorOff: {r: 0.2971698, g: 0.2971698, b: 0.2971698, a: 1}
-  toggleShootOnMoveAction: {fileID: -8480799163055771326, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
 --- !u!114 &1569542976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3953,7 +3961,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShootState
   calculateShootDamage:
-    formula: "(c_isWallsBetween > 0 ? 0 : \ng_M\n)"
+    formula: 'Math.Max(0,
+
+      ((i_DMG  < 2 * t_DR) ?
+
+      (int)Math.Floor((i_DMG
+      - t_DR)/10) :
+
+      (i_DMG - t_DR)))'
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
       '(', ')'.\nYou also can provide variables from Data Assets available in this
       object, using words like 'g_Statname' - the full list of available vars is
@@ -3973,8 +3988,13 @@ MonoBehaviour:
     - Initiator
     - Target
   calculateShootAccuracy:
-    formula: "(c_isWallsBetween > 0 ? 0 : \n(c_AttackerShotAmount > 0.5 ? -1 :\nMath.Max(g_M,
-      Math.Min(100-g_M,\n(10 - c_pawnDistance)*10\n))/100\n))"
+    formula: "(c_isWallsBetween > 0 ? -1 : \n(c_AttackerAvailableAmmo < 0.5 ? -2
+      :\n(c_AttackerCurrentMag < 0.5 ? -3 :\nMath.Max(g_M, Math.Min(100-g_M,\n\n((c_AttackerShotAmount
+      > 0.5) ?\n    ((c_AttackerIsShootOnMove < 0.5) ?\n        ((i_DX + i_SHT -
+      i_RNG - i_ASPD - i_RCL + 3) * g_M)\n    :\n        ((i_DX + i_SHT - i_RNG -
+      i_ASPD - i_RCL - i_BULK + 3) * g_M))\n:\n    ((c_AttackerIsShootOnMove < 0.5)
+      ?\n        ((i_DX + i_SHT - i_RNG - i_ASPD + 3) * g_M)\n    :\n        ((i_DX
+      + i_SHT - i_RNG - i_ASPD - i_BULK + 3) * g_M))\n\n)))/100\n)))"
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
       '(', ')'.\nYou also can provide variables from Data Assets available in this
       object, using words like 'g_Statname' - the full list of available vars is
@@ -3994,12 +4014,16 @@ MonoBehaviour:
     - Initiator
     - Target
   exitCodes:
-  - message: Unreachable
-    color: {r: 1, g: 0, b: 0, a: 1}
-    code: 0
-  - message: Shot too much
-    color: {r: 1, g: 0, b: 0, a: 1}
+  - message: "\u0426\u0435\u043B\u044C \u043D\u0435\u0434\u043E\u0441\u044F\u0433\u0430\u0435\u043C\u0430"
+    color: {r: 1, g: 0, b: 0, a: 0.47058824}
     code: -1
+  - message: "\u041F\u0430\u0442\u0440\u043E\u043D\u043E\u0432 \u0431\u043E\u043B\u044C\u0448\u0435
+      \u043D\u0435\u0442\u0443"
+    color: {r: 1, g: 0, b: 0, a: 0.47058824}
+    code: -2
+  - message: "\u041C\u0430\u0433\u0430\u0437\u0438\u043D \u043F\u0443\u0441\u0442"
+    color: {r: 1, g: 0, b: 0, a: 0.47058824}
+    code: -3
 --- !u!114 &1569542977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4012,6 +4036,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c061ffcab052f8647bcdbb1426178c5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WalkState
+  calculateWalkDistance:
+    formula: "(c_AttackerMovesToSkip > 0 ? -1 :\n((c_AttackerShotAmount > 0 && c_AttackerIsShootOnMove
+      < 0.5) ? -2 :\n((c_AttackerMeleeAmount > 0 && c_AttackerIsShootOnMove < 0.5)
+      ? -3 :\nMath.Max(0, \ni_SPD - c_AttackerWalkedDistance\n))))"
+    instruction: "Type a mathematical expression using common '+', '-', '*', '/',
+      '(', ')'.\nYou also can provide variables from Data Assets available in this
+      object, using words like 'g_Statname' - the full list of available vars is
+      listed below.\nEverything starting with '//' till the end of the line will
+      be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
+      C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
+      Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians), Min,
+      Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available variable
+      below to add its name to the end o\u0430 the formula (but be sure to the formula
+      to be blured when clicked)."
+    dataAssets:
+    - {fileID: 1569542970}
+    - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+    names:
+    - Calculated
+    - Initiator
+  exitCodes:
+  - message: Skipping move
+    color: {r: 1, g: 0, b: 0, a: 0.2784314}
+    code: -1
+  - message: Accuracy shoot
+    color: {r: 1, g: 0, b: 0, a: 0.2784314}
+    code: -2
+  - message: Accuracy melee
+    color: {r: 1, g: 0, b: 0, a: 0.2784314}
+    code: -3
 --- !u!114 &1569542978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4267,7 +4321,7 @@ PrefabInstance:
     - target: {fileID: 8515852256048443046, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: initialPawnData
       value: 
-      objectReference: {fileID: 11400000, guid: 960e0f1c8e4ba2443af0a375167df3ac, type: 2}
+      objectReference: {fileID: 11400000, guid: 46d3bae482eea6545a86bd0b114e44d6, type: 2}
     - target: {fileID: 8535413143347903252, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_AgentTypeID
       value: 0
@@ -4554,6 +4608,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c6c0b2508611504fb61f80e24bc99e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnBrain
+--- !u!114 &1919313458 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7592299687561083703, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+  m_PrefabInstance: {fileID: 2742994513151523351}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &1934439858
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5171,6 +5236,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1569542968}
     m_Modifications:
+    - target: {fileID: 355250195947624955, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 996191576542939083, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5222,7 +5291,7 @@ PrefabInstance:
     - target: {fileID: 1391792459796914368, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1569542975}
+      objectReference: {fileID: 1569542974}
     - target: {fileID: 1391792459796914368, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -5237,7 +5306,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1391792459796914368, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HandleInittingGlobalVars, Assembly-CSharp
+      value: PawnController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1391792459796914368, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName

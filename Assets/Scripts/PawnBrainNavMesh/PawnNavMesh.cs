@@ -180,9 +180,8 @@ public class PawnNavMesh : MonoBehaviour
     (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) DividePath(Vector3[] points)
     {
         float limit = GetAvDist() + distanceTravelling;
-
+        if (Mathf.Abs(limit) < 0.001f) return (null, points);
         if (limit < 0f) return (points, null);
-        if (limit == 0f) return (null, points);
 
         float distCalc = 0f;
         for (int i = 0; i < points.Length - 1; i++)

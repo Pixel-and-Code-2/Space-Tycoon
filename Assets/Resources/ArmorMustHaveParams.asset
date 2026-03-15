@@ -10,27 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41cf6bcf5f35067458db9c0a1798ba1e, type: 3}
-  m_Name: GlobalParameters
-  m_EditorClassIdentifier: Assembly-CSharp::GlobalParameters
+  m_Name: ArmorMustHaveParams
+  m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
-  - name: M
-    value: 6.66
-  - name: e
-    value: 1
-  - name: IsShootOnMove
+  - name: DMR
     value: 0
-  - name: MeleeDST
-    value: 1.5
+  - name: DMM
+    value: 0
+  - name: DR
+    value: 0
+  - name: MDR
+    value: 0
+  - name: ARMMASS
+    value: 0
   calculatedParameters: []
   mustHaveParameters: []
   isDirty: 0
-  parametersDictStateCache: 'M = 6,66 (6,66)
+  parametersDictStateCache: 'DMR = 0,00 (0,00)
 
-    e = 1,00 (1,00)
+    DMM = 0,00 (0,00)
 
-    IsShootOnMove
-    = 0,00 (0,00)
+    DR =
+    0,00 (0,00)
 
-    MeleeDST = 1,50 (1,50)
+    MDR = 0,00 (0,00)
+
+    ARMMASS = 0,00 (0,00)
 
 '

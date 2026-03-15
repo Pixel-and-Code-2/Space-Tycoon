@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 
 [RequireComponent(typeof(ISelectorBrain))]
@@ -22,9 +24,24 @@ public class PawnController : MonoBehaviour
     public ISelectorBrain enemySelectorBrain;
     [SerializeField]
     public PathDrawerWithText pathDrawer; // { get; private set; }
+    [SerializeField]
+    public Button toggleShootOnMoveButton;
+    [SerializeField]
+    public Color buttonColorOn;
+    [SerializeField]
+    public Color buttonColorOff;
+    [SerializeField]
+    public InputActionReference toggleShootOnMoveAction;
+    [SerializeField]
+    private Button startReloadButton;
+    [SerializeField]
+    private Color buttonColorStartReloadOn;
+    [SerializeField]
+    private Color buttonColorStartReloadOff;
 
 
-    public ISelectorBrain currentSelector { get; private set; }
+    public ISelectorBrain currentSelector
+    { get; private set; }
     public ISelectorBrainWithUI currentSelectorWithUICached { get; private set; }
     public IPawnState currentState { get; private set; }
     public IControlableSelectable _currentSelectedPawn;
@@ -89,7 +106,12 @@ public class PawnController : MonoBehaviour
         {
             if (currentSelectedPawn != null) currentSelectedPawn.OnDeselect();
             currentSelectedPawn = newSelection;
-            if (newSelection != null) newSelection.OnSelect();
+            if (newSelection != null)
+            {
+                newSelection.OnSelect();
+                UpdateMoveOnShootButtonColor();
+                UpdateStartReloadButtonColor();
+            }
         }
 
         ISelectable selectable = currentSelector.PollSelectClickableItem(clickableItemsController.currentSelectedItem);
@@ -133,6 +155,49 @@ public class PawnController : MonoBehaviour
         }
         isValidStage1 = false;
         isValidStage2 = false;
+
+        if (toggleShootOnMoveAction != null && toggleShootOnMoveAction.action.triggered && currentSelectedPawn != null)
+        {
+            ToggleShootOnMove();
+        }
+    }
+
+    public void ToggleShootOnMove()
+    {
+        if (currentSelectedPawn == null) return;
+        float res = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) == 0f ? 1f : 0f;
+        if (currentSelectedPawn.GetDynamicParameterValue(PawnDataController.WALKED_KEY) > 0.001f) res = 1f;
+        currentSelectedPawn.SetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY, res);
+        UpdateMoveOnShootButtonColor();
+    }
+    public void UpdateMoveOnShootButtonColor()
+    {
+        toggleShootOnMoveButton.image.color = Mathf.Abs(currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) - 0f) < 0.1f ? buttonColorOff : buttonColorOn;
+    }
+    public void StartReload()
+    {
+        if (currentSelectedPawn == null) return;
+        if (currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY) > 0.001f)
+        {
+            UpdateStartReloadButtonColor();
+            return;
+        }
+        float currentAmmo = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.TOTAL_AMMO_KEY);
+        float currentMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY);
+        float initialMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
+        float reloadMagWithAmount = Mathf.Min(initialMag - currentMag, currentAmmo);
+        float reloadedAmmo = currentAmmo - reloadMagWithAmount;
+        float reloadedMag = reloadMagWithAmount + currentMag;
+        currentSelectedPawn.SetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY, reloadedMag);
+        currentSelectedPawn.SetDynamicParameterValue(PawnDataController.TOTAL_AMMO_KEY, reloadedAmmo);
+        float movesToSkipForFullMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MOVES_TO_RELOAD_KEY);
+        float movesToSkip = Mathf.Ceil(movesToSkipForFullMag * (1 - reloadMagWithAmount / initialMag));
+        currentSelectedPawn.SetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY, movesToSkip);
+        UpdateStartReloadButtonColor();
+    }
+    public void UpdateStartReloadButtonColor()
+    {
+        startReloadButton.image.color = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY) < 0.1f ? buttonColorStartReloadOn : buttonColorStartReloadOff;
     }
 
     void OnValidate()

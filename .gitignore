@@ -26,6 +26,9 @@
 *.unityproj
 *.sln
 
+# Builds
+*.zip
+
 # Meta files: Unity generates .meta files for every asset. 
 # These are generally tracked, but sometimes large or unstable ones can be ignored.
 # NOTE: For standard workflow, keep .meta files! They store GUIDs necessary for linking assets.

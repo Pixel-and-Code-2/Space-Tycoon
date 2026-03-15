@@ -127,6 +127,10 @@ public class PawnBrain : IControlableSelectable
             PawnDataController.SHOOTED_AMOUNT_KEY,
             dataController.GetParameterValue(PawnDataController.SHOOTED_AMOUNT_KEY) + 1
         );
+        dataController.SetParameterValue(
+            PawnDataController.MAG_AMOUNT_KEY,
+            dataController.GetParameterValue(PawnDataController.MAG_AMOUNT_KEY) - 1
+        );
     }
     public override void OnMelee(Vector3 position)
     {
@@ -166,5 +170,13 @@ public class PawnBrain : IControlableSelectable
     public override void FillFormulaData(FormulaDataMonoBase formulaData, string prefix)
     {
         dataController.FillFormulaData(formulaData, prefix);
+    }
+    public override void SetDynamicParameterValue(string parameterName, float value)
+    {
+        dataController.SetParameterValue(parameterName, value);
+    }
+    public override float GetDynamicParameterValue(string parameterName)
+    {
+        return dataController.GetParameterValue(parameterName);
     }
 }

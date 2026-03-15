@@ -159,52 +159,84 @@ MonoBehaviour:
       - {fileID: 11400000}
       names:
       - Parameters
-  mustHaveParameters: []
+  mustHaveParameters:
+  - {fileID: 11400000, guid: 51f3c6c138b324e40af38d39a8bcf6f3, type: 2}
+  - {fileID: 11400000, guid: 841391b108c1aa14ba3bed0e70634795, type: 2}
   isDirty: 1
-  parametersDictStateCache: 'STR = 5,00 (5,00)
+  parametersDictStateCache: 'DMG = 5,00 (5,00)
 
-    DX = 5,00 (5,00)
+    MDMG = 0,00 (0,00)
 
-    IQ =
-    5,00 (5,00)
+    ROF
+    = 0,00 (0,00)
+
+    ACC = 0,00 (0,00)
+
+    MAG = 0,00 (0,00)
+
+    BULK = 0,00
+    (0,00)
+
+    RCL = 0,00 (0,00)
+
+    WPMASS = 0,00 (0,00)
+
+    MovesToReload
+    = 1,00 (1,00)
+
+    DMR = 0,00 (0,00)
+
+    DMM = 0,00 (0,00)
+
+    DR = 0,00
+    (0,00)
+
+    MDR = 0,00 (0,00)
+
+    ARMMASS = 0,00 (0,00)
+
+    STR = 5,00 (5,00)
+
+    DX
+    = 5,00 (5,00)
+
+    IQ = 5,00 (5,00)
 
     HT = 5,00 (5,00)
 
-    SHT = 5,00 (5,00)
+    SHT = 5,00
+    (5,00)
 
     BRW = 5,00 (5,00)
 
-    THR
-    = 5,00 (5,00)
+    THR = 5,00 (5,00)
 
     ENG = 5,00 (5,00)
 
-    SCI = 5,00 (5,00)
+    SCI
+    = 5,00 (5,00)
 
-    DDGB = 5,00
-    (5,00)
+    DDGB = 5,00 (5,00)
 
     SPDB = 5,00 (5,00)
 
-    DMG = 5,00 (5,00)
-
-    ShootAmount = 3,00
-    (3,00)
+    ShootAmount
+    = 3,00 (3,00)
 
     HP = 10,00 (10,00)
 
     PRC = 10,00 (10,00)
 
-    FP = 10,00 (10,00)
+    FP = 10,00
+    (10,00)
 
-    SPD
-    = 10,00 (10,00)
+    SPD = 10,00 (10,00)
 
     DDG = 16,00 (16,00)
 
-    BCW = 20,00 (20,00)
+    BCW = 20,00
+    (20,00)
 
-    BDMG
-    = 6,00 (6,00)
+    BDMG = 6,00 (6,00)
 
 '
