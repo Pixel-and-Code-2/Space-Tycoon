@@ -3947,12 +3947,16 @@ MonoBehaviour:
   calculateShootDamage:
     formula: 'Math.Max(0,
 
-      ((i_DMG  < 2 * t_DR) ?
+      (((float)Math.Round(g_Random * (i_MAXDMG-i_MINDMG)
+      + i_MINDMG)  < 2 * t_DR) ?
 
-      (int)Math.Floor((i_DMG
-      )/10) :
+      (int)Math.Floor((g_Random * (i_MAXDMG-i_MINDMG)
+      + i_MINDMG)/10) :
 
-      (i_DMG - t_DR+(int)Math.Floor((t_DR )/10))))'
+      (g_Random * (i_MAXDMG-i_MINDMG) + i_MINDMG - t_DR+(int)Math.Floor((t_DR
+      )/10))
+
+      ))'
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
       '(', ')'.\nYou also can provide variables from Data Assets available in this
       object, using words like 'g_Statname' - the full list of available vars is

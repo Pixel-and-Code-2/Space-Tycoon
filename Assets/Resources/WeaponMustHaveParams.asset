@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: WeaponMustHaveParams
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
-  - name: DMG
+  - name: MINDMG
+    value: 0
+  - name: MAXDMG
     value: 0
   - name: MDMG
     value: 0
@@ -36,19 +38,21 @@ MonoBehaviour:
   calculatedParameters: []
   mustHaveParameters: []
   isDirty: 0
-  parametersDictStateCache: 'DMG = 0,00 (0,00)
+  parametersDictStateCache: 'MINDMG = 0,00 (0,00)
 
-    MDMG = 0,00 (0,00)
+    MAXDMG = 0,00 (0,00)
 
-    ROF
+    MDMG
     = 0,00 (0,00)
+
+    ROF = 0,00 (0,00)
 
     ACC = 0,00 (0,00)
 
-    MAG = 0,00 (0,00)
-
-    BULK = 0,00
+    MAG = 0,00
     (0,00)
+
+    BULK = 0,00 (0,00)
 
     RCL = 0,00 (0,00)
 
