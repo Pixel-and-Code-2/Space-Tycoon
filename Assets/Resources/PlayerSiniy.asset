@@ -35,20 +35,22 @@ MonoBehaviour:
     value: 0
   - name: SPDB
     value: 0
+  - name: SHT
+    value: 10
   calculatedParameters: []
   mustHaveParameters:
-  - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
-  - {fileID: 11400000, guid: 3241949e1f09f444f946c7af71443abd, type: 2}
   - {fileID: 11400000, guid: d3b2db559de83f64693072d048142835, type: 2}
+  - {fileID: 11400000, guid: 3241949e1f09f444f946c7af71443abd, type: 2}
+  - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   isDirty: 0
-  parametersDictStateCache: 'DMG = 5,00 (5,00)
+  parametersDictStateCache: 'DMG = 10,00 (10,00)
 
     MDMG = 1,00 (1,00)
 
-    ACC
-    = 4,00 (4,00)
+    ROF
+    = 13,00 (13,00)
 
-    ROF = 13,00 (13,00)
+    ACC = 4,00 (4,00)
 
     MAG = 4,00 (4,00)
 
@@ -57,57 +59,69 @@ MonoBehaviour:
 
     RCL = 4,00 (4,00)
 
+    WPMASS = 0,00 (0,00)
+
+    MovesToReload
+    = 1,00 (1,00)
+
+    TotalAmmo = 40,00 (40,00)
+
+    DMR = 0,00 (0,00)
+
+    DMM
+    = 0,00 (0,00)
+
     DR = 21,00 (21,00)
 
-    MDR = 5,00
-    (5,00)
+    MDR = 5,00 (5,00)
 
-    ARMMASS = 9,00 (9,00)
+    ARMMASS
+    = 9,00 (9,00)
 
     STR = 6,00 (6,00)
 
     DX = 7,00 (7,00)
 
-    IQ
-    = 4,00 (4,00)
+    IQ = 4,00
+    (4,00)
 
     HT = 6,00 (6,00)
 
-    SHT = 5,00 (5,00)
+    SHT = 10,00 (10,00)
 
-    BRW = 2,00
-    (2,00)
+    BRW = 2,00 (2,00)
 
-    THR = 0,00 (0,00)
+    THR
+    = 0,00 (0,00)
 
     ENG = 0,00 (0,00)
 
     SCI = 0,00 (0,00)
 
-    DDGB
-    = 0,00 (0,00)
+    DDGB = 0,00
+    (0,00)
 
     SPDB = 0,00 (0,00)
 
     ShootAmount = 3,00 (3,00)
 
-    STH
-    = 4,00 (4,00)
+    STH = 4,00
+    (4,00)
 
     HP = 11,00 (11,00)
 
     PRC = 9,00 (9,00)
 
-    FP = 11,00
-    (11,00)
+    FP = 11,00 (11,00)
 
-    SPD = 5,75 (5,75)
+    SPD
+    = 5,75 (5,75)
 
     DDG = 6,75 (6,75)
 
     BCW = 11,50 (11,50)
 
-    BDMG
-    = 7,00 (7,00)
+    BDMG =
+    7,00 (7,00)
 
 '

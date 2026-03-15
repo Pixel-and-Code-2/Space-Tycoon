@@ -17,6 +17,8 @@ MonoBehaviour:
     value: 3
   - name: WPMASS
     value: 5
+  - name: TotalAmmo
+    value: 0
   calculatedParameters: []
   mustHaveParameters:
   - {fileID: 11400000, guid: 841391b108c1aa14ba3bed0e70634795, type: 2}
@@ -42,6 +44,6 @@ MonoBehaviour:
     MovesToReload
     = 1,00 (1,00)
 
-    TotalAmmo = 40,00 (40,00)
+    TotalAmmo = 0,00 (0,00)
 
 '

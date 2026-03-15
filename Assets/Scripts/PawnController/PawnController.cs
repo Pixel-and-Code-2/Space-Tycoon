@@ -191,12 +191,17 @@ public class PawnController : MonoBehaviour
         currentSelectedPawn.SetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY, reloadedMag);
         currentSelectedPawn.SetDynamicParameterValue(PawnDataController.TOTAL_AMMO_KEY, reloadedAmmo);
         float movesToSkipForFullMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MOVES_TO_RELOAD_KEY);
-        float movesToSkip = Mathf.Ceil(movesToSkipForFullMag * (1 - reloadMagWithAmount / initialMag));
-        currentSelectedPawn.SetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY, movesToSkip);
+        float movesToSkip = Mathf.Ceil(movesToSkipForFullMag * (reloadMagWithAmount / initialMag));
+        currentSelectedPawn.SetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY, movesToSkip + 1);
         UpdateStartReloadButtonColor();
     }
     public void UpdateStartReloadButtonColor()
     {
+        if (currentSelectedPawn == null)
+        {
+            startReloadButton.image.color = buttonColorStartReloadOff;
+            return;
+        }
         startReloadButton.image.color = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY) < 0.1f ? buttonColorStartReloadOn : buttonColorStartReloadOff;
     }
 

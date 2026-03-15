@@ -46,8 +46,6 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     private void ResetKeys()
     {
         var dict = initialPawnData.GetParametersDict();
-        // dynamicParameters[AVAILABLE_DISTANCE_KEY] = 12.5f;
-        // dynamicParameters[AVAILABLE_HEALTH_KEY] = 12.5f;
         if (dict.ContainsKey(INITIAL_HP_KEY))
         {
             dynamicParameters[AVAILABLE_HEALTH_KEY] = dict[INITIAL_HP_KEY];
