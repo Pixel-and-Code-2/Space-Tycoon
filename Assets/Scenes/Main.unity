@@ -1444,6 +1444,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1569542968}
     m_Modifications:
     - target: {fileID: 550354606863573953, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 550354606863573953, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: defaultLookTarget
       value: 
       objectReference: {fileID: 1066974138}
@@ -3789,7 +3793,7 @@ MonoBehaviour:
       ((i_STR + g_e*2 + i_MDMG  < 2 * t_DR) ?
 
       (int)Math.Floor((i_STR
-      + 2 + i_MDMG - t_DR)/10) :
+      + 2 + i_MDMG - t_MDR)/10) :
 
       (i_STR + g_e*2 + i_MDMG - t_DR)))'
     instruction: 

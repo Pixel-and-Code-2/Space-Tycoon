@@ -53,19 +53,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3b50b5aaf3770924db86c96c6418b0d7, type: 2}
   - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   isDirty: 0
-  parametersDictStateCache: 'DMG = 0,00 (0,00)
+  parametersDictStateCache: 'MINDMG = 0,00 (0,00)
 
-    MDMG = 1,00 (1,00)
+    MAXDMG = 0,00 (0,00)
 
-    ROF
-    = 0,00 (0,00)
+    MDMG
+    = 1,00 (1,00)
+
+    ROF = 0,00 (0,00)
 
     ACC = 0,00 (0,00)
 
-    MAG = 0,00 (0,00)
-
-    BULK = 0,00
+    MAG = 0,00
     (0,00)
+
+    BULK = 0,00 (0,00)
 
     RCL = 0,00 (0,00)
 
@@ -113,22 +115,25 @@ MonoBehaviour:
 
     SPDB = 0,00 (0,00)
 
-    ShootAmount = 3,00 (3,00)
+    DMG = 5,00 (5,00)
 
-    HP = 10,00
-    (10,00)
+    ShootAmount = 3,00
+    (3,00)
+
+    HP = 10,00 (10,00)
 
     PRC = 6,00 (6,00)
 
     FP = 8,00 (8,00)
 
-    SPD = 4,50 (4,50)
+    SPD
+    = 4,50 (4,50)
 
-    DDG
-    = 5,50 (5,50)
+    DDG = 5,50 (5,50)
 
     BCW = 9,00 (9,00)
 
-    BDMG = 6,00 (6,00)
+    BDMG = 6,00
+    (6,00)
 
 '
