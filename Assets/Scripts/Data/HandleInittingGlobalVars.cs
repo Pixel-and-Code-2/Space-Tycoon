@@ -41,10 +41,6 @@ public class HandleInittingGlobalVars : MonoBehaviour
                 };
     }
 
-    void Start()
-    {
-    }
-
 
     private ParameteredScriptableObject GetDataAsset(string fileName)
     {

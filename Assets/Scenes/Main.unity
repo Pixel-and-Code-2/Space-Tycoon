@@ -3971,19 +3971,23 @@ MonoBehaviour:
     - Initiator
     - Target
   calculateShootAccuracy:
-    formula: "(c_AttackerMovesToSkip > 0 ? -4 : \n(c_isWallsBetween > 0 ? -1 : \n(c_AttackerAvailableAmmo
-      < 0.5 ? -2 :\n(c_AttackerCurrentMag < 0.5 ? -3 :\nMath.Max(g_M, Math.Min(100-g_M,\n\n((c_AttackerShotAmount
+    formula: "(c_AttackerMovesToSkip > 0.5 ? -4 : \n(c_AttackerMeleeAmount > 0.5
+      ? -5 :\n(c_isWallsBetween > 0.5 ? -1 : \n(c_AttackerAvailableAmmo < 0.5 ? -2
+      :\n(c_AttackerCurrentMag < 0.5 ? -3 :\nMath.Max(g_M, Math.Min(100-g_M,\n\n((c_AttackerShotAmount
       > 0.5) ?\n    ((c_AttackerIsShootOnMove < 0.5) ?\n        ((i_DX\n         
       + i_SHT\n          - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n         
       - (int)(2.5 * Math.Log((c_AttackerLastRoundWalked-0.2)/1.9))\n          - i_RCL\n         
       + 3\n        )* g_M)\n    :\n        ((i_DX\n          + i_SHT\n          -
       (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n          - (int)(2.5 * Math.Log((c_AttackerLastRoundWalked-0.2)/1.9))\n         
-      - i_RCL\n          - i_BULK\n          + 3\n        )* g_M))\n:\n    ((c_AttackerIsShootOnMove
-      < 0.5) ?\n        ((i_DX\n          + i_SHT\n          - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n         
-      - (int)(2.5 * Math.Log((c_AttackerLastRoundWalked-0.2)/1.9))\n          + 3\n       
-      )* g_M)\n    :\n        ((i_DX\n          + i_SHT\n          - (int)(2.5 *
-      Math.Log((c_pawnDistance-0.2)/1.9))\n          - (int)(2.5 * Math.Log((c_AttackerLastRoundWalked-0.2)/1.9))\n         
-      - i_BULK\n          + 3\n        ) * g_M))\n\n)))/100\n))))"
+      - i_RCL\n          - i_BULK\n          - i_BULK * (float)Math.Round(Math.Min(\n             
+      Math.Abs(c_targetAngle - c_lastShotAngle),\n              360 - Math.Abs(c_targetAngle
+      - c_lastShotAngle)\n          )/15)\n          + 3\n        )* g_M))\n:\n   
+      ((c_AttackerIsShootOnMove < 0.5) ?\n        ((i_DX\n          + i_SHT\n         
+      - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n          - (int)(2.5 *
+      Math.Log((c_AttackerLastRoundWalked-0.2)/1.9))\n          + 3\n        )* g_M)\n   
+      :\n        ((i_DX\n          + i_SHT\n          - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n         
+      - (int)(2.5 * Math.Log((c_AttackerLastRoundWalked-0.2)/1.9))\n          - i_BULK\n         
+      + 3\n        ) * g_M))\n\n)))/100\n)))))"
     instruction: 
     dataAssets:
     - {fileID: 1569542970}

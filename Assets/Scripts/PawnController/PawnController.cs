@@ -66,7 +66,9 @@ public class PawnController : MonoBehaviour
     public const string PREY_PREFIX = "Prey";
     public const string IS_WALLS_BETWEEN_KEY = "isWallsBetween";
     public const string PAWN_DISTANCE_LABEL = "pawnDistance";
-    public static string[] ALL_KEYS = new string[] { IS_WALLS_BETWEEN_KEY, PAWN_DISTANCE_LABEL };
+    public const string CURRENT_TARGET_ANGLE = "targetAngle";
+    public const string LAST_SHOT_ANGLE = "lastShotAngle";
+    public static string[] ALL_KEYS = new string[] { IS_WALLS_BETWEEN_KEY, PAWN_DISTANCE_LABEL, CURRENT_TARGET_ANGLE, LAST_SHOT_ANGLE };
 
     void Awake()
     {
@@ -265,8 +267,13 @@ public class PawnController : MonoBehaviour
         Vector3 direction = (target - origin).normalized;
         float distance = Vector3.Distance(origin, target);
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PAWN_DISTANCE_LABEL] = distance;
-        float randomValue = Random.value;
-        HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.RANDOM_KEY] = randomValue;
+        // float randomValue = Random.value;
+        HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.RANDOM_KEY] = Random.value;
+
+        Vector3 dir2D = new Vector3(direction.x, 0f, direction.z).normalized;
+        float angle = Mathf.Atan2(dir2D.z, dir2D.x) * Mathf.Rad2Deg;
+        if (angle < 0) angle += 360f;
+        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[CURRENT_TARGET_ANGLE] = angle;
 
         RaycastHit hitInfo;
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[IS_WALLS_BETWEEN_KEY] =
