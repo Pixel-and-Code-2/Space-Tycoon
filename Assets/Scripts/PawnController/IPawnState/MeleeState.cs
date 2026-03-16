@@ -15,6 +15,14 @@ public class MeleeState : IPawnState
     [SerializeField]
     private int tooFarCode = -1;
     public List<ExitCode> exitCodes;
+    [SerializeField]
+    private FormulaFieldWithMemo calculateMeleeDefense1;
+    [SerializeField]
+    private string defenseMessage1;
+    [SerializeField]
+    private FormulaFieldWithMemo calculateMeleeDefense2;
+    [SerializeField]
+    private string defenseMessage2;
     public (IFormulaData, string) GetMeleeFormulaData() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated");
     private IFormulaData initiatorFormulaData => controlableSelectable == null ? HandleInittingGlobalVars.pawnMustHaveParams : controlableSelectable.GetFormulaData();
     public (IFormulaData, string) GetInitiatorFormulaData() => (initiatorFormulaData, "Initiator");
@@ -62,6 +70,28 @@ public class MeleeState : IPawnState
             calculateMeleeAccuracy.AddMemorizedDataset(GetInitiatorFormulaData);
             calculateMeleeAccuracy.AddMemorizedDataset(GetTargetFormulaData);
         }
+        if (calculateMeleeDefense1 == null)
+        {
+            calculateMeleeDefense1 = new FormulaFieldWithMemo();
+        }
+        if (calculateMeleeDefense1.memorySize != 3)
+        {
+            calculateMeleeDefense1.ClearMemorizedDatasets();
+            calculateMeleeDefense1.AddMemorizedDataset(GetMeleeFormulaData);
+            calculateMeleeDefense1.AddMemorizedDataset(GetInitiatorFormulaData);
+            calculateMeleeDefense1.AddMemorizedDataset(GetTargetFormulaData);
+        }
+        if (calculateMeleeDefense2 == null)
+        {
+            calculateMeleeDefense2 = new FormulaFieldWithMemo();
+        }
+        if (calculateMeleeDefense2.memorySize != 3)
+        {
+            calculateMeleeDefense2.ClearMemorizedDatasets();
+            calculateMeleeDefense2.AddMemorizedDataset(GetMeleeFormulaData);
+            calculateMeleeDefense2.AddMemorizedDataset(GetInitiatorFormulaData);
+            calculateMeleeDefense2.AddMemorizedDataset(GetTargetFormulaData);
+        }
     }
 
     void OnDisable()
@@ -79,6 +109,8 @@ public class MeleeState : IPawnState
                 float randomValue = Random.value;
                 controlableSelectable.OnMelee(worldPoint);
                 float chance = GetMeleeAccuracy(attackableSelectable);
+                float defenseChance1 = GetMeleeDefense1(attackableSelectable);
+                float defenseChance2 = GetMeleeDefense2(attackableSelectable);
                 (string message, Color color) = GetMessage(chance);
                 if (message != null)
                 {
@@ -86,7 +118,27 @@ public class MeleeState : IPawnState
                 }
                 if (randomValue < chance)
                 {
-                    attackableSelectable.OnGetHit(GetMeleeDamage(attackableSelectable));
+                    bool isDefended = false;
+                    randomValue = Random.value;
+                    if (randomValue < defenseChance1)
+                    {
+                        UI3DManager.Instance.ShowMessage(defenseMessage1, worldPoint, Color.red);
+                        isDefended = true;
+                    }
+                    randomValue = Random.value;
+                    if (randomValue < defenseChance2)
+                    {
+                        UI3DManager.Instance.ShowMessage(defenseMessage2, worldPoint, Color.red);
+                        isDefended = true;
+                    }
+                    if (isDefended)
+                    {
+                        attackableSelectable.OnGetDefendedHit(worldPoint - controlableSelectable.GetTransform().position, true);
+                    }
+                    else
+                    {
+                        attackableSelectable.OnGetHit(GetMeleeDamage(attackableSelectable));
+                    }
                 }
                 else
                 {
@@ -183,6 +235,29 @@ public class MeleeState : IPawnState
             }
         );
         return res;
+    }
+
+    private float GetMeleeDefense1(IAttackableSelectable attackableSelectable)
+    {
+        PawnController.SetCalculatableParamsForTwoPawns(controlableSelectable, attackableSelectable);
+        return calculateMeleeDefense1.EvaluateFormula(
+            new System.Collections.Generic.Dictionary<string, float>[] {
+                HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict,
+                controlableSelectable.GetFormulaData().parametersDict,
+                attackableSelectable.GetFormulaData().parametersDict
+            }
+        );
+    }
+    private float GetMeleeDefense2(IAttackableSelectable attackableSelectable)
+    {
+        PawnController.SetCalculatableParamsForTwoPawns(controlableSelectable, attackableSelectable);
+        return calculateMeleeDefense2.EvaluateFormula(
+            new System.Collections.Generic.Dictionary<string, float>[] {
+                HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict,
+                controlableSelectable.GetFormulaData().parametersDict,
+                attackableSelectable.GetFormulaData().parametersDict
+            }
+        );
     }
 
     public override bool IsErrorChance(IAttackableSelectable attackableSelectable)

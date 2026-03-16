@@ -1,4 +1,5 @@
 using System;
+using Random = UnityEngine.Random;
 using UnityEngine;
 
 public class HandleInittingGlobalVars : MonoBehaviour
@@ -34,6 +35,10 @@ public class HandleInittingGlobalVars : MonoBehaviour
         if (globalSettingsAssets == null)
             globalSettingsAssets = Resources.Load<GlobalSettingsAssets>("GlobalSettings");
         onParamsUpdated?.Invoke();
+        ParameteredScriptableObject.OnUpdateParams += () =>
+                {
+                    globalParameters.GetParametersDict()[RANDOM_KEY] = Random.value;
+                };
     }
 
 

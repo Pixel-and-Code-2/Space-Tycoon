@@ -17,10 +17,12 @@ MonoBehaviour:
     value: 6.66
   - name: e
     value: 1
-  - name: IsShootOnMove
-    value: 0
   - name: MeleeDST
     value: 1.5
+  - name: IsStepByStep
+    value: 0
+  - name: Random
+    value: 0
   calculatedParameters: []
   mustHaveParameters: []
   isDirty: 0
@@ -28,9 +30,11 @@ MonoBehaviour:
 
     e = 1,00 (1,00)
 
-    IsShootOnMove
-    = 0,00 (0,00)
+    MeleeDST
+    = 1,50 (1,50)
 
-    MeleeDST = 1,50 (1,50)
+    IsStepByStep = 0,00 (0,00)
+
+    Random = 0,00 (0,00)
 
 '
