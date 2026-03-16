@@ -3790,12 +3790,12 @@ MonoBehaviour:
   calculateMeleeDamage:
     formula: 'Math.Max(0,
 
-      ((i_STR + g_e*2 + i_MDMG  < 2 * t_DR) ?
+      ((i_STR + g_e*2 + i_MDMG  < 2 * t_MDR) ?
 
       (int)Math.Floor((i_STR
       + 2 + i_MDMG - t_MDR)/10) :
 
-      (i_STR + g_e*2 + i_MDMG - t_DR)))'
+      (i_STR + g_e*2 + i_MDMG - t_MDR)))'
     instruction: 
     dataAssets:
     - {fileID: 1569542970}
@@ -3961,16 +3961,7 @@ MonoBehaviour:
       )/10))
 
       ))'
-    instruction: "Type a mathematical expression using common '+', '-', '*', '/',
-      '(', ')'.\nYou also can provide variables from Data Assets available in this
-      object, using words like 'g_Statname' - the full list of available vars is
-      listed below.\nEverything starting with '//' till the end of the line will
-      be ignored as well as between those two: '/*', '*/'.\nYou also can use Math
-      C# library, for example: Math.Abs(-g_someglobalstat).\nList of math formuls:
-      Abs, Ceiling, Floor, Round, Pow, Sqrt, Sin, Cos, Tan (which use radians), Min,
-      Max, Log. Also you can use: 'Math.PI' and 'Math.E'.\nClick the available variable
-      below to add its name to the end o\u0430 the formula (but be sure to the formula
-      to be blured when clicked)."
+    instruction: 
     dataAssets:
     - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
@@ -3982,13 +3973,17 @@ MonoBehaviour:
   calculateShootAccuracy:
     formula: "(c_AttackerMovesToSkip > 0 ? -4 : \n(c_isWallsBetween > 0 ? -1 : \n(c_AttackerAvailableAmmo
       < 0.5 ? -2 :\n(c_AttackerCurrentMag < 0.5 ? -3 :\nMath.Max(g_M, Math.Min(100-g_M,\n\n((c_AttackerShotAmount
-      > 0.5) ?\n    ((c_AttackerIsShootOnMove < 0.5) ?\n        ((i_DX + i_SHT -
-      2 * (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9)) - i_RCL + 3) * g_M)\n   
-      :\n        ((i_DX + i_SHT - 2 * (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))
-      - i_RCL - i_BULK + 3) * g_M))\n:\n    ((c_AttackerIsShootOnMove < 0.5) ?\n       
-      ((i_DX + i_SHT - 2 * (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9)) + 3) *
-      g_M)\n    :\n        ((i_DX + i_SHT - 2 * (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))
-      - i_BULK + 3) * g_M))\n\n)))/100\n))))"
+      > 0.5) ?\n    ((c_AttackerIsShootOnMove < 0.5) ?\n        ((i_DX\n         
+      + i_SHT\n          - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n         
+      - (int)(2.5 * Math.Log((c_AttackerLastRoundWalked-0.2)/1.9))\n          - i_RCL\n         
+      + 3\n        )* g_M)\n    :\n        ((i_DX\n          + i_SHT\n          -
+      (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n          - (int)(2.5 * Math.Log((c_AttackerLastRoundWalked-0.2)/1.9))\n         
+      - i_RCL\n          - i_BULK\n          + 3\n        )* g_M))\n:\n    ((c_AttackerIsShootOnMove
+      < 0.5) ?\n        ((i_DX\n          + i_SHT\n          - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n         
+      - (int)(2.5 * Math.Log((c_AttackerLastRoundWalked-0.2)/1.9))\n          + 3\n       
+      )* g_M)\n    :\n        ((i_DX\n          + i_SHT\n          - (int)(2.5 *
+      Math.Log((c_pawnDistance-0.2)/1.9))\n          - (int)(2.5 * Math.Log((c_AttackerLastRoundWalked-0.2)/1.9))\n         
+      - i_BULK\n          + 3\n        ) * g_M))\n\n)))/100\n))))"
     instruction: 
     dataAssets:
     - {fileID: 1569542970}

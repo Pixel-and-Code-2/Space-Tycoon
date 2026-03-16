@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 [CreateAssetMenu(fileName = "Parameters", menuName = "Parameters", order = 1)]
 public class ParameteredScriptableObject : ScriptableObject, IFormulaData
@@ -18,18 +19,12 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
     [SerializeField, HideInInspector]
     private string parametersDictStateCache = string.Empty;
     public Dictionary<string, float> parametersDict { get; private set; } = new Dictionary<string, float>();
+    [SerializeField, HideInInspector]
+    public static event Action OnUpdateParams;
 
     public List<string> GetParameterNames()
     {
         var lst = new List<string>();
-        // foreach (var calculatedParameter in calculatedParameters)
-        // {
-        //     lst.Add(calculatedParameter.name);
-        // }
-        // foreach (var parameter in parameters)
-        // {
-        //     lst.Add(parameter.name);
-        // }
         RebuildParametersDict();
         foreach (var kv in parametersDict)
         {
@@ -51,10 +46,6 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
 
     public string GetParametersDictState()
     {
-        // if (!isDirty && !string.IsNullOrEmpty(parametersDictStateCache))
-        // {
-        //     return parametersDictStateCache;
-        // }
         RebuildParametersDict();
         if (parametersDict.Count == 0)
         {
@@ -66,7 +57,6 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
             sb.AppendLine(kv.Key + " = " + kv.Value.ToString("F2") + " (" + kv.Value.ToString("F2") + ")");
 
         parametersDictStateCache = sb.ToString();
-        // Debug.Log("Cache updated for: " + name);
         return parametersDictStateCache;
     }
 
@@ -108,6 +98,7 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         }
         foreach (var cf in calculatedParameters)
             formulas.Add(cf);
+        OnUpdateParams?.Invoke();
         foreach (var cf in formulas)
         {
             if (cf.IsAvailable())

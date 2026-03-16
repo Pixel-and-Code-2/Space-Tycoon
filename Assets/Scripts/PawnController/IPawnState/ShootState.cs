@@ -66,7 +66,6 @@ public class ShootState : IPawnState
     {
         if (selectable is IAttackableSelectable attackableSelectable)
         {
-
             if (worldPoint != Vector3.zero && selectable != null)
             {
                 float randomValue = Random.value;
@@ -153,14 +152,13 @@ public class ShootState : IPawnState
     private float GetShootDamage(IAttackableSelectable attackableSelectable)
     {
         PawnController.SetCalculatableParamsForTwoPawns(controlableSelectable, attackableSelectable);
-
-        return calculateShootDamage.EvaluateFormula(
+        float res = calculateShootDamage.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
-                // shootingFormulaData.parametersDict,
                 HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict,
                 controlableSelectable.GetFormulaData().parametersDict, attackableSelectable.GetFormulaData().parametersDict,
             }
         );
+        return res;
     }
 
     private float GetShootAccuracy(IAttackableSelectable attackableSelectable)
@@ -169,7 +167,6 @@ public class ShootState : IPawnState
 
         float res = calculateShootAccuracy.EvaluateFormula(
             new System.Collections.Generic.Dictionary<string, float>[] {
-                // shootingFormulaData.parametersDict,
                 HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict,
                 controlableSelectable.GetFormulaData().parametersDict, attackableSelectable.GetFormulaData().parametersDict
             }

@@ -265,7 +265,8 @@ public class PawnController : MonoBehaviour
         Vector3 direction = (target - origin).normalized;
         float distance = Vector3.Distance(origin, target);
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PAWN_DISTANCE_LABEL] = distance;
-        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[HandleInittingGlobalVars.RANDOM_KEY] = Random.value;
+        float randomValue = Random.value;
+        HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.RANDOM_KEY] = randomValue;
 
         RaycastHit hitInfo;
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[IS_WALLS_BETWEEN_KEY] =
