@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
   - name: DR
-    value: 18
+    value: 15
   - name: MDR
     value: 6
   - name: ARMMASS
@@ -28,7 +28,7 @@ MonoBehaviour:
     DMM = 0,00 (0,00)
 
     DR =
-    18,00 (18,00)
+    15,00 (15,00)
 
     MDR = 6,00 (6,00)
 
