@@ -12,6 +12,10 @@ public class ShootState : IPawnState
     [SerializeField]
     private FormulaFieldWithMemo calculateShootAccuracy;
     public List<ExitCode> exitCodes;
+    [SerializeField]
+    private FormulaFieldWithMemo calculateShootDefense;
+    [SerializeField]
+    private string defenseMessage;
 
     public (IFormulaData, string) GetShootFormulaData() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated");
     private IFormulaData initiatorFormulaData => controlableSelectable == null ? HandleInittingGlobalVars.pawnMustHaveParams : controlableSelectable.GetFormulaData();
@@ -55,6 +59,17 @@ public class ShootState : IPawnState
             calculateShootAccuracy.AddMemorizedDataset(GetInitiatorFormulaData);
             calculateShootAccuracy.AddMemorizedDataset(GetTargetFormulaData);
         }
+        if (calculateShootDefense == null)
+        {
+            calculateShootDefense = new FormulaFieldWithMemo();
+        }
+        if (calculateShootDefense.memorySize != 3)
+        {
+            calculateShootDefense.ClearMemorizedDatasets();
+            calculateShootDefense.AddMemorizedDataset(GetShootFormulaData);
+            calculateShootDefense.AddMemorizedDataset(GetInitiatorFormulaData);
+            calculateShootDefense.AddMemorizedDataset(GetTargetFormulaData);
+        }
     }
 
     void OnDisable()
@@ -81,6 +96,7 @@ public class ShootState : IPawnState
                 //     360 - Mathf.Abs(curr_target_angle - before)
                 // ) / 15));
                 float chance = GetShootAccuracy(attackableSelectable);
+                float defenseChance = GetShootDefense(attackableSelectable);
                 (string message, Color color) = GetMessage(chance);
                 if (message != null)
                 {
@@ -88,7 +104,16 @@ public class ShootState : IPawnState
                 }
                 if (randomValue < chance)
                 {
-                    attackableSelectable.OnGetHit(GetShootDamage(attackableSelectable));
+                    randomValue = Random.value;
+                    if (randomValue < defenseChance)
+                    {
+                        UI3DManager.Instance.ShowMessage(defenseMessage, worldPoint, Color.red);
+                        attackableSelectable.OnGetDefendedHit(worldPoint - controlableSelectable.GetTransform().position, false);
+                    }
+                    else
+                    {
+                        attackableSelectable.OnGetHit(GetShootDamage(attackableSelectable));
+                    }
                 }
                 else
                 {
@@ -182,6 +207,16 @@ public class ShootState : IPawnState
             }
         );
         return res;
+    }
+    private float GetShootDefense(IAttackableSelectable attackableSelectable)
+    {
+        PawnController.SetCalculatableParamsForTwoPawns(controlableSelectable, attackableSelectable);
+        return calculateShootDefense.EvaluateFormula(
+            new System.Collections.Generic.Dictionary<string, float>[] {
+                HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict,
+                controlableSelectable.GetFormulaData().parametersDict, attackableSelectable.GetFormulaData().parametersDict
+            }
+        );
     }
     private (string, Color) GetMessage(float chance)
     {

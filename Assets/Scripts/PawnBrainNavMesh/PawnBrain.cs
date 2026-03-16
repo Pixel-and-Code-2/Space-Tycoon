@@ -19,12 +19,16 @@ public class PawnBrain : IControlableSelectable
     [SerializeField]
     private AnimatorBrainBase animatorBrain;
     private Animator anim;
+    private Rigidbody rb;
+    [SerializeField]
+    // ToDo: move this variable to global data or sth
+    private float hitForce = 2f;
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
         dataController = GetComponent<PawnDataController>();
         pawnNavMesh = GetComponent<PawnNavMesh>();
-
+        rb = GetComponent<Rigidbody>();
         animatorBrain = GetComponentInChildren<AnimatorBrainBase>();
         anim = GetComponentInChildren<Animator>();
         animatorBrain.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
@@ -159,6 +163,22 @@ public class PawnBrain : IControlableSelectable
         dataController.SetParameterValue(
             PawnDataController.AVAILABLE_HEALTH_KEY,
             newHealth
+        );
+        dataController.SetParameterValue(
+            PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY,
+            dataController.GetParameterValue(PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY) + 1
+        );
+    }
+
+    public override void OnGetDefendedHit(Vector3 hitDirection, bool isMelee)
+    {
+        hitDirection.y = 0f;
+        hitDirection.Normalize();
+        hitDirection.y = 1f;
+        rb.AddForce(hitDirection * hitForce, ForceMode.Impulse);
+        dataController.SetParameterValue(
+            PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY,
+            dataController.GetParameterValue(PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY) + (isMelee ? 1 : 2)
         );
     }
 

@@ -252,6 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnBrain
   animatorBrain: {fileID: 0}
+  hitForce: 200
 --- !u!114 &8515852256048443046
 MonoBehaviour:
   m_ObjectHideFlags: 0

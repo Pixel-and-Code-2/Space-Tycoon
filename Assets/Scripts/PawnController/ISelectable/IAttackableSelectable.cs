@@ -4,6 +4,7 @@ public abstract class IAttackableSelectable : ISelectable
 {
     public virtual bool IsAttackable => true;
     public abstract void OnGetHit(float damage);
+    public abstract void OnGetDefendedHit(Vector3 hitDirection, bool isMelee);
     public abstract IFormulaData GetFormulaData();
     public abstract float GetDynamicParameterValue(string parameterName);
     public abstract void SetDynamicParameterValue(string parameterName, float value);
