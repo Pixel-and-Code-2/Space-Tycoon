@@ -18,7 +18,7 @@ MonoBehaviour:
   - name: e
     value: 1
   - name: MeleeDST
-    value: 1.5
+    value: 1.9
   - name: IsStepByStep
     value: 0
   - name: Random
@@ -31,10 +31,10 @@ MonoBehaviour:
     e = 1,00 (1,00)
 
     MeleeDST
-    = 1,50 (1,50)
+    = 1,90 (1,90)
 
     IsStepByStep = 0,00 (0,00)
 
-    Random = 0,00 (0,00)
+    Random = 0,65 (0,65)
 
 '

@@ -107,6 +107,7 @@ public class PawnNavMesh : MonoBehaviour
 
                     AddWalkedDistance(GetAvDist());
                     isMoving = true;
+                    TurnManager.Instance.RegisterMovingPawn(gameObject);
                     return;
                 }
                 distanceTravelling += dist;
@@ -117,6 +118,7 @@ public class PawnNavMesh : MonoBehaviour
 
             AddWalkedDistance(distanceTravelling);
             isMoving = true;
+            TurnManager.Instance.RegisterMovingPawn(gameObject);
         }
     }
 
@@ -142,6 +144,7 @@ public class PawnNavMesh : MonoBehaviour
                         SetTypeOfModifierVolumes(-1, -1);
                         navMeshAgent.ResetPath();
                         distanceTravelling = 0f;
+                        TurnManager.Instance.UnregisterMovingPawn(gameObject);
                     }
                 }
             }

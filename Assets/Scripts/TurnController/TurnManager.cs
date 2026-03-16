@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TurnManager : MonoBehaviour
 {
@@ -25,6 +27,13 @@ public class TurnManager : MonoBehaviour
     public bool IsPlayerTurn { get; private set; } = true;
     [SerializeField]
     private NavMeshSurface navMeshSurface;
+    private List<UnityEngine.Object> movingPawns = new List<UnityEngine.Object>();
+    [SerializeField]
+    private Button endTurnButton;
+    [SerializeField]
+    private Sprite activeEndTurn;
+    [SerializeField]
+    private Sprite inactiveEndTurn;
 
     private void Awake()
     {
@@ -45,6 +54,22 @@ public class TurnManager : MonoBehaviour
         StartCoroutine(StartFirstTurn());
     }
 
+    public void RegisterMovingPawn(UnityEngine.Object pawn)
+    {
+        movingPawns.Add(pawn);
+        endTurnButton.image.sprite = inactiveEndTurn;
+        endTurnButton.interactable = false;
+    }
+    public void UnregisterMovingPawn(UnityEngine.Object pawn)
+    {
+        movingPawns.Remove(pawn);
+        if (movingPawns.Count == 0)
+        {
+            endTurnButton.interactable = true;
+            endTurnButton.image.sprite = activeEndTurn;
+        }
+    }
+
     private IEnumerator StartFirstTurn()
     {
         yield return null; // Wait one frame to ensure all components are initialized
@@ -60,6 +85,7 @@ public class TurnManager : MonoBehaviour
 
     public void EndPlayerTurn()
     {
+        if (movingPawns.Count > 0) return;
         IsPlayerTurn = false;
         OnPlayerTurnEnd?.Invoke();
         Debug.Log("PLAYER TURN END");

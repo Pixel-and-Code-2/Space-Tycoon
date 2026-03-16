@@ -27,17 +27,17 @@ public class PawnController : MonoBehaviour
     [SerializeField]
     public Button toggleShootOnMoveButton;
     [SerializeField]
-    public Color buttonColorOn;
+    public Sprite toggleShootButtonOn;
     [SerializeField]
-    public Color buttonColorOff;
+    public Sprite toggleShootButtonOff;
     [SerializeField]
     public InputActionReference toggleShootOnMoveAction;
     [SerializeField]
     private Button startReloadButton;
     [SerializeField]
-    private Color buttonColorStartReloadOn;
+    private Sprite startReloadButtonOn;
     [SerializeField]
-    private Color buttonColorStartReloadOff;
+    private Sprite startReloadButtonOff;
 
 
     public ISelectorBrain currentSelector
@@ -174,7 +174,14 @@ public class PawnController : MonoBehaviour
     }
     public void UpdateMoveOnShootButtonColor()
     {
-        toggleShootOnMoveButton.image.color = Mathf.Abs(currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) - 0f) < 0.1f ? buttonColorOff : buttonColorOn;
+        if (Mathf.Abs(currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) - 0f) < 0.1f)
+        {
+            toggleShootOnMoveButton.image.sprite = toggleShootButtonOff;
+        }
+        else
+        {
+            toggleShootOnMoveButton.image.sprite = toggleShootButtonOn;
+        }
     }
     public void StartReload()
     {
@@ -201,10 +208,17 @@ public class PawnController : MonoBehaviour
     {
         if (currentSelectedPawn == null)
         {
-            startReloadButton.image.color = buttonColorStartReloadOff;
+            startReloadButton.image.sprite = startReloadButtonOff;
             return;
         }
-        startReloadButton.image.color = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY) < 0.1f ? buttonColorStartReloadOn : buttonColorStartReloadOff;
+        if (currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY) < 0.1f)
+        {
+            startReloadButton.image.sprite = startReloadButtonOn;
+        }
+        else
+        {
+            startReloadButton.image.sprite = startReloadButtonOff;
+        }
     }
 
     void OnValidate()

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using UnityEditor.Rendering;
 
 [CreateAssetMenu(fileName = "Parameters", menuName = "Parameters", order = 1)]
 public class ParameteredScriptableObject : ScriptableObject, IFormulaData
@@ -20,7 +21,7 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
     private string parametersDictStateCache = string.Empty;
     public Dictionary<string, float> parametersDict { get; private set; } = new Dictionary<string, float>();
     [SerializeField, HideInInspector]
-    public static event Action OnUpdateParams;
+    public static event Action<ParameteredScriptableObject> OnUpdateParams;
 
     public List<string> GetParameterNames()
     {
@@ -74,6 +75,11 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
 
     public void RebuildParametersDict(HashSet<ParameteredScriptableObject> visited)
     {
+        if (visited.Count > 15)
+        {
+            Debug.LogError("Recursive call limit reached for: " + name);
+            return;
+        }
         if (visited.Contains(this)) return;
         visited.Add(this);
         parametersDict.Clear();
@@ -98,7 +104,7 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         }
         foreach (var cf in calculatedParameters)
             formulas.Add(cf);
-        OnUpdateParams?.Invoke();
+        OnUpdateParams?.Invoke(this);
         foreach (var cf in formulas)
         {
             if (cf.IsAvailable())

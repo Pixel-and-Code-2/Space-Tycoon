@@ -244,9 +244,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 1569542968}
     m_Modifications:
     - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: activeEndTurn
+      value: 
+      objectReference: {fileID: -831309971, guid: 32c2c0cbb77d54940986386412e7af2b, type: 3}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: endTurnButton
+      value: 
+      objectReference: {fileID: 466472873}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
       propertyPath: navMeshSurface
       value: 
       objectReference: {fileID: 1147300971}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: inactiveEndTurn
+      value: 
+      objectReference: {fileID: -588120006, guid: 2d0b379754584644c95d8b2d15f789fb, type: 3}
     - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
       propertyPath: enemyNavMeshSurface
       value: 
@@ -529,6 +541,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e7a0b4608a389f4cbe5927a5f0bcefa, type: 3}
+--- !u!114 &466472873 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7674540831974941421, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+  m_PrefabInstance: {fileID: 2742994513151523351}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &482326685
 GameObject:
   m_ObjectHideFlags: 0
@@ -3964,12 +3987,12 @@ MonoBehaviour:
   enemySelectorBrain: {fileID: 1569542978}
   pathDrawer: {fileID: 1317397245437049300}
   toggleShootOnMoveButton: {fileID: 1764747765}
-  buttonColorOn: {r: 0.9811321, g: 0.63383746, b: 0.26842293, a: 1}
-  buttonColorOff: {r: 0.43867922, g: 0.43867922, b: 0.43867922, a: 0.6745098}
+  toggleShootButtonOn: {fileID: 1732047824, guid: e894649ef0d0a1b4b85749f25c37f37f, type: 3}
+  toggleShootButtonOff: {fileID: -863166482, guid: cdfc45e5d17ab3947bc8a4c3c87371ca, type: 3}
   toggleShootOnMoveAction: {fileID: -8480799163055771326, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   startReloadButton: {fileID: 1919313458}
-  buttonColorStartReloadOn: {r: 1, g: 1, b: 1, a: 1}
-  buttonColorStartReloadOff: {r: 0.25943398, g: 0.25943398, b: 0.25943398, a: 0.6627451}
+  startReloadButtonOn: {fileID: -51319423, guid: e278b7bc08516254aa16d5fb2c3d4cc4, type: 3}
+  startReloadButtonOff: {fileID: 1236265581, guid: f46e9092890fd7d4989e5dce5f6d2f98, type: 3}
   _currentSelectedPawn: {fileID: 0}
 --- !u!114 &1569542975
 MonoBehaviour:
@@ -5233,6 +5256,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1569542968}
     m_Modifications:
+    - target: {fileID: 37566628731749154, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 37566628731749154, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1027262560, guid: b6fd8e526570f384facd74c7cd29c7c9, type: 3}
     - target: {fileID: 355250195947624955, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5277,6 +5308,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1197946336038542303, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1197946336038542303, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -831309971, guid: 32c2c0cbb77d54940986386412e7af2b, type: 3}
     - target: {fileID: 1306394337026590783, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -5325,6 +5364,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1410669810776722837, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1410669810776722837, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -863166482, guid: cdfc45e5d17ab3947bc8a4c3c87371ca, type: 3}
     - target: {fileID: 1434598085804465601, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -5421,6 +5468,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3345269305490131753, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3345269305490131753, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2000980365, guid: 36df5c68837586c448dd298e3421684b, type: 3}
+    - target: {fileID: 3400155107433115717, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3400155107433115717, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -51319423, guid: e278b7bc08516254aa16d5fb2c3d4cc4, type: 3}
     - target: {fileID: 3800961250246812969, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Camera
       value: 
@@ -5641,6 +5704,14 @@ PrefabInstance:
       propertyPath: pawn
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7830355569509623485, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7830355569509623485, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 596277690, guid: 91227a6a8032e874280171dea746bd67, type: 3}
     - target: {fileID: 8379229608889304642, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

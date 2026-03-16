@@ -35,9 +35,12 @@ public class HandleInittingGlobalVars : MonoBehaviour
         if (globalSettingsAssets == null)
             globalSettingsAssets = Resources.Load<GlobalSettingsAssets>("GlobalSettings");
         onParamsUpdated?.Invoke();
-        ParameteredScriptableObject.OnUpdateParams += () =>
+        ParameteredScriptableObject.OnUpdateParams += (parametersObj) =>
                 {
-                    globalParameters.GetParametersDict()[RANDOM_KEY] = Random.value;
+                    if (parametersObj == globalParameters)
+                    {
+                        parametersObj.parametersDict[RANDOM_KEY] = Random.value;
+                    }
                 };
     }
 
