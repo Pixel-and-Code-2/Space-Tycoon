@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(PathDrawer))]
 [RequireComponent(typeof(PawnDataController))]
 [RequireComponent(typeof(PawnNavMesh))]
@@ -20,6 +22,8 @@ public class PawnBrain : IControlableSelectable
     private AnimatorBrainBase animatorBrain;
     private Animator anim;
     private Rigidbody rb;
+    private Collider col;
+    private NavMeshAgent navMeshAgent;
     [SerializeField]
     // ToDo: move this variable to global data or sth
     private float hitForce = 2f;
@@ -28,7 +32,9 @@ public class PawnBrain : IControlableSelectable
         pathDrawer = GetComponent<PathDrawer>();
         dataController = GetComponent<PawnDataController>();
         pawnNavMesh = GetComponent<PawnNavMesh>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
         animatorBrain = GetComponentInChildren<AnimatorBrainBase>();
         anim = GetComponentInChildren<Animator>();
         animatorBrain.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
@@ -155,10 +161,12 @@ public class PawnBrain : IControlableSelectable
             dataController.selectableType = SelectableType.Dead;
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
             pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
-            transform.position -= transform.up * 0.5f;
-            transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            // transform.position -= transform.up * 0.5f;
+            // transform.rotation = Quaternion.Euler(0f, 0f, 90f);
             animatorBrain.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
             newHealth = 0f;
+            col.enabled = false;
+            navMeshAgent.enabled = false;
         }
         dataController.SetParameterValue(
             PawnDataController.AVAILABLE_HEALTH_KEY,
