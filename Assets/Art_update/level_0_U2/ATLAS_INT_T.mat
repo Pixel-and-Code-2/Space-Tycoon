@@ -89,6 +89,7 @@ Material:
     - _ClippingMode: 2
     - _Cull: 0
     - _IsBaseMapAlphaAsClippingMask: 1
+    - _Is_LightColor_Base: 0
     - _ShadeColor_Step: 0.5
     m_Colors:
     - _1st_ShadeColor: {r: 0.42965472, g: 0.4403545, b: 0.509434, a: 1}
