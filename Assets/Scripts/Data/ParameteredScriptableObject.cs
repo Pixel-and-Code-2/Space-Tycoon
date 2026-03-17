@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
-using UnityEditor.Rendering;
 
 [CreateAssetMenu(fileName = "Parameters", menuName = "Parameters", order = 1)]
 public class ParameteredScriptableObject : ScriptableObject, IFormulaData
