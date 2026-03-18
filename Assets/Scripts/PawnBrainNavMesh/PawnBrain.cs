@@ -48,7 +48,8 @@ public class PawnBrain : IControlableSelectable
         TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
         TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
         pawnNavMesh.SetTypeOfModifierVolumes(dataController.selectableType == SelectableType.Player ? 1 : 0, 0, 0);
-
+        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE] = 0f;
+        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.CURRENT_TARGET_ANGLE] = 0f;
     }
 
     void Update()

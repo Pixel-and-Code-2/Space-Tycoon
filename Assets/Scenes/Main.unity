@@ -6384,7 +6384,7 @@ Transform:
   m_GameObject: {fileID: 901684446}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.31, y: -3.98, z: 1}
+  m_LocalPosition: {x: 0.31, y: -2.53, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13667,7 +13667,7 @@ MonoBehaviour:
   calculateMeleeDamage:
     formula: 'Math.Max(0,
 
-      ((i_STR + g_e*2 + i_MDMG  < 2 * t_MDR) ?
+      ((i_STR + g_e*2 + i_MDMG  < t_MDR) ?
 
       (int)Math.Floor((i_STR
       + 2 + i_MDMG - t_MDR)/10) :
@@ -13880,7 +13880,7 @@ MonoBehaviour:
     formula: 'Math.Max(0,
 
       (((float)Math.Round(g_Random * (i_MAXDMG-i_MINDMG)
-      + i_MINDMG)  < 2 * t_DR) ?
+      + i_MINDMG)  < t_DR) ?
 
       (int)Math.Floor((g_Random * (i_MAXDMG-i_MINDMG)
       + i_MINDMG)/10) :
@@ -13903,19 +13903,21 @@ MonoBehaviour:
       ? -5 :\n(c_isWallsBetween > 0.5 ? -1 : \n(c_AttackerAvailableAmmo < 0.5 ? -2
       :\n(c_AttackerCurrentMag < 0.5 ? -3 :\nMath.Max(g_M, Math.Min(100-g_M,\n\n((c_AttackerShotAmount
       > 0.5) ?\n    ((c_AttackerIsShootOnMove < 0.5) ?\n        ((i_DX\n         
-      + i_SHT\n          - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n         
-      - (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))\n          - i_RCL\n         
-      + 3\n        )* g_M)\n    :\n        ((i_DX\n          + i_SHT\n          -
-      (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n          - (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))\n         
-      - i_RCL\n          - i_BULK\n          - i_BULK * (float)Math.Round(Math.Min(\n             
+      + i_SHT\n          - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n          
+      - (c_PreyWalkedDistance > 0.2 ? \n              (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))
+      : 0)\n          - i_RCL\n          + 3\n        )* g_M)\n    :\n        ((i_DX\n         
+      + i_SHT\n          - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n          
+      - (c_PreyWalkedDistance > 0.2 ? \n              (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))
+      : 0)\n          - i_RCL\n          - i_BULK\n          - i_BULK * (float)Math.Round(Math.Min(\n             
       Math.Abs(c_targetAngle - c_lastShotAngle),\n              360 - Math.Abs(c_targetAngle
       - c_lastShotAngle)\n          )/15)\n          + 3\n        )* g_M))\n:\n   
       ((c_AttackerIsShootOnMove < 0.5) ?\n        ((i_DX\n          + i_SHT\n         
-      - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n          - (int)(2.5 *
-      Math.Log((c_PreyWalkedDistance-0.2)/1.9))\n          + 3\n        )* g_M)\n   
-      :\n        ((i_DX\n          + i_SHT\n          - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n         
-      - (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))\n          - i_BULK\n         
-      + 3\n        ) * g_M))\n\n)))/100\n)))))"
+      - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n           - (c_PreyWalkedDistance
+      > 0.2 ? \n              (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))
+      : 0)\n          + 3\n        )* g_M)\n    :\n        ((i_DX\n          + i_SHT\n         
+      - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n           - (c_PreyWalkedDistance
+      > 0.2 ? \n              (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))
+      : 0)\n          - i_BULK\n          + 3\n        ) * g_M))\n\n)))/100\n)))))"
     instruction: 
     dataAssets:
     - {fileID: 1569542970}
@@ -17567,6 +17569,7 @@ GameObject:
   - component: {fileID: 5568423941303754897}
   - component: {fileID: 4944981437536051803}
   - component: {fileID: 7606018933971240879}
+  - component: {fileID: 7606018933971240880}
   m_Layer: 8
   m_Name: M_01_INTERIOR_WALL_U1
   m_TagString: Untagged
@@ -17869,6 +17872,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7606018933971240880
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6496280960538203403}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4190959876382024242, guid: 212d88f6158163a489b29a418cfaac02, type: 3}
 --- !u!4 &7844054928089293150
 Transform:
   m_ObjectHideFlags: 0
