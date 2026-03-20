@@ -5,25 +5,30 @@ using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class TriggerData
+{
+    public GameObject triggerObject;
+    public List<PawnBrain> enemies = new List<PawnBrain>();
+    public bool IsEnemiesDestroyed => enemies.Find(enemy => enemy.GetSelectableType() == SelectableType.Enemy) == null;
+    [SerializeField, HideInInspector]
+    public bool isActive = false;
+}
+
 public class TurnManager : MonoBehaviour
 {
-    public static TurnManager Instance { get; private set; } // Singleton instance
-    // TurnManager()
-    // {
-    //     if (Instance == null) Instance = this;
-    //     else
-    //     {
-    //         Debug.LogError("Constructor met second TurnManager instance");
-    //     }
-    // }
-
-    // Actions to contoller and pawns to notify turn changes
+    public static TurnManager Instance { get; private set; }
     public event Action OnPlayerTurnStart;
     public event Action OnPlayerTurnEnd;
 
     public event Action OnEnemyTurnStart;
     public event Action OnEnemyTurnEnd;
 
+    public event Action OnTriggerZoneEnter;
+    public event Action OnTriggerZoneExit;
+
+    [SerializeField]
+    private List<TriggerData> listOfTriggers = new List<TriggerData>();
     public bool IsPlayerTurn { get; private set; } = true;
     [SerializeField]
     private NavMeshSurface navMeshSurface;
@@ -51,11 +56,68 @@ public class TurnManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(StartFirstTurn());
+        // StartCoroutine(StartFirstTurn());
+    }
+    public void EnterTrigger(GameObject triggerObject)
+    {
+        TriggerData trigger = listOfTriggers.Find(t => t.triggerObject == triggerObject);
+        if (trigger == null)
+        {
+            return;
+        }
+        if (trigger.IsEnemiesDestroyed)
+        {
+            return;
+        }
+        if (trigger.isActive)
+        {
+            return;
+        }
+        trigger.isActive = true;
+        OnTriggerZoneEnter?.Invoke();
+        HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 1f;
+        StartFirstTurn();
+    }
+    private void ExitAllTriggers()
+    {
+        HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 0f;
+        OnTriggerZoneExit?.Invoke();
     }
 
+    public void CheckTriggers()
+    {
+        foreach (var trigger in listOfTriggers)
+        {
+            if (trigger.isActive)
+            {
+                if (trigger.IsEnemiesDestroyed)
+                {
+                    trigger.isActive = false;
+                }
+            }
+        }
+        if (listOfTriggers.Find(t => t.isActive) == null)
+        {
+            ExitAllTriggers();
+        }
+    }
+    public bool IsInActiveTriggerZone(PawnBrain pawn)
+    {
+        foreach (var trigger in listOfTriggers)
+        {
+            if (trigger.isActive)
+            {
+                if (trigger.enemies.Contains(pawn))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public void RegisterMovingPawn(UnityEngine.Object pawn)
     {
+        if (listOfTriggers.Find(t => t.isActive) == null) return;
         movingPawns.Add(pawn);
         endTurnButton.image.sprite = inactiveEndTurn;
         endTurnButton.interactable = false;
@@ -86,6 +148,11 @@ public class TurnManager : MonoBehaviour
     public void EndPlayerTurn()
     {
         if (movingPawns.Count > 0) return;
+        CheckTriggers();
+        if (listOfTriggers.Find(t => t.isActive) == null)
+        {
+            return;
+        }
         IsPlayerTurn = false;
         OnPlayerTurnEnd?.Invoke();
         Debug.Log("PLAYER TURN END");

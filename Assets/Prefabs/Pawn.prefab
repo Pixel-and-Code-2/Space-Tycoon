@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 9210157037339918676}
   - component: {fileID: 6597195559084275918}
   - component: {fileID: 7664171741854589473}
+  - component: {fileID: 6360029765295339956}
   m_Layer: 7
   m_Name: Pawn
   m_TagString: Player
@@ -296,6 +297,11 @@ MonoBehaviour:
     onlySelected: 0
     onlyOnMove: 0
     onlyOnDeath: -1
+  - script: {fileID: 6360029765295339956}
+    onlyMyTurn: 0
+    onlySelected: -1
+    onlyOnMove: -1
+    onlyOnDeath: 0
 --- !u!114 &9210157037339918676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifierVolume
   m_SerializedVersion: 0
-  m_Size: {x: 2, y: 3, z: 4}
+  m_Size: {x: 2, y: 3, z: 5}
   m_Center: {x: 0, y: 0, z: 0}
   m_Area: 3
   m_AffectedAgents: ffffffff
@@ -326,7 +332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifierVolume
   m_SerializedVersion: 0
-  m_Size: {x: 4, y: 3, z: 2}
+  m_Size: {x: 5, y: 3, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
   m_Area: 3
   m_AffectedAgents: ffffffff
@@ -346,6 +352,23 @@ MonoBehaviour:
   m_Size: {x: 1.5, y: 3, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
   m_Area: 4
+  m_AffectedAgents: ffffffff
+--- !u!114 &6360029765295339956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230305945013315322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifierVolume
+  m_SerializedVersion: 0
+  m_Size: {x: 4, y: 3, z: 4}
+  m_Center: {x: 0, y: 0, z: 0}
+  m_Area: 3
   m_AffectedAgents: ffffffff
 --- !u!1001 &2606105266857778799
 PrefabInstance:

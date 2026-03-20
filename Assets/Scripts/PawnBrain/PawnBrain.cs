@@ -47,6 +47,7 @@ public class PawnBrain : IControlableSelectable
         UI3DManager.Instance.RegisterPawn(gameObject);
         TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
         TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
+        TurnManager.Instance.OnTriggerZoneEnter += OnTriggerZoneEnter;
         pawnNavMesh.SetTypeOfModifierVolumes(dataController.selectableType == SelectableType.Player ? 1 : 0, 0, 0);
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE] = 0f;
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.CURRENT_TARGET_ANGLE] = 0f;
@@ -80,6 +81,10 @@ public class PawnBrain : IControlableSelectable
         }
     }
 
+    public override bool IsInActiveTriggerZone()
+    {
+        return TurnManager.Instance.IsInActiveTriggerZone(this);
+    }
     public override Transform GetTransform()
     {
         return transform;
@@ -103,6 +108,10 @@ public class PawnBrain : IControlableSelectable
     private void OnEnemyTurnStart()
     {
         pawnNavMesh.SetTypeOfModifierVolumes(dataController.selectableType == SelectableType.Enemy ? 1 : 0, -1);
+    }
+    private void OnTriggerZoneEnter()
+    {
+        pawnNavMesh.ResetMovement();
     }
 
     public override void OnMove(Vector3 position)
@@ -128,6 +137,15 @@ public class PawnBrain : IControlableSelectable
         Vector3 dir = -transform.position + other.transform.position;
         if (dataController.verticalPushOverride != -1f) dir.y = dataController.verticalPushOverride;
         other.rigidbody.AddForce(dir * dataController.obstaclePushForce, ForceMode.Impulse);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (GetSelectableType() != SelectableType.Player) return;
+        if (other.gameObject.layer == LayerMask.NameToLayer("Trigger"))
+        {
+            TurnManager.Instance.EnterTrigger(other.gameObject);
+        }
     }
 
     public override void OnShoot(Vector3 position)
@@ -160,6 +178,7 @@ public class PawnBrain : IControlableSelectable
         {
             UI3DManager.Instance.ShowMessage("Kill", transform.position, Color.red);
             dataController.selectableType = SelectableType.Dead;
+            TurnManager.Instance.CheckTriggers();
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
             pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
             // transform.position -= transform.up * 0.5f;

@@ -76,18 +76,10 @@ public class SimpleEnemyAI : ISelectorBrain
     {
         TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
     }
-    // private int csiCached = -1;
-    // private int cciCached = -1;
     private float timeStack = 0.0f;
     void Update()
     {
         currentScenarioIndexBeforeUpdate = currentScenarioIndex;
-        // if (csiCached != currentScenarioIndex || cciCached != completedScenarioIndex)
-        // {
-        //     csiCached = currentScenarioIndex;
-        //     cciCached = completedScenarioIndex;
-        // Debug.Log("SimpleEnemyAI Update: calculated " + detailedScenario[currentScenarioIndex].type + " completed " + detailedScenario[completedScenarioIndex].type);
-        // }
 
         if (completedScenarioIndex == -2) return;
         if (currentScenarioIndex >= detailedScenario.Count)
@@ -252,7 +244,8 @@ public class SimpleEnemyAI : ISelectorBrain
         detailedScenario.Clear();
         foreach (var element in scenario)
         {
-            if (element.controlledPawn.GetSelectableType() != SelectableType.Enemy) continue;
+            if (element.controlledPawn.GetSelectableType() != SelectableType.Enemy ||
+                !element.controlledPawn.IsInActiveTriggerZone()) continue;
             AddDetailedScenarioElement(DetailedScenarioElementType.SelectPawn, element);
             switch (element.capability)
             {

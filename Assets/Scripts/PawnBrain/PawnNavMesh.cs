@@ -212,4 +212,19 @@ public class PawnNavMesh : MonoBehaviour
         }
         return (points, null);
     }
+
+    public void ResetMovement()
+    {
+        if (navMeshAgent.enabled)
+        {
+            navMeshAgent.ResetPath();
+        }
+        distanceTravelling = 0f;
+        targetPosition = Vector3.zero;
+        isMoving = false;
+        cachedTargetPosition = Vector3.zero;
+        cachedPointsAvailable = null;
+        cachedPointsOutOfRange = null;
+        cachedTargetPositionValid = false;
+    }
 }

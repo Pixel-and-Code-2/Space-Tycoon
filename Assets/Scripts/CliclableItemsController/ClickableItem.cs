@@ -38,6 +38,7 @@ public class ClickableItem : ISelectable
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
+            TurnManager.Instance.OnTriggerZoneEnter += OnTriggerZoneEnter;
         }
         OnValidate();
         this.gameObject.layer = LayerMask.NameToLayer("ClickableItem");
@@ -105,6 +106,10 @@ public class ClickableItem : ISelectable
     }
 
     private void OnPlayerTurnEnd()
+    {
+        BoostProgressBar();
+    }
+    private void OnTriggerZoneEnter()
     {
         BoostProgressBar();
     }

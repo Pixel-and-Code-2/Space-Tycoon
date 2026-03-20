@@ -2370,7 +2370,7 @@ GameObject:
   - component: {fileID: 1380762602082617878}
   - component: {fileID: 6416807371946320511}
   - component: {fileID: 8650268381355154381}
-  - component: {fileID: 5615305596201018398}
+  - component: {fileID: 8177761722325288154}
   m_Layer: 0
   m_Name: MenuRect
   m_TagString: Untagged
@@ -2491,7 +2491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd4dd977b3f87448b42890b9aebc0b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonStopPropagation
---- !u!114 &5615305596201018398
+--- !u!114 &8177761722325288154
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2500,7 +2500,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6501960671996821730}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f22f353d464e82641b67457621762bf8, type: 3}
+  m_Script: {fileID: 11500000, guid: 53cb53cd5903ad44fa1bc4bc189a24d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
 --- !u!1 &6502543943391206197

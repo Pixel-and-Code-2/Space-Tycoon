@@ -9,4 +9,6 @@ public abstract class IControlableSelectable : IAttackableSelectable
     public abstract (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) GetPathPointsTo(Vector3 position);
 
     public abstract bool IsMoving();
+
+    public abstract bool IsInActiveTriggerZone();
 }

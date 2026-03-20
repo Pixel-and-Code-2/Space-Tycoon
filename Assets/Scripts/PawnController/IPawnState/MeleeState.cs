@@ -112,7 +112,7 @@ public class MeleeState : IPawnState
                 float defenseChance1 = GetMeleeDefense1(attackableSelectable);
                 float defenseChance2 = GetMeleeDefense2(attackableSelectable);
                 (string message, Color color) = GetMessage(chance);
-                if (message != null)
+                if (message != null && controlableSelectable.GetSelectableType() == SelectableType.Player)
                 {
                     UI3DManager.Instance.ShowMessage(message, worldPoint, color);
                 }
