@@ -11,4 +11,5 @@ public abstract class ISelectorBrain : MonoBehaviour
         return defaultSelectable;
     }
     public virtual void SetClickAsUnhandled() { }
+    public virtual bool SyncUI => true;
 }

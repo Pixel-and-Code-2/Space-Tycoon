@@ -58,6 +58,7 @@ public class SimpleEnemyAI : ISelectorBrain
     private int currentScenarioIndex = -1; // -1 means no scenario is running, if this var is bigger than completedScenarioIndex, then local methods (not polls ones) are waiting for sth, otherwise scenario is stopped to make a poll return
     private int completedScenarioIndex = -2;
     private int currentScenarioIndexBeforeUpdate = -1;
+    public override bool SyncUI => false;
 
     void Awake()
     {

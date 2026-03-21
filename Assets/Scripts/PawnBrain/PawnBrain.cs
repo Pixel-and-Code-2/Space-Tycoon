@@ -124,6 +124,7 @@ public class PawnBrain : IControlableSelectable
     private void OnTriggerZoneExit()
     {
         dataController.IsStepByStepOff();
+        MakeReload();
     }
 
     public override void OnMove(Vector3 position)
@@ -188,7 +189,7 @@ public class PawnBrain : IControlableSelectable
         UI3DManager.Instance.ShowMessage("-" + damage.ToString("F1"), transform.position, Color.red);
         if (newHealth <= 0f)
         {
-            UI3DManager.Instance.ShowMessage("Kill", transform.position, Color.red);
+            UI3DManager.Instance.ShowMessage("Kill", transform.position + transform.up * 0.5f, Color.red);
             dataController.selectableType = SelectableType.Dead;
             TurnManager.Instance.CheckTriggers();
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
@@ -220,6 +221,27 @@ public class PawnBrain : IControlableSelectable
             PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY,
             dataController.GetParameterValue(PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY) + (isMelee ? 1 : 2)
         );
+    }
+
+    public override void MakeReload()
+    {
+        Debug.Log("MakeReload " + gameObject.name);
+        float currentAmmo = dataController.GetParameterValue(PawnDataController.TOTAL_AMMO_KEY);
+        float currentMag = dataController.GetParameterValue(PawnDataController.MAG_AMOUNT_KEY);
+        float initialMag = dataController.GetParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
+        float reloadMagWithAmount = Mathf.Min(initialMag - currentMag, currentAmmo);
+        float reloadedAmmo = currentAmmo - reloadMagWithAmount;
+        float reloadedMag = reloadMagWithAmount + currentMag;
+        dataController.SetParameterValue(PawnDataController.MAG_AMOUNT_KEY, reloadedMag);
+        dataController.SetParameterValue(PawnDataController.TOTAL_AMMO_KEY, reloadedAmmo);
+        if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f)
+        {
+            float movesToSkipForFullMag = dataController.GetParameterValue(PawnDataController.INITIAL_MOVES_TO_RELOAD_KEY);
+            float movesToSkip = Mathf.Ceil(movesToSkipForFullMag * (reloadMagWithAmount / initialMag));
+            Debug.Log("movesToSkip: " + movesToSkip + " reloadMagWithAmount: " + reloadMagWithAmount + " initialMag: " + initialMag + " movesToSkipForFullMag: " + movesToSkipForFullMag);
+            dataController.SetParameterValue(PawnDataController.MOVES_TO_SKIP_KEY, movesToSkip + 1);
+        }
+
     }
 
     public override IFormulaData GetFormulaData()

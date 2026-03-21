@@ -86,6 +86,7 @@ public class PawnController : MonoBehaviour
         {
             TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurn;
             TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurn;
+            TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
         }
     }
     void Update()
@@ -106,13 +107,13 @@ public class PawnController : MonoBehaviour
         IControlableSelectable newSelection = currentSelector.PollSelectPawn(currentSelectedPawn);
         if (newSelection != currentSelectedPawn)
         {
+            UpdateStartReloadButtonColor();
             if (currentSelectedPawn != null) currentSelectedPawn.OnDeselect();
             currentSelectedPawn = newSelection;
             if (newSelection != null)
             {
-                newSelection.OnSelect();
                 UpdateMoveOnShootButtonColor();
-                UpdateStartReloadButtonColor();
+                newSelection.OnSelect();
             }
         }
 
@@ -175,6 +176,7 @@ public class PawnController : MonoBehaviour
     }
     public void UpdateMoveOnShootButtonColor()
     {
+        if (!currentSelector.SyncUI) return;
         if (Mathf.Abs(currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) - 0f) < 0.1f)
         {
             toggleShootOnMoveButton.image.sprite = toggleShootButtonOff;
@@ -186,27 +188,28 @@ public class PawnController : MonoBehaviour
     }
     public void StartReload()
     {
-        if (currentSelectedPawn == null) return;
+        if (currentSelectedPawn == null)
+        {
+            UpdateStartReloadButtonColor();
+            return;
+        }
         if (currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY) > 0.001f)
         {
             UpdateStartReloadButtonColor();
             return;
         }
-        float currentAmmo = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.TOTAL_AMMO_KEY);
-        float currentMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY);
-        float initialMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
-        float reloadMagWithAmount = Mathf.Min(initialMag - currentMag, currentAmmo);
-        float reloadedAmmo = currentAmmo - reloadMagWithAmount;
-        float reloadedMag = reloadMagWithAmount + currentMag;
-        currentSelectedPawn.SetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY, reloadedMag);
-        currentSelectedPawn.SetDynamicParameterValue(PawnDataController.TOTAL_AMMO_KEY, reloadedAmmo);
-        float movesToSkipForFullMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MOVES_TO_RELOAD_KEY);
-        float movesToSkip = Mathf.Ceil(movesToSkipForFullMag * (reloadMagWithAmount / initialMag));
-        currentSelectedPawn.SetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY, movesToSkip + 1);
+
+        currentSelectedPawn.MakeReload();
         UpdateStartReloadButtonColor();
+    }
+
+    public void OnTriggerZoneExit()
+    {
+        StartReload();
     }
     public void UpdateStartReloadButtonColor()
     {
+        if (!currentSelector.SyncUI) return;
         if (currentSelectedPawn == null)
         {
             startReloadButton.image.sprite = startReloadButtonOff;

@@ -13225,7 +13225,7 @@ MonoBehaviour:
     chanceToLaunch:
       formula: '(c_pawnDistance > 5 ? - g_e :
 
-        p_STR < 7 ? - 2 * g_e :
+        //p_STR < 7 ? - 2 * g_e :
 
         g_e
 
@@ -13404,7 +13404,7 @@ MonoBehaviour:
     chanceToLaunch:
       formula: '(c_pawnDistance > 3 ? - g_e :
 
-        p_STR < 7 ? - 2 * g_e :
+        // p_STR < 7 ? - 2 * g_e :
 
         g_e)'
       instruction: 
@@ -13717,8 +13717,8 @@ MonoBehaviour:
   toggleShootButtonOff: {fileID: -863166482, guid: cdfc45e5d17ab3947bc8a4c3c87371ca, type: 3}
   toggleShootOnMoveAction: {fileID: -8480799163055771326, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   startReloadButton: {fileID: 1919313458}
-  startReloadButtonOn: {fileID: -51319423, guid: e278b7bc08516254aa16d5fb2c3d4cc4, type: 3}
-  startReloadButtonOff: {fileID: 1236265581, guid: f46e9092890fd7d4989e5dce5f6d2f98, type: 3}
+  startReloadButtonOn: {fileID: 1236265581, guid: f46e9092890fd7d4989e5dce5f6d2f98, type: 3}
+  startReloadButtonOff: {fileID: -51319423, guid: e278b7bc08516254aa16d5fb2c3d4cc4, type: 3}
   _currentSelectedPawn: {fileID: 0}
 --- !u!114 &1569542975
 MonoBehaviour:
@@ -15614,7 +15614,7 @@ MonoBehaviour:
   - text: Start computer
     action: 0
     chanceToLaunch:
-      formula: '(p_IQ<5?-g_e:
+      formula: '(//p_IQ<5?-g_e:
 
         c_pawnDistance >= 3? -2*g_e:
 

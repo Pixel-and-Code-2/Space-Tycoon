@@ -11,4 +11,5 @@ public abstract class IControlableSelectable : IAttackableSelectable
     public abstract bool IsMoving();
 
     public abstract bool IsInActiveTriggerZone();
+    public abstract void MakeReload();
 }
