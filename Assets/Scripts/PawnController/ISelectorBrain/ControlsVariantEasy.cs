@@ -319,6 +319,11 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
     // Helper methods
     private void CheckAdditionalButtonClicks()
     {
+        if (GetClickState(toggleMainMenu))
+        {
+            MainMenu.Instance.ToggleMainMenu();
+        }
+        if (MainMenu.Instance.isMainMenuVisible) return;
         foreach (var playerAction in playerActions)
         {
             if (GetClickState(playerAction.whenSelect))
@@ -337,10 +342,6 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
         if (GetClickState(attackButtonClick))
         {
             SetControlTypeTo(false);
-        }
-        if (GetClickState(toggleMainMenu))
-        {
-            MainMenu.Instance.ToggleMainMenu();
         }
     }
     private void SetHandleClick(InputActionReference action, bool value)
@@ -372,7 +373,10 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
     private InputActionReference lastHitAction = null;
     private bool GetClickState(InputActionReference action)
     {
-        if (action.action.controls.Count > 0 && handledControls[action.action.controls[0]])
+        if (
+                action.action.activeControl != null && handledControls[action.action.activeControl] ||
+                action.action.controls.Count > 0 && handledControls[action.action.controls[0]]
+            )
         {
             return false;
         }

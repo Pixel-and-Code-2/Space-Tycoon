@@ -63,8 +63,8 @@ public class SettingTest : MonoBehaviour
         }
         else
         {
-            selectorBrain1.enabled = true;
             selectorBrain2.enabled = false;
+            selectorBrain1.enabled = true;
             if (PawnController.Instance.currentSelector == selectorBrain2)
             {
                 PawnController.Instance.ChangeSelectorBrain(selectorBrain1);

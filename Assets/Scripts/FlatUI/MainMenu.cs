@@ -17,6 +17,15 @@ public class MainMenu : MonoBehaviour
     }
     public void ToggleMainMenu()
     {
-        gameObject.SetActive(!gameObject.activeSelf);
+        if (gameObject.activeSelf)
+        {
+            gameObject.SetActive(false);
+            Time.timeScale = 1f;
+        }
+        else
+        {
+            gameObject.SetActive(true);
+            Time.timeScale = 0f;
+        }
     }
 }

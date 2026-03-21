@@ -132,6 +132,7 @@ public class PawnNavMesh : MonoBehaviour
     }
     protected virtual void Update()
     {
+        if (MainMenu.Instance.isMainMenuVisible) return;
         if (isMoving)
         {
             if (!navMeshAgent.pathPending)

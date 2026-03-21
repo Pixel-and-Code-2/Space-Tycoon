@@ -118,8 +118,8 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "b5fafb82-d57b-4ec5-b1f5-c9b663658b96",
-                    "path": "<Keyboard>/escape",
+                    "id": "42d88302-646f-416a-9af8-f9d60a5216e5",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -129,8 +129,8 @@
                 },
                 {
                     "name": "",
-                    "id": "42d88302-646f-416a-9af8-f9d60a5216e5",
-                    "path": "<Mouse>/leftButton",
+                    "id": "b5fafb82-d57b-4ec5-b1f5-c9b663658b96",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

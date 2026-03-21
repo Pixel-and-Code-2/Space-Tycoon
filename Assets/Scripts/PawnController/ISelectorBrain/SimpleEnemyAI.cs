@@ -80,6 +80,7 @@ public class SimpleEnemyAI : ISelectorBrain
     private float timeStack = 0.0f;
     void Update()
     {
+        if (MainMenu.Instance.isMainMenuVisible) return;
         currentScenarioIndexBeforeUpdate = currentScenarioIndex;
 
         if (completedScenarioIndex == -2) return;

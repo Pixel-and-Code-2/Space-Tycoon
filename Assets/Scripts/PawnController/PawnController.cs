@@ -91,6 +91,7 @@ public class PawnController : MonoBehaviour
     }
     void Update()
     {
+        if (MainMenu.Instance.isMainMenuVisible) return;
         // Polling selector brain and addressing logic to the current state
         if (currentSelector == null)
         {
