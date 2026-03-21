@@ -28,6 +28,8 @@ public class HandleInittingGlobalVars : MonoBehaviour
         globalParameters.AddParameter(IS_STEP_BY_STEP_KEY);
         globalParameters.AddParameter(MELEE_ATTACK_DISTANCE_KEY);
         globalParameters.AddParameter(RANDOM_KEY);
+        globalParameters.SetDirty();
+        globalParameters.RebuildParametersDict();
         if (pawnMustHaveParams == null)
             pawnMustHaveParams = GetDataAsset("PawnMustHaveParams");
         if (mainCalculatedFormulaData == null)
@@ -36,12 +38,10 @@ public class HandleInittingGlobalVars : MonoBehaviour
             globalSettingsAssets = Resources.Load<GlobalSettingsAssets>("GlobalSettings");
         onParamsUpdated?.Invoke();
         ParameteredScriptableObject.OnUpdateParams += (parametersObj) =>
-                {
-                    if (parametersObj == globalParameters)
-                    {
-                        parametersObj.parametersDict[RANDOM_KEY] = Random.value;
-                    }
-                };
+        {
+            // Debug.Log("RAN: " + parametersObj.name);
+            parametersObj.parametersDict[RANDOM_KEY] = Random.value;
+        };
     }
 
 

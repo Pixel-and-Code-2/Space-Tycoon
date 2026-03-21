@@ -132,12 +132,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b7ae93bb85949e4b840b5488df85cf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputCameraControlActions
-  lookReleaseActionReference: {fileID: 9169725678241011566, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
-  zoomActionReference: {fileID: -7317863640907986851, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
-  moveActionReference: {fileID: 8439316055708601252, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
-  lookActionReference: {fileID: 768050417373404248, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
-  rotPositive: {fileID: 9055761755586328353, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
-  rotNegative: {fileID: -1870017170588784536, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  lookReleaseActionReference: {fileID: 9169725678241011566, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
+  zoomActionReference: {fileID: -7317863640907986851, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
+  moveActionReference: {fileID: 8439316055708601252, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
+  lookActionReference: {fileID: 768050417373404248, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
+  rotPositive: {fileID: 9055761755586328353, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
+  rotNegative: {fileID: -1870017170588784536, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
 --- !u!114 &550354606863573953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,8 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce36424953285747a47fa74ac52b6be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraTargetController
-  defaultActions: {fileID: 6309733935719371799}
-  onPawnActions: {fileID: 6309733935719371799}
   defaultLookTarget: {fileID: 0}
   listenOnlyPlayerControls: 1
   lockTargetAction: {fileID: -361045016904779170, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}

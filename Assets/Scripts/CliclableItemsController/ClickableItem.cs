@@ -120,6 +120,15 @@ public class ClickableItem : ISelectable
         {
             float progress = progressBarCached.GetValue();
             progress += actionCached.progressPerRound.EvaluateFormula();
+            if (progress < 0f)
+            {
+                progress = 0f;
+                UI3DManager.Instance.UnregisterSlider(transform);
+                progressBarCached = null;
+                actionCached = null;
+                UI3DManager.Instance.ShowMessage("Cancelled", transform.position, Color.green);
+                return;
+            }
             progressBarCached.SetValue(progress);
             if (progress >= 100f)
             {

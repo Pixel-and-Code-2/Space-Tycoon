@@ -153,6 +153,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
             }
         }
         initialPawnData.SetDirty();
+        initialPawnData.RebuildParametersDict();
         ResetKeys();
     }
     void OnEnable()
@@ -227,6 +228,11 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         {
             return initialPawnData.GetParametersDict();
         }
+    }
+
+    public void IsStepByStepOff()
+    {
+        SetParameterValue(MOVES_TO_SKIP_KEY, 0f);
     }
 
 }

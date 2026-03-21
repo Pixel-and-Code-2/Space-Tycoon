@@ -73,8 +73,9 @@ public class TurnManager : MonoBehaviour
         {
             return;
         }
+        if (listOfTriggers.Find(t => t.isActive) == null)
+            OnTriggerZoneEnter?.Invoke();
         trigger.isActive = true;
-        OnTriggerZoneEnter?.Invoke();
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 1f;
         StartFirstTurn();
     }

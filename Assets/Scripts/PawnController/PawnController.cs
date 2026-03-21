@@ -23,7 +23,7 @@ public class PawnController : MonoBehaviour
     [SerializeField]
     public ISelectorBrain enemySelectorBrain;
     [SerializeField]
-    public PathDrawerWithText pathDrawer; // { get; private set; }
+    public PathDrawerWithText pathDrawer;
     [SerializeField]
     public Button toggleShootOnMoveButton;
     [SerializeField]
@@ -129,6 +129,7 @@ public class PawnController : MonoBehaviour
                 bool selecting = clickableItemsController.OnSelect(selectable);
                 if (!selecting)
                 {
+
                     currentSelector.SetClickAsUnhandled();
                 }
             }

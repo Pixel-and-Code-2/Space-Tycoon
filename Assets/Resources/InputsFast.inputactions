@@ -1,47 +1,11 @@
 {
     "version": 1,
-    "name": "Inputs",
+    "name": "InputsFast",
     "maps": [
         {
-            "name": "CameraInputs",
+            "name": "FastInputs",
             "id": "470ff244-3b23-422b-98b7-8deaa79e3bd8",
             "actions": [
-                {
-                    "name": "Look",
-                    "type": "Value",
-                    "id": "403e4502-e6cd-4208-8736-bbb81bcc2fd6",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Zoom",
-                    "type": "Value",
-                    "id": "c12384eb-0283-47e2-9f2c-376a5786fb7b",
-                    "expectedControlType": "Delta",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "LookReleaser",
-                    "type": "Button",
-                    "id": "d9143433-3cb9-4ff9-93a8-b5da5d82ed1c",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Move",
-                    "type": "Value",
-                    "id": "e9c752c9-cd7e-438d-a679-1b50bbf5021d",
-                    "expectedControlType": "Stick",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
                 {
                     "name": "PawnSelection3D",
                     "type": "Button",
@@ -55,24 +19,6 @@
                     "name": "PawnDeselection3D",
                     "type": "Button",
                     "id": "ebdc2927-688e-4618-8305-0b5ce790e6c2",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RotPositive",
-                    "type": "Button",
-                    "id": "104f7e5a-b792-4a81-8b4c-72d838ad9570",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RotNegative",
-                    "type": "Button",
-                    "id": "0b5a16e7-944e-4bd6-86cf-b8832b2a3bc5",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -124,15 +70,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "EndTurnButton",
-                    "type": "Button",
-                    "id": "31239055-3bf2-45b3-bf25-4772c2eb1906",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "SelectPlayer1",
                     "type": "Button",
                     "id": "9f007ddd-55d7-4934-b5ab-73e1fe7d45f8",
@@ -160,15 +97,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "LockOnTarget",
-                    "type": "Button",
-                    "id": "60cd352b-ddc9-454b-95db-3337694687c7",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "ToggleShootOnMove",
                     "type": "Button",
                     "id": "d289f21c-06e2-4128-8a1d-e381c743e0ee",
@@ -178,9 +106,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ToggleMainMenu",
+                    "name": "EndTurnButton",
                     "type": "Button",
-                    "id": "ec0ed7f3-37b3-4ee9-835f-bcd854e79961",
+                    "id": "2ab2cc2a-b216-4375-bc76-c27f53fc23d2",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -188,94 +116,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "cb921298-1457-4658-8220-b4ff0a60eacc",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3ede1774-c48d-4383-9e2a-429a899fa90e",
-                    "path": "<Mouse>/scroll",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Zoom",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "472f771f-6787-4697-95e2-809d9b8dcb56",
-                    "path": "<Mouse>/middleButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "LookReleaser",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "2D Vector",
-                    "id": "624d26d4-c2ae-42d1-8ce5-41658032fd3d",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "f79d2720-8d07-4619-85b6-78869df73e2a",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "1281a545-dc46-40c0-8b2e-d19d7c49befe",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "39cfd670-51db-431e-9b84-c84102c7f42e",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "8d60a2d8-a9f8-48a4-a169-70aa64dd4c2d",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
                 {
                     "name": "",
                     "id": "b5fafb82-d57b-4ec5-b1f5-c9b663658b96",
@@ -295,28 +135,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "PawnDeselection3D",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "42832896-e9ff-4592-9139-ae9e4ccfbd9f",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RotPositive",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b72d5cd0-bde1-40f6-942a-63c98a8bc2d2",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RotNegative",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -355,17 +173,6 @@
                 },
                 {
                     "name": "",
-                    "id": "f3c93ae1-d649-4f24-9564-4eb79102e2ea",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "EndTurnButton",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "95ae0156-b6a6-4024-95f1-f70dcb220d96",
                     "path": "<Keyboard>/1",
                     "interactions": "",
@@ -394,17 +201,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "SelectPlayer3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "bf64ca4d-a79f-46d4-9d2c-170f40bd84d0",
-                    "path": "<Keyboard>/enter",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "LockOnTarget",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -454,12 +250,260 @@
                 },
                 {
                     "name": "",
-                    "id": "d69b2f65-c603-4434-9380-7b89c5a61a69",
+                    "id": "5cca6fba-fb5e-4641-a17e-592cf702f22a",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EndTurnButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "EasyInputs",
+            "id": "7298be9e-3786-4ba5-95fa-cecc4698bdde",
+            "actions": [
+                {
+                    "name": "PawnSelection3D",
+                    "type": "Button",
+                    "id": "00fcd937-87cc-4f04-8a84-d47d5f5a5e0e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PawnDeselection3D",
+                    "type": "Button",
+                    "id": "4c214558-a7bb-4164-9e14-ccf140139426",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectablesSelection",
+                    "type": "Button",
+                    "id": "5fff4b31-5d77-4703-8097-9bf6869558c7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PawnMove",
+                    "type": "Button",
+                    "id": "0c193c1c-c07c-4d65-91b6-329855fdde35",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PawnAttack",
+                    "type": "Button",
+                    "id": "cfde022f-33a8-4ff2-9657-360e269b7df9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "WalkButton",
+                    "type": "Button",
+                    "id": "cf4481a8-896a-4946-be31-541121133a6d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AttackButton",
+                    "type": "Button",
+                    "id": "cbe27127-a270-48aa-ac80-860ff6c75659",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectPlayer1",
+                    "type": "Button",
+                    "id": "d65661b7-2454-47f0-9782-d21c4c5c2c83",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectPlayer2",
+                    "type": "Button",
+                    "id": "047f4cb2-4857-44b9-8972-46e43536a88c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectPlayer3",
+                    "type": "Button",
+                    "id": "e8520cf4-3db0-4bc5-bda2-5cfbdab25797",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleShootOnMove",
+                    "type": "Button",
+                    "id": "b31a88f5-526c-4faa-9afd-15d2a60da025",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "EndTurnButton",
+                    "type": "Button",
+                    "id": "68db3dd7-7b06-4d58-a728-ba683139920b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b27b6cde-f708-4b53-ac33-6362d8eba8b6",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ToggleMainMenu",
+                    "action": "PawnDeselection3D",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba4f14cd-8a7c-46b6-8641-db9d23f57aab",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectablesSelection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f5e716e-b419-4f39-8472-3972c75120af",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PawnMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b6c5f892-2feb-4320-817d-98e2489e62ec",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PawnAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3c34323f-d0a5-4023-a790-44e1ed464fa7",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PawnSelection3D",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "216506ad-3764-4801-b7a4-1c1b70f811c5",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WalkButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9807f11f-084f-4209-ae34-2943d7cf6cfb",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AttackButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ac69a3b2-92f6-4ef4-af17-c9419a7a2c25",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleShootOnMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e5304400-2faa-4cb9-851e-27e05dacbcac",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EndTurnButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "193b120d-cc01-4955-8a6a-7e61e365c201",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectPlayer1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5338f5f3-9655-44d4-965f-2f44d2d105b6",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectPlayer2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6a1e291e-ab9d-4f61-83fa-0bb2146302b2",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectPlayer3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

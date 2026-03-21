@@ -174,7 +174,11 @@ public class SimpleEnemyAI : ISelectorBrain
                     {
                         answer = el.targetPawn.GetTransform().position;
                     }
-                    return (null, answer);
+                    if ((answer - PawnController.Instance.currentSelectedPawn.GetTransform().position).magnitude > HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.MELEE_ATTACK_DISTANCE_KEY])
+                    {
+                        return (null, answer);
+                    }
+                    return (null, Vector3.zero);
                 case DetailedScenarioElementType.AttackPawn:
                     IControlableSelectable answer2;
                     currentScenarioIndex++;

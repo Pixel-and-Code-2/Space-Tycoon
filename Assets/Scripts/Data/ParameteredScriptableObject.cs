@@ -67,6 +67,8 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
 
     public void RebuildParametersDict()
     {
+        // Debug.Log("INvoking");
+        OnUpdateParams?.Invoke(this);
         if (!isDirty && parametersDict.Count > 0) return;
         RebuildParametersDict(new HashSet<ParameteredScriptableObject>());
         isDirty = false;
@@ -83,7 +85,6 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         visited.Add(this);
         parametersDict.Clear();
         CheckCalculatedParameters();
-
         for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
         {
             var dep = mustHaveParameters[i];
@@ -103,7 +104,6 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         }
         foreach (var cf in calculatedParameters)
             formulas.Add(cf);
-        OnUpdateParams?.Invoke(this);
         foreach (var cf in formulas)
         {
             if (cf.IsAvailable())
