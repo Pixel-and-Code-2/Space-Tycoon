@@ -1,6 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using NUnit.Framework;
+
+[System.Serializable]
+public class MessageObject
+{
+    public GameObject gameObject;
+    public TextMeshProUGUI text;
+    public RectTransform rectTransform;
+    public bool isBusy => gameObject.activeSelf;
+    [SerializeField, HideInInspector]
+    public float timeShown = 0f;
+    [SerializeField, HideInInspector]
+    public Vector3 worldPosition;
+}
+
 public class UI3DManager : MonoBehaviour
 {
     private class MessageItem
@@ -25,13 +40,12 @@ public class UI3DManager : MonoBehaviour
     [SerializeField]
     private Canvas canvas;
     [SerializeField]
-    private GameObject messageObject = null;
+    private List<MessageObject> messageObjectList = new List<MessageObject>();
     [SerializeField]
     private float messageDuration = 1f;
-    private GameObject messageObjectCached = null;
-    private RectTransform messageRectTransform;
+    [SerializeField]
+    private float messageGoUpOn = 5f;
     private RectTransform canvasRectTransformCached;
-    private TextMeshProUGUI messageText;
     private Queue<MessageItem> messageItems = new Queue<MessageItem>();
 
     [SerializeField]
@@ -40,20 +54,6 @@ public class UI3DManager : MonoBehaviour
     private Dictionary<GameObject, SliderToPawnConnector> pawnsInScene = new Dictionary<GameObject, SliderToPawnConnector>();
     private Dictionary<ISelectable, SelectableToBoxConnector> selectablesInScene = new Dictionary<ISelectable, SelectableToBoxConnector>();
     private Dictionary<Transform, SliderController> slidersOnTransform = new Dictionary<Transform, SliderController>();
-
-    void OnValidate()
-    {
-        if (messageObject == null) messageObject = GetComponentInChildren<TextMeshProUGUI>().gameObject;
-        if (messageObjectCached != messageObject)
-        {
-            messageObjectCached = messageObject;
-            messageRectTransform = messageObject.GetComponent<RectTransform>();
-            messageText = messageObject.GetComponent<TextMeshProUGUI>();
-        }
-        if (messageRectTransform == null) messageRectTransform = messageObject.GetComponent<RectTransform>();
-        if (messageText == null) messageText = messageObject.GetComponent<TextMeshProUGUI>();
-        if (messageObject.activeSelf) messageObject.SetActive(false);
-    }
 
     void Awake()
     {
@@ -64,7 +64,6 @@ public class UI3DManager : MonoBehaviour
         Instance = this;
         if (contextMenuController == null) contextMenuController = GetComponentInChildren<ContextMenuController>();
         contextMenuController.gameObject.SetActive(false);
-        OnValidate();
         canvasRectTransformCached = canvas.GetComponent<RectTransform>();
     }
     void Start()
@@ -110,28 +109,33 @@ public class UI3DManager : MonoBehaviour
             contextMenuController.UpdateAttach(canvas);
         }
     }
-
-    private float messageTimeShown = 0f;
+    private float MessageEaseOutFunc(float t)
+    {
+        return 1 - Mathf.Pow(1 - t, 4);
+    }
     private void UpdateMessagePosition()
     {
-        if (messageItems.Count > 0)
+        if (messageItems.Count > 0 && messageObjectList.Find(m => !m.isBusy) != null)
         {
-            if (!messageObject.activeSelf)
-            {
-                messageObject.SetActive(true);
-                messageText.text = messageItems.Peek().message;
-                messageText.color = messageItems.Peek().color;
-                messageTimeShown = 0f;
-            }
-            messageTimeShown += Time.deltaTime;
-            if (messageTimeShown >= messageDuration)
-            {
-                messageObject.SetActive(false);
-                messageTimeShown = 0f;
-                messageItems.Dequeue();
-                return;
-            }
-            Vector3 worldPosition = messageItems.Peek().position + uiOffset;
+            MessageObject messageObject = messageObjectList.Find(m => !m.isBusy);
+
+            messageObject.gameObject.SetActive(true);
+            messageObject.text.text = messageItems.Peek().message;
+            messageObject.text.color = messageItems.Peek().color;
+            messageObject.worldPosition = messageItems.Peek().position;
+            messageObject.timeShown = 0f;
+            messageItems.Dequeue();
+        }
+        foreach (MessageObject messageObject in messageObjectList)
+        {
+            if (!messageObject.isBusy) continue;
+            Vector3 worldPosition = messageObject.worldPosition + uiOffset + Vector3.up * messageGoUpOn * messageObject.timeShown / messageDuration;
+            messageObject.text.color = new Color(
+                messageObject.text.color.r,
+                messageObject.text.color.g,
+                messageObject.text.color.b,
+                MessageEaseOutFunc(1 - messageObject.timeShown / messageDuration)
+            );
             Vector3 screenPosition = canvas.worldCamera.WorldToScreenPoint(worldPosition);
             Vector2 localPoint;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -140,11 +144,15 @@ public class UI3DManager : MonoBehaviour
                 canvas.worldCamera,
                 out localPoint))
             {
-                if (messageRectTransform == null || messageText == null) OnValidate();
-                messageRectTransform.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
+                messageObject.rectTransform.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
+            }
+            messageObject.timeShown += Time.deltaTime;
+            if (messageObject.timeShown >= messageDuration)
+            {
+                messageObject.gameObject.SetActive(false);
+                messageObject.timeShown = 0f;
             }
         }
-
     }
 
     private void UpdateSliderPositions()
