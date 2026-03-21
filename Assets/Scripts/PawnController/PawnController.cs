@@ -170,8 +170,8 @@ public class PawnController : MonoBehaviour
     public void ToggleShootOnMove()
     {
         if (currentSelectedPawn == null) return;
-        float res = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) == 0f ? 1f : 0f;
-        if (currentSelectedPawn.GetDynamicParameterValue(PawnDataController.WALKED_KEY) > 0.001f) res = 1f;
+        float res = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) < 0.5f ? 1f : 0f;
+        if (currentSelectedPawn.GetDynamicParameterValue(PawnDataController.WALKED_KEY) > 0.5f) res = 1f;
         currentSelectedPawn.SetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY, res);
         UpdateMoveOnShootButtonColor();
     }

@@ -84,23 +84,18 @@ public class ShootState : IPawnState
             if (worldPoint != Vector3.zero && selectable != null)
             {
                 float randomValue = Random.value;
-                controlableSelectable.OnShoot(worldPoint);
                 float curr_target_angle = HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.CURRENT_TARGET_ANGLE];
-                // float before = HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE];
-                // Debug.Log("LAST SHOT ANGLE BEFORE: " + HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE]);
-                HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE] = curr_target_angle;
-                // Debug.Log("LAST SHOT ANGLE AFTER: " + HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE]);
-                // Debug.Log("CURRENT TARGET ANGLE: " + curr_target_angle);
-                // Debug.Log("ANGLE BETWEEN: " + Mathf.Round(Mathf.Min(
-                //     Mathf.Abs(curr_target_angle - before),
-                //     360 - Mathf.Abs(curr_target_angle - before)
-                // ) / 15));
                 float chance = GetShootAccuracy(attackableSelectable);
                 float defenseChance = GetShootDefense(attackableSelectable);
                 (string message, Color color) = GetMessage(chance);
                 if (message != null)
                 {
                     UI3DManager.Instance.ShowMessage(message, worldPoint, color);
+                }
+                else
+                {
+                    HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE] = curr_target_angle;
+                    controlableSelectable.OnShoot(worldPoint);
                 }
                 if (randomValue < chance)
                 {
