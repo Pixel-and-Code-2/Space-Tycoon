@@ -51,10 +51,10 @@ Material:
     m_Floats:
     - _1st2nd_Shades_Feather: 0.381
     - _1st_ShadeColor_Feather: 0.452
-    - _1st_ShadeColor_Step: 0
+    - _1st_ShadeColor_Step: 0.2
     - _2nd_ShadeColor_Feather: 0.381
     - _2nd_ShadeColor_Step: 0.412
-    - _BaseColor_Step: 0
+    - _BaseColor_Step: 0.2
     - _BaseShade_Feather: 0.452
     - _Is_BlendBaseColor: 0
     - _ShadeColor_Step: 0.412
