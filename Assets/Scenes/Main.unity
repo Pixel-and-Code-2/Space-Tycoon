@@ -638,7 +638,7 @@ MonoBehaviour:
         g_e)'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       names:
       - Calculated
     exitCodes:
@@ -649,7 +649,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       names:
       - Calculated
 --- !u!65 &285404554
@@ -976,7 +976,7 @@ MonoBehaviour:
         g_e)'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       names:
       - Calculated
     exitCodes:
@@ -987,7 +987,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       names:
       - Calculated
 --- !u!65 &549932610
@@ -8340,7 +8340,7 @@ MonoBehaviour:
         g_e)'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       names:
       - Calculated
     exitCodes:
@@ -8351,7 +8351,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       names:
       - Calculated
 --- !u!65 &1283831391
@@ -13718,7 +13718,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       names:
       - Calculated
     exitCodes:
@@ -13732,7 +13732,7 @@ MonoBehaviour:
       formula: 'g_IsStepByStep < 0.5 ? 100 : 20*g_e'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       names:
       - Calculated
 --- !u!65 &1444200269
@@ -13891,7 +13891,7 @@ MonoBehaviour:
         g_e)'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       names:
       - Calculated
     exitCodes:
@@ -13905,7 +13905,7 @@ MonoBehaviour:
       formula: 'g_IsStepByStep < 0.5 ? 100 : 20*g_e'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       names:
       - Calculated
 --- !u!1 &1483986393
@@ -14027,7 +14027,7 @@ MonoBehaviour:
       (i_STR + g_e*2 + i_MDMG - t_MDR)))'
     instruction: 
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -14041,7 +14041,7 @@ MonoBehaviour:
       > 0.1 ? 1 : 4)) * g_M\n)) / 100\n)))))"
     instruction: 
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -14083,7 +14083,7 @@ MonoBehaviour:
       below to add its name to the end o\u0430 the formula (but be sure to the formula
       to be blured when clicked)."
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -14109,7 +14109,7 @@ MonoBehaviour:
       below to add its name to the end o\u0430 the formula (but be sure to the formula
       to be blured when clicked)."
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
