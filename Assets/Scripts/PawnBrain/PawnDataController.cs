@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
 
 public class PawnDataController : MonoBehaviour, IFormulaData
 {
@@ -12,11 +10,11 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     // Additional developing params
     [Header("Additional Developing params")]
     [SerializeField, Tooltip("Max distance from mouse to walkable area, to show path")]
-    public float maxSampleDistance { get; private set; } = 5f;
+    public float maxSampleDistance = 5f;
     [SerializeField, Tooltip("Force of push when pawn collides with obstacle, 0 to disable")]
-    public float obstaclePushForce { get; private set; } = 10f;
+    public float obstaclePushForce = 10f;
     [SerializeField, Tooltip("Override of vertical push when pawn collides with obstacle, -1 to disable")]
-    public float verticalPushOverride { get; private set; } = 0.2f;
+    public float verticalPushOverride = 0.2f;
 
     // Dynamic parameters
     public Dictionary<string, float> dynamicParameters = new Dictionary<string, float>();

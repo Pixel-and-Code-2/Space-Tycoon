@@ -151,7 +151,12 @@ public class PawnBrain : IControlableSelectable
         if (!other.rigidbody) return;
         Vector3 dir = -transform.position + other.transform.position;
         if (dataController.verticalPushOverride != -1f) dir.y = dataController.verticalPushOverride;
-        other.rigidbody.AddForce(dir * dataController.obstaclePushForce, ForceMode.Impulse);
+        float pushForce = dataController.obstaclePushForce;
+        if (navMeshAgent != null)
+        {
+            pushForce *= navMeshAgent.speed;
+        }
+        other.rigidbody.AddForce(dir * pushForce, ForceMode.Impulse);
     }
 
     void OnTriggerEnter(Collider other)

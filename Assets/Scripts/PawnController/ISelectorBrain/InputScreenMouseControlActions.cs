@@ -149,6 +149,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         {
             IControlableSelectable pl = forcedSelectedPlayer;
             forcedSelectedPlayer = null;
+            CameraTargetController.Instance.ForceLockTarget();
             return pl;
         }
         if (GetClickState(selectionClick))

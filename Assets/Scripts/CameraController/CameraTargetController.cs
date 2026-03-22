@@ -4,14 +4,28 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CameraController))]
 public class CameraTargetController : MonoBehaviour
 {
+    public static CameraTargetController Instance { get; private set; }
     [SerializeField] private ILookTarget defaultLookTarget;
     [SerializeField] private bool listenOnlyPlayerControls = true;
     [SerializeField] private InputActionReference lockTargetAction;
     private CameraController cameraController;
     private ILookTarget currentLookTarget;
     private bool isLockedOnTarget = false;
+    [SerializeField]
+    private bool lockOnSelect = true;
+    [SerializeField]
+    private bool lockOnForceSelect = true;
+    private bool isForced = false;
     void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogError("Multiple instances of CameraTargetController found, destroying the extra one");
+        }
         cameraController = GetComponent<CameraController>();
     }
 
@@ -51,11 +65,7 @@ public class CameraTargetController : MonoBehaviour
         //     }
         // }
         // else
-        if (currentLookTarget != PawnController.Instance.currentSelectedPawn)
-        {
-            if (currentLookTarget != null) UnsetPawnTarget();
-            if (PawnController.Instance.currentSelectedPawn != null) SetPawnTarget(PawnController.Instance.currentSelectedPawn);
-        }
+        CheckTarget();
         if (cameraController.cameraControlActions.GetMoveValue() != Vector2.zero)
         {
             if (isLockedOnTarget)
@@ -72,11 +82,30 @@ public class CameraTargetController : MonoBehaviour
             LockTarget();
         }
     }
+    public void ForceLockTarget()
+    {
+        isForced = true;
+    }
+
+    public void CheckTarget()
+    {
+        if (currentLookTarget != PawnController.Instance.currentSelectedPawn)
+        {
+            Debug.Log("CheckTarget: currentLookTarget != PawnController.Instance.currentSelectedPawn");
+            if (currentLookTarget != null) UnsetPawnTarget();
+            if (PawnController.Instance.currentSelectedPawn != null) SetPawnTarget(PawnController.Instance.currentSelectedPawn);
+        }
+    }
 
     private void SetPawnTarget(ILookTarget lookTarget)
     {
         currentLookTarget = lookTarget;
-        LockTarget();
+        if (lockOnSelect || (isForced && lockOnForceSelect))
+        {
+            Debug.Log("Locking " + lockOnSelect + " or " + (isForced && lockOnForceSelect));
+            isForced = false;
+            LockTarget();
+        }
     }
     private void UnsetPawnTarget()
     {
@@ -92,6 +121,7 @@ public class CameraTargetController : MonoBehaviour
     }
     private void LockTarget()
     {
+        Debug.Log("Locking target");
         if (isLockedOnTarget) return;
         isLockedOnTarget = true;
         if (cameraController != null)

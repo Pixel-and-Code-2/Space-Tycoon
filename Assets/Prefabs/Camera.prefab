@@ -82,7 +82,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   maxCameraRadius: 27.5
   cameraTopOffset: 26.125
-  cameraBottomOffset: 5.54
+  cameraBottomOffset: 8.55
   cameraInitialDegreeHeight: 43.1
   cameraInitialHorizontalDegree: 101.9
   cameraHorizontalDegreeLimitation: 180
@@ -90,11 +90,11 @@ MonoBehaviour:
   virtualCamera: {fileID: 3219692792882578697}
   boundsGetterRef: {fileID: 0}
   lookTarget: {fileID: 0}
-  cameraControlActions: {fileID: 0}
+  cameraControlActions: {fileID: 6309733935719371799}
   rotationSpeeds: {x: 0.3, y: 0}
   panSpeed: 10
   zoomSensitivity: 0.1
-  minCameraRadiusCoef: 0.2
+  minCameraRadiusCoef: 0.5
   zoomChangeCurve:
     serializedVersion: 2
     m_Curve:
@@ -152,7 +152,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraTargetController
   defaultLookTarget: {fileID: 0}
   listenOnlyPlayerControls: 1
-  lockTargetAction: {fileID: -361045016904779170, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
+  lockTargetAction: {fileID: -361045016904779170, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
+  lockOnSelect: 0
+  lockOnForceSelect: 1
 --- !u!1 &6383040990635429009
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,11 +260,11 @@ MonoBehaviour:
       Radius: 8.586872
       Height: 26.125
     Center:
-      Radius: 22.48515
-      Height: 15.8325
+      Radius: 21.34622
+      Height: 17.3375
     Bottom:
-      Radius: 26.936192
-      Height: 5.54
+      Radius: 26.13709
+      Height: 8.55
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
@@ -277,8 +279,8 @@ MonoBehaviour:
     Restrictions: 0
   VerticalAxis:
     Value: 43.1
-    Center: 11.62203
-    Range: {x: 11.62203, y: 71.80512}
+    Center: 18.114025
+    Range: {x: 18.114025, y: 71.80512}
     Wrap: 0
     Recentering:
       Enabled: 0
@@ -288,7 +290,7 @@ MonoBehaviour:
   RadialAxis:
     Value: 1
     Center: 1
-    Range: {x: 0.2, y: 1}
+    Range: {x: 0.5, y: 1}
     Wrap: 0
     Recentering:
       Enabled: 0
