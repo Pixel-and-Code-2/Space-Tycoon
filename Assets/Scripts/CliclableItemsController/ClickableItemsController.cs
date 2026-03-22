@@ -28,6 +28,7 @@ public class ClickableItemsController : MonoBehaviour
     [SerializeField]
     private List<TaskItem> sideTaskScenario;
     private int currentTaskScenarioIndex = 0;
+    private const string UNIQUE_ID = "ClickableItemsController";
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -43,6 +44,8 @@ public class ClickableItemsController : MonoBehaviour
             TurnManager.Instance.OnPlayerTurnEnd -= OnPlayerTurnEnd;
             TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
         }
+        SaveHub.Instance.OnLoad += OnLoadData;
+        SaveHub.Instance.OnSave += OnSaveData;
     }
 
     void OnEnable()
@@ -92,6 +95,41 @@ public class ClickableItemsController : MonoBehaviour
                 CheckActionBox();
             }
         }
+    }
+    private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
+    {
+        SaveRecord[] records = new SaveRecord[mainTaskScenario.Count + sideTaskScenario.Count];
+        for (int i = 0; i < mainTaskScenario.Count; i++)
+        {
+            records[i] = new SaveRecord()
+            {
+                recordName = "MainTaskScenario_" + i,
+                recordType = SaveRecordType.integerNumber,
+                intValue = (int)mainTaskScenario[i].status
+            };
+        }
+        for (int i = 0; i < sideTaskScenario.Count; i++)
+        {
+            records[mainTaskScenario.Count + i] = new SaveRecord()
+            {
+                recordName = "SideTaskScenario_" + i,
+                recordType = SaveRecordType.integerNumber,
+                intValue = (int)sideTaskScenario[i].status
+            };
+        }
+        addSaveData(records, UNIQUE_ID);
+    }
+    private void OnLoadData(LoadedData data)
+    {
+        for (int i = 0; i < mainTaskScenario.Count; i++)
+        {
+            mainTaskScenario[i].status = (TaskItem.TaskItemStatus)data.GetData("MainTaskScenario_" + i, UNIQUE_ID, (int)TaskItem.TaskItemStatus.Unavailable);
+        }
+        for (int i = 0; i < sideTaskScenario.Count; i++)
+        {
+            sideTaskScenario[i].status = (TaskItem.TaskItemStatus)data.GetData("SideTaskScenario_" + i, UNIQUE_ID, (int)TaskItem.TaskItemStatus.Unavailable);
+        }
+        CheckActionBox();
     }
     private void CheckActionBox(List<TaskItem> scenario, string label)
     {

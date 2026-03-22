@@ -528,10 +528,8 @@ MonoBehaviour:
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
     exitCodes:
     - message: Too far
       color: {r: 0, g: 0, b: 0, a: 0}
@@ -541,10 +539,8 @@ MonoBehaviour:
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
 --- !u!65 &285404554
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -870,10 +866,8 @@ MonoBehaviour:
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
     exitCodes:
     - message: Too far
       color: {r: 0, g: 0, b: 0, a: 0}
@@ -883,10 +877,8 @@ MonoBehaviour:
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
 --- !u!65 &549932610
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7852,10 +7844,8 @@ MonoBehaviour:
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
     exitCodes:
     - message: Too far
       color: {r: 0, g: 0, b: 0, a: 0}
@@ -7865,10 +7855,8 @@ MonoBehaviour:
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
 --- !u!65 &1283831391
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13233,10 +13221,8 @@ MonoBehaviour:
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
     exitCodes:
     - message: Too far
       color: {r: 1, g: 0, b: 0, a: 1}
@@ -13245,14 +13231,12 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -2
     progressPerRound:
-      formula: 'g_IsStepByStep < 0.5 ? 100 : (p_STR*5)'
+      formula: 'g_IsStepByStep < 0.5 ? 100 : 20*g_e'
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
 --- !u!65 &1444200269
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13410,10 +13394,8 @@ MonoBehaviour:
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
     exitCodes:
     - message: Too far
       color: {r: 1, g: 0, b: 0, a: 1}
@@ -13422,14 +13404,12 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -2
     progressPerRound:
-      formula: 'g_IsStepByStep < 0.5 ? 100 : (p_STR*5)'
+      formula: 'g_IsStepByStep < 0.5 ? 100 : 20*g_e'
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
 --- !u!1 &1483986393
 GameObject:
   m_ObjectHideFlags: 0
@@ -13491,6 +13471,8 @@ GameObject:
   - component: {fileID: 1569542979}
   - component: {fileID: 1569542980}
   - component: {fileID: 1569542982}
+  - component: {fileID: 1569542984}
+  - component: {fileID: 1569542983}
   m_Layer: 0
   m_Name: MainComponent
   m_TagString: Untagged
@@ -14032,7 +14014,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1569542967}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d005e8ccfa27ee041979fcebe524368f, type: 3}
   m_Name: 
@@ -14073,6 +14055,34 @@ MonoBehaviour:
   selectorBrain2: {fileID: 1569542981}
   controlsPanel1: {fileID: 119986954}
   controlsPanel2: {fileID: 1230900818}
+--- !u!114 &1569542983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569542967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52b70b3f76f010a41a1e8f5e1ac5f343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SaveControllerTest
+  saveAction: {fileID: -507106586987965239, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
+  loadAction: {fileID: -8741907005406331415, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
+  showLastSavedDataAction: {fileID: 8614311395896457588, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
+  fileName: testSave
+--- !u!114 &1569542984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569542967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 213dd97b2d2c8b44490e84a696271e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SaveHub
 --- !u!114 &1630805095 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4993254271696055037, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
@@ -14391,7 +14401,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.76
+      value: -1.07
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14399,7 +14409,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.27
+      value: 9.38
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalRotation.w
@@ -15622,10 +15632,8 @@ MonoBehaviour:
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
     exitCodes:
     - message: Not enough IQ
       color: {r: 1, g: 0, b: 0, a: 1}
@@ -15638,10 +15646,8 @@ MonoBehaviour:
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
 --- !u!65 &2082539462280390459
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18276,10 +18282,8 @@ MonoBehaviour:
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
     exitCodes:
     - message: Not enough IQ
       color: {r: 1, g: 0, b: 0, a: 1}
@@ -18288,14 +18292,12 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -2
     progressPerRound:
-      formula: 'g_IsStepByStep < 0.5 ? 100 : (p_IQ*5)'
+      formula: 'g_IsStepByStep < 0.5 ? 100 : 20*g_e'
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
-      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
-      - Player
 --- !u!65 &8641919246460748559
 BoxCollider:
   m_ObjectHideFlags: 0

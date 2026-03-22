@@ -86,6 +86,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OnSave",
+                    "type": "Button",
+                    "id": "a82151f9-4ddc-42b4-834d-f4f8e8992e32",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OnLoad",
+                    "type": "Button",
+                    "id": "43785171-bdb7-4d3e-b392-74917cbee721",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OnCheckSave",
+                    "type": "Button",
+                    "id": "ef216af1-c7b1-4325-a5c7-a5067b42c1a8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -229,6 +256,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "ChangeControl",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "333b6e17-cbc2-4fc2-8cb4-e8bd1b409280",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OnSave",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6f79dc8a-8a5f-40c9-8b34-a2b156ba9e30",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OnLoad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3631471f-689a-4e7e-8842-ed500fbb2d4d",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OnCheckSave",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

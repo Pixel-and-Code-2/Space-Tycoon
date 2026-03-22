@@ -59,6 +59,7 @@ public class SimpleEnemyAI : ISelectorBrain
     private int completedScenarioIndex = -2;
     private int currentScenarioIndexBeforeUpdate = -1;
     public override bool SyncUI => false;
+    private const string UNIQUE_ID = "EnemyAI";
 
     void Awake()
     {
@@ -72,6 +73,8 @@ public class SimpleEnemyAI : ISelectorBrain
         {
             TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
         }
+        SaveHub.Instance.OnSave += OnSaveData;
+        SaveHub.Instance.OnLoad += OnLoadData;
     }
     void OnDestroy()
     {
@@ -237,12 +240,44 @@ public class SimpleEnemyAI : ISelectorBrain
         currentScenarioIndex = currentScenarioIndexBeforeUpdate;
     }
 
+    bool startingFromBeggining = true;
     void OnEnemyTurnStart()
     {
-        currentScenarioIndex = 0;
-        completedScenarioIndex = -1;
+        if (startingFromBeggining)
+        {
+            currentScenarioIndex = 0;
+            completedScenarioIndex = -1;
+        }
+        else
+        {
+            startingFromBeggining = false;
+        }
         BuildDetailedScenario();
         // Debug.Log("SimpleEnemyAI OnEnemyTurnStart " + detailedScenario.Count);
+    }
+
+    private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
+    {
+        addSaveData(new SaveRecord[] {
+            new SaveRecord()
+            {
+                recordName = "CompletedScenarioIndex",
+                recordType = SaveRecordType.integerNumber,
+                intValue = completedScenarioIndex
+            },
+            new SaveRecord()
+            {
+                recordName = "CurrentScenarioIndex",
+                recordType = SaveRecordType.integerNumber,
+                intValue = currentScenarioIndex
+            }
+        }, UNIQUE_ID);
+    }
+    private void OnLoadData(LoadedData data)
+    {
+        completedScenarioIndex = data.GetData("CompletedScenarioIndex", UNIQUE_ID, -2);
+        currentScenarioIndex = data.GetData("CurrentScenarioIndex", UNIQUE_ID, -1);
+        if (completedScenarioIndex != -2) startingFromBeggining = false;
     }
 
     private void BuildDetailedScenario()

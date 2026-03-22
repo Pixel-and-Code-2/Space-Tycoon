@@ -39,6 +39,7 @@ public class TurnManager : MonoBehaviour
     private Sprite activeEndTurn;
     [SerializeField]
     private Sprite inactiveEndTurn;
+    private const string UNIQUE_ID = "TurnManager";
 
     private void Awake()
     {
@@ -56,7 +57,48 @@ public class TurnManager : MonoBehaviour
 
     private void Start()
     {
-        // StartCoroutine(StartFirstTurn());
+        SaveHub.Instance.OnLoad += OnLoadData;
+        SaveHub.Instance.OnSave += OnSaveData;
+    }
+    private void OnLoadData(LoadedData data)
+    {
+        IsPlayerTurn = data.GetData("IsPlayerTurn", UNIQUE_ID, IsPlayerTurn);
+        for (int i = 0; i < listOfTriggers.Count; i++)
+        {
+            listOfTriggers[i].isActive = data.GetData("IsTriggerActive_" + i, UNIQUE_ID, listOfTriggers[i].isActive);
+        }
+        if (IsPlayerTurn)
+        {
+            Debug.Log("Loading: Starting player turn");
+            UpdateNavMesh();
+            StartCoroutine(DelayFrame(() => StartPlayerTurn()));
+        }
+        else
+        {
+            Debug.Log("Loading: Starting enemy turn");
+            UpdateNavMesh();
+            StartCoroutine(DelayFrame(() => StartEnemyTurn()));
+        }
+    }
+    private void OnSaveData(Action<SaveRecord[], string> addSaveData)
+    {
+        SaveRecord[] records = new SaveRecord[1 + listOfTriggers.Count];
+        records[0] = new()
+        {
+            recordName = "IsPlayerTurn",
+            recordType = SaveRecordType.boolean,
+            boolValue = IsPlayerTurn
+        };
+        for (int i = 0; i < listOfTriggers.Count; i++)
+        {
+            records[i + 1] = new()
+            {
+                recordName = "IsTriggerActive_" + i,
+                recordType = SaveRecordType.boolean,
+                boolValue = listOfTriggers[i].isActive
+            };
+        }
+        addSaveData(records, UNIQUE_ID);
     }
     public void EnterTrigger(GameObject triggerObject)
     {
@@ -138,16 +180,21 @@ public class TurnManager : MonoBehaviour
         yield return null; // Wait one frame to ensure all components are initialized
         EndEnemyTurn();
     }
+    private IEnumerator DelayFrame(System.Action action)
+    {
+        yield return null;
+        action?.Invoke();
+    }
 
-    public void StartPlayerTurn()
+    private void StartPlayerTurn()
     {
         IsPlayerTurn = true;
         OnPlayerTurnStart?.Invoke();
-        Debug.Log("PLAYER TURN START");
     }
 
     public void EndPlayerTurn()
     {
+        if (!IsPlayerTurn) return;
         if (movingPawns.Count > 0) return;
         CheckTriggers();
         if (listOfTriggers.Find(t => t.isActive) == null)
@@ -156,27 +203,23 @@ public class TurnManager : MonoBehaviour
         }
         IsPlayerTurn = false;
         OnPlayerTurnEnd?.Invoke();
-        Debug.Log("PLAYER TURN END");
-        StartCoroutine(StartEnemyTurnWithDelay());
+        StartEnemyTurn();
     }
 
-    private IEnumerator StartEnemyTurnWithDelay()
+    private void StartEnemyTurn()
     {
-        // yield return new WaitForSeconds(0.1f);
         UpdateNavMesh();
-        // yield return new WaitForSeconds(0.1f);
         EnemyTurn();
-        yield return null;
     }
 
     private void EnemyTurn()
     {
         OnEnemyTurnStart?.Invoke();
-        Debug.Log("Enemy is making its move");
     }
 
     public void EndEnemyTurn()
     {
+        if (IsPlayerTurn) return;
         OnEnemyTurnEnd?.Invoke();
         StartCoroutine(StartPlayerTurnWithDelay());
     }

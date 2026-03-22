@@ -20,6 +20,7 @@ public class HandleInittingGlobalVars : MonoBehaviour
     public const string IS_STEP_BY_STEP_KEY = "IsStepByStep";
     public const string MELEE_ATTACK_DISTANCE_KEY = "MeleeDST";
     public const string RANDOM_KEY = "Random";
+    public const string UNIQUE_ID = "HandleInittingGlobalVars";
 
     void Awake()
     {
@@ -44,7 +45,30 @@ public class HandleInittingGlobalVars : MonoBehaviour
         };
     }
 
-
+    void Start()
+    {
+        SaveHub.Instance.OnLoad += OnLoadData;
+        SaveHub.Instance.OnSave += OnSaveData;
+    }
+    private void OnLoadData(LoadedData data)
+    {
+        globalParameters.parametersDict[IS_STEP_BY_STEP_KEY] =
+            data.GetData(
+                "IsStepByStep",
+                UNIQUE_ID,
+                globalParameters.parametersDict[IS_STEP_BY_STEP_KEY] > 0.5f
+            ) ? 1f : 0f;
+    }
+    private void OnSaveData(Action<SaveRecord[], string> addSaveData)
+    {
+        SaveRecord records = new()
+        {
+            recordName = "IsStepByStep",
+            recordType = SaveRecordType.boolean,
+            boolValue = globalParameters.parametersDict[IS_STEP_BY_STEP_KEY] > 0.5f
+        };
+        addSaveData(new SaveRecord[] { records }, UNIQUE_ID);
+    }
     private ParameteredScriptableObject GetDataAsset(string fileName)
     {
         return Resources.Load<ParameteredScriptableObject>(fileName);

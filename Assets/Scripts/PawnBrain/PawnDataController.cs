@@ -42,8 +42,81 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
     [SerializeField]
     public SelectableType selectableType = SelectableType.Player;
+    private string UNIQUE_ID => "PawnData_" + gameObject.name;
 
+    void OnValidate()
+    {
+        if (pawnDataCached != initialPawnData)
+        {
+            pawnDataCached = initialPawnData;
+            ResetKeys();
+        }
+    }
 
+    void Start()
+    {
+        if (TurnManager.Instance != null)
+        {
+            if (selectableType == SelectableType.Player)
+            {
+                TurnManager.Instance.OnPlayerTurnStart += ResetActionPoints;
+            }
+            else if (selectableType == SelectableType.Enemy)
+            {
+                TurnManager.Instance.OnEnemyTurnStart += ResetActionPoints;
+            }
+        }
+        initialPawnData.SetDirty();
+        initialPawnData.RebuildParametersDict();
+        ResetKeys();
+        SaveHub.Instance.OnLoad += OnLoadData;
+        SaveHub.Instance.OnSave += OnSaveData;
+    }
+    void OnEnable()
+    {
+        if (TurnManager.Instance != null)
+        {
+            if (selectableType == SelectableType.Player)
+            {
+                TurnManager.Instance.OnPlayerTurnStart += ResetActionPoints;
+            }
+            else if (selectableType == SelectableType.Enemy)
+            {
+                TurnManager.Instance.OnEnemyTurnStart += ResetActionPoints;
+            }
+        }
+        if (PawnController.Instance.toggleShootOnMoveAction != null) PawnController.Instance.toggleShootOnMoveAction.action.Enable();
+    }
+
+    void OnDisable()
+    {
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnStart -= ResetActionPoints;
+            TurnManager.Instance.OnEnemyTurnStart -= ResetActionPoints;
+        }
+        if (PawnController.Instance.toggleShootOnMoveAction != null) PawnController.Instance.toggleShootOnMoveAction.action.Disable();
+    }
+    private void OnLoadData(LoadedData data)
+    {
+        dynamicParameters = data.GetData("DynamicParameters", UNIQUE_ID, dynamicParameters);
+        selectableType = (SelectableType)data.GetData("SelectableType", UNIQUE_ID, (int)selectableType);
+    }
+    private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
+    {
+        addSaveData(new SaveRecord[] {
+            new SaveRecord() {
+                recordName = "DynamicParameters",
+                recordType = SaveRecordType.dictionary,
+                dictValue = dynamicParameters
+            },
+            new SaveRecord() {
+                recordName = "SelectableType",
+                recordType = SaveRecordType.integerNumber,
+                intValue = (int)selectableType
+            }
+        }, UNIQUE_ID);
+    }
     private void ResetKeys()
     {
         var dict = initialPawnData.GetParametersDict();
@@ -128,58 +201,6 @@ public class PawnDataController : MonoBehaviour, IFormulaData
             Debug.LogWarning($"Parameter {parameterName} not found in dynamicParameters of pawn data controller, creating new one");
         }
         dynamicParameters[parameterName] = value;
-    }
-
-    void OnValidate()
-    {
-        if (pawnDataCached != initialPawnData)
-        {
-            pawnDataCached = initialPawnData;
-            ResetKeys();
-        }
-    }
-
-    void Start()
-    {
-        if (TurnManager.Instance != null)
-        {
-            if (selectableType == SelectableType.Player)
-            {
-                TurnManager.Instance.OnPlayerTurnStart += ResetActionPoints;
-            }
-            else if (selectableType == SelectableType.Enemy)
-            {
-                TurnManager.Instance.OnEnemyTurnStart += ResetActionPoints;
-            }
-        }
-        initialPawnData.SetDirty();
-        initialPawnData.RebuildParametersDict();
-        ResetKeys();
-    }
-    void OnEnable()
-    {
-        if (TurnManager.Instance != null)
-        {
-            if (selectableType == SelectableType.Player)
-            {
-                TurnManager.Instance.OnPlayerTurnStart += ResetActionPoints;
-            }
-            else if (selectableType == SelectableType.Enemy)
-            {
-                TurnManager.Instance.OnEnemyTurnStart += ResetActionPoints;
-            }
-        }
-        if (PawnController.Instance.toggleShootOnMoveAction != null) PawnController.Instance.toggleShootOnMoveAction.action.Enable();
-    }
-
-    void OnDisable()
-    {
-        if (TurnManager.Instance != null)
-        {
-            TurnManager.Instance.OnPlayerTurnStart -= ResetActionPoints;
-            TurnManager.Instance.OnEnemyTurnStart -= ResetActionPoints;
-        }
-        if (PawnController.Instance.toggleShootOnMoveAction != null) PawnController.Instance.toggleShootOnMoveAction.action.Disable();
     }
 
     private void ResetActionPoints()

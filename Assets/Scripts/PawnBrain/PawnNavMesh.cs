@@ -16,6 +16,7 @@ public class PawnNavMesh : MonoBehaviour
     private Vector3[] cachedPointsAvailable = null;
     private Vector3[] cachedPointsOutOfRange = null;
     private bool cachedTargetPositionValid = false;
+    private string UNIQUE_ID => "PawnNavMesh_" + gameObject.name;
     [System.Serializable]
     private class ScriptEnabler
     {
@@ -69,6 +70,55 @@ public class PawnNavMesh : MonoBehaviour
     void Start()
     {
         navMeshAgent.stoppingDistance = 1.05f;
+        SaveHub.Instance.OnSave += OnSaveData;
+        SaveHub.Instance.OnLoad += OnLoadData;
+    }
+    private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
+    {
+        SaveRecord[] records = new SaveRecord[isMoving ? 3 : 2];
+        records[0] = new SaveRecord()
+        {
+            recordName = "Pos",
+            recordType = SaveRecordType.vector,
+            vecValue = transform.position
+        };
+        records[1] = new SaveRecord()
+        {
+            recordName = "Rot",
+            recordType = SaveRecordType.quaternion,
+            quatValue = transform.rotation
+        };
+        if (isMoving)
+        {
+            records[2] = new SaveRecord()
+            {
+                recordName = "Destination",
+                recordType = SaveRecordType.vector,
+                vecValue = navMeshAgent.destination
+            };
+        }
+        addSaveData(records, UNIQUE_ID);
+    }
+
+    private void OnLoadData(LoadedData data)
+    {
+        ResetMovement();
+        navMeshAgent.Warp(data.GetData("Pos", UNIQUE_ID, transform.position));
+        transform.rotation = data.GetData("Rot", UNIQUE_ID, transform.rotation);
+        Vector3 defaultVal = new Vector3(0f, 1000f, 0f);
+        Vector3 destination = data.GetData("Destination", UNIQUE_ID, defaultVal);
+        if (destination != defaultVal)
+        {
+            targetPosition = destination;
+            navMeshAgent.SetDestination(targetPosition);
+            isMoving = true;
+            TurnManager.Instance.RegisterMovingPawn(gameObject);
+        }
+        else
+        {
+            TurnManager.Instance.UnregisterMovingPawn(gameObject);
+            isMoving = false;
+        }
     }
 
     private float GetAvDist()

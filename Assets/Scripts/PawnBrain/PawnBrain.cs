@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
@@ -27,6 +28,7 @@ public class PawnBrain : IControlableSelectable
     [SerializeField]
     // ToDo: move this variable to global data or sth
     private float hitForce = 2f;
+    private string UNIQUE_ID => "Pawn_" + gameObject.name;
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
@@ -225,7 +227,7 @@ public class PawnBrain : IControlableSelectable
 
     public override void MakeReload()
     {
-        Debug.Log("MakeReload " + gameObject.name);
+        // Debug.Log("MakeReload " + gameObject.name);
         float currentAmmo = dataController.GetParameterValue(PawnDataController.TOTAL_AMMO_KEY);
         float currentMag = dataController.GetParameterValue(PawnDataController.MAG_AMOUNT_KEY);
         float initialMag = dataController.GetParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
@@ -238,7 +240,7 @@ public class PawnBrain : IControlableSelectable
         {
             float movesToSkipForFullMag = dataController.GetParameterValue(PawnDataController.INITIAL_MOVES_TO_RELOAD_KEY);
             float movesToSkip = Mathf.Ceil(movesToSkipForFullMag * (reloadMagWithAmount / initialMag));
-            Debug.Log("movesToSkip: " + movesToSkip + " reloadMagWithAmount: " + reloadMagWithAmount + " initialMag: " + initialMag + " movesToSkipForFullMag: " + movesToSkipForFullMag);
+            // Debug.Log("movesToSkip: " + movesToSkip + " reloadMagWithAmount: " + reloadMagWithAmount + " initialMag: " + initialMag + " movesToSkipForFullMag: " + movesToSkipForFullMag);
             dataController.SetParameterValue(PawnDataController.MOVES_TO_SKIP_KEY, movesToSkip + 1);
         }
 
