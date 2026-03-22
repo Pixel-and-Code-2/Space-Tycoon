@@ -91,7 +91,6 @@ public class CameraTargetController : MonoBehaviour
     {
         if (currentLookTarget != PawnController.Instance.currentSelectedPawn)
         {
-            Debug.Log("CheckTarget: currentLookTarget != PawnController.Instance.currentSelectedPawn");
             if (currentLookTarget != null) UnsetPawnTarget();
             if (PawnController.Instance.currentSelectedPawn != null) SetPawnTarget(PawnController.Instance.currentSelectedPawn);
         }
@@ -102,7 +101,6 @@ public class CameraTargetController : MonoBehaviour
         currentLookTarget = lookTarget;
         if (lockOnSelect || (isForced && lockOnForceSelect))
         {
-            Debug.Log("Locking " + lockOnSelect + " or " + (isForced && lockOnForceSelect));
             isForced = false;
             LockTarget();
         }
@@ -121,7 +119,6 @@ public class CameraTargetController : MonoBehaviour
     }
     private void LockTarget()
     {
-        Debug.Log("Locking target");
         if (isLockedOnTarget) return;
         isLockedOnTarget = true;
         if (cameraController != null)

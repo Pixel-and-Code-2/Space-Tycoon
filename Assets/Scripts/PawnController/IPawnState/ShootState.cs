@@ -95,25 +95,27 @@ public class ShootState : IPawnState
                 else
                 {
                     HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE] = curr_target_angle;
-                    controlableSelectable.OnShoot(worldPoint);
                 }
                 if (randomValue < chance)
                 {
                     randomValue = Random.value;
                     if (randomValue < defenseChance)
                     {
+                        controlableSelectable.OnShoot(worldPoint, true);
                         UI3DManager.Instance.ShowMessage(defenseMessage, worldPoint, Color.red);
                         attackableSelectable.OnGetDefendedHit(worldPoint - controlableSelectable.GetTransform().position, false);
                     }
                     else
                     {
-                        attackableSelectable.OnGetHit(GetShootDamage(attackableSelectable));
+                        bool isAlive = attackableSelectable.OnGetHit(GetShootDamage(attackableSelectable));
+                        controlableSelectable.OnShoot(worldPoint, isAlive);
                     }
                 }
                 else
                 {
                     if (message == null)
                     {
+                        controlableSelectable.OnShoot(worldPoint, true);
                         UI3DManager.Instance.ShowMessage("Miss", worldPoint, Color.yellow);
                     }
                 }

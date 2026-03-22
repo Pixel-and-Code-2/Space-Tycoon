@@ -3,8 +3,6 @@ using UnityEngine.AI;
 using System;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Collider))]
-[RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(PathDrawer))]
 [RequireComponent(typeof(PawnDataController))]
 [RequireComponent(typeof(PawnNavMesh))]
@@ -23,20 +21,15 @@ public class PawnBrain : IControlableSelectable
     private AnimatorBrainBase animatorBrain;
     private Animator anim;
     private Rigidbody rb;
-    private Collider col;
-    private NavMeshAgent navMeshAgent;
     [SerializeField]
     // ToDo: move this variable to global data or sth
     private float hitForce = 2f;
-    private string UNIQUE_ID => "Pawn_" + gameObject.name;
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
         dataController = GetComponent<PawnDataController>();
         pawnNavMesh = GetComponent<PawnNavMesh>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
-        col = GetComponent<Collider>();
         animatorBrain = GetComponentInChildren<AnimatorBrainBase>();
         anim = GetComponentInChildren<Animator>();
         animatorBrain.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
@@ -152,9 +145,9 @@ public class PawnBrain : IControlableSelectable
         Vector3 dir = -transform.position + other.transform.position;
         if (dataController.verticalPushOverride != -1f) dir.y = dataController.verticalPushOverride;
         float pushForce = dataController.obstaclePushForce;
-        if (navMeshAgent != null)
+        if (pawnNavMesh.navMeshAgent != null)
         {
-            pushForce *= navMeshAgent.speed;
+            pushForce *= pawnNavMesh.navMeshAgent.speed;
         }
         other.rigidbody.AddForce(dir * pushForce, ForceMode.Impulse);
     }
@@ -168,7 +161,7 @@ public class PawnBrain : IControlableSelectable
         }
     }
 
-    public override void OnShoot(Vector3 position)
+    public override void OnShoot(Vector3 position, bool isAlive)
     {
         transform.LookAt(position);
         animatorBrain.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
@@ -180,6 +173,12 @@ public class PawnBrain : IControlableSelectable
             PawnDataController.MAG_AMOUNT_KEY,
             dataController.GetParameterValue(PawnDataController.MAG_AMOUNT_KEY) - 1
         );
+        if (!isAlive && dataController.selectableType == SelectableType.Player)
+        {
+            string[] boosts = new string[] { "+ 1 к защите", "+ 1 к силе", "", "+ 5% к силе", "+ 5% к защите" };
+            int boostIndex = UnityEngine.Random.Range(0, boosts.Length);
+            UI3DManager.Instance.ShowMessage(boosts[boostIndex], transform.position, new Color(0f, 1f, 0f));
+        }
     }
     public override void OnMelee(Vector3 position)
     {
@@ -190,8 +189,9 @@ public class PawnBrain : IControlableSelectable
             dataController.GetParameterValue(PawnDataController.MELEE_AMOUNT_KEY) + 1
         );
     }
-    public override void OnGetHit(float damage)
+    public override bool OnGetHit(float damage)
     {
+        bool isAlive = true;
         float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
         UI3DManager.Instance.ShowMessage("-" + damage.ToString("F1"), transform.position, Color.red);
         if (newHealth <= 0f)
@@ -205,8 +205,7 @@ public class PawnBrain : IControlableSelectable
             // transform.rotation = Quaternion.Euler(0f, 0f, 90f);
             animatorBrain.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
             newHealth = 0f;
-            col.enabled = false;
-            navMeshAgent.enabled = false;
+            isAlive = false;
         }
         dataController.SetParameterValue(
             PawnDataController.AVAILABLE_HEALTH_KEY,
@@ -216,6 +215,7 @@ public class PawnBrain : IControlableSelectable
             PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY,
             dataController.GetParameterValue(PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY) + 1
         );
+        return isAlive;
     }
 
     public override void OnGetDefendedHit(Vector3 hitDirection, bool isMelee)

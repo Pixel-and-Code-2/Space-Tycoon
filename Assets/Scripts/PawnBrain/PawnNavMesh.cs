@@ -4,10 +4,12 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(PawnDataController))]
+[RequireComponent(typeof(Collider))]
 public class PawnNavMesh : MonoBehaviour
 {
     private PawnDataController dataController;
     public NavMeshAgent navMeshAgent;
+    public Collider col;
     private float distanceTravelling = 0f;
     [HideInInspector]
     public Vector3 targetPosition { get; private set; } = Vector3.zero;
@@ -46,6 +48,17 @@ public class PawnNavMesh : MonoBehaviour
     private int isDeath = -1;
     public void SetTypeOfModifierVolumes(int isMyTeamsTurn = -1, int isSelected = -1, int isDeath = -1)
     {
+        if (isDeath == 1)
+        {
+            col.enabled = false;
+            navMeshAgent.enabled = false;
+            gameObject.layer = LayerMask.NameToLayer("DeadPawn");
+        }
+        if (isDeath == 0)
+        {
+            col.enabled = true;
+            navMeshAgent.enabled = true;
+        }
         if (isMyTeamsTurn != -1) this.isMyTeamsTurn = isMyTeamsTurn;
         if (isSelected != -1) this.isSelected = isSelected;
         if (isDeath != -1) this.isDeath = isDeath;
@@ -65,6 +78,7 @@ public class PawnNavMesh : MonoBehaviour
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         dataController = GetComponent<PawnDataController>();
+        col = GetComponent<Collider>();
     }
 
     void Start()
@@ -102,6 +116,23 @@ public class PawnNavMesh : MonoBehaviour
 
     private void OnLoadData(LoadedData data)
     {
+        SelectableType selectableType = (SelectableType)data.GetData("SelectableType", dataController.UNIQUE_ID, (int)dataController.selectableType);
+        if (selectableType != SelectableType.Dead)
+        {
+            SetTypeOfModifierVolumes(-1, -1, 0);
+            if (selectableType == SelectableType.Player)
+            {
+                gameObject.layer = LayerMask.NameToLayer("Player");
+            }
+            else
+            {
+                gameObject.layer = LayerMask.NameToLayer("Hitable");
+            }
+        }
+        else
+        {
+            SetTypeOfModifierVolumes(-1, -1, 1);
+        }
         ResetMovement();
         navMeshAgent.Warp(data.GetData("Pos", UNIQUE_ID, transform.position));
         transform.rotation = data.GetData("Rot", UNIQUE_ID, transform.rotation);

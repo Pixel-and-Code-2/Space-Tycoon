@@ -40,7 +40,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
     [SerializeField]
     public SelectableType selectableType = SelectableType.Player;
-    private string UNIQUE_ID => "PawnData_" + gameObject.name;
+    public string UNIQUE_ID => "PawnData_" + gameObject.name;
 
     void OnValidate()
     {

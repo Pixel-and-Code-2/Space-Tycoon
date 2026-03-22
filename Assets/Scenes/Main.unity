@@ -629,8 +629,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482326685}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.19942056, y: 0.736663, z: -0.24582505, w: 0.59760284}
-  m_LocalPosition: {x: -21.447346, y: 16.46146, z: 4.51967}
+  m_LocalRotation: {x: 0.1989153, y: 0.73687047, z: -0.24520217, w: 0.5977713}
+  m_LocalPosition: {x: -21.646748, y: 16.55608, z: 4.561691}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6259,31 +6259,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3840838322773846342, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -21.447346
+      value: -21.646748
       objectReference: {fileID: 0}
     - target: {fileID: 3840838322773846342, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.46146
+      value: 16.55608
       objectReference: {fileID: 0}
     - target: {fileID: 3840838322773846342, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.51967
+      value: 4.561691
       objectReference: {fileID: 0}
     - target: {fileID: 3840838322773846342, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5976029
+      value: 0.5977713
       objectReference: {fileID: 0}
     - target: {fileID: 3840838322773846342, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.19942059
+      value: 0.1989153
       objectReference: {fileID: 0}
     - target: {fileID: 3840838322773846342, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.736663
+      value: 0.73687047
       objectReference: {fileID: 0}
     - target: {fileID: 3840838322773846342, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.24582507
+      value: -0.24520218
       objectReference: {fileID: 0}
     - target: {fileID: 4702315125008643062, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23730,7 +23730,7 @@ MonoBehaviour:
   - text: Start computer
     action: 0
     chanceToLaunch:
-      formula: '(p_IQ<5?-g_e:
+      formula: '(//p_IQ<5?-g_e:
 
         c_pawnDistance >= 3? -2*g_e:
 
