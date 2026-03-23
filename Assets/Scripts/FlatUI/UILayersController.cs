@@ -62,15 +62,9 @@ public class UILayersController : MonoBehaviour
                 layer.uiLayer.gameObject.SetActive(false);
             }
         }
-        if (currentLayer != UILayer.GameUI)
-        {
-            ShowLayer(currentLayer);
-            StopGame();
-        }
-        else
-        {
-            ResumeGame();
-        }
+        ShowLayer(currentLayer);
+        if (currentLayer != UILayer.GameUI) StopGame();
+        else ResumeGame();
     }
     private void ShowLayer(UILayer layer)
     {
