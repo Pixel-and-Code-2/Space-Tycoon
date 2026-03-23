@@ -99,6 +99,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     {
         dynamicParameters = data.GetData("DynamicParameters", UNIQUE_ID, dynamicParameters);
         selectableType = (SelectableType)data.GetData("SelectableType", UNIQUE_ID, (int)selectableType);
+        PawnController.Instance.UpdateStartReloadButtonColor();
     }
     private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
     {

@@ -100,7 +100,6 @@ public class PawnController : MonoBehaviour
         IControlableSelectable newSelection = currentSelector.PollSelectPawn(currentSelectedPawn);
         if (newSelection != currentSelectedPawn)
         {
-            UpdateStartReloadButtonColor();
             if (currentSelectedPawn != null) currentSelectedPawn.OnDeselect();
             currentSelectedPawn = newSelection;
             if (newSelection != null)
@@ -108,6 +107,7 @@ public class PawnController : MonoBehaviour
                 UpdateMoveOnShootButtonColor();
                 newSelection.OnSelect();
             }
+            UpdateStartReloadButtonColor();
         }
 
         ISelectable selectable = currentSelector.PollSelectClickableItem(clickableItemsController.currentSelectedItem);
@@ -191,6 +191,13 @@ public class PawnController : MonoBehaviour
             UpdateStartReloadButtonColor();
             return;
         }
+        float currentMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY);
+        float initialMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
+        if (currentMag >= initialMag)
+        {
+            UpdateStartReloadButtonColor();
+            return;
+        }
 
         currentSelectedPawn.MakeReload();
         UpdateStartReloadButtonColor();
@@ -208,7 +215,11 @@ public class PawnController : MonoBehaviour
             startReloadButton.TurnOffButton();
             return;
         }
-        if (currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY) < 0.1f)
+        float currentMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY);
+        float initialMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
+        bool canReload = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY) < 0.1f
+                         && currentMag < initialMag;
+        if (canReload)
         {
             startReloadButton.TurnOnButton();
         }

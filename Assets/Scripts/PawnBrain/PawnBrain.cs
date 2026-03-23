@@ -160,7 +160,12 @@ public class PawnBrain : IControlableSelectable
             TurnManager.Instance.EnterTrigger(other.gameObject);
         }
     }
-
+    public override void OnCompleteTask()
+    {
+        string[] boosts = new string[] { "+ 1 к IQ", "+ 1 к ловкости", "+ 5% к ловкости", "+ 5% к IQ" };
+        int boostIndex = UnityEngine.Random.Range(0, boosts.Length);
+        UI3DManager.Instance.ShowMessage(boosts[boostIndex], transform.position, new Color(0f, 1f, 0f));
+    }
     public override void OnShoot(Vector3 position, bool isAlive)
     {
         transform.LookAt(position);
@@ -173,6 +178,7 @@ public class PawnBrain : IControlableSelectable
             PawnDataController.MAG_AMOUNT_KEY,
             dataController.GetParameterValue(PawnDataController.MAG_AMOUNT_KEY) - 1
         );
+        PawnController.Instance.UpdateStartReloadButtonColor();
         if (!isAlive && dataController.selectableType == SelectableType.Player)
         {
             string[] boosts = new string[] { "+ 1 к защите", "+ 1 к силе", "", "+ 5% к силе", "+ 5% к защите" };
@@ -232,10 +238,10 @@ public class PawnBrain : IControlableSelectable
 
     public override void MakeReload()
     {
-        // Debug.Log("MakeReload " + gameObject.name);
         float currentAmmo = dataController.GetParameterValue(PawnDataController.TOTAL_AMMO_KEY);
         float currentMag = dataController.GetParameterValue(PawnDataController.MAG_AMOUNT_KEY);
         float initialMag = dataController.GetParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
+        if (currentMag >= initialMag) return;
         float reloadMagWithAmount = Mathf.Min(initialMag - currentMag, currentAmmo);
         float reloadedAmmo = currentAmmo - reloadMagWithAmount;
         float reloadedMag = reloadMagWithAmount + currentMag;
@@ -246,7 +252,7 @@ public class PawnBrain : IControlableSelectable
             float movesToSkipForFullMag = dataController.GetParameterValue(PawnDataController.INITIAL_MOVES_TO_RELOAD_KEY);
             float movesToSkip = Mathf.Ceil(movesToSkipForFullMag * (reloadMagWithAmount / initialMag));
             // Debug.Log("movesToSkip: " + movesToSkip + " reloadMagWithAmount: " + reloadMagWithAmount + " initialMag: " + initialMag + " movesToSkipForFullMag: " + movesToSkipForFullMag);
-            dataController.SetParameterValue(PawnDataController.MOVES_TO_SKIP_KEY, movesToSkip + 1);
+            dataController.SetParameterValue(PawnDataController.MOVES_TO_SKIP_KEY, movesToSkip);
         }
 
     }

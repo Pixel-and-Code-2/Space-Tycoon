@@ -149,7 +149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.51
+      value: -2.975
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.y
@@ -157,7 +157,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.92
+      value: -11.245
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalRotation.w
@@ -650,6 +650,7 @@ MonoBehaviour:
       - {fileID: 1569542970}
       names:
       - Calculated
+  scriptForClickable: {fileID: 0}
 --- !u!65 &285404554
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1000,6 +1001,7 @@ MonoBehaviour:
       - {fileID: 1569542970}
       names:
       - Calculated
+  scriptForClickable: {fileID: 0}
 --- !u!65 &549932610
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7625,7 +7627,6 @@ Transform:
   - {fileID: 4378931921680228762}
   - {fileID: 5390582538473229007}
   - {fileID: 5698396568379475280}
-  - {fileID: 2073056157}
   m_Father: {fileID: 1569542968}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1187009918
@@ -7814,6 +7815,7 @@ MonoBehaviour:
       - {fileID: 1569542970}
       names:
       - Calculated
+  scriptForClickable: {fileID: 0}
 --- !u!65 &1283831391
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13192,6 +13194,8 @@ GameObject:
   - component: {fileID: 1444200267}
   - component: {fileID: 1444200269}
   - component: {fileID: 1444200268}
+  - component: {fileID: 1444200271}
+  - component: {fileID: 1444200270}
   m_Layer: 6
   m_Name: DoorCollider
   m_TagString: Untagged
@@ -13256,6 +13260,7 @@ MonoBehaviour:
       - {fileID: 1569542970}
       names:
       - Calculated
+  scriptForClickable: {fileID: 1444200271}
 --- !u!65 &1444200269
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13277,6 +13282,44 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5, y: 2, z: 1.52}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1444200270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444200266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
+  m_SerializedVersion: 1
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: -0.92, z: -3.96}
+  m_EndPoint: {x: 0, y: -0.9, z: 1.71}
+  m_StartTransform: {fileID: 0}
+  m_EndTransform: {fileID: 0}
+  m_Activated: 1
+  m_Width: 0
+  m_CostModifier: 1
+  m_IsOverridingCost: 0
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 0
+  m_Area: 0
+--- !u!114 &1444200271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444200266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35e9eded1f7ba0142aa1584fa1673eda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstDoorOpen
+  navMeshLink: {fileID: 1444200270}
 --- !u!1 &1445595619
 GameObject:
   m_ObjectHideFlags: 0
@@ -13429,6 +13472,7 @@ MonoBehaviour:
       - {fileID: 1569542970}
       names:
       - Calculated
+  scriptForClickable: {fileID: 0}
 --- !u!1 &1483986393
 GameObject:
   m_ObjectHideFlags: 0
@@ -14373,7 +14417,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.04
+      value: -0.97
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14381,7 +14425,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.99
+      value: 9.34
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14911,63 +14955,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1483986394}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2073056156
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2073056157}
-  - component: {fileID: 2073056158}
-  m_Layer: 0
-  m_Name: DoorTeleporter1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2073056157
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2073056156}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.08, y: -0.8, z: -15.91}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1187009917}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2073056158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2073056156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -2.45}
-  m_EndPoint: {x: 0, y: 0, z: 3.18}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 0
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!1 &2136816929
 GameObject:
   m_ObjectHideFlags: 0
@@ -19745,6 +19732,7 @@ GameObject:
   - component: {fileID: 4580301832448339890}
   - component: {fileID: 4580301832448339889}
   - component: {fileID: 4580301832448339888}
+  - component: {fileID: 4580301832448339891}
   m_Layer: 6
   m_Name: M_01_USE_PC_U1
   m_TagString: Untagged
@@ -21580,6 +21568,7 @@ MonoBehaviour:
       - {fileID: 1569542970}
       names:
       - Calculated
+  scriptForClickable: {fileID: 4580301832448339891}
 --- !u!65 &4580301832448339889
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -21635,6 +21624,18 @@ VideoPlayer:
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
+--- !u!114 &4580301832448339891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3115228128118583054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a33e5ff9193ff74aa7700da00186e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstComputer
 --- !u!23 &4610762660671047381
 MeshRenderer:
   m_ObjectHideFlags: 0

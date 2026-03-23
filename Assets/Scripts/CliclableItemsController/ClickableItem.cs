@@ -22,6 +22,8 @@ public class ClickableItem : ISelectable
 
     [SerializeField]
     private List<InspectorContextMenuItem> availableActions = new List<InspectorContextMenuItem>();
+    [SerializeField]
+    private IScriptForClickable scriptForClickable;
     private string UNIQUE_ID => "ClickableItem_" + gameObject.name;
 
 
@@ -129,7 +131,7 @@ public class ClickableItem : ISelectable
         {
             formula.ClearMemorizedDatasets();
             formula.AddMemorizedDataset(() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated"));
-            // formula.AddMemorizedDataset(() => (PawnController.Instance.currentSelectedPawn == null ? HandleInittingGlobalVars.pawnMustHaveParams : PawnController.Instance.currentSelectedPawn.GetFormulaData(), "Player"));
+            formula.AddMemorizedDataset(() => (PawnController.Instance.currentSelectedPawn == null ? HandleInittingGlobalVars.pawnMustHaveParams : PawnController.Instance.currentSelectedPawn.GetFormulaData(), "Player"));
         }
         formula.OnParamsUpdated();
     }
@@ -137,14 +139,17 @@ public class ClickableItem : ISelectable
     public override void OnSelect()
     {
         ClickableItemsController.Instance.OnContextMenu();
+        scriptForClickable?.OnSelect();
     }
 
     private SliderController progressBarCached = null;
     private InspectorContextMenuItem actionCached = null;
     public override bool IsWorking() => progressBarCached != null;
+    private IControlableSelectable panwProgressing = null;
     private void StartWork()
     {
         progressBarCached = UI3DManager.Instance.RegisterSlider(transform);
+        panwProgressing = PawnController.Instance.currentSelectedPawn;
         // if (progressBarCached == null)
         // {
         //     Debug.LogError("StartWorkAction: progressBarCached is null");
@@ -157,6 +162,7 @@ public class ClickableItem : ISelectable
         progressBarCached.SetBounds(0f, 100f);
         progressBarCached.SetValue(0f);
         progressBarCached.SetClass(SelectableType.Neutral);
+        scriptForClickable?.OnStart();
     }
     private void StartWorkAction(InspectorContextMenuItem action)
     {
@@ -165,6 +171,7 @@ public class ClickableItem : ISelectable
         ClickableItemsController.Instance.OnDeselect();
         BoostProgressBar();
         // UI3DManager.Instance.ShowMessage("Started", transform.position, Color.yellow);
+        scriptForClickable?.OnDeselect();
     }
 
     private void OnPlayerTurnEnd()
@@ -189,17 +196,24 @@ public class ClickableItem : ISelectable
                 progressBarCached = null;
                 actionCached = null;
                 UI3DManager.Instance.ShowMessage("Cancelled", transform.position, Color.green);
+                panwProgressing = null;
+                scriptForClickable?.OnCancel();
                 return;
             }
             progressBarCached.SetValue(progress);
             if (progress >= 100f)
             {
+                scriptForClickable?.OnProgress(100f);
                 UI3DManager.Instance.UnregisterSlider(transform);
                 progressBarCached = null;
                 actionCached = null;
                 UI3DManager.Instance.ShowMessage("Completed", transform.position, Color.green);
+                panwProgressing?.OnCompleteTask();
                 ClickableItemsController.Instance.OnCompleteTask(this);
+                scriptForClickable?.OnComplete();
+                return;
             }
+            scriptForClickable?.OnProgress(progress);
         }
     }
 

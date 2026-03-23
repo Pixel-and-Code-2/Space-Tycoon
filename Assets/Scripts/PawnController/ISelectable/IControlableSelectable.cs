@@ -12,4 +12,5 @@ public abstract class IControlableSelectable : IAttackableSelectable
 
     public abstract bool IsInActiveTriggerZone();
     public abstract void MakeReload();
+    public virtual void OnCompleteTask() { }
 }
