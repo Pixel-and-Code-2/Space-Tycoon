@@ -25,19 +25,11 @@ public class PawnController : MonoBehaviour
     [SerializeField]
     public PathDrawerWithText pathDrawer;
     [SerializeField]
-    public Button toggleShootOnMoveButton;
-    [SerializeField]
-    public Sprite toggleShootButtonOn;
-    [SerializeField]
-    public Sprite toggleShootButtonOff;
+    private IconButtonStyleFiller shootOnMoveButton;
     [SerializeField]
     public InputActionReference toggleShootOnMoveAction;
     [SerializeField]
-    private Button startReloadButton;
-    [SerializeField]
-    private Sprite startReloadButtonOn;
-    [SerializeField]
-    private Sprite startReloadButtonOff;
+    private IconButtonStyleFiller startReloadButton;
 
 
     public ISelectorBrain currentSelector
@@ -180,11 +172,11 @@ public class PawnController : MonoBehaviour
         if (!currentSelector.SyncUI) return;
         if (Mathf.Abs(currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) - 0f) < 0.1f)
         {
-            toggleShootOnMoveButton.image.sprite = toggleShootButtonOff;
+            shootOnMoveButton.TurnOffButton();
         }
         else
         {
-            toggleShootOnMoveButton.image.sprite = toggleShootButtonOn;
+            shootOnMoveButton.TurnOnButton();
         }
     }
     public void StartReload()
@@ -213,16 +205,16 @@ public class PawnController : MonoBehaviour
         if (!currentSelector.SyncUI) return;
         if (currentSelectedPawn == null)
         {
-            startReloadButton.image.sprite = startReloadButtonOff;
+            startReloadButton.TurnOffButton();
             return;
         }
         if (currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY) < 0.1f)
         {
-            startReloadButton.image.sprite = startReloadButtonOn;
+            startReloadButton.TurnOnButton();
         }
         else
         {
-            startReloadButton.image.sprite = startReloadButtonOff;
+            startReloadButton.TurnOffButton();
         }
     }
 

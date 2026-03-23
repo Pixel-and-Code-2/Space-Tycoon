@@ -54,13 +54,9 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
     [SerializeField]
     private bool showZeroPlane = false;
     [SerializeField]
-    private Button walkButton;
+    private IconButtonStyleFiller walkButton;
     [SerializeField]
-    private Color walkButtonColor;
-    [SerializeField]
-    private Button attackButton;
-    [SerializeField]
-    private Color attackButtonColor;
+    private IconButtonStyleFiller attackButton;
     private IControlableSelectable forcedSelectedPlayer = null;
     private List<InputActionReference> actions = new List<InputActionReference>();
     // here we tracking certain keys, to prevent multiple click handles on the same button press
@@ -432,17 +428,13 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
     {
         if (currentControlType == ControlType.walk)
         {
-            walkButton.interactable = false;
-            walkButton.image.color = Color.gray;
-            attackButton.interactable = true;
-            attackButton.image.color = attackButtonColor;
+            walkButton.TurnOffButton();
+            attackButton.TurnOnButton();
         }
         else
         {
-            attackButton.interactable = false;
-            attackButton.image.color = Color.gray;
-            walkButton.interactable = true;
-            walkButton.image.color = walkButtonColor;
+            attackButton.TurnOffButton();
+            walkButton.TurnOnButton();
         }
     }
     public void SetControlTypeTo(bool isWalk)

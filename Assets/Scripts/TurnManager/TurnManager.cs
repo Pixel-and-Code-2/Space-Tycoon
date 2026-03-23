@@ -34,11 +34,9 @@ public class TurnManager : MonoBehaviour
     private NavMeshSurface navMeshSurface;
     private List<UnityEngine.Object> movingPawns = new List<UnityEngine.Object>();
     [SerializeField]
-    private Button endTurnButton;
+    private IconButtonStyleFiller endTurnButton1;
     [SerializeField]
-    private Sprite activeEndTurn;
-    [SerializeField]
-    private Sprite inactiveEndTurn;
+    private IconButtonStyleFiller endTurnButton2;
     private const string UNIQUE_ID = "TurnManager";
 
     private void Awake()
@@ -162,16 +160,16 @@ public class TurnManager : MonoBehaviour
     {
         if (listOfTriggers.Find(t => t.isActive) == null) return;
         movingPawns.Add(pawn);
-        endTurnButton.image.sprite = inactiveEndTurn;
-        endTurnButton.interactable = false;
+        endTurnButton1.TurnOffButton();
+        endTurnButton2.TurnOffButton();
     }
     public void UnregisterMovingPawn(UnityEngine.Object pawn)
     {
         movingPawns.Remove(pawn);
         if (movingPawns.Count == 0)
         {
-            endTurnButton.interactable = true;
-            endTurnButton.image.sprite = activeEndTurn;
+            endTurnButton1.TurnOnButton();
+            endTurnButton2.TurnOnButton();
         }
     }
 
