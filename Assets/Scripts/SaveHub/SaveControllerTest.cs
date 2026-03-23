@@ -9,8 +9,6 @@ public class SaveControllerTest : MonoBehaviour
     private InputActionReference loadAction;
     [SerializeField]
     private InputActionReference showLastSavedDataAction;
-    [SerializeField]
-    private string fileName;
 
     private void Awake()
     {
@@ -26,11 +24,11 @@ public class SaveControllerTest : MonoBehaviour
     }
     private void Save(InputAction.CallbackContext context)
     {
-        SaveHub.Instance.MakeSave(fileName);
+        SaveHub.Instance.MakeSave();
     }
 
     private void Load(InputAction.CallbackContext context)
     {
-        SaveHub.Instance.LoadAllData(fileName);
+        SaveHub.Instance.LoadAllData();
     }
 }

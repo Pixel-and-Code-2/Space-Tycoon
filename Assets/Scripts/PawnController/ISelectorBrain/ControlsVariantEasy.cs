@@ -37,7 +37,7 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
     [SerializeField]
     private InputActionReference endTurnButtonClick;
     [SerializeField]
-    private InputActionReference toggleMainMenu;
+    private InputActionReference togglePause;
     [System.Serializable]
     struct PlayerActions
     {
@@ -86,7 +86,7 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
             actions.Add(endTurnButtonClick);
             actions.Add(walkClick);
             actions.Add(attackButtonClick);
-            actions.Add(toggleMainMenu);
+            actions.Add(togglePause);
             foreach (var playerAction in playerActions)
             {
                 actions.Add(playerAction.whenSelect);
@@ -320,11 +320,11 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
     // Helper methods
     private void CheckAdditionalButtonClicks()
     {
-        if (GetClickState(toggleMainMenu))
+        if (UILayersController.Instance.currentLayer != UILayersController.UILayer.GameUI) return;
+        if (GetClickState(togglePause))
         {
-            MainMenu.Instance.ToggleMainMenu();
+            UILayersController.Instance.SetLayer(UILayersController.UILayer.PauseMenu);
         }
-        if (MainMenu.Instance.isMainMenuVisible) return;
         foreach (var playerAction in playerActions)
         {
             if (GetClickState(playerAction.whenSelect))

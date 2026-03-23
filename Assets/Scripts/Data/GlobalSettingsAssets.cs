@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class GlobalSettingsAssets : ScriptableObject
 {
     [System.Serializable]
+    public class IconButtonStyle { public string name; public Sprite spriteOff; public Sprite spriteOn; public Color colorOff; public Color colorOn; }
+    [System.Serializable]
     public struct SliderClassColors { public SelectableType selectableType; public Color colorFront; public Color colorBack; }
     [Header("Slider class colors")]
     [SerializeField]
@@ -16,9 +18,15 @@ public class GlobalSettingsAssets : ScriptableObject
     public Color deadColor = Color.gray;
     public Color allyColor = Color.green;
     public Color enemyColor = Color.red;
+    [SerializeField]
+    private List<IconButtonStyle> iconButtonStyles;
 
     public SliderClassColors GetSliderClassColors(SelectableType selectableType)
     {
         return sliderClassColors.Find(x => x.selectableType == selectableType);
+    }
+    public IconButtonStyle GetIconButtonStyle(string name)
+    {
+        return iconButtonStyles.Find(x => x.name == name);
     }
 }

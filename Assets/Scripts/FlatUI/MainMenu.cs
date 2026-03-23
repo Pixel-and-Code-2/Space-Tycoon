@@ -1,31 +1,29 @@
 using UnityEngine;
 
-public class MainMenu : MonoBehaviour
+public class MainMenu : IUILayer
 {
-    public static MainMenu Instance { get; private set; }
-
-    public bool isMainMenuVisible => gameObject.activeSelf;
-
-    void Awake()
+    void OnEnable()
     {
-        if (Instance == null) Instance = this;
-        else
-        {
-            Debug.LogError("Constructor met second MainMenu instance");
-        }
+        gameObject.SetActive(true);
+    }
+    void OnDisable()
+    {
         gameObject.SetActive(false);
     }
-    public void ToggleMainMenu()
+    public void OnExitGame()
     {
-        if (gameObject.activeSelf)
-        {
-            gameObject.SetActive(false);
-            Time.timeScale = 1f;
-        }
-        else
-        {
-            gameObject.SetActive(true);
-            Time.timeScale = 0f;
-        }
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+    public void OnPlay()
+    {
+        UILayersController.Instance.SetLayer(UILayersController.UILayer.SaveGame, "gameStart");
+    }
+    public void OnSettings()
+    {
+        UILayersController.Instance.SetLayer(UILayersController.UILayer.Settings, "mainMenu");
     }
 }

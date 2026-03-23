@@ -213,7 +213,7 @@ public class PawnNavMesh : MonoBehaviour
     }
     protected virtual void Update()
     {
-        if (MainMenu.Instance.isMainMenuVisible) return;
+        if (UILayersController.Instance.currentLayer != UILayersController.UILayer.GameUI) return;
         if (isMoving)
         {
             if (!navMeshAgent.pathPending)

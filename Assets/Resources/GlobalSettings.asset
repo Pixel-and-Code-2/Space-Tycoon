@@ -30,3 +30,59 @@ MonoBehaviour:
   deadColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   allyColor: {r: 0, g: 1, b: 0, a: 1}
   enemyColor: {r: 1, g: 0, b: 0, a: 1}
+  iconButtonStyles:
+  - name: Exit
+    spriteOff: {fileID: 0}
+    spriteOn: {fileID: 0}
+    colorOff: {r: 0.9386792, g: 0.30551353, b: 0.30551353, a: 1}
+    colorOn: {r: 0.6367924, g: 0.4205233, b: 0.4205233, a: 1}
+  - name: Walk
+    spriteOff: {fileID: 0}
+    spriteOn: {fileID: 0}
+    colorOff: {r: 0.30588233, g: 0.3566498, b: 0.9019608, a: 1}
+    colorOn: {r: 0.41960785, g: 0.42324236, b: 0.63529414, a: 1}
+  - name: Attack
+    spriteOff: {fileID: 0}
+    spriteOn: {fileID: 0}
+    colorOff: {r: 0.9019608, g: 0.63483167, b: 0.30588236, a: 1}
+    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
+  - name: IsShootWalk
+    spriteOff: {fileID: -863166482, guid: cdfc45e5d17ab3947bc8a4c3c87371ca, type: 3}
+    spriteOn: {fileID: 1732047824, guid: e894649ef0d0a1b4b85749f25c37f37f, type: 3}
+    colorOff: {r: 0.9019608, g: 0.63483167, b: 0.30588236, a: 1}
+    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
+  - name: EndTurn
+    spriteOff: {fileID: -588120006, guid: 2d0b379754584644c95d8b2d15f789fb, type: 3}
+    spriteOn: {fileID: -831309971, guid: 32c2c0cbb77d54940986386412e7af2b, type: 3}
+    colorOff: {r: 0.9019608, g: 0.63483167, b: 0.30588236, a: 1}
+    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
+  - name: Player1
+    spriteOff: {fileID: 0}
+    spriteOn: {fileID: -1027262560, guid: b6fd8e526570f384facd74c7cd29c7c9, type: 3}
+    colorOff: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
+    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
+  - name: Player2
+    spriteOff: {fileID: 0}
+    spriteOn: {fileID: 596277690, guid: 91227a6a8032e874280171dea746bd67, type: 3}
+    colorOff: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
+    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
+  - name: Player3
+    spriteOff: {fileID: 0}
+    spriteOn: {fileID: -2000980365, guid: 36df5c68837586c448dd298e3421684b, type: 3}
+    colorOff: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
+    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
+  - name: Weapon
+    spriteOff: {fileID: 1236265581, guid: f46e9092890fd7d4989e5dce5f6d2f98, type: 3}
+    spriteOn: {fileID: -51319423, guid: e278b7bc08516254aa16d5fb2c3d4cc4, type: 3}
+    colorOff: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
+    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
+  - name: Settings
+    spriteOff: {fileID: 0}
+    spriteOn: {fileID: 0}
+    colorOff: {r: 0.5801887, g: 0.5801887, b: 0.5801887, a: 1}
+    colorOn: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
+  - name: Back
+    spriteOff: {fileID: 0}
+    spriteOn: {fileID: 0}
+    colorOff: {r: 0.9103774, g: 0.27053666, b: 0.85023457, a: 1}
+    colorOn: {r: 0.7075472, g: 0.46057317, b: 0.68739, a: 1}

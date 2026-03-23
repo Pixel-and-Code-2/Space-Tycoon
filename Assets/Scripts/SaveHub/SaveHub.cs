@@ -7,6 +7,9 @@ public class SaveHub : MonoBehaviour
 {
     public static SaveHub Instance { get; private set; }
 
+    public const string StreamingAssetsDefaultSaveFileName = "defaultSave.dat";
+
+    public static int DEFAULT_SAVE_SLOT = 0;
     public Action<Action<SaveRecord[], string>> OnSave;
     public Action<LoadedData> OnLoad;
     private LoadedData loadedData = new LoadedData();
@@ -28,12 +31,15 @@ public class SaveHub : MonoBehaviour
     {
         accumulatedSaveData.AddData(DataCompressor.CollectData(records, id));
     }
-
-    public void MakeSave(string fileName)
+    private string GetSlotFileName(int slot)
+    {
+        return $"save_{slot}.dat";
+    }
+    public void MakeSave(int slot) => MakeSave(GetSlotFileName(slot));
+    public void MakeSave(string fileName = null)
     {
         accumulatedSaveData.Clear();
-        string path = Path.Combine(Application.persistentDataPath, fileName);
-        // Debug.Log($"Saving data to {path}");
+        string path = ResolveSavePath(fileName);
         var bf = new BinaryFormatter();
         OnSave?.Invoke(AddSaveData);
         using (var stream = new FileStream(path, FileMode.Create))
@@ -42,13 +48,29 @@ public class SaveHub : MonoBehaviour
         }
     }
 
-    public void LoadAllData(string fileName)
+    private static string ResolveSavePath(string fileName)
     {
-        string path = Path.Combine(Application.persistentDataPath, fileName);
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            return GetDefaultPath();
+        }
+        return Path.Combine(Application.persistentDataPath, fileName);
+    }
+    private static string GetDefaultPath()
+    {
+        string dir = Application.streamingAssetsPath;
+        if (!Directory.Exists(dir))
+            Directory.CreateDirectory(dir);
+        return Path.Combine(dir, StreamingAssetsDefaultSaveFileName);
+    }
+
+    public void LoadAllData(int slot) => LoadAllData(GetSlotFileName(slot));
+    public void LoadAllData(string fileName = null)
+    {
+        string path = ResolveSavePath(fileName);
         if (!File.Exists(path))
         {
-            Debug.LogError($"File {path} does not exist");
-            return;
+            path = GetDefaultPath();
         }
 
         var bf = new BinaryFormatter();

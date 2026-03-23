@@ -70,7 +70,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ToggleMainMenu",
+                    "name": "GoBackButton",
                     "type": "Button",
                     "id": "ec0ed7f3-37b3-4ee9-835f-bcd854e79961",
                     "expectedControlType": "",
@@ -244,7 +244,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ToggleMainMenu",
+                    "action": "GoBackButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

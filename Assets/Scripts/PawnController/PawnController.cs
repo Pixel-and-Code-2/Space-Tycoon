@@ -91,7 +91,7 @@ public class PawnController : MonoBehaviour
     }
     void Update()
     {
-        if (MainMenu.Instance.isMainMenuVisible) return;
+        if (UILayersController.Instance.currentLayer != UILayersController.UILayer.GameUI) return;
         // Polling selector brain and addressing logic to the current state
         if (currentSelector == null)
         {
