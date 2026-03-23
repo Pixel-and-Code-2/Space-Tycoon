@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SettingTest : MonoBehaviour
+public class SettingApplier : MonoBehaviour
 {
+    public static SettingApplier Instance { get; private set; }
     [SerializeField]
     private InputActionReference changeControlsAction;
     [SerializeField]
@@ -15,6 +16,11 @@ public class SettingTest : MonoBehaviour
     private GameObject controlsPanel2;
 
 
+    void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Debug.LogError("SettingApplier already exists");
+    }
     void Start()
     {
         if (!changeControlsAction.action.enabled)
@@ -68,7 +74,7 @@ public class SettingTest : MonoBehaviour
             PlayerPrefs.SetInt("SelectedBrain", 1);
         }
     }
-    private void SelectBrain1()
+    public void SelectBrain1()
     {
         selectorBrain2.enabled = false;
         selectorBrain1.enabled = true;
@@ -80,7 +86,7 @@ public class SettingTest : MonoBehaviour
         controlsPanel1.SetActive(true);
         controlsPanel2.SetActive(false);
     }
-    private void SelectBrain2()
+    public void SelectBrain2()
     {
         selectorBrain1.enabled = false;
         selectorBrain2.enabled = true;

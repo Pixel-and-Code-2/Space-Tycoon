@@ -14058,14 +14058,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1569542967}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 850665a89c954d8498cdda796ebe1cbb, type: 3}
+  m_Script: {fileID: 11500000, guid: 68106b05653aba646a4be3661aabde1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingTest
   changeControlsAction: {fileID: 7852135703199459930, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
-  selectorBrain1: {fileID: 1569542973}
-  selectorBrain2: {fileID: 1569542981}
-  controlsPanel1: {fileID: 119986954}
-  controlsPanel2: {fileID: 1230900818}
+  selectorBrain1: {fileID: 1569542981}
+  selectorBrain2: {fileID: 1569542973}
+  controlsPanel1: {fileID: 1230900818}
+  controlsPanel2: {fileID: 119986954}
 --- !u!114 &1569542983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14957,8 +14957,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
   m_SerializedVersion: 1
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -3.6}
-  m_EndPoint: {x: 0, y: 0, z: 3.69}
+  m_StartPoint: {x: 0, y: 0, z: -2.45}
+  m_EndPoint: {x: 0, y: 0, z: 3.18}
   m_StartTransform: {fileID: 0}
   m_EndTransform: {fileID: 0}
   m_Activated: 1
@@ -19242,6 +19242,7 @@ PrefabInstance:
     - {fileID: 7009302999404416906, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
     - {fileID: 7504851305448500303, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
     - {fileID: 2438489071785789104, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+    - {fileID: 6861815647378547314, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}

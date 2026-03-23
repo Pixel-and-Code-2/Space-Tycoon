@@ -2490,6 +2490,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1344326477695231927}
+  - component: {fileID: 8088185511430740301}
   m_Layer: 0
   m_Name: GameUI
   m_TagString: Untagged
@@ -2522,6 +2523,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8088185511430740301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6422084714905366737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f0ae4e7fce88c04cb5063628bfc28f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameUI
+  isBackgroundVisible: 0
+  togglePause: {fileID: -2221508905919505455, guid: 47e3989434b5a4c44b00171d32be59cf, type: 3}
 --- !u!1 &6446781991768313081
 GameObject:
   m_ObjectHideFlags: 0
@@ -2749,7 +2764,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6178684169531077367}
+        m_TargetAssemblyTypeName: UILayersController, Assembly-CSharp
+        m_MethodName: OnBackgroundClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8650268381355154381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4220,7 +4247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UILayersController
   layers:
   - layer: -1
-    uiLayer: {fileID: 8685472095177738503}
+    uiLayer: {fileID: 8088185511430740301}
   - layer: 3
     uiLayer: {fileID: 3052535308931160197}
   - layer: 0
@@ -8024,7 +8051,7 @@ PrefabInstance:
     - target: {fileID: 1513497965970453833, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 8685472095177738503}
+      objectReference: {fileID: 8088185511430740301}
     - target: {fileID: 1513497965970453833, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -8282,7 +8309,7 @@ PrefabInstance:
     - target: {fileID: 1513497965970453833, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 8685472095177738503}
+      objectReference: {fileID: 8088185511430740301}
     - target: {fileID: 1513497965970453833, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2

@@ -37,6 +37,13 @@ public class SettingsMenu : IUILayer
     }
     public void OnChangeControls(int variantNumber)
     {
-
+        if (variantNumber == 1)
+        {
+            SettingApplier.Instance.SelectBrain1();
+        }
+        else if (variantNumber == 2)
+        {
+            SettingApplier.Instance.SelectBrain2();
+        }
     }
 }
