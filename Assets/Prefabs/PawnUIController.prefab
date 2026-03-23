@@ -2056,7 +2056,7 @@ MonoBehaviour:
   pathLineOutOfRange: {fileID: 929362839844601732}
   pathStartObject: {fileID: 4994314587632701724}
   pathEndObject: {fileID: 2921903975356514036}
-  pathWalkableMaterial: {fileID: 2100000, guid: 420c92562ba9f7448830858d499db1bc, type: 2}
+  pathWalkableMaterial: {fileID: 2100000, guid: 82bf1a0fbc5d02c429bf16be866a3a3b, type: 2}
   pathOutOfRangeMaterial: {fileID: 2100000, guid: 0397cd2f2a8a4cf42883ef2849b25b0e, type: 2}
   availableDistance: 1.15
   updateStillnesOfEndPoints: 0
