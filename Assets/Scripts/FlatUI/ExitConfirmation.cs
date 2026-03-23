@@ -33,6 +33,12 @@ public class ExitConfirmation : IUILayer
     }
     public void OnExitWithSave()
     {
+        if (SaveHub.DEFAULT_SAVE_SLOT == -1)
+        {
+            Debug.LogError("Save slot is not set");
+            return;
+        }
+        SettingApplier.SaveSlot();
         SaveHub.Instance.MakeSave(SaveHub.DEFAULT_SAVE_SLOT);
         UILayersController.Instance.SetLayer(UILayersController.UILayer.MainMenu);
     }

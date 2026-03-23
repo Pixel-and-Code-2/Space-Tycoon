@@ -98,4 +98,14 @@ public class SettingApplier : MonoBehaviour
         controlsPanel1.SetActive(false);
         controlsPanel2.SetActive(true);
     }
+    public static void SaveSlot(int slot = -1)
+    {
+        if (slot == -1) slot = SaveHub.DEFAULT_SAVE_SLOT;
+        if (slot == -1) return;
+        string text = "Слот " + slot + ": ";
+        var nextTask = ClickableItemsController.Instance.mainTaskScenario.Find((item) => item.status == ClickableItemsController.TaskItem.TaskItemStatus.ReadyToStart);
+        if (nextTask != null && nextTask.shortLevelName != "") text += nextTask.shortLevelName;
+        else text += "Конец";
+        PlayerPrefs.SetString(SaveMenu.GetSlotName(slot), text);
+    }
 }

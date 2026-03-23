@@ -67,13 +67,11 @@ public class TurnManager : MonoBehaviour
         }
         if (IsPlayerTurn)
         {
-            Debug.Log("Loading: Starting player turn");
             UpdateNavMesh();
             StartCoroutine(DelayFrame(() => StartPlayerTurn()));
         }
         else
         {
-            Debug.Log("Loading: Starting enemy turn");
             UpdateNavMesh();
             StartCoroutine(DelayFrame(() => StartEnemyTurn()));
         }

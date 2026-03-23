@@ -14,7 +14,8 @@ public class UILayersController : MonoBehaviour
         ExitConfirmation = 2,
         MainMenu = 3,
         SaveGame = 4,
-        NarrativeText = 5
+        NarrativeText = 5,
+        AttentionText = 6
     }
     [System.Serializable]
     private class UILayerEntry

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 public class ClickableItemsController : MonoBehaviour
 {
     [System.Serializable]
-    private class TaskItem
+    public class TaskItem
     {
         public enum TaskItemStatus
         {
@@ -31,19 +31,21 @@ public class ClickableItemsController : MonoBehaviour
             public bool showOnlyOnStepByStep = false;
         }
         public ISelectable selectable;
-        // [HideInInspector]
+        [HideInInspector]
         public TaskItemStatus status = TaskItemStatus.Unavailable;
         public int readyWhenItem = -1;
         public TaskItemStatus readyWhenStatus;
         public bool readyWhenIsMain = true;
         public List<TextToShow> textToShow = new List<TextToShow>();
+        public string shortLevelName = string.Empty;
     }
     public static ClickableItemsController Instance { get; private set; }
+    public System.Action OnTaskUpdated;
     public ISelectable currentSelectedItem { get; private set; }
     [SerializeField]
-    private List<TaskItem> mainTaskScenario;
+    public List<TaskItem> mainTaskScenario;
     [SerializeField]
-    private List<TaskItem> sideTaskScenario;
+    public List<TaskItem> sideTaskScenario;
     private int currentTaskScenarioIndex = 0;
     private const string UNIQUE_ID = "ClickableItemsController";
     void Awake()
@@ -97,6 +99,7 @@ public class ClickableItemsController : MonoBehaviour
     }
     void Update()
     {
+        bool updated = false;
         foreach (TaskItem item in mainTaskScenario)
         {
             if (item.selectable.IsWorking() && item.status != TaskItem.TaskItemStatus.InProgress)
@@ -104,6 +107,7 @@ public class ClickableItemsController : MonoBehaviour
                 item.status = TaskItem.TaskItemStatus.InProgress;
                 UI3DManager.Instance.UnregisterSelectable(item.selectable);
                 CheckActionBox();
+                updated = true;
             }
         }
         foreach (TaskItem item in sideTaskScenario)
@@ -113,8 +117,10 @@ public class ClickableItemsController : MonoBehaviour
                 item.status = TaskItem.TaskItemStatus.InProgress;
                 UI3DManager.Instance.UnregisterSelectable(item.selectable);
                 CheckActionBox();
+                updated = true;
             }
         }
+        if (updated) OnTaskUpdated?.Invoke();
     }
     private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
     {
@@ -178,9 +184,11 @@ public class ClickableItemsController : MonoBehaviour
             }
         }
         CheckActionBox();
+        OnTaskUpdated?.Invoke();
     }
     private void CheckActionBox(List<TaskItem> scenario, string label)
     {
+        bool updated = false;
         for (int i = 0; i < scenario.Count; i++)
         {
             if (scenario[i].status == TaskItem.TaskItemStatus.Unavailable)
@@ -188,6 +196,7 @@ public class ClickableItemsController : MonoBehaviour
                 if (CheckReadyWhen(scenario[i]))
                 {
                     scenario[i].status = TaskItem.TaskItemStatus.ReadyToStart;
+                    updated = true;
                 }
             }
             if (scenario[i].selectable.IsWorking())
@@ -195,6 +204,7 @@ public class ClickableItemsController : MonoBehaviour
                 if (scenario[i].status != TaskItem.TaskItemStatus.InProgress)
                 {
                     scenario[i].status = TaskItem.TaskItemStatus.InProgress;
+                    updated = true;
                 }
             }
             if (scenario[i].status != TaskItem.TaskItemStatus.ReadyToStart)
@@ -206,6 +216,7 @@ public class ClickableItemsController : MonoBehaviour
                 UI3DManager.Instance.RegisterSelectable(scenario[i].selectable, label);
             }
         }
+        if (updated) OnTaskUpdated?.Invoke();
     }
     private void CheckActionBox()
     {
@@ -340,6 +351,7 @@ public class ClickableItemsController : MonoBehaviour
 
     public void OnCompleteTask(ISelectable selectable)
     {
+        bool updated = false;
         foreach (TaskItem item in mainTaskScenario)
         {
             if (item.selectable == selectable)
@@ -347,6 +359,7 @@ public class ClickableItemsController : MonoBehaviour
                 item.status = TaskItem.TaskItemStatus.Done;
                 UI3DManager.Instance.UnregisterSelectable(item.selectable);
                 CheckActionBox();
+                updated = true;
             }
         }
         foreach (TaskItem item in sideTaskScenario)
@@ -356,10 +369,12 @@ public class ClickableItemsController : MonoBehaviour
                 item.status = TaskItem.TaskItemStatus.Done;
                 UI3DManager.Instance.UnregisterSelectable(item.selectable);
                 CheckActionBox();
+                updated = true;
             }
         }
         if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.AfterComplete, selectable)) return;
         if (CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.AfterComplete, selectable)) return;
+        if (updated) OnTaskUpdated?.Invoke();
     }
     public void OnStartTask(ISelectable selectable)
     {

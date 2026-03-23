@@ -9,7 +9,7 @@ public class SaveHub : MonoBehaviour
 
     public const string StreamingAssetsDefaultSaveFileName = "defaultSave.dat";
 
-    public static int DEFAULT_SAVE_SLOT = 0;
+    public static int DEFAULT_SAVE_SLOT = -1;
     public Action<Action<SaveRecord[], string>> OnSave;
     public Action<LoadedData> OnLoad;
     private LoadedData loadedData = new LoadedData();
@@ -39,9 +39,13 @@ public class SaveHub : MonoBehaviour
     public void MakeSave(string fileName = null)
     {
         accumulatedSaveData.Clear();
+        OnSave?.Invoke(AddSaveData);
+        SaveSaveData(fileName);
+    }
+    private void SaveSaveData(string fileName = null)
+    {
         string path = ResolveSavePath(fileName);
         var bf = new BinaryFormatter();
-        OnSave?.Invoke(AddSaveData);
         using (var stream = new FileStream(path, FileMode.Create))
         {
             bf.Serialize(stream, accumulatedSaveData);
@@ -67,6 +71,12 @@ public class SaveHub : MonoBehaviour
     public void LoadAllData(int slot) => LoadAllData(GetSlotFileName(slot));
     public void LoadAllData(string fileName = null)
     {
+        loadedData = DataCompressor.DecompressAllData(LoadSaveData(fileName));
+        OnLoad?.Invoke(loadedData);
+        loadedData = null;
+    }
+    private SaveData LoadSaveData(string fileName = null)
+    {
         string path = ResolveSavePath(fileName);
         if (!File.Exists(path))
         {
@@ -82,13 +92,10 @@ public class SaveHub : MonoBehaviour
         if (saveData == null)
         {
             Debug.LogError($"File {path} is empty");
-            return;
         }
-
-        loadedData = DataCompressor.DecompressAllData(saveData);
-        OnLoad?.Invoke(loadedData);
-        loadedData = null;
+        return saveData;
     }
+
 
     public void ShowLastSavedData()
     {
@@ -137,4 +144,9 @@ public class SaveHub : MonoBehaviour
         Debug.Log(data);
     }
 
+    public void ClearSaveData(int slot)
+    {
+        accumulatedSaveData = LoadSaveData();
+        SaveSaveData(GetSlotFileName(slot));
+    }
 }
