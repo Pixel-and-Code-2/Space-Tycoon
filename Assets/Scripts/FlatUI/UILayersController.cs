@@ -75,7 +75,15 @@ public class UILayersController : MonoBehaviour
     private void ShowLayer(UILayer layer)
     {
         layersDictionary[layer].gameObject.SetActive(true);
-        dimScreenObject.SetActive(layersDictionary[layer].isBackgroundVisible);
+        if (layer != UILayer.GameUI)
+        {
+            dimScreenObject.SetActive(layersDictionary[layer].isBackgroundVisible);
+        }
+        else
+        {
+            dimScreenObject.SetActive(false);
+            backgoundClickableObject.SetActive(false);
+        }
     }
 
     public void SetLayer(UILayer layer, string config = null)

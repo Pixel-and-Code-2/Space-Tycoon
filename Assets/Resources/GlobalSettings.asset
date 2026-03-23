@@ -86,3 +86,8 @@ MonoBehaviour:
     spriteOn: {fileID: 0}
     colorOff: {r: 0.9103774, g: 0.27053666, b: 0.85023457, a: 1}
     colorOn: {r: 0.7075472, g: 0.46057317, b: 0.68739, a: 1}
+  - name: Help
+    spriteOff: {fileID: 0}
+    spriteOn: {fileID: 0}
+    colorOff: {r: 0.27058822, g: 0.9098039, b: 0.9068236, a: 1}
+    colorOn: {r: 0.45882353, g: 0.7058824, b: 0.7058824, a: 1}

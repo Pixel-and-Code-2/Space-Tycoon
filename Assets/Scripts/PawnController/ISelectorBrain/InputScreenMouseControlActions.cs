@@ -30,8 +30,6 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     private InputActionReference attackButtonClick;
     [SerializeField]
     private InputActionReference endTurnButtonClick;
-    [SerializeField]
-    private InputActionReference togglePause;
     [System.Serializable]
     struct PlayerActions
     {
@@ -62,7 +60,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         walkState = GetComponent<WalkState>();
         shootState = GetComponent<ShootState>();
         OnValidate();
-        if (actions.Count != 9 + playerActions.Count)
+        if (actions.Count != 8 + playerActions.Count)
         {
             actions.Clear();
             actions.Add(selectionClick);
@@ -73,7 +71,6 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
             actions.Add(endTurnButtonClick);
             actions.Add(walkClick);
             actions.Add(attackButtonClick);
-            actions.Add(togglePause);
             foreach (var playerAction in playerActions)
             {
                 actions.Add(playerAction.whenSelect);
@@ -81,8 +78,13 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         }
         foreach (var action in actions)
         {
-            if (action != null && action.action.controls.Count > 0)
-                handledControls[action.action.controls[0]] = false;
+            if (action != null)
+            {
+                foreach (var control in action.action.controls)
+                {
+                    handledControls[control] = false;
+                }
+            }
         }
     }
 
@@ -304,10 +306,6 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     private void CheckAdditionalButtonClicks()
     {
         if (UILayersController.Instance.currentLayer != UILayersController.UILayer.GameUI) return;
-        if (GetClickState(togglePause))
-        {
-            UILayersController.Instance.SetLayer(UILayersController.UILayer.PauseMenu);
-        }
         foreach (var playerAction in playerActions)
         {
             if (GetClickState(playerAction.whenSelect))
