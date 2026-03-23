@@ -253,8 +253,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c6c0b2508611504fb61f80e24bc99e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnBrain
-  animatorBrain: {fileID: 0}
-  hitForce: 200
+  animatorBrain: {fileID: 4717283122709828959}
+  hitForce: 100
+  defaultMaterial: {fileID: 2100000, guid: 6393d2bdfb8420844bc7dc6f6fbcc4d5, type: 2}
+  selectedMaterial: {fileID: 2100000, guid: dc487a0932c0f974a926f58de0f97bb0, type: 2}
+  skinnedMeshRenderer: {fileID: 976997793479485022}
 --- !u!114 &8515852256048443046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -477,6 +480,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4717283122709828959}
   m_SourcePrefab: {fileID: 100100000, guid: 6e9958695b08bf54ca56f0c63e50a6ee, type: 3}
+--- !u!137 &976997793479485022 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -6222777593134155727, guid: 6e9958695b08bf54ca56f0c63e50a6ee, type: 3}
+  m_PrefabInstance: {fileID: 2606105266857778799}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2567060118913448324 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6e9958695b08bf54ca56f0c63e50a6ee, type: 3}

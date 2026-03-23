@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PathDrawer))]
@@ -24,6 +25,12 @@ public class PawnBrain : IControlableSelectable
     [SerializeField]
     // ToDo: move this variable to global data or sth
     private float hitForce = 2f;
+    [SerializeField]
+    Material defaultMaterial;
+    [SerializeField]
+    Material selectedMaterial;
+    [SerializeField]
+    SkinnedMeshRenderer skinnedMeshRenderer;
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
@@ -97,12 +104,16 @@ public class PawnBrain : IControlableSelectable
     {
         pawnNavMesh.SetTypeOfModifierVolumes(-1, 1);
         TurnManager.Instance.UpdateNavMesh();
+        if (skinnedMeshRenderer != null)
+            skinnedMeshRenderer.material = selectedMaterial;
     }
 
     public override void OnDeselect()
     {
         pawnNavMesh.SetTypeOfModifierVolumes(-1, 0);
         TurnManager.Instance.UpdateNavMesh();
+        if (skinnedMeshRenderer != null)
+            skinnedMeshRenderer.material = defaultMaterial;
     }
     private void OnPlayerTurnStart()
     {
