@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class UILayersController : MonoBehaviour
 {
     public static UILayersController Instance { get; private set; }
+    public event Action OnGameResumed;
     public enum UILayer
     {
         GameUI = -1,
@@ -12,6 +14,7 @@ public class UILayersController : MonoBehaviour
         ExitConfirmation = 2,
         MainMenu = 3,
         SaveGame = 4,
+        NarrativeText = 5
     }
     [System.Serializable]
     private class UILayerEntry
@@ -98,6 +101,7 @@ public class UILayersController : MonoBehaviour
     {
         backgoundClickableObject.SetActive(false);
         Time.timeScale = 1f;
+        OnGameResumed?.Invoke();
     }
     public IUILayer GetLayer(UILayer layer)
     {

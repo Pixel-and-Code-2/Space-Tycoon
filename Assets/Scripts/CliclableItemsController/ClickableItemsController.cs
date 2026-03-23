@@ -14,12 +14,29 @@ public class ClickableItemsController : MonoBehaviour
             InProgress,
             Done,
         }
+        public enum TextShowTime
+        {
+            BeforeContextMenu,
+            BeforeStart,
+            AfterComplete
+        }
+        [System.Serializable]
+        public class TextToShow
+        {
+            public TextShowTime showTime;
+            public string text;
+            [HideInInspector]
+            public bool shown = false;
+            public bool showOnce = true;
+            public bool showOnlyOnStepByStep = false;
+        }
         public ISelectable selectable;
         // [HideInInspector]
         public TaskItemStatus status = TaskItemStatus.Unavailable;
         public int readyWhenItem = -1;
         public TaskItemStatus readyWhenStatus;
         public bool readyWhenIsMain = true;
+        public List<TextToShow> textToShow = new List<TextToShow>();
     }
     public static ClickableItemsController Instance { get; private set; }
     public ISelectable currentSelectedItem { get; private set; }
@@ -46,6 +63,7 @@ public class ClickableItemsController : MonoBehaviour
         }
         SaveHub.Instance.OnLoad += OnLoadData;
         SaveHub.Instance.OnSave += OnSaveData;
+        UILayersController.Instance.OnGameResumed += OnGameResumed;
     }
 
     void OnEnable()
@@ -74,6 +92,8 @@ public class ClickableItemsController : MonoBehaviour
             TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
             TurnManager.Instance.OnPlayerTurnEnd -= OnPlayerTurnEnd;
         }
+        if (UILayersController.Instance != null)
+            UILayersController.Instance.OnGameResumed -= OnGameResumed;
     }
     void Update()
     {
@@ -98,36 +118,64 @@ public class ClickableItemsController : MonoBehaviour
     }
     private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
     {
-        SaveRecord[] records = new SaveRecord[mainTaskScenario.Count + sideTaskScenario.Count];
+        List<SaveRecord> records = new List<SaveRecord>();
         for (int i = 0; i < mainTaskScenario.Count; i++)
         {
-            records[i] = new SaveRecord()
+            records.Add(new SaveRecord()
             {
                 recordName = "MainTaskScenario_" + i,
                 recordType = SaveRecordType.integerNumber,
                 intValue = (int)mainTaskScenario[i].status
-            };
+            });
+            for (int j = 0; j < mainTaskScenario[i].textToShow.Count; j++)
+            {
+                records.Add(new SaveRecord()
+                {
+                    recordName = "MainTaskScenarioTextShown_" + i + "_" + j,
+                    recordType = SaveRecordType.boolean,
+                    boolValue = mainTaskScenario[i].textToShow[j].shown
+                });
+            }
         }
+
+
         for (int i = 0; i < sideTaskScenario.Count; i++)
         {
-            records[mainTaskScenario.Count + i] = new SaveRecord()
+            records.Add(new SaveRecord()
             {
                 recordName = "SideTaskScenario_" + i,
                 recordType = SaveRecordType.integerNumber,
                 intValue = (int)sideTaskScenario[i].status
-            };
+            });
+            for (int j = 0; j < sideTaskScenario[i].textToShow.Count; j++)
+            {
+                records.Add(new SaveRecord()
+                {
+                    recordName = "SideTaskScenarioTextShown_" + i + "_" + j,
+                    recordType = SaveRecordType.boolean,
+                    boolValue = sideTaskScenario[i].textToShow[j].shown
+                });
+            }
         }
-        addSaveData(records, UNIQUE_ID);
+        addSaveData(records.ToArray(), UNIQUE_ID);
     }
     private void OnLoadData(LoadedData data)
     {
         for (int i = 0; i < mainTaskScenario.Count; i++)
         {
             mainTaskScenario[i].status = (TaskItem.TaskItemStatus)data.GetData("MainTaskScenario_" + i, UNIQUE_ID, (int)TaskItem.TaskItemStatus.Unavailable);
+            for (int j = 0; j < mainTaskScenario[i].textToShow.Count; j++)
+            {
+                mainTaskScenario[i].textToShow[j].shown = data.GetData("MainTaskScenarioTextShown_" + i + "_" + j, UNIQUE_ID, false);
+            }
         }
         for (int i = 0; i < sideTaskScenario.Count; i++)
         {
             sideTaskScenario[i].status = (TaskItem.TaskItemStatus)data.GetData("SideTaskScenario_" + i, UNIQUE_ID, (int)TaskItem.TaskItemStatus.Unavailable);
+            for (int j = 0; j < sideTaskScenario[i].textToShow.Count; j++)
+            {
+                sideTaskScenario[i].textToShow[j].shown = data.GetData("SideTaskScenarioTextShown_" + i + "_" + j, UNIQUE_ID, false);
+            }
         }
         CheckActionBox();
     }
@@ -227,6 +275,8 @@ public class ClickableItemsController : MonoBehaviour
     public void OnContextMenu()
     {
         if (currentSelectedItem == null) return;
+        if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.BeforeContextMenu)) return;
+        if (CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.BeforeContextMenu)) return;
         List<ContextMenuItem> items = currentSelectedItem.OnContextMenu();
         if (items != null)
         {
@@ -234,7 +284,32 @@ public class ClickableItemsController : MonoBehaviour
         }
         UI3DManager.Instance.UnregisterSelectable(currentSelectedItem);
     }
+    bool CheckScenarioForText(List<TaskItem> taskScenario, TaskItem.TextShowTime showTime, ISelectable target = null)
+    {
+        if (target == null) target = currentSelectedItem;
+        foreach (TaskItem item in taskScenario)
+        {
+            if (item.selectable == target)
+            {
+                foreach (TaskItem.TextToShow text in item.textToShow)
+                {
+                    if (text.showOnlyOnStepByStep && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f) continue;
+                    if (text.showTime == showTime && !text.shown)
+                    {
+                        text.shown = true;
+                        UILayersController.Instance.SetLayer(UILayersController.UILayer.NarrativeText, text.text);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
+    private void OnGameResumed()
+    {
+        OnDeselect();
+    }
     public void OnPlayerTurnStart()
     {
         // if (taskScenario.Count > currentTaskScenarioIndex && !taskScenario[currentTaskScenarioIndex].IsWorking())
@@ -283,6 +358,13 @@ public class ClickableItemsController : MonoBehaviour
                 CheckActionBox();
             }
         }
+        if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.AfterComplete, selectable)) return;
+        if (CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.AfterComplete, selectable)) return;
+    }
+    public void OnStartTask(ISelectable selectable)
+    {
+        if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.BeforeStart)) return;
+        if (CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.BeforeStart)) return;
     }
 
 }
