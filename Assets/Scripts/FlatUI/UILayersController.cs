@@ -38,6 +38,7 @@ public class UILayersController : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Debug.LogError("UILayersController instance already exists");
+        OnValidate();
     }
     void OnValidate()
     {

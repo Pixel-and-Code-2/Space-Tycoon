@@ -112,7 +112,10 @@ public class TurnManager : MonoBehaviour
             return;
         }
         if (listOfTriggers.Find(t => t.isActive) == null)
+        {
             OnTriggerZoneEnter?.Invoke();
+            UILayersController.Instance.SetLayer(UILayersController.UILayer.AttentionText, "К бою!");
+        }
         trigger.isActive = true;
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 1f;
         StartFirstTurn();
@@ -121,6 +124,7 @@ public class TurnManager : MonoBehaviour
     {
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 0f;
         OnTriggerZoneExit?.Invoke();
+        UILayersController.Instance.SetLayer(UILayersController.UILayer.AttentionText, "Зачищено");
     }
 
     public void CheckTriggers()

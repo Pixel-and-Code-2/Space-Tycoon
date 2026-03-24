@@ -54,6 +54,8 @@ public class SimpleEnemyAI : ISelectorBrain
     private IPawnState walkState;
     [SerializeField]
     private List<EnemyScenarioElement> scenario = new List<EnemyScenarioElement>();
+    [SerializeField]
+    private PawnBrain addPawn;
     private List<DetailedScenarioElement> detailedScenario = new List<DetailedScenarioElement>();
     private int currentScenarioIndex = -1; // -1 means no scenario is running, if this var is bigger than completedScenarioIndex, then local methods (not polls ones) are waiting for sth, otherwise scenario is stopped to make a poll return
     private int completedScenarioIndex = -2;
@@ -75,6 +77,10 @@ public class SimpleEnemyAI : ISelectorBrain
         }
         SaveHub.Instance.OnSave += OnSaveData;
         SaveHub.Instance.OnLoad += OnLoadData;
+    }
+    void OnValidate()
+    {
+        AddPawnToScenarioIfNeeded();
     }
     void OnDestroy()
     {
@@ -304,6 +310,44 @@ public class SimpleEnemyAI : ISelectorBrain
             }
             AddDetailedScenarioElement(DetailedScenarioElementType.DeselectPawn, element);
         }
+    }
+
+    private void AddPawnToScenarioIfNeeded()
+    {
+        if (addPawn == null)
+        {
+            return;
+        }
+        if (scenario.Exists(el => el != null && el.controlledPawn == addPawn))
+        {
+            addPawn = null;
+            return;
+        }
+
+        int moveInsertIndex = scenario.FindLastIndex(el => el != null && el.capability == EnemyCapabilities.Move);
+        EnemyScenarioElement moveElement = CreateEnemyScenarioElement(addPawn, EnemyCapabilities.Move);
+        if (moveInsertIndex == -1)
+        {
+            scenario.Insert(0, moveElement);
+        }
+        else
+        {
+            scenario.Insert(moveInsertIndex + 1, moveElement);
+        }
+
+        scenario.Add(CreateEnemyScenarioElement(addPawn, EnemyCapabilities.WaitMovement));
+        scenario.Add(CreateEnemyScenarioElement(addPawn, EnemyCapabilities.Melee));
+        addPawn = null;
+    }
+
+    private EnemyScenarioElement CreateEnemyScenarioElement(PawnBrain pawn, EnemyCapabilities capability)
+    {
+        EnemyScenarioElement element = new EnemyScenarioElement();
+        element.controlledPawn = pawn;
+        element.targetPawn = null;
+        element.position = Vector3.zero;
+        element.capability = capability;
+        return element;
     }
 
     private void AddDetailedScenarioElement(DetailedScenarioElementType type, ScenarioElement element)

@@ -32,7 +32,7 @@ public class AttentionText : IUILayer
     void Update()
     {
         if (isPersistent) return;
-        timeElapsed += Time.deltaTime;
+        timeElapsed += Time.unscaledDeltaTime;
         if (timeElapsed >= duration)
         {
             UILayersController.Instance.SetLayer(UILayersController.UILayer.GameUI);

@@ -45,7 +45,6 @@ public class GameUI : IUILayer
     }
     private void OnTaskUpdated()
     {
-        // Получаем именно последнюю незавершённую таску для main
         ClickableItemsController.TaskItem mainTask = null;
         var scenario = ClickableItemsController.Instance.mainTaskScenario;
         for (int i = scenario.Count - 1; i >= 0; i--)
@@ -57,7 +56,6 @@ public class GameUI : IUILayer
             }
         }
 
-        // Вывести main таску
         if (mainTask != null)
         {
             UpdateButton(mainTaskTextStyleChanger, mainTask);
@@ -65,9 +63,8 @@ public class GameUI : IUILayer
         else
         {
             mainTaskTextStyleChanger.ClearText();
+            UILayersController.Instance.SetLayer(UILayersController.UILayer.AttentionText, "Победа!_persistent");
         }
-
-        // Subtasks: это все незавершённые задачи, кроме mainTask
         int subTaskIndex = 0;
         for (int i = 0; i < scenario.Count && subTaskIndex < sideTaskTextStyleChangers.Count; i++)
         {
@@ -79,7 +76,6 @@ public class GameUI : IUILayer
             subTaskIndex++;
         }
 
-        // Очищаем оставшиеся subtask кнопки, если тасок меньше, чем кнопок
         for (int i = subTaskIndex; i < sideTaskTextStyleChangers.Count; i++)
         {
             sideTaskTextStyleChangers[i].ClearText();

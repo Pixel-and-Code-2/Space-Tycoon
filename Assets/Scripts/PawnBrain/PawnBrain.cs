@@ -32,6 +32,7 @@ public class PawnBrain : IControlableSelectable
     [SerializeField]
     SkinnedMeshRenderer skinnedMeshRenderer;
     private bool warFogEventsSubscribed;
+    private static List<IControlableSelectable> playersAlive = new List<IControlableSelectable>();
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
@@ -42,7 +43,10 @@ public class PawnBrain : IControlableSelectable
         anim = GetComponentInChildren<Animator>();
         animatorBrain.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
         animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
-
+        if (dataController.selectableType == SelectableType.Player)
+        {
+            playersAlive.Add(this);
+        }
     }
 
     void Start()
@@ -238,11 +242,14 @@ public class PawnBrain : IControlableSelectable
             TurnManager.Instance.CheckTriggers();
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
             pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
-            // transform.position -= transform.up * 0.5f;
-            // transform.rotation = Quaternion.Euler(0f, 0f, 90f);
             animatorBrain.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
             newHealth = 0f;
             isAlive = false;
+            playersAlive.Remove(this);
+            if (playersAlive.Count == 0)
+            {
+                UILayersController.Instance.SetLayer(UILayersController.UILayer.AttentionText, "Все члены экипажа погибли!_persistent");
+            }
         }
         dataController.SetParameterValue(
             PawnDataController.AVAILABLE_HEALTH_KEY,

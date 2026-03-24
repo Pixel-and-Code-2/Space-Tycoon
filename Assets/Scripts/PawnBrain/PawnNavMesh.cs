@@ -120,13 +120,11 @@ public class PawnNavMesh : MonoBehaviour
         if (selectableType != SelectableType.Dead)
         {
             SetTypeOfModifierVolumes(-1, -1, 0);
-            if (selectableType == SelectableType.Player)
+            if (gameObject.layer != LayerMask.NameToLayer("WarFog"))
             {
-                gameObject.layer = LayerMask.NameToLayer("Player");
-            }
-            else
-            {
-                gameObject.layer = LayerMask.NameToLayer("Hitable");
+                gameObject.layer = selectableType == SelectableType.Player
+                    ? LayerMask.NameToLayer("Player")
+                    : LayerMask.NameToLayer("Hitable");
             }
         }
         else

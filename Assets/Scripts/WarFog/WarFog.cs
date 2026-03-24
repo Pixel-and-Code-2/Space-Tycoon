@@ -10,12 +10,13 @@ public class WarFog : MonoBehaviour
     public static event Action OnWarFogEnd;
     public static event Action OnWarFogStart;
 
-    private readonly Dictionary<Renderer, Material[]> rendererDefaultSharedMaterials = new Dictionary<Renderer, Material[]>();
-    private readonly Dictionary<GameObject, int> objectOriginalLayers = new Dictionary<GameObject, int>();
+    private Dictionary<Renderer, Material[]> rendererDefaultMaterials = new Dictionary<Renderer, Material[]>();
+    private Dictionary<GameObject, int> objectOriginalLayers = new Dictionary<GameObject, int>();
 
     [SerializeField]
     private List<GameObject> othersToInclude;
     private string UNIQUE_ID => "WarFog_" + gameObject.name;
+    private bool isHidden = true;
 
     void Awake()
     {
@@ -31,43 +32,35 @@ public class WarFog : MonoBehaviour
         SaveHub.Instance.OnLoad += OnLoad;
     }
 
-    private static Material[] CloneSharedMaterials(Renderer renderer)
-    {
-        Material[] src = renderer.sharedMaterials;
-        Material[] dst = new Material[src.Length];
-        Array.Copy(src, dst, src.Length);
-        return dst;
-    }
-
     private void RegisterRenderer(Renderer renderer)
     {
-        if (renderer == null || rendererDefaultSharedMaterials.ContainsKey(renderer))
+        if (renderer == null || rendererDefaultMaterials.ContainsKey(renderer))
             return;
-        rendererDefaultSharedMaterials[renderer] = CloneSharedMaterials(renderer);
+        Material[] src = renderer.sharedMaterials;
+        Material[] copy = new Material[src.Length];
+        Array.Copy(src, copy, src.Length);
+        rendererDefaultMaterials[renderer] = copy;
     }
 
     private void RegisterRenderersUnder(GameObject root)
     {
-        if (root == null)
-            return;
-        foreach (MeshRenderer meshRenderer in root.GetComponentsInChildren<MeshRenderer>(true))
-            RegisterRenderer(meshRenderer);
-        foreach (SkinnedMeshRenderer skinnedMeshRenderer in root.GetComponentsInChildren<SkinnedMeshRenderer>(true))
-            RegisterRenderer(skinnedMeshRenderer);
+        if (root == null) return;
+        foreach (MeshRenderer r in root.GetComponentsInChildren<MeshRenderer>(true))
+            RegisterRenderer(r);
+        foreach (SkinnedMeshRenderer r in root.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+            RegisterRenderer(r);
     }
 
     private void RegisterSnapshot()
     {
         RegisterRenderersUnder(gameObject);
-        if (othersToInclude == null)
-            return;
+        if (othersToInclude == null) return;
         foreach (GameObject other in othersToInclude)
         {
-            if (other == null)
-                continue;
-            RegisterRenderersUnder(other);
+            if (other == null) continue;
             if (!objectOriginalLayers.ContainsKey(other))
                 objectOriginalLayers[other] = other.layer;
+            RegisterRenderersUnder(other);
         }
     }
 
@@ -87,59 +80,45 @@ public class WarFog : MonoBehaviour
         bool newIsHidden = loadedData.GetData("isHidden", UNIQUE_ID, true);
         if (newIsHidden != isHidden)
         {
-            isHidden = newIsHidden;
             if (newIsHidden)
-            {
                 HideEverything();
-            }
             else
-            {
                 ShowEverything();
-            }
         }
     }
 
     private void ApplyHiddenVisuals()
     {
-        foreach (KeyValuePair<Renderer, Material[]> pair in rendererDefaultSharedMaterials)
+        foreach (var pair in rendererDefaultMaterials)
         {
-            Renderer renderer = pair.Key;
-            if (renderer == null)
-                continue;
-            Material[] defaults = pair.Value;
-            Material[] fogMats = new Material[defaults.Length];
+            if (pair.Key == null) continue;
+            Material[] fogMats = new Material[pair.Value.Length];
             for (int i = 0; i < fogMats.Length; i++)
                 fogMats[i] = fogMaterial;
-            renderer.sharedMaterials = fogMats;
+            pair.Key.sharedMaterials = fogMats;
         }
-        foreach (KeyValuePair<GameObject, int> pair in objectOriginalLayers)
+        int warFogLayer = LayerMask.NameToLayer("WarFog");
+        if (othersToInclude == null) return;
+        foreach (GameObject other in othersToInclude)
         {
-            GameObject go = pair.Key;
-            if (go == null)
-                continue;
-            go.layer = LayerMask.NameToLayer("WarFog");
+            if (other == null) continue;
+            other.layer = warFogLayer;
         }
     }
 
     private void ApplyVisibleVisuals()
     {
-        foreach (KeyValuePair<Renderer, Material[]> pair in rendererDefaultSharedMaterials)
+        foreach (var pair in rendererDefaultMaterials)
         {
-            Renderer renderer = pair.Key;
-            if (renderer == null)
-                continue;
-            renderer.sharedMaterials = pair.Value;
+            if (pair.Key == null) continue;
+            pair.Key.sharedMaterials = pair.Value;
         }
-        foreach (KeyValuePair<GameObject, int> pair in objectOriginalLayers)
+        foreach (var pair in objectOriginalLayers)
         {
-            GameObject go = pair.Key;
-            if (go == null)
-                continue;
-            go.layer = pair.Value;
+            if (pair.Key == null) continue;
+            pair.Key.layer = pair.Value;
         }
     }
-
-    private bool isHidden = true;
 
     private void HideEverything()
     {
