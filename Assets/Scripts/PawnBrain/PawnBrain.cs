@@ -31,6 +31,7 @@ public class PawnBrain : IControlableSelectable
     Material selectedMaterial;
     [SerializeField]
     SkinnedMeshRenderer skinnedMeshRenderer;
+    private bool warFogEventsSubscribed;
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
@@ -46,7 +47,16 @@ public class PawnBrain : IControlableSelectable
 
     void Start()
     {
-        UI3DManager.Instance.RegisterPawn(gameObject);
+        if (gameObject.layer != LayerMask.NameToLayer("WarFog"))
+        {
+            UI3DManager.Instance.RegisterPawn(gameObject);
+        }
+        else
+        {
+            WarFog.OnWarFogEnd += OnWarFogEnd;
+            WarFog.OnWarFogStart += OnWarFogStart;
+            warFogEventsSubscribed = true;
+        }
         TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
         TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
         TurnManager.Instance.OnTriggerZoneEnter += OnTriggerZoneEnter;
@@ -61,6 +71,11 @@ public class PawnBrain : IControlableSelectable
         TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
         TurnManager.Instance.OnTriggerZoneEnter -= OnTriggerZoneEnter;
         TurnManager.Instance.OnTriggerZoneExit -= OnTriggerZoneExit;
+        if (warFogEventsSubscribed)
+        {
+            WarFog.OnWarFogEnd -= OnWarFogEnd;
+            WarFog.OnWarFogStart -= OnWarFogStart;
+        }
     }
 
     void Update()
@@ -170,6 +185,11 @@ public class PawnBrain : IControlableSelectable
         {
             TurnManager.Instance.EnterTrigger(other.gameObject);
         }
+        if (other.gameObject.layer == LayerMask.NameToLayer("WarFog"))
+        {
+            WarFog warFog = other.gameObject.GetComponent<WarFog>();
+            warFog.ShowEverything();
+        }
     }
     public override void OnCompleteTask()
     {
@@ -265,9 +285,21 @@ public class PawnBrain : IControlableSelectable
             // Debug.Log("movesToSkip: " + movesToSkip + " reloadMagWithAmount: " + reloadMagWithAmount + " initialMag: " + initialMag + " movesToSkipForFullMag: " + movesToSkipForFullMag);
             dataController.SetParameterValue(PawnDataController.MOVES_TO_SKIP_KEY, movesToSkip);
         }
-
     }
-
+    private void OnWarFogEnd()
+    {
+        if (gameObject.layer != LayerMask.NameToLayer("WarFog"))
+        {
+            UI3DManager.Instance.RegisterPawn(gameObject);
+        }
+    }
+    private void OnWarFogStart()
+    {
+        if (gameObject.layer == LayerMask.NameToLayer("WarFog"))
+        {
+            UI3DManager.Instance.UnregisterPawn(gameObject);
+        }
+    }
     public override IFormulaData GetFormulaData()
     {
         return dataController;

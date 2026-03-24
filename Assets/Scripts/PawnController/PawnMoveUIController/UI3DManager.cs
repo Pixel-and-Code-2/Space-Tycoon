@@ -225,6 +225,12 @@ public class UI3DManager : MonoBehaviour
         if (pawnsInScene.ContainsKey(pawnObject)) return;
         pawnsInScene.Add(pawnObject, CreateSliderForPawn(pawnObject));
     }
+    public void UnregisterPawn(GameObject pawnObject)
+    {
+        if (!pawnsInScene.ContainsKey(pawnObject)) return;
+        Destroy(pawnsInScene[pawnObject].gameObject);
+        pawnsInScene.Remove(pawnObject);
+    }
 
     public SliderController RegisterSlider(Transform transform)
     {
