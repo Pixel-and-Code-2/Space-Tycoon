@@ -5836,7 +5836,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.08
+      value: -0.05
       objectReference: {fileID: 0}
     - target: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7321,6 +7321,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1444200267}
+  - {fileID: 1512402888}
   - {fileID: 4378931921680228762}
   - {fileID: 5390582538473229007}
   - {fileID: 5698396568379475280}
@@ -12907,6 +12908,141 @@ Transform:
   - {fileID: 2056518768}
   m_Father: {fileID: 1569542968}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1512402887
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1512402888}
+  - component: {fileID: 1512402892}
+  - component: {fileID: 1512402891}
+  - component: {fileID: 1512402890}
+  - component: {fileID: 1512402889}
+  m_Layer: 6
+  m_Name: Door2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1512402888
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512402887}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 21.77, y: -1.01, z: -31.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1187009917}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &1512402889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512402887}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
+  m_SerializedVersion: 1
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -2.71}
+  m_EndPoint: {x: 0, y: 0, z: 2.93}
+  m_StartTransform: {fileID: 0}
+  m_EndTransform: {fileID: 0}
+  m_Activated: 1
+  m_Width: 0
+  m_CostModifier: 1
+  m_IsOverridingCost: 0
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 0
+  m_Area: 0
+--- !u!114 &1512402890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512402887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c620a594d364e054aaedeb1f1aea6ff4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SecondDoorOpen
+  navMeshLink: {fileID: 1512402889}
+--- !u!114 &1512402891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512402887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e506eb7913d9014991c3980aa3bb513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
+  availableActions:
+  - text: "\u0420\u0430\u0437\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C
+      \u0434\u0432\u0435\u0440\u044C"
+    action: 0
+    chanceToLaunch:
+      formula: '(c_pawnDistance > 4 ? -1:
+
+        100*g_e)'
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+    exitCodes:
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+      color: {r: 1, g: 0, b: 0, a: 1}
+      code: -1
+    progressPerRound:
+      formula: 100*g_e
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+  scriptForClickable: {fileID: 1512402890}
+--- !u!65 &1512402892
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512402887}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.34, y: 2.5, z: 3.16}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &1565159077 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5518004313056994089, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
@@ -13437,9 +13573,8 @@ MonoBehaviour:
   mainTaskScenario:
   - selectable: {fileID: 4580301832448339888}
     status: 0
-    readyWhenItem: -1
-    readyWhenStatus: 0
-    readyWhenIsMain: 1
+    readyWhen: []
+    doneWhen: []
     textToShow:
     - showTime: 0
       text: "\u041D\u0430\u043C \u043D\u0443\u0436\u043D\u043E \u0434\u043E\u0431\u0440\u0430\u0442\u044C\u0441\u044F
@@ -13462,11 +13597,15 @@ MonoBehaviour:
       showOnce: 1
       showOnlyOnStepByStep: 0
     shortLevelName: "\u0417\u0430\u043F\u0443\u0441\u0442\u0438\u0442\u044C \u043A\u043E\u043C\u043F\u044C\u044E\u0442\u0435\u0440"
+    completeText: 
   - selectable: {fileID: 1444200268}
     status: 0
-    readyWhenItem: 0
-    readyWhenStatus: 3
-    readyWhenIsMain: 1
+    readyWhen:
+    - itemIndex: 0
+      requiredStatus: 3
+      isMain: 1
+      atLeast: 0
+    doneWhen: []
     textToShow:
     - showTime: 0
       text: "\u0414\u0432\u0435\u0440\u044C \u043D\u0435 \u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0442\u0441\u044F,
@@ -13481,6 +13620,137 @@ MonoBehaviour:
       showOnce: 1
       showOnlyOnStepByStep: 1
     shortLevelName: "\u041E\u0442\u043F\u0435\u0440\u0435\u0442\u044C \u0434\u0432\u0435\u0440\u0438"
+    completeText: 
+  - selectable: {fileID: 7423991045303590523}
+    status: 0
+    readyWhen:
+    - itemIndex: 1
+      requiredStatus: 3
+      isMain: 1
+      atLeast: 0
+    doneWhen: []
+    textToShow:
+    - showTime: 0
+      text: "\u0414\u0432\u0435\u0440\u044C \u043D\u0435 \u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0442\u0441\u044F,
+        \u043D\u0443\u0436\u043D\u043E \u043F\u0440\u0438\u043B\u043E\u0436\u0438\u0442\u044C
+        \u0441\u0438\u043B\u0443"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+    - showTime: 1
+      text: "\u0412\u0441\u0435 \u0432\u043C\u0435\u0441\u0442\u0435"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 1
+    shortLevelName: "\u0412\u0437\u044F\u0442\u044C \u043A\u043B\u044E\u0447\u0438
+      \u0448\u0438\u0444\u0440\u043E\u0432\u0430\u043D\u0438\u044F"
+    completeText: 
+  - selectable: {fileID: 8304735298341820026}
+    status: 0
+    readyWhen:
+    - itemIndex: 1
+      requiredStatus: 3
+      isMain: 1
+      atLeast: 0
+    doneWhen:
+    - itemIndex: 5
+      requiredStatus: 3
+      isMain: 1
+      atLeast: 0
+    textToShow:
+    - showTime: 0
+      text: "\u0414\u0432\u0435\u0440\u044C \u043D\u0435 \u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0442\u0441\u044F,
+        \u043D\u0443\u0436\u043D\u043E \u043F\u0440\u0438\u043B\u043E\u0436\u0438\u0442\u044C
+        \u0441\u0438\u043B\u0443"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+    - showTime: 1
+      text: "\u0412\u0441\u0435 \u0432\u043C\u0435\u0441\u0442\u0435"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 1
+    shortLevelName: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447
+      \u043A\u0430\u0440\u0442\u0443"
+    completeText: 
+  - selectable: {fileID: 5283825735161033118}
+    status: 0
+    readyWhen:
+    - itemIndex: 1
+      requiredStatus: 3
+      isMain: 1
+      atLeast: 0
+    doneWhen:
+    - itemIndex: 5
+      requiredStatus: 3
+      isMain: 1
+      atLeast: 0
+    textToShow:
+    - showTime: 0
+      text: "\u0414\u0432\u0435\u0440\u044C \u043D\u0435 \u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0442\u0441\u044F,
+        \u043D\u0443\u0436\u043D\u043E \u043F\u0440\u0438\u043B\u043E\u0436\u0438\u0442\u044C
+        \u0441\u0438\u043B\u0443"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+    - showTime: 1
+      text: "\u0412\u0441\u0435 \u0432\u043C\u0435\u0441\u0442\u0435"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 1
+    shortLevelName: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447
+      \u043A\u0430\u0440\u0442\u0443"
+    completeText: 
+  - selectable: {fileID: 7030045181592525981}
+    status: 0
+    readyWhen:
+    - itemIndex: 1
+      requiredStatus: 3
+      isMain: 1
+      atLeast: 0
+    doneWhen: []
+    textToShow: []
+    shortLevelName: "\u041E\u0442\u043F\u0435\u0440\u0435\u0442\u044C \u0434\u0432\u0435\u0440\u0438"
+    completeText: 
+  - selectable: {fileID: 1512402891}
+    status: 0
+    readyWhen:
+    - itemIndex: 5
+      requiredStatus: 3
+      isMain: 1
+      atLeast: 0
+    - itemIndex: 2
+      requiredStatus: 3
+      isMain: 1
+      atLeast: 0
+    doneWhen: []
+    textToShow: []
+    shortLevelName: "\u0420\u0430\u0437\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u0442\u044C
+      \u0434\u0432\u0435\u0440\u044C"
+    completeText: 
+  - selectable: {fileID: 6892028548969385538}
+    status: 0
+    readyWhen:
+    - itemIndex: 6
+      requiredStatus: 3
+      isMain: 1
+      atLeast: 0
+    doneWhen: []
+    textToShow: []
+    shortLevelName: "\u041F\u043E\u0447\u0438\u043D\u0438\u0442\u044C \u0433\u0435\u043D\u0435\u0440\u0430\u0442\u043E\u0440"
+    completeText: 
+  - selectable: {fileID: 7132018437590799232}
+    status: 0
+    readyWhen:
+    - itemIndex: 7
+      requiredStatus: 3
+      isMain: 1
+      atLeast: 0
+    doneWhen: []
+    textToShow: []
+    shortLevelName: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C
+      \u0441\u0432\u044F\u0437\u044C \u0441 \u0417\u0435\u043C\u043B\u0451\u0439"
+    completeText: 
   sideTaskScenario: []
 --- !u!114 &1569542981
 MonoBehaviour:
@@ -15506,8 +15776,10 @@ GameObject:
   - component: {fileID: 1391981333239905663}
   - component: {fileID: 2573087953242046061}
   - component: {fileID: 8304735298341820025}
-  m_Layer: 8
-  m_Name: M_1_USE_OBJECT.001
+  - component: {fileID: 8304735298341820027}
+  - component: {fileID: 8304735298341820026}
+  m_Layer: 6
+  m_Name: M_1_BALLONS_WALL_LVL2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19833,7 +20105,7 @@ GameObject:
   - component: {fileID: 4580301832448339888}
   - component: {fileID: 4580301832448339891}
   m_Layer: 6
-  m_Name: M_01_USE_PC_U1
+  m_Name: M_01_COMPUTER_LVL1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21663,7 +21935,9 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -2
     progressPerRound:
-      formula: 'g_IsStepByStep < 0.5 ? 100 : 20*g_e'
+      formula: "(g_IsStepByStep < 0.5 ? 100 : \n(c_pawnDistance > 4 ? -10 : \n(c_AttackerLastRoundWalked
+        > 1 ? 0 :\n(c_AttackerShotAmount > 0.5 ? 0 :\n(c_AttackerMeleeAmount > 0.5
+        ? 0 :\np_IQ*3 )))))"
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
@@ -22440,8 +22714,10 @@ GameObject:
   - component: {fileID: 5283825735161033117}
   - component: {fileID: 3599476307345190751}
   - component: {fileID: 521228039366223078}
-  m_Layer: 8
-  m_Name: M_1_USE_OBJECT
+  - component: {fileID: 5283825735161033119}
+  - component: {fileID: 5283825735161033118}
+  m_Layer: 6
+  m_Name: M_1_BALLONS_LVL2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22506,8 +22782,10 @@ GameObject:
   - component: {fileID: 1316197589299894215}
   - component: {fileID: 1452961519347265776}
   - component: {fileID: 7423991045303590522}
-  m_Layer: 8
-  m_Name: M_1_USE_OBJECT.003
+  - component: {fileID: 7423991045303590524}
+  - component: {fileID: 7423991045303590523}
+  m_Layer: 6
+  m_Name: M_1_GET_KEY_CARD_LVL2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22579,6 +22857,69 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1845831617559851527}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5283825735161033118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5105905810847931932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e506eb7913d9014991c3980aa3bb513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
+  availableActions:
+  - text: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447 \u043A\u0430\u0440\u0442\u0443"
+    action: 0
+    chanceToLaunch:
+      formula: '(c_pawnDistance > 4 ? -1:
+
+        100*g_e)'
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+    exitCodes:
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+      color: {r: 0, g: 0, b: 0, a: 0}
+      code: -1
+    progressPerRound:
+      formula: "(g_IsStepByStep < 0.5 ? 100 : \n(c_pawnDistance > 4 ? -10 : \n(c_AttackerLastRoundWalked
+        > 1 ? 0 :\n(c_AttackerShotAmount > 0.5 ? 0 :\n(c_AttackerMeleeAmount > 0.5
+        ? 0 :\np_IQ*3 )))))"
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+  scriptForClickable: {fileID: 0}
+--- !u!65 &5283825735161033119
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5105905810847931932}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.3090197, y: 2.4963825, z: 1.3232387}
+  m_Center: {x: -0.0018098061, y: 1.2481912, z: -0.0023522084}
 --- !u!1 &5291334186369769994
 GameObject:
   m_ObjectHideFlags: 0
@@ -22887,8 +23228,10 @@ GameObject:
   - component: {fileID: 4991683919331798302}
   - component: {fileID: 7132018437590799231}
   - component: {fileID: 6989845461548713672}
-  m_Layer: 8
-  m_Name: M_2_USE_OBJECT
+  - component: {fileID: 7132018437590799233}
+  - component: {fileID: 7132018437590799232}
+  m_Layer: 6
+  m_Name: M_2_COMPUTER_LVL3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24750,13 +25093,78 @@ GameObject:
   - component: {fileID: 398866342757356396}
   - component: {fileID: 1248172054657944669}
   - component: {fileID: 2975256612008453039}
-  m_Layer: 8
-  m_Name: M_2_USE_OBJECT.001
+  - component: {fileID: 6892028548969385539}
+  - component: {fileID: 6892028548969385538}
+  m_Layer: 6
+  m_Name: M_2_GENERATOR_LVL3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6892028548969385538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6892028548969385537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e506eb7913d9014991c3980aa3bb513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
+  availableActions:
+  - text: "\u041F\u043E\u0447\u0438\u043D\u0438\u0442\u044C \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0443"
+    action: 0
+    chanceToLaunch:
+      formula: '(c_pawnDistance > 4 ? -1:
+
+        100*g_e)'
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+    exitCodes:
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+      color: {r: 1, g: 0, b: 0, a: 1}
+      code: -1
+    progressPerRound:
+      formula: "(g_IsStepByStep < 0.5 ? 100 : \n(c_pawnDistance > 4 ? -10 : \n(c_AttackerLastRoundWalked
+        > 1 ? 0 :\n(c_AttackerShotAmount > 0.5 ? 0 :\n(c_AttackerMeleeAmount > 0.5
+        ? 0 :\np_IQ*3 )))))"
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+  scriptForClickable: {fileID: 0}
+--- !u!65 &6892028548969385539
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6892028548969385537}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.835812, y: 3.0098758, z: 2.7806573}
+  m_Center: {x: 0.027615555, y: 1.50477, z: 0.000001907349}
 --- !u!4 &6895492729877853519
 Transform:
   m_ObjectHideFlags: 0
@@ -25168,13 +25576,78 @@ GameObject:
   - component: {fileID: 93843652697780043}
   - component: {fileID: 6246232388608986476}
   - component: {fileID: 1061425686282118206}
-  m_Layer: 8
-  m_Name: M_1_USE_OBJECT.002
+  - component: {fileID: 7030045181592525982}
+  - component: {fileID: 7030045181592525981}
+  m_Layer: 6
+  m_Name: M_1_KEY_CARD_LVL2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7030045181592525981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7030045181592525980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e506eb7913d9014991c3980aa3bb513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
+  availableActions:
+  - text: "\u041D\u0430\u0439\u0442\u0438 \u043A\u043B\u044E\u0447 \u043A\u0430\u0440\u0442\u0443"
+    action: 0
+    chanceToLaunch:
+      formula: '(c_pawnDistance > 4 ? -1:
+
+        100*g_e)'
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+    exitCodes:
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+      color: {r: 1, g: 0, b: 0, a: 1}
+      code: -1
+    progressPerRound:
+      formula: "(g_IsStepByStep < 0.5 ? 100 : \n(c_pawnDistance > 4 ? -10 : \n(c_AttackerLastRoundWalked
+        > 1 ? 0 :\n(c_AttackerShotAmount > 0.5 ? 0 :\n(c_AttackerMeleeAmount > 0.5
+        ? 0 :\np_IQ*3 )))))"
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+  scriptForClickable: {fileID: 0}
+--- !u!65 &7030045181592525982
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7030045181592525980}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.6248771, y: 2.4963808, z: 1.3897719}
+  m_Center: {x: 0.064794645, y: 1.2481904, z: -0.23914206}
 --- !u!1 &7121852863246046054
 GameObject:
   m_ObjectHideFlags: 0
@@ -25269,6 +25742,69 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5676842684131860380}
   m_Mesh: {fileID: -779103943177863499, guid: 141895409efacd241b87308e14b52966, type: 3}
+--- !u!114 &7132018437590799232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5676842684131860380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e506eb7913d9014991c3980aa3bb513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
+  availableActions:
+  - text: "\u0417\u0430\u043F\u0443\u0441\u0442\u0438\u0442\u044C \u0433\u0435\u043D\u0435\u0440\u0430\u0442\u043E\u0440"
+    action: 0
+    chanceToLaunch:
+      formula: '(c_pawnDistance > 4 ? -1:
+
+        100*g_e)'
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+    exitCodes:
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+      color: {r: 1, g: 0, b: 0, a: 1}
+      code: -1
+    progressPerRound:
+      formula: "(g_IsStepByStep < 0.5 ? 100 : \n(c_pawnDistance > 4 ? -10 : \n(c_AttackerLastRoundWalked
+        > 1 ? 0 :\n(c_AttackerShotAmount > 0.5 ? 0 :\n(c_AttackerMeleeAmount > 0.5
+        ? 0 :\np_IQ*3 )))))"
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+  scriptForClickable: {fileID: 0}
+--- !u!65 &7132018437590799233
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5676842684131860380}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.18543, y: 2.0134616, z: 1.3683954}
+  m_Center: {x: -0.091797106, y: 1.1216321, z: -0.0013130609}
 --- !u!1 &7140091783520518375
 GameObject:
   m_ObjectHideFlags: 0
@@ -25546,6 +26082,64 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7423991045303590523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5147377913600763259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e506eb7913d9014991c3980aa3bb513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
+  availableActions:
+  - text: "\u0412\u0437\u044F\u0442\u044C \u043A\u043B\u044E\u0447\u0438 \u0448\u0438\u0444\u0440\u043E\u0432\u0430\u043D\u0438\u044F"
+    action: 0
+    chanceToLaunch:
+      formula: '(c_pawnDistance > 4 ? -1:
+
+        100*g_e)'
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+    exitCodes: []
+    progressPerRound:
+      formula: 100*g_e
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+  scriptForClickable: {fileID: 0}
+--- !u!65 &7423991045303590524
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5147377913600763259}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0308602, y: 1.0870448, z: 3.5451891}
+  m_Center: {x: -0.043237787, y: 0.54352206, z: -0.010580185}
 --- !u!23 &7442500343878436827
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -26846,6 +27440,69 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8304735298341820026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024756485465673159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e506eb7913d9014991c3980aa3bb513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
+  availableActions:
+  - text: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447 \u043A\u0430\u0440\u0442\u0443"
+    action: 0
+    chanceToLaunch:
+      formula: '(c_pawnDistance > 4 ? -1:
+
+        100*g_e)'
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+    exitCodes:
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+      color: {r: 1, g: 0, b: 0, a: 1}
+      code: -1
+    progressPerRound:
+      formula: "(g_IsStepByStep < 0.5 ? 100 : \n(c_pawnDistance > 4 ? -10 : \n(c_AttackerLastRoundWalked
+        > 1 ? 0 :\n(c_AttackerShotAmount > 0.5 ? 0 :\n(c_AttackerMeleeAmount > 0.5
+        ? 0 :\np_IQ )))))"
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+  scriptForClickable: {fileID: 0}
+--- !u!65 &8304735298341820027
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024756485465673159}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.97298974, y: 2.4541388, z: 3.54985}
+  m_Center: {x: 0.053228777, y: 1.2270694, z: 0.0000032186508}
 --- !u!33 &8314461200220165121
 MeshFilter:
   m_ObjectHideFlags: 0

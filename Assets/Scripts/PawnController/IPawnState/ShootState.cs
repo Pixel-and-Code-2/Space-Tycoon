@@ -116,7 +116,7 @@ public class ShootState : IPawnState
                     if (message == null)
                     {
                         controlableSelectable.OnShoot(worldPoint, true);
-                        UI3DManager.Instance.ShowMessage("Miss", worldPoint, Color.yellow);
+                        UI3DManager.Instance.ShowMessage("Промах", worldPoint, Color.yellow);
                     }
                 }
             }

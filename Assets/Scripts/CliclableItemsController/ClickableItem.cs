@@ -196,7 +196,7 @@ public class ClickableItem : ISelectable
                 UI3DManager.Instance.UnregisterSlider(transform);
                 progressBarCached = null;
                 actionCached = null;
-                UI3DManager.Instance.ShowMessage("Cancelled", transform.position, Color.green);
+                UI3DManager.Instance.ShowMessage("Отменено", transform.position, Color.red);
                 panwProgressing = null;
                 scriptForClickable?.OnCancel();
                 return;
@@ -208,7 +208,7 @@ public class ClickableItem : ISelectable
                 UI3DManager.Instance.UnregisterSlider(transform);
                 progressBarCached = null;
                 actionCached = null;
-                UI3DManager.Instance.ShowMessage("Completed", transform.position, Color.green);
+                UI3DManager.Instance.ShowMessage("Завершено", transform.position, Color.black);
                 panwProgressing?.OnCompleteTask();
                 ClickableItemsController.Instance.OnCompleteTask(this);
                 scriptForClickable?.OnComplete();
@@ -248,7 +248,7 @@ public class ClickableItem : ISelectable
                         else
                         {
                             if (chance <= 1f && chance >= 0f)
-                                UI3DManager.Instance.ShowMessage("Not started", transform.position, Color.red);
+                                UI3DManager.Instance.ShowMessage("Не начато", transform.position, Color.red);
                         }
                         ClickableItemsController.Instance.OnDeselect();
                     };
@@ -262,7 +262,7 @@ public class ClickableItem : ISelectable
                         }
                         else
                         {
-                            UI3DManager.Instance.ShowMessage("Not moved", transform.position, Color.red);
+                            UI3DManager.Instance.ShowMessage("Не перемещено", transform.position, Color.red);
                         }
                         ClickableItemsController.Instance.OnDeselect();
                     };

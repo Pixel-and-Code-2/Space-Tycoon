@@ -9,10 +9,10 @@ public class ClickableItemsController : MonoBehaviour
     {
         public enum TaskItemStatus
         {
-            Unavailable, // Player can't click to start job, but soon it will be available
-            ReadyToStart, // Means player can click and start doing sth with this object
-            InProgress,
-            Done,
+            Unavailable = 0,
+            ReadyToStart = 1,
+            InProgress = 2,
+            Done = 3,
         }
         public enum TextShowTime
         {
@@ -30,14 +30,22 @@ public class ClickableItemsController : MonoBehaviour
             public bool showOnce = true;
             public bool showOnlyOnStepByStep = false;
         }
+        [System.Serializable]
+        public class TaskCondition
+        {
+            public int itemIndex = -1;
+            public TaskItemStatus requiredStatus = TaskItemStatus.Done;
+            public bool isMain = true;
+            public bool atLeast;
+        }
         public ISelectable selectable;
         [HideInInspector]
         public TaskItemStatus status = TaskItemStatus.Unavailable;
-        public int readyWhenItem = -1;
-        public TaskItemStatus readyWhenStatus;
-        public bool readyWhenIsMain = true;
+        public List<TaskCondition> readyWhen = new List<TaskCondition>();
+        public List<TaskCondition> doneWhen = new List<TaskCondition>();
         public List<TextToShow> textToShow = new List<TextToShow>();
         public string shortLevelName = string.Empty;
+        public string completeText = string.Empty;
     }
     public static ClickableItemsController Instance { get; private set; }
     public System.Action OnTaskUpdated;
@@ -186,7 +194,7 @@ public class ClickableItemsController : MonoBehaviour
         CheckActionBox();
         OnTaskUpdated?.Invoke();
     }
-    private void CheckActionBox(List<TaskItem> scenario, string label)
+    private bool CheckActionBoxInternal(List<TaskItem> scenario, string label)
     {
         bool updated = false;
         for (int i = 0; i < scenario.Count; i++)
@@ -198,6 +206,15 @@ public class ClickableItemsController : MonoBehaviour
                     scenario[i].status = TaskItem.TaskItemStatus.ReadyToStart;
                     updated = true;
                 }
+            }
+            if (scenario[i].status != TaskItem.TaskItemStatus.Done
+                && scenario[i].status != TaskItem.TaskItemStatus.Unavailable
+                && scenario[i].doneWhen.Count > 0
+                && CheckDoneWhen(scenario[i]))
+            {
+                scenario[i].status = TaskItem.TaskItemStatus.Done;
+                UI3DManager.Instance.UnregisterSelectable(scenario[i].selectable);
+                updated = true;
             }
             if (scenario[i].selectable.IsWorking())
             {
@@ -216,25 +233,49 @@ public class ClickableItemsController : MonoBehaviour
                 UI3DManager.Instance.RegisterSelectable(scenario[i].selectable, label);
             }
         }
-        if (updated) OnTaskUpdated?.Invoke();
+        return updated;
     }
     private void CheckActionBox()
     {
-        CheckActionBox(mainTaskScenario, "!");
-        CheckActionBox(sideTaskScenario, "?");
+        bool anyUpdated = false;
+        bool updated;
+        do
+        {
+            updated = false;
+            updated |= CheckActionBoxInternal(mainTaskScenario, "!");
+            updated |= CheckActionBoxInternal(sideTaskScenario, "?");
+            anyUpdated |= updated;
+        } while (updated);
+        if (anyUpdated) OnTaskUpdated?.Invoke();
+    }
+
+    private static bool StatusMatchesCondition(TaskItem.TaskItemStatus actual, TaskItem.TaskCondition cond)
+    {
+        int a = (int)actual;
+        int r = (int)cond.requiredStatus;
+        return cond.atLeast ? a >= r : a == r;
     }
 
     private bool CheckReadyWhen(TaskItem item)
     {
-        if (item.readyWhenItem < 0)
+        if (item.readyWhen.Count == 0) return true;
+        foreach (var cond in item.readyWhen)
         {
-            return true;
+            var scenario = cond.isMain ? mainTaskScenario : sideTaskScenario;
+            if (!StatusMatchesCondition(scenario[cond.itemIndex].status, cond))
+                return false;
         }
-        if (item.readyWhenIsMain)
+        return true;
+    }
+    private bool CheckDoneWhen(TaskItem item)
+    {
+        foreach (var cond in item.doneWhen)
         {
-            return mainTaskScenario[item.readyWhenItem].status == item.readyWhenStatus;
+            var scenario = cond.isMain ? mainTaskScenario : sideTaskScenario;
+            if (StatusMatchesCondition(scenario[cond.itemIndex].status, cond))
+                return true;
         }
-        return sideTaskScenario[item.readyWhenItem].status == item.readyWhenStatus;
+        return false;
     }
     public bool OnSelect(ISelectable selectable)
     {
@@ -352,6 +393,7 @@ public class ClickableItemsController : MonoBehaviour
     public void OnCompleteTask(ISelectable selectable)
     {
         bool updated = false;
+        TaskItem completedItem = null;
         foreach (TaskItem item in mainTaskScenario)
         {
             if (item.selectable == selectable)
@@ -360,6 +402,7 @@ public class ClickableItemsController : MonoBehaviour
                 UI3DManager.Instance.UnregisterSelectable(item.selectable);
                 CheckActionBox();
                 updated = true;
+                completedItem = item;
             }
         }
         foreach (TaskItem item in sideTaskScenario)
@@ -370,11 +413,16 @@ public class ClickableItemsController : MonoBehaviour
                 UI3DManager.Instance.UnregisterSelectable(item.selectable);
                 CheckActionBox();
                 updated = true;
+                completedItem = item;
             }
         }
+        if (completedItem != null && !string.IsNullOrEmpty(completedItem.completeText))
+        {
+            UI3DManager.Instance.ShowMessage(completedItem.completeText, selectable.GetTransform().position, Color.red);
+        }
+        if (updated) OnTaskUpdated?.Invoke();
         if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.AfterComplete, selectable)) return;
         if (CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.AfterComplete, selectable)) return;
-        if (updated) OnTaskUpdated?.Invoke();
     }
     public void OnStartTask(ISelectable selectable)
     {

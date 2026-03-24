@@ -45,31 +45,44 @@ public class GameUI : IUILayer
     }
     private void OnTaskUpdated()
     {
-        int i = 0;
-        int amountOfButtons = 0;
-        if (ClickableItemsController.Instance.mainTaskScenario.Count > 0)
+        // Получаем именно последнюю незавершённую таску для main
+        ClickableItemsController.TaskItem mainTask = null;
+        var scenario = ClickableItemsController.Instance.mainTaskScenario;
+        for (int i = scenario.Count - 1; i >= 0; i--)
         {
-            UpdateButton(mainTaskTextStyleChanger, ClickableItemsController.Instance.mainTaskScenario[ClickableItemsController.Instance.mainTaskScenario.Count - 1]);
-            amountOfButtons += 1;
-        }
-        while (ClickableItemsController.Instance.mainTaskScenario.Count > i && ClickableItemsController.Instance.mainTaskScenario[i].status == ClickableItemsController.TaskItem.TaskItemStatus.Done)
-        {
-            i += 1;
-        }
-        for (int j = 0; j < sideTaskTextStyleChangers.Count && ClickableItemsController.Instance.mainTaskScenario.Count > i; j++, i++, amountOfButtons++)
-        {
-            UpdateButton(sideTaskTextStyleChangers[j], ClickableItemsController.Instance.mainTaskScenario[i]);
-        }
-        if (amountOfButtons < 1 + sideTaskTextStyleChangers.Count)
-        {
-            if (amountOfButtons < 1)
+            if (scenario[i].status != ClickableItemsController.TaskItem.TaskItemStatus.Done)
             {
-                mainTaskTextStyleChanger.ClearText();
+                mainTask = scenario[i];
+                break;
             }
-            for (int j = amountOfButtons; j < 1 + sideTaskTextStyleChangers.Count; j++)
-            {
-                sideTaskTextStyleChangers[j - 1].ClearText();
-            }
+        }
+
+        // Вывести main таску
+        if (mainTask != null)
+        {
+            UpdateButton(mainTaskTextStyleChanger, mainTask);
+        }
+        else
+        {
+            mainTaskTextStyleChanger.ClearText();
+        }
+
+        // Subtasks: это все незавершённые задачи, кроме mainTask
+        int subTaskIndex = 0;
+        for (int i = 0; i < scenario.Count && subTaskIndex < sideTaskTextStyleChangers.Count; i++)
+        {
+            var item = scenario[i];
+            if (item == mainTask || item.status == ClickableItemsController.TaskItem.TaskItemStatus.Done)
+                continue;
+
+            UpdateButton(sideTaskTextStyleChangers[subTaskIndex], item);
+            subTaskIndex++;
+        }
+
+        // Очищаем оставшиеся subtask кнопки, если тасок меньше, чем кнопок
+        for (int i = subTaskIndex; i < sideTaskTextStyleChangers.Count; i++)
+        {
+            sideTaskTextStyleChangers[i].ClearText();
         }
     }
     private void UpdateButton(TaskTextStyleChanger button, ClickableItemsController.TaskItem item)

@@ -144,7 +144,7 @@ public class MeleeState : IPawnState
                 {
                     if (message == null)
                     {
-                        UI3DManager.Instance.ShowMessage("Miss", worldPoint, Color.yellow);
+                        UI3DManager.Instance.ShowMessage("Промах", worldPoint, Color.yellow);
                     }
                 }
             }
