@@ -7751,7 +7751,13 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 2834033621025928656, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1222671061}
+    - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1222671062}
   m_SourcePrefab: {fileID: 100100000, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
 --- !u!4 &824540565 stripped
 Transform:
@@ -7763,7 +7769,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8696655358907118961, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
   m_PrefabInstance: {fileID: 824540564}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1222671049}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c6c0b2508611504fb61f80e24bc99e0, type: 3}
@@ -7806,6 +7812,11 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5eeb4206d198be94aa44f64405432119, type: 3}
   m_PrefabInstance: {fileID: 1707117079}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &861419552 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+  m_PrefabInstance: {fileID: 1175933358}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &862567613
 PrefabInstance:
@@ -10845,7 +10856,13 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 2834033621025928656, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1175933377}
+    - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1175933378}
   m_SourcePrefab: {fileID: 100100000, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
 --- !u!4 &1175933359 stripped
 Transform:
@@ -10857,12 +10874,80 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8696655358907118961, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
   m_PrefabInstance: {fileID: 1175933358}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 861419552}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c6c0b2508611504fb61f80e24bc99e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnBrain
+--- !u!114 &1175933377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861419552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e506eb7913d9014991c3980aa3bb513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
+  availableActions:
+  - text: "\u041F\u043E\u0434\u043D\u044F\u0442\u044C"
+    action: 0
+    chanceToLaunch:
+      formula: '(c_pawnDistance > 3 ? - g_e :
+
+        (c_PreyHealingsAmount > g_Healings
+        - 0.1 ? -2*g_e :
+
+        //p_STR < 7 ? - 2 * g_e :
+
+        g_e
+
+        ))'
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+      - Prey
+    exitCodes:
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+      color: {r: 1, g: 0, b: 0, a: 0.4117647}
+      code: -1
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u043C\u043D\u043E\u0433\u043E
+        \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0439"
+      color: {r: 1, g: 0, b: 0, a: 0.4117647}
+      code: -2
+    progressPerRound:
+      formula: 40*g_e
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+      - Prey
+  scriptForClickable: {fileID: 1175933378}
+--- !u!114 &1175933378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861419552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d1505aab49e85845bfa62facdf74ba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PawnHealing
+  pawnBrain: {fileID: 1175933365}
 --- !u!1 &1187009916
 GameObject:
   m_ObjectHideFlags: 0
@@ -10951,6 +11036,79 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8697987743951974375, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
   m_PrefabInstance: {fileID: 2742994513151523351}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1222671049 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+  m_PrefabInstance: {fileID: 824540564}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1222671061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222671049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e506eb7913d9014991c3980aa3bb513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
+  availableActions:
+  - text: "\u041F\u043E\u0434\u043D\u044F\u0442\u044C"
+    action: 0
+    chanceToLaunch:
+      formula: '(c_pawnDistance > 3 ? - g_e :
+
+        (c_PreyHealingsAmount > g_Healings
+        - 0.1 ? -2*g_e :
+
+        //p_STR < 7 ? - 2 * g_e :
+
+        g_e
+
+        ))'
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+      - Prey
+    exitCodes:
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+      color: {r: 1, g: 0, b: 0, a: 0.4117647}
+      code: -1
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u043C\u043D\u043E\u0433\u043E
+        \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0439"
+      color: {r: 1, g: 0, b: 0, a: 0.4117647}
+      code: -2
+    progressPerRound:
+      formula: 40*g_e
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+      - Prey
+  scriptForClickable: {fileID: 1222671062}
+--- !u!114 &1222671062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222671049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d1505aab49e85845bfa62facdf74ba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PawnHealing
+  pawnBrain: {fileID: 824540571}
 --- !u!1 &1230900818 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 357469372584167491, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
@@ -17318,7 +17476,7 @@ GameObject:
   - component: {fileID: 1444200271}
   - component: {fileID: 1444200270}
   m_Layer: 6
-  m_Name: DoorCollider
+  m_Name: DoorCollider_LVL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17352,7 +17510,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
   availableActions:
-  - text: Open the doors
+  - text: "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0434\u0432\u0435\u0440\u0438"
     action: 0
     chanceToLaunch:
       formula: '(c_pawnDistance > 5 ? - g_e :
@@ -17366,25 +17524,30 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
-      names:
-      - Calculated
-      - Player
-    exitCodes:
-    - message: Too far
-      color: {r: 1, g: 0, b: 0, a: 1}
-      code: -1
-    - message: Not strong enough
-      color: {r: 1, g: 0, b: 0, a: 1}
-      code: -2
-    progressPerRound:
-      formula: 'g_IsStepByStep < 0.5 ? 100 : 20*g_e'
-      instruction: 
-      dataAssets:
-      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
+    exitCodes:
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+      color: {r: 1, g: 0, b: 0, a: 1}
+      code: -1
+    - message: "\u041D\u0435\u0434\u043E\u0441\u0442\u0430\u0442\u043E\u0447\u043D\u043E
+        \u0441\u0438\u043B\u044B"
+      color: {r: 1, g: 0, b: 0, a: 1}
+      code: -2
+    progressPerRound:
+      formula: 20*g_e
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+      - Prey
   scriptForClickable: {fileID: 1444200271}
 --- !u!65 &1444200269
 BoxCollider:
@@ -17527,7 +17690,7 @@ GameObject:
   - component: {fileID: 1512402890}
   - component: {fileID: 1512402889}
   m_Layer: 6
-  m_Name: Door2
+  m_Name: Door2_LVL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17610,9 +17773,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
     exitCodes:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 1}
@@ -17623,9 +17788,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
   scriptForClickable: {fileID: 1512402890}
 --- !u!65 &1512402892
 BoxCollider:
@@ -17743,9 +17910,9 @@ MonoBehaviour:
     - Target
   calculateMeleeAccuracy:
     formula: "(c_pawnDistance > g_MeleeDST ? -2 :\n(c_AttackerMovesToSkip > 0 ? -5
-      :\n(c_isWallsBetween > 0 ? -1 :\n(c_AttackerMeleeAmount > 0.5 ? -3 :\n(c_AttackerShotAmount
-      > 0.5 ? -4 :\nMath.Max(g_M, Math.Min(100 - g_M, \n(i_DX + i_BRW + (c_AttackerIsShootOnMove
-      > 0.1 ? 1 : 4)) * g_M\n)) / 100\n)))))"
+      :\n(c_isWallsBetween > 0 ? -1 :\n(c_AttackerMeleeAmount > i_ROF - 0.1 ? -3
+      :\n(c_AttackerShotAmount > 0.5 ? -4 :\nMath.Max(g_M, Math.Min(100 - g_M, \n(i_DX
+      + i_BRW + (c_AttackerIsShootOnMove > 0.1 ? 1 : 4)) * g_M\n)) / 100\n)))))"
     instruction: 
     dataAssets:
     - {fileID: 1569542970}
@@ -17764,7 +17931,8 @@ MonoBehaviour:
       (melee)"
     color: {r: 1, g: 0, b: 0, a: 0.47058824}
     code: -1
-  - message: "\u0423\u0436\u0435 \u0431\u044B\u043B \u0443\u0434\u0430\u0440"
+  - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u043C\u043D\u043E\u0433\u043E
+      \u0443\u0434\u0430\u0440\u043E\u0432 \u0437\u0430 \u0445\u043E\u0434"
     color: {r: 1, g: 0, b: 0, a: 0.2784314}
     code: -3
   - message: "\u0412 \u0440\u0443\u043A\u0430\u0445 \u043E\u0440\u0443\u0436\u0438\u0435"
@@ -17955,10 +18123,11 @@ MonoBehaviour:
   calculateShootAccuracy:
     formula: "(c_AttackerMovesToSkip > 0.5 ? -4 : \n(c_AttackerMeleeAmount > 0.5
       ? -5 :\n(c_isWallsBetween > 0.5 ? -1 : \n(c_AttackerAvailableAmmo < 0.5 ? -2
-      :\n(c_AttackerCurrentMag < 0.5 ? -3 :\nMath.Max(g_M, Math.Min(100-g_M,\n\n((c_AttackerShotAmount
-      > 0.5) ?\n    ((c_AttackerIsShootOnMove < 0.5) ?\n        ((i_DX\n         
-      + i_SHT\n          - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n          
-      - (c_PreyWalkedDistance > 0.2 ? \n              (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))
+      :\n(c_AttackerCurrentMag < 0.5 ? -3 :\n(c_AttackerShotAmount > i_ROF-0.1 ?
+      -6 :\nMath.Max(g_M, Math.Min(100-g_M,\n\n((c_AttackerShotAmount > 0.5) ?\n   
+      ((c_AttackerIsShootOnMove < 0.5) ?\n        ((i_DX\n          + i_SHT\n         
+      - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n           - (c_PreyWalkedDistance
+      > 0.2 ? \n              (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))
       : 0)\n          - i_RCL\n          + 3\n        )* g_M)\n    :\n        ((i_DX\n         
       + i_SHT\n          - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n          
       - (c_PreyWalkedDistance > 0.2 ? \n              (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))
@@ -17971,7 +18140,7 @@ MonoBehaviour:
       : 0)\n          + 3\n        )* g_M)\n    :\n        ((i_DX\n          + i_SHT\n         
       - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n           - (c_PreyWalkedDistance
       > 0.2 ? \n              (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))
-      : 0)\n          - i_BULK\n          + 3\n        ) * g_M))\n\n)))/100\n)))))"
+      : 0)\n          - i_BULK\n          + 3\n        ) * g_M))\n\n)))/100\n))))))"
     instruction: 
     dataAssets:
     - {fileID: 1569542970}
@@ -17997,6 +18166,10 @@ MonoBehaviour:
   - message: "\u0411\u043B\u0438\u0436\u043D\u0438\u0439 \u0431\u043E\u0439 \u0430\u043A\u0442\u0438\u0432\u0435\u043D"
     color: {r: 1, g: 0, b: 0, a: 0.627451}
     code: -5
+  - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u043C\u043D\u043E\u0433\u043E
+      \u0432\u044B\u0441\u0442\u0440\u0435\u043B\u043E\u0432 \u0437\u0430 \u0445\u043E\u0434"
+    color: {r: 1, g: 0, b: 0, a: 0.627451}
+    code: -6
   calculateShootDefense:
     formula: '( c_PreyDefenses < 0.5 ?
 
@@ -18412,7 +18585,8 @@ MonoBehaviour:
       atLeast: 0
     doneWhen: []
     textToShow: []
-    shortLevelName: "\u041E\u0442\u043F\u0435\u0440\u0435\u0442\u044C \u0434\u0432\u0435\u0440\u0438"
+    shortLevelName: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447
+      \u043A\u0430\u0440\u0442\u0443"
     completeText: 
   - selectable: {fileID: 1512402891}
     status: 0
@@ -19647,7 +19821,13 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 2834033621025928656, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1917569761}
+    - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1917569762}
   m_SourcePrefab: {fileID: 100100000, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
 --- !u!4 &1899494917 stripped
 Transform:
@@ -19659,12 +19839,85 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8696655358907118961, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
   m_PrefabInstance: {fileID: 1899494916}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1917569749}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c6c0b2508611504fb61f80e24bc99e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnBrain
+--- !u!1 &1917569749 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+  m_PrefabInstance: {fileID: 1899494916}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1917569761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917569749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e506eb7913d9014991c3980aa3bb513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
+  availableActions:
+  - text: "\u041F\u043E\u0434\u043D\u044F\u0442\u044C"
+    action: 0
+    chanceToLaunch:
+      formula: '(c_pawnDistance > 3 ? - g_e :
+
+        (c_PreyHealingsAmount > g_Healings
+        - 0.1 ? -2*g_e :
+
+        //p_STR < 7 ? - 2 * g_e :
+
+        g_e
+
+        ))'
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+      - Prey
+    exitCodes:
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+      color: {r: 1, g: 0, b: 0, a: 0.4117647}
+      code: -1
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u043C\u043D\u043E\u0433\u043E
+        \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0439"
+      color: {r: 1, g: 0, b: 0, a: 0.4117647}
+      code: -2
+    progressPerRound:
+      formula: 40*g_e
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+      - Prey
+  scriptForClickable: {fileID: 1917569762}
+--- !u!114 &1917569762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917569749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d1505aab49e85845bfa62facdf74ba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PawnHealing
+  pawnBrain: {fileID: 1899494926}
 --- !u!1001 &1934439858
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28800,27 +29053,31 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
-      names:
-      - Calculated
-      - Player
-    exitCodes:
-    - message: Too far
-      color: {r: 1, g: 0, b: 0, a: 1}
-      code: -1
-    - message: Not strong enough
-      color: {r: 1, g: 0, b: 0, a: 1}
-      code: -2
-    progressPerRound:
-      formula: "(g_IsStepByStep < 0.5 ? 100 : \n(c_pawnDistance > 4 ? -10 : \n(c_AttackerLastRoundWalked
-        > 1 ? 0 :\n(c_AttackerShotAmount > 0.5 ? 0 :\n(c_AttackerMeleeAmount > 0.5
-        ? 0 :\np_IQ*3 )))))"
-      instruction: 
-      dataAssets:
-      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
+    exitCodes:
+    - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
+      color: {r: 1, g: 0, b: 0, a: 1}
+      code: -1
+    - message: "\u041D\u0435\u043E\u0441\u0442\u0430\u0442\u043E\u043D\u043E \u0441\u0438\u043B\u044B"
+      color: {r: 1, g: 0, b: 0, a: 1}
+      code: -2
+    progressPerRound:
+      formula: "(c_pawnDistance > 4 ? -10 : \n(c_AttackerLastRoundWalked > 1 ? 0
+        :\n(c_AttackerShotAmount > 0.5 ? 0 :\n(c_AttackerMeleeAmount > 0.5 ? 0 :\np_IQ*3
+        ))))"
+      instruction: 
+      dataAssets:
+      - {fileID: 1569542970}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      names:
+      - Calculated
+      - Player
+      - Prey
   scriptForClickable: {fileID: 4580301832448339891}
 --- !u!65 &4580301832448339889
 BoxCollider:
@@ -29853,9 +30110,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
     exitCodes:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 0, g: 0, b: 0, a: 0}
@@ -29868,9 +30127,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
   scriptForClickable: {fileID: 0}
 --- !u!65 &5283825735161033119
 BoxCollider:
@@ -32136,9 +32397,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
     exitCodes:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 1}
@@ -32151,9 +32414,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
   scriptForClickable: {fileID: 0}
 --- !u!65 &6892028548969385539
 BoxCollider:
@@ -32619,9 +32884,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
     exitCodes:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 1}
@@ -32634,9 +32901,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
   scriptForClickable: {fileID: 0}
 --- !u!65 &7030045181592525982
 BoxCollider:
@@ -32776,9 +33045,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
     exitCodes:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 1}
@@ -32791,9 +33062,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
   scriptForClickable: {fileID: 0}
 --- !u!65 &7132018437590799233
 BoxCollider:
@@ -33153,9 +33426,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
     exitCodes: []
     progressPerRound:
       formula: 100*g_e
@@ -33163,9 +33438,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
   scriptForClickable: {fileID: 0}
 --- !u!65 &7423991045303590524
 BoxCollider:
@@ -33853,7 +34130,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 9.47, y: 1, z: 10.82}
+  m_Size: {x: 8.54, y: 1, z: 12.07}
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &7883893332593444127
 GameObject:
@@ -34552,9 +34829,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
     exitCodes:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 1}
@@ -34567,9 +34846,11 @@ MonoBehaviour:
       dataAssets:
       - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+      - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
       - Calculated
       - Player
+      - Prey
   scriptForClickable: {fileID: 0}
 --- !u!65 &8304735298341820027
 BoxCollider:

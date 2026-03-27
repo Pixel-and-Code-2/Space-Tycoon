@@ -9,7 +9,8 @@ public enum SaveRecordType
     vector,
     boolean,
     integerNumber,
-    quaternion
+    quaternion,
+    stringValue
 }
 
 [System.Serializable]
@@ -23,6 +24,7 @@ public class SaveRecord
     public Quaternion quatValue;
     public bool boolValue;
     public int intValue;
+    public string stringValue;
 }
 
 [System.Serializable]
@@ -64,6 +66,8 @@ public class SaveData
     public List<float> intRecords = new List<float>();
     public List<string> quatRecordNames = new List<string>();
     public List<SaveRecordQuaternion> quatRecords = new List<SaveRecordQuaternion>();
+    public List<string> stringRecordNames = new List<string>();
+    public List<string> stringRecords = new List<string>();
 
     public void AddData(SaveData other)
     {
@@ -79,6 +83,8 @@ public class SaveData
         intRecords.AddRange(other.intRecords);
         quatRecordNames.AddRange(other.quatRecordNames);
         quatRecords.AddRange(other.quatRecords);
+        stringRecordNames.AddRange(other.stringRecordNames);
+        stringRecords.AddRange(other.stringRecords);
     }
 
     public void Clear()
@@ -95,6 +101,8 @@ public class SaveData
         intRecords.Clear();
         quatRecordNames.Clear();
         quatRecords.Clear();
+        stringRecordNames.Clear();
+        stringRecords.Clear();
     }
 }
 
@@ -106,6 +114,7 @@ public class LoadedData
     public Dictionary<string, Quaternion> quatData;
     public Dictionary<string, bool> boolData;
     public Dictionary<string, int> intData;
+    public Dictionary<string, string> stringData;
 
     public float GetData(string recordName, string id, float defaultVal)
     {
@@ -162,6 +171,15 @@ public class LoadedData
                 defaultVal[item.Key] = item.Value;
             }
             return defaultVal;
+        }
+        return defaultVal;
+    }
+    public string GetData(string recordName, string id, string defaultVal)
+    {
+        string key = DataCompressor.GetRecordName(recordName, id);
+        if (stringData.TryGetValue(key, out string value))
+        {
+            return value;
         }
         return defaultVal;
     }

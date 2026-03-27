@@ -20,7 +20,7 @@ MonoBehaviour:
   - name: MDMG
     value: 0
   - name: ROF
-    value: 0
+    value: 1
   - name: ACC
     value: 0
   - name: MAG
@@ -32,7 +32,7 @@ MonoBehaviour:
   - name: WPMASS
     value: 0
   - name: MovesToReload
-    value: 1
+    value: 2
   - name: TotalAmmo
     value: 40
   calculatedParameters: []
@@ -45,7 +45,7 @@ MonoBehaviour:
     MDMG
     = 0,00 (0,00)
 
-    ROF = 0,00 (0,00)
+    ROF = 1,00 (1,00)
 
     ACC = 0,00 (0,00)
 
@@ -59,8 +59,10 @@ MonoBehaviour:
     WPMASS = 0,00 (0,00)
 
     MovesToReload
-    = 1,00 (1,00)
+    = 2,00 (2,00)
 
     TotalAmmo = 40,00 (40,00)
+
+    Random = 0,35 (0,35)
 
 '

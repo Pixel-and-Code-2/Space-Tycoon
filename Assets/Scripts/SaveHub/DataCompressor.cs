@@ -38,6 +38,10 @@ public static class DataCompressor
                     res.intRecordNames.Add(GetRecordName(record.recordName, id));
                     res.intRecords.Add(record.intValue);
                     break;
+                case SaveRecordType.stringValue:
+                    res.stringRecordNames.Add(GetRecordName(record.recordName, id));
+                    res.stringRecords.Add(record.stringValue);
+                    break;
             }
         }
         return res;
@@ -52,7 +56,8 @@ public static class DataCompressor
             vecData = new Dictionary<string, Vector3>(),
             quatData = new Dictionary<string, Quaternion>(),
             boolData = new Dictionary<string, bool>(),
-            intData = new Dictionary<string, int>()
+            intData = new Dictionary<string, int>(),
+            stringData = new Dictionary<string, string>()
         };
         for (int i = 0; i < data.floatRecordNames.Count; i++)
         {
@@ -77,6 +82,10 @@ public static class DataCompressor
         for (int i = 0; i < data.intRecordNames.Count; i++)
         {
             res.intData.Add(data.intRecordNames[i], DecompressInt(data.intRecords[i]));
+        }
+        for (int i = 0; i < data.stringRecordNames.Count; i++)
+        {
+            res.stringData.Add(data.stringRecordNames[i], data.stringRecords[i]);
         }
         return res;
     }

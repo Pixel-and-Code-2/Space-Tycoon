@@ -1,14 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(Collider))]
 public class ClickableItem : ISelectable
 {
     private enum AvailableActions
     {
-        StartWork,
-        MoveHere
+        StartWork
     }
     [System.Serializable]
     private class InspectorContextMenuItem
@@ -19,16 +19,18 @@ public class ClickableItem : ISelectable
         public List<ExitCode> exitCodes;
         public FormulaFieldWithMemo progressPerRound = new FormulaFieldWithMemo();
     }
-
+    private IControlableSelectable taskExecutor = null;
     [SerializeField]
     private List<InspectorContextMenuItem> availableActions = new List<InspectorContextMenuItem>();
     [SerializeField]
     private IScriptForClickable scriptForClickable;
     private string UNIQUE_ID => "ClickableItem_" + gameObject.name;
+    private IControlableSelectable prey = null;
 
 
     void OnValidate()
     {
+        prey = GetComponent<IControlableSelectable>();
         foreach (InspectorContextMenuItem action in availableActions)
         {
             UpdateFormula(action.chanceToLaunch);
@@ -86,6 +88,12 @@ public class ClickableItem : ISelectable
                     recordName = "ActionCached",
                     recordType = SaveRecordType.integerNumber,
                     intValue = actionCached != null ? availableActions.IndexOf(actionCached) : -1
+                },
+                new SaveRecord()
+                {
+                    recordName = "TaskExecutor",
+                    recordType = SaveRecordType.stringValue,
+                    stringValue = taskExecutor != null ? "Pawn_" + taskExecutor.gameObject.name : ""
                 }
             }, UNIQUE_ID);
         }
@@ -113,6 +121,11 @@ public class ClickableItem : ISelectable
             {
                 actionCached = null;
             }
+            string taskExecutorName = data.GetData("TaskExecutor", UNIQUE_ID, "");
+            if (taskExecutorName.StartsWith("Pawn_"))
+            {
+                taskExecutor = GameObject.Find(taskExecutorName.Substring(5)).GetComponent<IControlableSelectable>();
+            }
         }
         else
         {
@@ -131,7 +144,8 @@ public class ClickableItem : ISelectable
         {
             formula.ClearMemorizedDatasets();
             formula.AddMemorizedDataset(() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated"));
-            formula.AddMemorizedDataset(() => (PawnController.Instance.currentSelectedPawn == null ? HandleInittingGlobalVars.pawnMustHaveParams : PawnController.Instance.currentSelectedPawn.GetFormulaData(), "Player"));
+            formula.AddMemorizedDataset(() => (taskExecutor == null ? HandleInittingGlobalVars.pawnMustHaveParams : taskExecutor.GetFormulaData(), "Player"));
+            formula.AddMemorizedDataset(() => (prey == null || prey.GetFormulaData() == null ? HandleInittingGlobalVars.pawnMustHaveParams : prey.GetFormulaData(), "Prey"));
         }
         formula.OnParamsUpdated();
     }
@@ -145,11 +159,9 @@ public class ClickableItem : ISelectable
     private SliderController progressBarCached = null;
     private InspectorContextMenuItem actionCached = null;
     public override bool IsWorking() => progressBarCached != null;
-    private IControlableSelectable panwProgressing = null;
     private void StartWork()
     {
         progressBarCached = UI3DManager.Instance.RegisterSlider(transform);
-        panwProgressing = PawnController.Instance.currentSelectedPawn;
         // if (progressBarCached == null)
         // {
         //     Debug.LogError("StartWorkAction: progressBarCached is null");
@@ -183,21 +195,48 @@ public class ClickableItem : ISelectable
     {
         BoostProgressBar();
     }
+    private IEnumerator BoostProgressBarInTime(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        BoostProgressBar();
+    }
 
     private void BoostProgressBar()
     {
         if (progressBarCached != null)
         {
+            if (prey != null)
+            {
+                PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, prey);
+                // Debug.Log(
+                //     "Boost progress bar with calculated_healing=" +
+                //     HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict["PreyHealingsAmount"] +
+                //     " and executor_healing=" +
+                //     taskExecutor.GetDynamicParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY) +
+                //     " prey_healing=" +
+                //     prey.GetDynamicParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY) +
+                //     " g_Healings=" +
+                //     HandleInittingGlobalVars.globalParameters.parametersDict["Healings"]
+                // );
+            }
+            else
+            {
+                PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, transform.position);
+            }
             float progress = progressBarCached.GetValue();
             progress += actionCached.progressPerRound.EvaluateFormula();
-            if (progress < 0f)
+            if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
+            {
+                StartCoroutine(BoostProgressBarInTime(1f));
+            }
+            if (progress < -0.00001f)
             {
                 progress = 0f;
                 UI3DManager.Instance.UnregisterSlider(transform);
                 progressBarCached = null;
                 actionCached = null;
                 UI3DManager.Instance.ShowMessage("Отменено", transform.position, Color.red);
-                panwProgressing = null;
+                taskExecutor = null;
                 scriptForClickable?.OnCancel();
                 return;
             }
@@ -209,7 +248,7 @@ public class ClickableItem : ISelectable
                 progressBarCached = null;
                 actionCached = null;
                 UI3DManager.Instance.ShowMessage("Завершено", transform.position, Color.black);
-                panwProgressing?.OnCompleteTask();
+                taskExecutor?.OnCompleteTask();
                 ClickableItemsController.Instance.OnCompleteTask(this);
                 scriptForClickable?.OnComplete();
                 return;
@@ -233,6 +272,15 @@ public class ClickableItem : ISelectable
                 case AvailableActions.StartWork:
                     actionDelegate = () =>
                     {
+                        taskExecutor = PawnController.Instance.currentSelectedPawn;
+                        if (prey != null)
+                        {
+                            PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, prey);
+                        }
+                        else
+                        {
+                            PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, transform.position);
+                        }
                         float chance = action.chanceToLaunch.EvaluateFormula();
                         foreach (ExitCode exitCode in action.exitCodes)
                         {
@@ -249,20 +297,6 @@ public class ClickableItem : ISelectable
                         {
                             if (chance <= 1f && chance >= 0f)
                                 UI3DManager.Instance.ShowMessage("Не начато", transform.position, Color.red);
-                        }
-                        ClickableItemsController.Instance.OnDeselect();
-                    };
-                    break;
-                case AvailableActions.MoveHere:
-                    actionDelegate = () =>
-                    {
-                        if (action.chanceToLaunch.EvaluateFormula() >= UnityEngine.Random.Range(0f, 1f))
-                        {
-                            // Debug.Log("Move Here");
-                        }
-                        else
-                        {
-                            UI3DManager.Instance.ShowMessage("Не перемещено", transform.position, Color.red);
                         }
                         ClickableItemsController.Instance.OnDeselect();
                     };

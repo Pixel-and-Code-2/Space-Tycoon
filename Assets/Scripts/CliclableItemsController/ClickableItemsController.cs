@@ -297,6 +297,11 @@ public class ClickableItemsController : MonoBehaviour
             }
         }
 
+        ClickableItem clickableItem = selectable.GetClickableItem();
+        if (clickableItem != null)
+        {
+            selecting = true;
+        }
         if (selecting)
         {
             UI3DManager.Instance.UnregisterSelectable(selectable);

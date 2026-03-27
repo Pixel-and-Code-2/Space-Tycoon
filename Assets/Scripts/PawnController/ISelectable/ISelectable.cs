@@ -15,4 +15,5 @@ public abstract class ISelectable : ILookTarget
     public virtual void OnSelect() { }
     public virtual void OnDeselect() { }
     public virtual bool IsWorking() { return false; }
+    public virtual ClickableItem GetClickableItem() { return GetComponent<ClickableItem>(); }
 }

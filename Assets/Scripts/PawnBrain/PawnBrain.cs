@@ -68,6 +68,25 @@ public class PawnBrain : IControlableSelectable
         pawnNavMesh.SetTypeOfModifierVolumes(dataController.selectableType == SelectableType.Player ? 1 : 0, 0, 0);
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE] = 0f;
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.CURRENT_TARGET_ANGLE] = 0f;
+        SaveHub.Instance.OnLoad += OnLoadData;
+    }
+    private void OnLoadData(LoadedData data)
+    {
+        SelectableType selectableType = (SelectableType)data.GetData("SelectableType", dataController.UNIQUE_ID, (int)dataController.selectableType);
+        if (selectableType != SelectableType.Dead)
+        {
+            if (!playersAlive.Contains(this) && selectableType == SelectableType.Player)
+            {
+                playersAlive.Add(this);
+            }
+        }
+        else
+        {
+            if (playersAlive.Contains(this))
+            {
+                playersAlive.Remove(this);
+            }
+        }
     }
     void OnDestroy()
     {
@@ -260,6 +279,21 @@ public class PawnBrain : IControlableSelectable
             dataController.GetParameterValue(PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY) + 1
         );
         return isAlive;
+    }
+    public void OnHeal()
+    {
+        dataController.selectableType = SelectableType.Player;
+        gameObject.layer = LayerMask.NameToLayer("Player");
+        pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 0);
+        playersAlive.Add(this);
+        dataController.SetParameterValue(
+            PawnDataController.AVAILABLE_HEALTH_KEY,
+            dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY) / 2f
+        );
+        dataController.SetParameterValue(
+            PawnDataController.AMOUNT_OF_HEALINGS_KEY,
+            dataController.GetParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY) + 1
+        );
     }
 
     public override void OnGetDefendedHit(Vector3 hitDirection, bool isMelee)

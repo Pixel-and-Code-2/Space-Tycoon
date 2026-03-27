@@ -68,7 +68,19 @@ public class SaveHub : MonoBehaviour
         return Path.Combine(dir, StreamingAssetsDefaultSaveFileName);
     }
 
-    public void LoadAllData(int slot) => LoadAllData(GetSlotFileName(slot));
+    public void LoadAllData(int slot)
+    {
+        try
+        {
+            LoadAllData(GetSlotFileName(slot));
+        }
+        catch (Exception ex)
+        {
+            Debug.Log("Error loading save data (trying to restore default): " + ex.Message);
+            ClearSaveData(slot);
+            LoadAllData(GetSlotFileName(slot));
+        }
+    }
     public void LoadAllData(string fileName = null)
     {
         loadedData = DataCompressor.DecompressAllData(LoadSaveData(fileName));
@@ -142,6 +154,12 @@ public class SaveHub : MonoBehaviour
             data += $"\t{accumulatedSaveData.intRecordNames[i]}: {accumulatedSaveData.intRecords[i]}\n";
         }
         Debug.Log(data);
+
+        data += "String data:\n";
+        for (int i = 0; i < accumulatedSaveData.stringRecordNames.Count; i++)
+        {
+            data += $"\t{accumulatedSaveData.stringRecordNames[i]}: {accumulatedSaveData.stringRecords[i]}\n";
+        }
     }
 
     public void ClearSaveData(int slot)

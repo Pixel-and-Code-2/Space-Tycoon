@@ -37,6 +37,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     public const string TOTAL_AMMO_KEY = "AvailableAmmo";
     public const string INITIAL_MOVES_TO_RELOAD_KEY = "MovesToReload";
     public const string AMOUNT_OF_DEFENDED_HITS_KEY = "Defenses";
+    public const string AMOUNT_OF_HEALINGS_KEY = "HealingsAmount";
 
     [SerializeField]
     public SelectableType selectableType = SelectableType.Player;
@@ -146,6 +147,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         dynamicParameters[MOVES_TO_SKIP_KEY] = 0f;
         dynamicParameters[IS_SHOOT_ON_MOVE_KEY] = 0f;
         dynamicParameters[AMOUNT_OF_DEFENDED_HITS_KEY] = 0f;
+        dynamicParameters[AMOUNT_OF_HEALINGS_KEY] = 0f;
     }
 
     public void FillFormulaData(FormulaDataMonoBase formulaData, string prefix)
@@ -161,6 +163,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         formulaData.parametersDict[prefix + MAG_AMOUNT_KEY] = dynamicParameters[MAG_AMOUNT_KEY];
         formulaData.parametersDict[prefix + TOTAL_AMMO_KEY] = dynamicParameters[TOTAL_AMMO_KEY];
         formulaData.parametersDict[prefix + AMOUNT_OF_DEFENDED_HITS_KEY] = dynamicParameters[AMOUNT_OF_DEFENDED_HITS_KEY];
+        formulaData.parametersDict[prefix + AMOUNT_OF_HEALINGS_KEY] = dynamicParameters[AMOUNT_OF_HEALINGS_KEY];
     }
 
     public static void PreFillFormulaData(FormulaDataMonoBase formulaData, string prefix)
@@ -176,6 +179,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         formulaData.parametersDict[prefix + MAG_AMOUNT_KEY] = 0f;
         formulaData.parametersDict[prefix + TOTAL_AMMO_KEY] = 0f;
         formulaData.parametersDict[prefix + AMOUNT_OF_DEFENDED_HITS_KEY] = 0f;
+        formulaData.parametersDict[prefix + AMOUNT_OF_HEALINGS_KEY] = 0f;
     }
 
     public float GetParameterValue(string parameterName)

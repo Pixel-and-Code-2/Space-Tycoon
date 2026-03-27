@@ -23,27 +23,31 @@ MonoBehaviour:
   mustHaveParameters:
   - {fileID: 11400000, guid: 841391b108c1aa14ba3bed0e70634795, type: 2}
   isDirty: 0
-  parametersDictStateCache: 'DMG = 0,00 (0,00)
+  parametersDictStateCache: 'MINDMG = 0,00 (0,00)
 
-    MDMG = 1,00 (1,00)
+    MAXDMG = 0,00 (0,00)
 
-    ROF
-    = 0,00 (0,00)
+    MDMG
+    = 1,00 (1,00)
+
+    ROF = 1,00 (1,00)
 
     ACC = 0,00 (0,00)
 
-    MAG = 0,00 (0,00)
-
-    BULK = 0,00
+    MAG = 0,00
     (0,00)
+
+    BULK = 0,00 (0,00)
 
     RCL = 0,00 (0,00)
 
     WPMASS = 5,00 (5,00)
 
     MovesToReload
-    = 1,00 (1,00)
+    = 2,00 (2,00)
 
     TotalAmmo = 0,00 (0,00)
+
+    Random = 0,81 (0,81)
 
 '

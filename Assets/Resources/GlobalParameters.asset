@@ -23,6 +23,8 @@ MonoBehaviour:
     value: 0
   - name: Random
     value: 0
+  - name: Healings
+    value: 3
   calculatedParameters: []
   mustHaveParameters: []
   isDirty: 0
@@ -35,6 +37,9 @@ MonoBehaviour:
 
     IsStepByStep = 0,00 (0,00)
 
-    Random = 0,25 (0,25)
+    Random = 0,21 (0,21)
+
+    Healings
+    = 3,00 (3,00)
 
 '

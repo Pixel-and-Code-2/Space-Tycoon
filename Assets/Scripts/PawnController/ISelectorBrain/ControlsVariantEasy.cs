@@ -202,15 +202,22 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("ClickableItem")))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("ClickableItem", "DeadPawn")))
             {
-                ISelectable selectable = hit.collider.GetComponent<ISelectable>();
+                ISelectable[] selectables = hit.collider.GetComponents<ISelectable>();
+                ISelectable clickableSelectable = null;
+                foreach (var item in selectables)
+                {
+                    if (item is IControlableSelectable) continue;
+                    clickableSelectable = item;
+                    break;
+                }
                 if (
-                    selectable != null &&
-                    selectable.GetSelectableType() == SelectableType.Neutral
+                    clickableSelectable != null &&
+                    (clickableSelectable.GetSelectableType() == SelectableType.Neutral || clickableSelectable.GetSelectableType() == SelectableType.Dead)
                 )
                 {
-                    return selectable;
+                    return clickableSelectable;
                 }
             }
             // SetHandleClick(secondarySelectionClick, false);
