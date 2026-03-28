@@ -83,7 +83,7 @@ public class PawnController : MonoBehaviour
     }
     void Update()
     {
-        if (UILayersController.Instance.currentLayer != UILayersController.UILayer.GameUI) return;
+        if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI) return;
         // Polling selector brain and addressing logic to the current state
         if (currentSelector == null)
         {

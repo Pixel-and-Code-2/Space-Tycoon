@@ -354,7 +354,7 @@ public class ClickableItemsController : MonoBehaviour
                     if (text.showTime == showTime && !text.shown)
                     {
                         text.shown = true;
-                        UILayersController.Instance.SetLayer(UILayersController.UILayer.NarrativeText, text.text);
+                        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.NarrativeText, text.text);
                         return true;
                     }
                 }

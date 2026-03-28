@@ -37,7 +37,7 @@ public class GameUI : IUILayer
     }
     public void OnPause()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.PauseMenu);
+        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.PauseMenu);
     }
     public void OnHelp()
     {
@@ -63,7 +63,7 @@ public class GameUI : IUILayer
         else
         {
             mainTaskTextStyleChanger.ClearText();
-            UILayersController.Instance.SetLayer(UILayersController.UILayer.AttentionText, "Победа!_persistent");
+            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.SlideShow, SlideShow.slidesDictionary[SlideShowType.Win]);
         }
         int subTaskIndex = 0;
         for (int i = 0; i < scenario.Count && subTaskIndex < sideTaskTextStyleChangers.Count; i++)

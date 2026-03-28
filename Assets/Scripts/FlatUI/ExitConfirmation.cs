@@ -25,7 +25,7 @@ public class ExitConfirmation : IUILayer
     }
     public void OnReturnToPause()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.PauseMenu);
+        UILayersController.Instance.GoBack();
     }
     public override void OnBackgroundClick()
     {

@@ -5,7 +5,6 @@ public class SettingsMenu : IUILayer
 {
     [SerializeField]
     private InputActionReference returnToPauseButton;
-    private bool isMainMenu;
     void OnEnable()
     {
         returnToPauseButton.action.Enable();
@@ -29,11 +28,7 @@ public class SettingsMenu : IUILayer
     }
     public void OnBack()
     {
-        UILayersController.Instance.SetLayer(isMainMenu ? UILayersController.UILayer.MainMenu : UILayersController.UILayer.PauseMenu);
-    }
-    public override void Initialize(string config) // "mainMenu" or "pauseMenu"
-    {
-        isMainMenu = config == "mainMenu";
+        UILayersController.Instance.GoBack();
     }
     public void OnChangeControls(int variantNumber)
     {

@@ -117,7 +117,7 @@ public class PawnNavMesh : MonoBehaviour
     private void OnLoadData(LoadedData data)
     {
         SelectableType selectableType = (SelectableType)data.GetData("SelectableType", dataController.UNIQUE_ID, (int)dataController.selectableType);
-        Debug.Log("OnLoadData: " + selectableType + " " + gameObject.name + " layer: " + gameObject.layer + " " + LayerMask.NameToLayer("DeadPawn"));
+        // Debug.Log("OnLoadData: " + selectableType + " " + gameObject.name + " layer: " + gameObject.layer + " " + LayerMask.NameToLayer("DeadPawn"));
 
         if (selectableType != SelectableType.Dead)
         {
@@ -214,7 +214,7 @@ public class PawnNavMesh : MonoBehaviour
     }
     protected virtual void Update()
     {
-        if (UILayersController.Instance.currentLayer != UILayersController.UILayer.GameUI) return;
+        if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI) return;
         if (isMoving)
         {
             if (!navMeshAgent.pathPending)

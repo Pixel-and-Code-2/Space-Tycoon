@@ -32,7 +32,7 @@ public class NarrativeTextWindow : IUILayer
     }
     public void OnResume()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.GameUI);
+        UILayersController.Instance.GoBack();
     }
     public override void Initialize(string config)
     {

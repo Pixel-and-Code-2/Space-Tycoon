@@ -20,10 +20,10 @@ public class MainMenu : IUILayer
     }
     public void OnPlay()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.SaveGame, "gameStart");
+        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.SaveGame, "gameStart");
     }
     public void OnSettings()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.Settings, "mainMenu");
+        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.Settings);
     }
 }

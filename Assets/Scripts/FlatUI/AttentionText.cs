@@ -35,7 +35,7 @@ public class AttentionText : IUILayer
         timeElapsed += Time.unscaledDeltaTime;
         if (timeElapsed >= duration)
         {
-            UILayersController.Instance.SetLayer(UILayersController.UILayer.GameUI);
+            UILayersController.Instance.GoBack();
         }
     }
     public void OnExit()

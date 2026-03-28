@@ -325,7 +325,7 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
     // Helper methods
     private void CheckAdditionalButtonClicks()
     {
-        if (UILayersController.Instance.currentLayer != UILayersController.UILayer.GameUI) return;
+        if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI) return;
         foreach (var playerAction in playerActions)
         {
             if (GetClickState(playerAction.whenSelect))

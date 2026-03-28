@@ -76,7 +76,7 @@ public class SaveHub : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.Log("Error loading save data (trying to restore default): " + ex.Message);
+            Debug.LogWarning("Error loading save data (trying to restore default): " + ex.Message);
             ClearSaveData(slot);
             LoadAllData(GetSlotFileName(slot));
         }

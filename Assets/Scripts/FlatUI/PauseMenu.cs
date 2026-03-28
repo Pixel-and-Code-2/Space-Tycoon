@@ -26,18 +26,18 @@ public class PauseMenu : IUILayer
 
     public void OnResume()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.GameUI);
+        UILayersController.Instance.GoBack();
     }
     public void OnTryMainMenu()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.ExitConfirmation);
+        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.ExitConfirmation);
     }
     public void OnSaveGame()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.SaveGame, "gameSave");
+        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.SaveGame, "gameSave");
     }
     public void OnSettings()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.Settings, "pauseMenu");
+        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.Settings);
     }
 }
