@@ -233,6 +233,7 @@ public class PawnBrain : IControlableSelectable
             dataController.GetParameterValue(PawnDataController.MAG_AMOUNT_KEY) - 1
         );
         PawnController.Instance.UpdateStartReloadButtonColor();
+        PawnController.Instance.UpdateMoveOnShootButtonColor();
         if (!isAlive && dataController.selectableType == SelectableType.Player)
         {
             string[] boosts = new string[] { "+ 1 к защите", "+ 1 к силе", "", "+ 5% к силе", "+ 5% к защите" };

@@ -1,14 +1,20 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
+[RequireComponent(typeof(RectTransform))]
 public class NarrativeTextWindow : IUILayer
 {
     [SerializeField]
     private TextMeshProUGUI textMeshProUGUI;
     [SerializeField]
     private InputActionReference returnToGameButton;
-
+    private RectTransform parentRect;
+    private void Awake()
+    {
+        parentRect = GetComponent<RectTransform>();
+    }
     void OnEnable()
     {
         returnToGameButton.action.Enable();
@@ -37,5 +43,6 @@ public class NarrativeTextWindow : IUILayer
     public override void Initialize(string config)
     {
         textMeshProUGUI.text = config;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(parentRect);
     }
 }

@@ -46,6 +46,7 @@ public class ClickableItemsController : MonoBehaviour
         public List<TextToShow> textToShow = new List<TextToShow>();
         public string shortLevelName = string.Empty;
         public string completeText = string.Empty;
+        public Color completeTextColor = Color.yellow;
     }
     public static ClickableItemsController Instance { get; private set; }
     public System.Action OnTaskUpdated;
@@ -423,7 +424,7 @@ public class ClickableItemsController : MonoBehaviour
         }
         if (completedItem != null && !string.IsNullOrEmpty(completedItem.completeText))
         {
-            UI3DManager.Instance.ShowMessage(completedItem.completeText, selectable.GetTransform().position, Color.red);
+            UI3DManager.Instance.ShowMessage(completedItem.completeText, selectable.GetTransform().position, completedItem.completeTextColor);
         }
         if (updated) OnTaskUpdated?.Invoke();
         if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.AfterComplete, selectable)) return;

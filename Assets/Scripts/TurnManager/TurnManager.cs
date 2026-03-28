@@ -25,6 +25,11 @@ public class TurnManager : MonoBehaviour
     public event Action OnEnemyTurnEnd;
 
     public event Action OnTriggerZoneEnter;
+    /// <summary>
+    /// Вызывается при выходе из боя до сброса параметров пешек (ResetActionPoints).
+    /// Нужен для формул прогресса, использующих LastRoundWalked — иначе WALKED уже скопирован в LastRoundWalked и формула даёт 0.
+    /// </summary>
+    public event Action OnTriggerZoneExitBeforePawnReset;
     public event Action OnTriggerZoneExit;
 
     [SerializeField]
@@ -57,6 +62,7 @@ public class TurnManager : MonoBehaviour
     {
         SaveHub.Instance.OnLoad += OnLoadData;
         SaveHub.Instance.OnSave += OnSaveData;
+        StartCoroutine(DelayFrame(() => SyncEndTurnButtonsWithMovement()));
     }
     private void OnLoadData(LoadedData data)
     {
@@ -118,13 +124,16 @@ public class TurnManager : MonoBehaviour
         }
         trigger.isActive = true;
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 1f;
+        SyncEndTurnButtonsWithMovement();
         StartFirstTurn();
     }
     private void ExitAllTriggers()
     {
+        OnTriggerZoneExitBeforePawnReset?.Invoke();
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 0f;
         OnTriggerZoneExit?.Invoke();
         UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "Зачищено");
+        SyncEndTurnButtonsWithMovement();
     }
 
     public void CheckTriggers()
@@ -168,10 +177,21 @@ public class TurnManager : MonoBehaviour
     public void UnregisterMovingPawn(UnityEngine.Object pawn)
     {
         movingPawns.Remove(pawn);
-        if (movingPawns.Count == 0)
+        SyncEndTurnButtonsWithMovement();
+    }
+
+    private void SyncEndTurnButtonsWithMovement()
+    {
+        bool hasActiveTrigger = listOfTriggers.Find(t => t.isActive) != null;
+        if (hasActiveTrigger && IsPlayerTurn && movingPawns.Count == 0)
         {
             endTurnButton1.TurnOnButton();
             endTurnButton2.TurnOnButton();
+        }
+        else
+        {
+            endTurnButton1.TurnOffButton();
+            endTurnButton2.TurnOffButton();
         }
     }
 
@@ -190,6 +210,7 @@ public class TurnManager : MonoBehaviour
     {
         IsPlayerTurn = true;
         OnPlayerTurnStart?.Invoke();
+        SyncEndTurnButtonsWithMovement();
     }
 
     public void EndPlayerTurn()

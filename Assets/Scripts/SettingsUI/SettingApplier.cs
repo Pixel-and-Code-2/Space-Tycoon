@@ -103,7 +103,7 @@ public class SettingApplier : MonoBehaviour
         if (slot == -1) slot = SaveHub.DEFAULT_SAVE_SLOT;
         if (slot == -1) return;
         string text = "Слот " + slot + ": ";
-        var nextTask = ClickableItemsController.Instance.mainTaskScenario.Find((item) => item.status == ClickableItemsController.TaskItem.TaskItemStatus.ReadyToStart);
+        var nextTask = ClickableItemsController.Instance.mainTaskScenario.Find((item) => item.status == ClickableItemsController.TaskItem.TaskItemStatus.ReadyToStart || item.status == ClickableItemsController.TaskItem.TaskItemStatus.InProgress);
         if (nextTask != null && nextTask.shortLevelName != "") text += nextTask.shortLevelName;
         else text += "Конец";
         PlayerPrefs.SetString(SaveMenu.GetSlotName(slot), text);

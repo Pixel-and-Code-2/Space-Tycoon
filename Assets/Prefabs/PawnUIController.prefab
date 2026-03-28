@@ -721,7 +721,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &56010093159574231
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3357,7 +3357,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4503441363720269058
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3376,7 +3376,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 520, y: 95}
+  m_SizeDelta: {x: 770, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3575034547894522475
 MonoBehaviour:
@@ -3405,7 +3405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
-  m_HorizontalFit: 2
+  m_HorizontalFit: 0
   m_VerticalFit: 2
 --- !u!222 &7207489882932928896
 CanvasRenderer:
@@ -3466,7 +3466,7 @@ MonoBehaviour:
   m_Spacing: 10
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
+  m_ChildControlWidth: 1
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
@@ -4918,6 +4918,7 @@ GameObject:
   - component: {fileID: 2021157520071889540}
   - component: {fileID: 3533302278952045257}
   - component: {fileID: 228641172547473250}
+  - component: {fileID: 960480625585973513}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -4941,8 +4942,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 260, y: -47.5}
-  m_SizeDelta: {x: 500, y: 75}
+  m_AnchoredPosition: {x: 385, y: -24.470001}
+  m_SizeDelta: {x: 750, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3533302278952045257
 CanvasRenderer:
@@ -4972,7 +4973,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: some text
+  m_text: "\u041C\u0430\u043B\u043E \u0442\u0435\u043A\u0441\u0442\u0430"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5043,6 +5044,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &960480625585973513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7682762444469315874}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &8058916031316359023
 GameObject:
   m_ObjectHideFlags: 0
@@ -5994,6 +6009,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StartSlide1
       objectReference: {fileID: 0}
+    - target: {fileID: 685615690484826085, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6004,11 +6023,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMin.x
@@ -6024,7 +6043,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 631.3919
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6214,6 +6233,10 @@ PrefabInstance:
     - target: {fileID: 1299707820030113181, guid: 78b2c45a6a906584195f53032ab9315b, type: 3}
       propertyPath: m_Name
       value: ClickableBG2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1299707820030113181, guid: 78b2c45a6a906584195f53032ab9315b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7715287158651968418, guid: 78b2c45a6a906584195f53032ab9315b, type: 3}
       propertyPath: m_Pivot.x
@@ -6874,6 +6897,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StartSlide2
       objectReference: {fileID: 0}
+    - target: {fileID: 685615690484826085, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6884,11 +6911,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMin.x
@@ -6904,7 +6931,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 631.3919
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7348,6 +7375,10 @@ PrefabInstance:
     - target: {fileID: 1299707820030113181, guid: 78b2c45a6a906584195f53032ab9315b, type: 3}
       propertyPath: m_Name
       value: ClickableBG3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1299707820030113181, guid: 78b2c45a6a906584195f53032ab9315b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7715287158651968418, guid: 78b2c45a6a906584195f53032ab9315b, type: 3}
       propertyPath: m_Pivot.x
@@ -7997,6 +8028,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoseSlide1
       objectReference: {fileID: 0}
+    - target: {fileID: 685615690484826085, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -8007,11 +8042,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMin.x
@@ -8027,7 +8062,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 631.3919
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8786,6 +8821,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StartSlide3
       objectReference: {fileID: 0}
+    - target: {fileID: 685615690484826085, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -8796,11 +8835,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMin.x
@@ -8816,7 +8855,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 631.3919
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9144,6 +9183,10 @@ PrefabInstance:
     - target: {fileID: 1299707820030113181, guid: 78b2c45a6a906584195f53032ab9315b, type: 3}
       propertyPath: m_Name
       value: ClickableBG
+      objectReference: {fileID: 0}
+    - target: {fileID: 1299707820030113181, guid: 78b2c45a6a906584195f53032ab9315b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7715287158651968418, guid: 78b2c45a6a906584195f53032ab9315b, type: 3}
       propertyPath: m_Pivot.x
@@ -10390,6 +10433,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WinSlide1
       objectReference: {fileID: 0}
+    - target: {fileID: 685615690484826085, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -10400,11 +10447,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_AnchorMin.x
@@ -10420,7 +10467,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 631.3919
       objectReference: {fileID: 0}
     - target: {fileID: 800406388357414630, guid: 283709f77fcd679408a717a7ac3b2a53, type: 3}
       propertyPath: m_LocalPosition.x

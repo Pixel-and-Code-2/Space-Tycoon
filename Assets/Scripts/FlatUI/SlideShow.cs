@@ -85,10 +85,10 @@ public class SlideShow : IUILayer
                     UILayersController.Instance.SetLayer(UILayersController.UILayer.GameUI);
                     break;
                 case SlideShowType.Win:
-                    UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "Подбеда!_persistent");
+                    UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "Миссия выполнена!_persistent");
                     break;
                 case SlideShowType.Lose:
-                    UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "Все члены экипажа погибли!_persistent");
+                    UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "Миссия провалена!Все члены экипажа погибли..._persistent");
                     break;
             }
             return;

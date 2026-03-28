@@ -38,6 +38,10 @@ public class IconButtonStyleFiller : MonoBehaviour
             }
         }
     }
+    public void SetInteractable(bool interactable)
+    {
+        button.interactable = interactable;
+    }
     public void TurnOffButton()
     {
         button.interactable = false;

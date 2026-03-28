@@ -70,6 +70,13 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         ResetKeys();
         SaveHub.Instance.OnLoad += OnLoadData;
         SaveHub.Instance.OnSave += OnSaveData;
+        TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
+    }
+
+    private void OnTriggerZoneExit()
+    {
+        ResetActionPoints();
+        SetParameterValue(MOVES_TO_SKIP_KEY, 0);
     }
     void OnEnable()
     {
@@ -84,7 +91,6 @@ public class PawnDataController : MonoBehaviour, IFormulaData
                 TurnManager.Instance.OnEnemyTurnStart += ResetActionPoints;
             }
         }
-        if (PawnController.Instance.toggleShootOnMoveAction != null) PawnController.Instance.toggleShootOnMoveAction.action.Enable();
     }
 
     void OnDisable()
@@ -94,7 +100,6 @@ public class PawnDataController : MonoBehaviour, IFormulaData
             TurnManager.Instance.OnPlayerTurnStart -= ResetActionPoints;
             TurnManager.Instance.OnEnemyTurnStart -= ResetActionPoints;
         }
-        if (PawnController.Instance.toggleShootOnMoveAction != null) PawnController.Instance.toggleShootOnMoveAction.action.Disable();
     }
     private void OnLoadData(LoadedData data)
     {

@@ -43,7 +43,7 @@ public class ClickableItem : ISelectable
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
-            TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
+            TurnManager.Instance.OnTriggerZoneExitBeforePawnReset += OnTriggerZoneExitBeforePawnReset;
         }
         OnValidate();
         this.gameObject.layer = LayerMask.NameToLayer("ClickableItem");
@@ -69,6 +69,7 @@ public class ClickableItem : ISelectable
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnEnd -= OnPlayerTurnEnd;
+            TurnManager.Instance.OnTriggerZoneExitBeforePawnReset -= OnTriggerZoneExitBeforePawnReset;
         }
     }
 
@@ -136,6 +137,14 @@ public class ClickableItem : ISelectable
                 actionCached = null;
             }
         }
+        if ((actionCached == null || taskExecutor == null) && progressBarCached != null)
+        {
+            CancelAction();
+        }
+        if (progressBarCached != null && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
+        {
+            BoostProgressBar();
+        }
     }
 
     void UpdateFormula(FormulaFieldWithMemo formula)
@@ -191,14 +200,18 @@ public class ClickableItem : ISelectable
     {
         BoostProgressBar();
     }
-    private void OnTriggerZoneExit()
+    private void OnTriggerZoneExitBeforePawnReset()
     {
         BoostProgressBar();
     }
     private IEnumerator BoostProgressBarInTime(float waitTime)
     {
-        yield return new WaitForSeconds(waitTime);
-        BoostProgressBar();
+        yield return null;
+        if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
+        {
+            yield return new WaitForSeconds(waitTime);
+            BoostProgressBar();
+        }
     }
 
     private void BoostProgressBar()
@@ -225,19 +238,11 @@ public class ClickableItem : ISelectable
             }
             float progress = progressBarCached.GetValue();
             progress += actionCached.progressPerRound.EvaluateFormula();
-            if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
-            {
-                StartCoroutine(BoostProgressBarInTime(1f));
-            }
+            StartCoroutine(BoostProgressBarInTime(1f));
             if (progress < -0.00001f)
             {
                 progress = 0f;
-                UI3DManager.Instance.UnregisterSlider(transform);
-                progressBarCached = null;
-                actionCached = null;
-                UI3DManager.Instance.ShowMessage("Отменено", transform.position, Color.red);
-                taskExecutor = null;
-                scriptForClickable?.OnCancel();
+                CancelAction();
                 return;
             }
             progressBarCached.SetValue(progress);
@@ -255,6 +260,15 @@ public class ClickableItem : ISelectable
             }
             scriptForClickable?.OnProgress(progress);
         }
+    }
+    private void CancelAction()
+    {
+        UI3DManager.Instance.UnregisterSlider(transform);
+        progressBarCached = null;
+        actionCached = null;
+        UI3DManager.Instance.ShowMessage("Отменено", transform.position, Color.red);
+        taskExecutor = null;
+        scriptForClickable?.OnCancel();
     }
 
     public override List<ContextMenuItem> OnContextMenu()

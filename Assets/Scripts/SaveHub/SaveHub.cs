@@ -153,7 +153,7 @@ public class SaveHub : MonoBehaviour
         {
             data += $"\t{accumulatedSaveData.intRecordNames[i]}: {accumulatedSaveData.intRecords[i]}\n";
         }
-        Debug.Log(data);
+        Debug.Log/**/(data);
 
         data += "String data:\n";
         for (int i = 0; i < accumulatedSaveData.stringRecordNames.Count; i++)
