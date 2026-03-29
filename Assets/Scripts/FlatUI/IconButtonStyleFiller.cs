@@ -74,7 +74,7 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
     }
     public void TurnOnButton()
     {
-        UpdateButton(1, -1, -1);
+        UpdateButton(1, -1, 1);
     }
     public void SetInteractable(bool interactable)
     {
@@ -82,7 +82,7 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
     }
     public void TurnOffButton()
     {
-        UpdateButton(0, -1, -1);
+        UpdateButton(0, -1, 0);
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -173,7 +173,7 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
         if (image == null) return;
         if (spriteName == string.Empty)
         {
-            image.enabled = false;
+            // image.enabled = false;
             return;
         }
         var spriteLink = HandleInittingGlobalVars.globalSettingsAssets.GetSpriteLink(spriteName);
@@ -186,6 +186,6 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
                 image.type = Image.Type.Sliced;
             }
         }
-        else image.enabled = false;
+        // else image.enabled = false;
     }
 }

@@ -204,6 +204,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
     public void SetParameterValue(string parameterName, float value)
     {
+        GameUI.Instance.OnChangeStats();
         if (!dynamicParameters.ContainsKey(parameterName))
         {
             Debug.LogWarning($"Parameter {parameterName} not found in dynamicParameters of pawn data controller, creating new one");

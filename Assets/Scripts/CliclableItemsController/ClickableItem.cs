@@ -26,6 +26,7 @@ public class ClickableItem : ISelectable
     private IScriptForClickable scriptForClickable;
     private string UNIQUE_ID => "ClickableItem_" + gameObject.name;
     private IControlableSelectable prey = null;
+    private Collider col = null;
 
 
     void OnValidate()
@@ -36,6 +37,7 @@ public class ClickableItem : ISelectable
             UpdateFormula(action.chanceToLaunch);
             UpdateFormula(action.progressPerRound);
         }
+        if (col == null) col = GetComponent<Collider>();
     }
 
     void Start()
@@ -75,32 +77,42 @@ public class ClickableItem : ISelectable
 
     private void OnSaveData(Action<SaveRecord[], string> addSaveData)
     {
+        List<SaveRecord> saveRecords = new List<SaveRecord>
+        {
+            new()
+            {
+                recordName = "ColliderEnabled",
+                recordType = SaveRecordType.boolean,
+                boolValue = col.enabled
+            }
+        };
         if (progressBarCached != null)
         {
-            addSaveData(new SaveRecord[] {
-                new SaveRecord()
-                {
-                    recordName = "Progress",
-                    recordType = SaveRecordType.floatNumber,
-                    floatValue = progressBarCached.GetValue()
-                },
-                new SaveRecord()
-                {
-                    recordName = "ActionCached",
-                    recordType = SaveRecordType.integerNumber,
-                    intValue = actionCached != null ? availableActions.IndexOf(actionCached) : -1
-                },
-                new SaveRecord()
-                {
-                    recordName = "TaskExecutor",
-                    recordType = SaveRecordType.stringValue,
-                    stringValue = taskExecutor != null ? "Pawn_" + taskExecutor.gameObject.name : ""
-                }
-            }, UNIQUE_ID);
+            saveRecords.Add(new SaveRecord()
+            {
+                recordName = "Progress",
+                recordType = SaveRecordType.floatNumber,
+                floatValue = progressBarCached.GetValue()
+            });
+            saveRecords.Add(new SaveRecord()
+            {
+                recordName = "ActionCached",
+                recordType = SaveRecordType.integerNumber,
+                intValue = actionCached != null ? availableActions.IndexOf(actionCached) : -1
+            });
+            saveRecords.Add(new SaveRecord()
+            {
+                recordName = "TaskExecutor",
+                recordType = SaveRecordType.stringValue,
+                stringValue = taskExecutor != null ? "Pawn_" + taskExecutor.gameObject.name : ""
+            });
         }
+        addSaveData(saveRecords.ToArray(), UNIQUE_ID);
     }
     private void OnLoadData(LoadedData data)
     {
+        data.GetData("ColliderEnabled", UNIQUE_ID, true);
+        col.enabled = data.GetData("ColliderEnabled", UNIQUE_ID, true);
         float progress = data.GetData("Progress", UNIQUE_ID, -1f);
         if (progress != -1f)
         {
@@ -258,6 +270,10 @@ public class ClickableItem : ISelectable
                 progressBarCached = null;
                 actionCached = null;
                 UI3DManager.Instance.ShowMessage("Завершено", transform.position, Color.black);
+                if (gameObject.layer != LayerMask.NameToLayer("DeadPawn"))
+                {
+                    GetComponent<Collider>().enabled = false;
+                }
                 taskExecutor?.OnCompleteTask();
                 ClickableItemsController.Instance.OnCompleteTask(this);
                 scriptForClickable?.OnComplete();

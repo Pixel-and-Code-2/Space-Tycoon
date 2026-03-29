@@ -109,12 +109,21 @@ public class UILayersController : MonoBehaviour
                 backgroundObjects[i].backgoundClickableObject.SetActive(false);
             }
         }
-        if (overlayStack.Peek() != UILayer.GameUI) StopGame();
+        bool isStopping = false;
+        foreach (var layer in overlayStack)
+        {
+            if (layer != UILayer.Background && layersDictionary[layer].isStoppingGame)
+            {
+                isStopping = true;
+                break;
+            }
+        }
+        if (isStopping) StopGame();
         else ResumeGame();
     }
     private void AddLayer(UILayer layer, string config = null)
     {
-        if (overlayStack.Count > 0)
+        if (overlayStack.Count > 0 && layersDictionary[layer].isBackgroundVisible)
         {
             overlayStack.Push(UILayer.Background);
         }

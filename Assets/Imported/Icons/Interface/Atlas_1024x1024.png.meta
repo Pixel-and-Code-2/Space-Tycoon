@@ -188,7 +188,7 @@ TextureImporter:
       name: PlayerMessageBG
       rect:
         serializedVersion: 2
-        x: 346
+        x: 347
         y: 147
         width: 588
         height: 68
@@ -919,7 +919,7 @@ TextureImporter:
         width: 60
         height: 60
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -928,6 +928,292 @@ TextureImporter:
       bones: []
       spriteID: 579c3fdd7ee24e547a15a6ad228567ae
       internalID: -270673593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EndTurnIcon
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 947
+        width: 55
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89257fd9c79615149a07bb91b3595257
+      internalID: -2105800190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ReloadIcon
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 879
+        width: 55
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab20f47070abddd4d966b8a7db6c33bd
+      internalID: 924836417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoveIcon
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 877
+        width: 55
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c194d5383d431ea4e85c4aac42d85006
+      internalID: -218056899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AttackIcon
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 875
+        width: 55
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8b02a5ba85981b49b8ee51d7b5d0ab1
+      internalID: 1385840209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreenFGIcon
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 873
+        width: 58
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fc941f480ec17f4e8df07241537df2c
+      internalID: 635371925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IconBG
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 877
+        width: 58
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d18b87d56b3d0f42aa4db01ae6ac611
+      internalID: -1210383545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlueFGIcon
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 803
+        width: 58
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0607ce1054b78f348b89d809dea34377
+      internalID: 1811584744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RedFGIcon
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 571
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b1dfbed8940abf47909c4569b4dfeb6
+      internalID: 1960213472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HelpIcon
+      rect:
+        serializedVersion: 2
+        x: 348
+        y: 871
+        width: 45
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f21cee0dc0f68a459aac001d2d4c336
+      internalID: 1302277037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PauseIcon
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 875
+        width: 45
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34a09d748264bdb4a91f5b9bcd9af3ef
+      internalID: -1957881959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HighlightIcon70
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 794
+        width: 70
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e54229f6566887a46bc8b2b570234a77
+      internalID: 1173504058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponMask
+      rect:
+        serializedVersion: 2
+        x: 943
+        y: 383
+        width: 75
+        height: 175
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b70286292df5eab4d97d88594099d2c2
+      internalID: 1602112384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WeaponOutline
+      rect:
+        serializedVersion: 2
+        x: 943
+        y: 200
+        width: 75
+        height: 175
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f6f364abf9e2234e87e62fa207850c7
+      internalID: -976322046
       vertices: []
       indices: 
       edges: []
@@ -950,25 +1236,34 @@ TextureImporter:
       ArrowButtonClicked: 760408173
       ArrowButtonHighLighted: -1160879311
       AttackAvailableIcon: -824843497
+      AttackIcon: 1385840209
       AudioSettingsIcon: 1965459434
       BackIcon: 1334609889
       BackIconDim: -406650387
+      BlueFGIcon: 1811584744
       ControlsSettingsIcon: 445857235
       DefaultIconFG: 1952660164
       DeleteIcon: -270673593
+      EndTurnIcon: -2105800190
       EnemyHPBarMG: 1759517135
       ExitGameButton: 1027359017
       ExitGameIconHighlighted: 1940082184
       GoBackButtonBG: -834533165
       GoBackButtonBGDim: -368902632
+      GreenFGIcon: 635371925
       HeaderBG: 1034603082
+      HelpIcon: 1302277037
       HighlightIcon40: 471217748
+      HighlightIcon70: 1173504058
+      IconBG: -1210383545
       MainIconOverlayBG: 772369963
       MenuTextButtonFG: 737606116
       MenuTextButtonHighlight: -1234750612
       MenuTextButtonPressed: 1652799172
+      MoveIcon: -218056899
       OnReloadIcon: 405550530
       OverlayWindowBG: 769577695
+      PauseIcon: 1271442837
       PauseOverlayIcon: -1565439613
       PawnHPBarBG: -1642081042
       PawnHPBarFG: 968314263
@@ -978,12 +1273,16 @@ TextureImporter:
       PlayerSiniy: -2037391613
       PlayerZaya: -2042840650
       PlayerZeleniy: -452275947
+      RedFGIcon: 1960213472
+      ReloadIcon: 924836417
       SaveSettingsOverlayIcon: 1260820737
       SettingsIconHighlighted: -1724745265
       SettingsIconOn: -894679824
       SettingsTabHighlight: 387610126
       SettingsTabPressed: 1535338179
       WalkAvailableIcon: 1272724622
+      WeaponMask: 1602112384
+      WeaponOutline: -976322046
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

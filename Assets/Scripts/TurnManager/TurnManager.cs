@@ -216,6 +216,7 @@ public class TurnManager : MonoBehaviour
     public void EndPlayerTurn()
     {
         if (!IsPlayerTurn) return;
+        if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f) return;
         if (movingPawns.Count > 0) return;
         CheckTriggers();
         if (listOfTriggers.Find(t => t.isActive) == null)

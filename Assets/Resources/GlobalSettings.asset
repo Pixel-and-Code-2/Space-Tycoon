@@ -122,6 +122,136 @@ MonoBehaviour:
     fgOff: 
     fgHighlightAddition: 
     fgPressedAddition: 
+  - name: IsShootWalk
+    bgOn: IconBG
+    bgOff: 
+    bgHighlightAddition: HighlightIcon70
+    bgPressedAddition: 
+    mgOn: PauseOverlayIcon
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: GreenFGIcon
+    fgOff: DefaultIconFG
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: EndTurn
+    bgOn: IconBG
+    bgOff: 
+    bgHighlightAddition: HighlightIcon70
+    bgPressedAddition: 
+    mgOn: EndTurnIcon
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: RedFGIcon
+    fgOff: DefaultIconFG
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: Walk
+    bgOn: IconBG
+    bgOff: 
+    bgHighlightAddition: HighlightIcon70
+    bgPressedAddition: 
+    mgOn: MoveIcon
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: GreenFGIcon
+    fgOff: DefaultIconFG
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: Attack
+    bgOn: IconBG
+    bgOff: 
+    bgHighlightAddition: HighlightIcon70
+    bgPressedAddition: 
+    mgOn: AttackIcon
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: GreenFGIcon
+    fgOff: DefaultIconFG
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: Reload
+    bgOn: IconBG
+    bgOff: 
+    bgHighlightAddition: HighlightIcon70
+    bgPressedAddition: 
+    mgOn: ReloadIcon
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: BlueFGIcon
+    fgOff: DefaultIconFG
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: Settings
+    bgOn: IconBG
+    bgOff: 
+    bgHighlightAddition: HighlightIcon70
+    bgPressedAddition: 
+    mgOn: PauseIcon
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: GreenFGIcon
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: Help
+    bgOn: IconBG
+    bgOff: 
+    bgHighlightAddition: HighlightIcon70
+    bgPressedAddition: 
+    mgOn: HelpIcon
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: GreenFGIcon
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: Player1
+    bgOn: 
+    bgOff: 
+    bgHighlightAddition: 
+    bgPressedAddition: 
+    mgOn: PlayerZaya
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: PlayerIconOutline
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: Player2
+    bgOn: 
+    bgOff: 
+    bgHighlightAddition: 
+    bgPressedAddition: 
+    mgOn: PlayerSiniy
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: PlayerIconOutline
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: Player3
+    bgOn: 
+    bgOff: 
+    bgHighlightAddition: 
+    bgPressedAddition: 
+    mgOn: PlayerZeleniy
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: PlayerIconOutline
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
   spriteLinks:
   - name: SettingsIcon
     sprite: {fileID: 1596380650, guid: 92d6f723c771370438471db72335612b, type: 3}
@@ -181,3 +311,45 @@ MonoBehaviour:
     sprite: {fileID: -1565439613, guid: 92d6f723c771370438471db72335612b, type: 3}
   - name: DeleteIcon
     sprite: {fileID: -270673593, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PlayerMessageBG
+    sprite: {fileID: -1537476883, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: ReloadIcon
+    sprite: {fileID: 924836417, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: MoveIcon
+    sprite: {fileID: -218056899, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: AttackIcon
+    sprite: {fileID: 1385840209, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: GreenFGIcon
+    sprite: {fileID: 635371925, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: IconBG
+    sprite: {fileID: -1210383545, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: BlueFGIcon
+    sprite: {fileID: 1811584744, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: RedFGIcon
+    sprite: {fileID: 1960213472, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PauseIcon
+    sprite: {fileID: -1957881959, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: HelpIcon
+    sprite: {fileID: 1302277037, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: HighlightIcon70
+    sprite: {fileID: 1173504058, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: EndTurnIcon
+    sprite: {fileID: -2105800190, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: WeaponOutline
+    sprite: {fileID: -976322046, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: WeaponMask
+    sprite: {fileID: 1602112384, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PawnHPBarBG
+    sprite: {fileID: -1642081042, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PawnHPBarFG
+    sprite: {fileID: 968314263, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PlayerHPBarMG
+    sprite: {fileID: 1831619436, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PlayerIconOutline
+    sprite: {fileID: -472215626, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PlayerZaya
+    sprite: {fileID: -2042840650, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PlayerSiniy
+    sprite: {fileID: -2037391613, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PlayerZeleniy
+    sprite: {fileID: -452275947, guid: 92d6f723c771370438471db72335612b, type: 3}

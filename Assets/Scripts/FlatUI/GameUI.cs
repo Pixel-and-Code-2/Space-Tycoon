@@ -1,15 +1,30 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using TMPro;
 
 public class GameUI : IUILayer
 {
+    public static GameUI Instance { get; private set; }
     [SerializeField]
     private InputActionReference togglePause;
     [SerializeField]
     private TaskTextStyleChanger mainTaskTextStyleChanger;
     [SerializeField]
     private List<TaskTextStyleChanger> sideTaskTextStyleChangers;
+    public override bool isStoppingGame => false;
+    [SerializeField]
+    private SliderController weaponSlider;
+    [SerializeField]
+    private TextMeshProUGUI weaponSliderText;
+    void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else
+        {
+            Debug.LogError("Constructor met second GameUI instance");
+        }
+    }
     void Start()
     {
         ClickableItemsController.Instance.OnTaskUpdated += OnTaskUpdated;
@@ -92,5 +107,15 @@ public class GameUI : IUILayer
             item.status == ClickableItemsController.TaskItem.TaskItemStatus.Done ? 1 : -1,
             item.status == ClickableItemsController.TaskItem.TaskItemStatus.InProgress ? 1 : -1
         );
+    }
+    public void OnChangeStats()
+    {
+        if (PawnController.Instance.currentSelectedPawn == null) return;
+        float curMag = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY);
+        float initMag = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
+        float curAmmo = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.TOTAL_AMMO_KEY);
+        weaponSlider.SetBounds(0f, initMag);
+        weaponSlider.SetValue(curMag);
+        weaponSliderText.text = curMag.ToString() + "/" + curAmmo.ToString();
     }
 }
