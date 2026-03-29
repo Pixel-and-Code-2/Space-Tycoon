@@ -94,7 +94,7 @@ public class SaveHub : MonoBehaviour
         {
             path = GetDefaultPath();
         }
-
+        // Debug.Log("Loading save data from " + path);
         var bf = new BinaryFormatter();
         SaveData saveData;
         using (var stream = new FileStream(path, FileMode.Open))

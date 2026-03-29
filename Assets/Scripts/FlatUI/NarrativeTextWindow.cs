@@ -27,7 +27,6 @@ public class NarrativeTextWindow : IUILayer
     }
     void OnDisable()
     {
-        returnToGameButton.action.Disable();
         gameObject.SetActive(false);
     }
     private float timeElapsed = 0f;

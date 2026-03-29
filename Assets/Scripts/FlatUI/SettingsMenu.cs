@@ -47,7 +47,6 @@ public class SettingsMenu : IUILayer
     }
     void OnDisable()
     {
-        returnToPauseButton.action.Disable();
         gameObject.SetActive(false);
     }
     void Update()

@@ -39,7 +39,7 @@ public class ClickableItemsController : MonoBehaviour
             public bool atLeast;
         }
         public ISelectable selectable;
-        [HideInInspector]
+        // [HideInInspector]
         public TaskItemStatus status = TaskItemStatus.Unavailable;
         public List<TaskCondition> readyWhen = new List<TaskCondition>();
         public List<TaskCondition> doneWhen = new List<TaskCondition>();
@@ -299,7 +299,7 @@ public class ClickableItemsController : MonoBehaviour
         }
 
         ClickableItem clickableItem = selectable.GetClickableItem();
-        if (clickableItem != null)
+        if (clickableItem != null && clickableItem.gameObject.layer != LayerMask.NameToLayer("ClickableItem"))
         {
             selecting = true;
         }
@@ -434,6 +434,27 @@ public class ClickableItemsController : MonoBehaviour
     {
         if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.BeforeStart)) return;
         if (CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.BeforeStart)) return;
+    }
+    public void OnCancelTask(ClickableItem clickableItem)
+    {
+        foreach (TaskItem item in mainTaskScenario)
+        {
+            if (item.selectable == clickableItem)
+            {
+                item.status = TaskItem.TaskItemStatus.ReadyToStart;
+                CheckActionBox();
+                return;
+            }
+        }
+        foreach (TaskItem item in sideTaskScenario)
+        {
+            if (item.selectable == clickableItem)
+            {
+                item.status = TaskItem.TaskItemStatus.ReadyToStart;
+                CheckActionBox();
+                return;
+            }
+        }
     }
 
 }

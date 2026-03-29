@@ -13,7 +13,6 @@ public class ExitConfirmation : IUILayer
     }
     void OnDisable()
     {
-        returnToPauseButton.action.Disable();
         gameObject.SetActive(false);
     }
     void Update()

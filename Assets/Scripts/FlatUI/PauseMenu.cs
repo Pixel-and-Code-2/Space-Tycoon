@@ -13,7 +13,6 @@ public class PauseMenu : IUILayer
     }
     void OnDisable()
     {
-        returnToGameButton.action.Disable();
         gameObject.SetActive(false);
     }
     void Update()

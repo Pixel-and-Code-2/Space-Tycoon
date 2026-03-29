@@ -233,16 +233,6 @@ public class ClickableItem : ISelectable
             if (prey != null)
             {
                 PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, prey);
-                // Debug.Log(
-                //     "Boost progress bar with calculated_healing=" +
-                //     HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict["PreyHealingsAmount"] +
-                //     " and executor_healing=" +
-                //     taskExecutor.GetDynamicParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY) +
-                //     " prey_healing=" +
-                //     prey.GetDynamicParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY) +
-                //     " g_Healings=" +
-                //     HandleInittingGlobalVars.globalParameters.parametersDict["Healings"]
-                // );
             }
             else
             {
@@ -251,9 +241,11 @@ public class ClickableItem : ISelectable
             float progress = progressBarCached.GetValue();
             float boost = actionCached.progressPerRound.EvaluateFormula();
             progress += boost;
-            if (boost <= 0.001f && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
+            if (Math.Abs(boost) <= 0.001f && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
             {
-                progress = 100f;
+                Debug.LogWarning("BoostProgressBar: boost is too small, boosting more");
+                LogBoostProgressFormulaDiagnostics(boost);
+                progress += 5f;
             }
             StartCoroutine(BoostProgressBarInTime(1f));
             if (progress < -0.00001f)
@@ -272,7 +264,7 @@ public class ClickableItem : ISelectable
                 UI3DManager.Instance.ShowMessage("Завершено", transform.position, Color.black);
                 if (gameObject.layer != LayerMask.NameToLayer("DeadPawn"))
                 {
-                    GetComponent<Collider>().enabled = false;
+                    col.enabled = false;
                 }
                 taskExecutor?.OnCompleteTask();
                 ClickableItemsController.Instance.OnCompleteTask(this);
@@ -282,6 +274,30 @@ public class ClickableItem : ISelectable
             scriptForClickable?.OnProgress(progress);
         }
     }
+    void LogBoostProgressFormulaDiagnostics(float boostEvaluated)
+    {
+        var calc = HandleInittingGlobalVars.mainCalculatedFormulaData?.parametersDict;
+        var globals = HandleInittingGlobalVars.globalParameters?.GetParametersDict();
+        var playerDict = taskExecutor?.GetFormulaData()?.parametersDict;
+        string Fc(string k) => calc != null && calc.TryGetValue(k, out float v) ? v.ToString() : "—";
+        string Fg(string k) => globals != null && globals.TryGetValue(k, out float v) ? v.ToString() : "—";
+        string Fp(string k) => playerDict != null && playerDict.TryGetValue(k, out float v) ? v.ToString() : "—";
+        string atkW = PawnController.ATTACKER_PREFIX + PawnDataController.WALKED_KEY;
+        string atkS = PawnController.ATTACKER_PREFIX + PawnDataController.SHOOTED_AMOUNT_KEY;
+        string atkM = PawnController.ATTACKER_PREFIX + PawnDataController.MELEE_AMOUNT_KEY;
+        Debug.Log(
+            "BoostProgressBar context [" + gameObject.name + "] " +
+            "c_pawnDistance=" + Fc(PawnController.PAWN_DISTANCE_LABEL) +
+            " g_IsStepByStep=" + Fg(HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY) +
+            " c_AttackerWalkedDistance=" + Fc(atkW) +
+            " c_AttackerShotAmount=" + Fc(atkS) +
+            " c_AttackerMeleeAmount=" + Fc(atkM) +
+            " p_IQ=" + Fp("IQ") +
+            " prey=" + (prey != null ? prey.gameObject.name : "null") +
+            " boost=" + boostEvaluated
+        );
+    }
+
     private void CancelAction()
     {
         UI3DManager.Instance.UnregisterSlider(transform);
@@ -290,6 +306,7 @@ public class ClickableItem : ISelectable
         UI3DManager.Instance.ShowMessage("Отменено", transform.position, Color.red);
         taskExecutor = null;
         scriptForClickable?.OnCancel();
+        ClickableItemsController.Instance.OnCancelTask(this);
     }
 
     public override List<ContextMenuItem> OnContextMenu()

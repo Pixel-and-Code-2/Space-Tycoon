@@ -157,12 +157,22 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
     public void FillFormulaData(FormulaDataMonoBase formulaData, string prefix)
     {
+        bool exportCombatTurnShotMelee =
+            HandleInittingGlobalVars.globalParameters != null
+            && HandleInittingGlobalVars.globalParameters.parametersDict.TryGetValue(
+                HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY, out float stepByStepFlag)
+            && stepByStepFlag > 0.5f;
+
         formulaData.parametersDict[prefix + LAST_ROUND_WALKED_KEY] = dynamicParameters[LAST_ROUND_WALKED_KEY];
         formulaData.parametersDict[prefix + WALKED_KEY] = dynamicParameters[WALKED_KEY];
-        formulaData.parametersDict[prefix + LAST_ROUND_SHOOTED_AMOUNT_KEY] = dynamicParameters[LAST_ROUND_SHOOTED_AMOUNT_KEY];
-        formulaData.parametersDict[prefix + SHOOTED_AMOUNT_KEY] = dynamicParameters[SHOOTED_AMOUNT_KEY];
-        formulaData.parametersDict[prefix + LAST_ROUND_MELEE_AMOUNT_KEY] = dynamicParameters[LAST_ROUND_MELEE_AMOUNT_KEY];
-        formulaData.parametersDict[prefix + MELEE_AMOUNT_KEY] = dynamicParameters[MELEE_AMOUNT_KEY];
+        formulaData.parametersDict[prefix + LAST_ROUND_SHOOTED_AMOUNT_KEY] =
+            exportCombatTurnShotMelee ? dynamicParameters[LAST_ROUND_SHOOTED_AMOUNT_KEY] : 0f;
+        formulaData.parametersDict[prefix + SHOOTED_AMOUNT_KEY] =
+            exportCombatTurnShotMelee ? dynamicParameters[SHOOTED_AMOUNT_KEY] : 0f;
+        formulaData.parametersDict[prefix + LAST_ROUND_MELEE_AMOUNT_KEY] =
+            exportCombatTurnShotMelee ? dynamicParameters[LAST_ROUND_MELEE_AMOUNT_KEY] : 0f;
+        formulaData.parametersDict[prefix + MELEE_AMOUNT_KEY] =
+            exportCombatTurnShotMelee ? dynamicParameters[MELEE_AMOUNT_KEY] : 0f;
         formulaData.parametersDict[prefix + MOVES_TO_SKIP_KEY] = dynamicParameters[MOVES_TO_SKIP_KEY];
         formulaData.parametersDict[prefix + IS_SHOOT_ON_MOVE_KEY] = dynamicParameters[IS_SHOOT_ON_MOVE_KEY];
         formulaData.parametersDict[prefix + MAG_AMOUNT_KEY] = dynamicParameters[MAG_AMOUNT_KEY];

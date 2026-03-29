@@ -9863,7 +9863,7 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 0.5058824}
       code: -1
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerLastRoundWalked
+      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
         > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
         > 0.5 ? 0 :\r\np_IQ))))"
       instruction: 
@@ -18251,7 +18251,7 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -2
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerLastRoundWalked
+      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
         > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
         > 0.5 ? 0 :\r\np_STR*3 ))))"
       instruction: 
@@ -18500,7 +18500,7 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -1
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerLastRoundWalked
+      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
         > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
         > 0.5 ? 0 :\r\np_IQ*3 ))))"
       instruction: 
@@ -31912,7 +31912,7 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -2
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerLastRoundWalked
+      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
         > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
         > 0.5 ? 0 :\r\np_IQ*3 ))))"
       instruction: 
@@ -35279,7 +35279,7 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -1
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerLastRoundWalked
+      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
         > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
         > 0.5 ? 0 :\r\np_IQ*3 ))))"
       instruction: 
@@ -35768,7 +35768,7 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -1
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerLastRoundWalked
+      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
         > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
         > 0.5 ? 0 :\r\np_IQ*3 ))))"
       instruction: 
@@ -35931,7 +35931,7 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -1
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerLastRoundWalked
+      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
         > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
         > 0.5 ? 0 :\r\np_IQ*3 ))))"
       instruction: 
@@ -36311,9 +36311,9 @@ MonoBehaviour:
       - Prey
     exitCodes: []
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerLastRoundWalked
-        > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
-        > 0.5 ? 0 :\r\np_IQ*3 ))))"
+      formula: "(c_pawnDistance > 4 ? -10 : \n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
+        > 1 ? 0 :\n(c_AttackerShotAmount > 0.5 ? 0 :\n(c_AttackerMeleeAmount > 0.5
+        ? 0 :\np_IQ*3 ))))"
       instruction: 
       dataAssets:
       - {fileID: 1569542970}

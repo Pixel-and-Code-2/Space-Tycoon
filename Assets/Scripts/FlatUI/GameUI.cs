@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using TMPro;
 
+[DefaultExecutionOrder(-100)]
 public class GameUI : IUILayer
 {
     public static GameUI Instance { get; private set; }
@@ -28,10 +29,18 @@ public class GameUI : IUILayer
     void Start()
     {
         ClickableItemsController.Instance.OnTaskUpdated += OnTaskUpdated;
+        UILayersController.Instance.OnGameResumed += OnGameResumed;
     }
     void OnDestroy()
     {
         ClickableItemsController.Instance.OnTaskUpdated -= OnTaskUpdated;
+        if (UILayersController.Instance != null)
+            UILayersController.Instance.OnGameResumed -= OnGameResumed;
+    }
+    void OnGameResumed()
+    {
+        if (togglePause != null && togglePause.action != null)
+            togglePause.action.Enable();
     }
     void OnEnable()
     {
@@ -45,10 +54,13 @@ public class GameUI : IUILayer
     }
     void Update()
     {
-        if (togglePause.action.triggered)
-        {
-            OnPause();
-        }
+        if (!togglePause.action.triggered)
+            return;
+        if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI)
+            return;
+        if (PawnController.Instance != null && PawnController.Instance.currentSelectedPawn != null)
+            return;
+        OnPause();
     }
     public void OnPause()
     {
