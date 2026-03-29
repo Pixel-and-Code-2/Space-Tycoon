@@ -39,13 +39,14 @@ public class ClickableItemsController : MonoBehaviour
             public bool atLeast;
         }
         public ISelectable selectable;
-        [HideInInspector]
+        // [HideInInspector]
         public TaskItemStatus status = TaskItemStatus.Unavailable;
         public List<TaskCondition> readyWhen = new List<TaskCondition>();
         public List<TaskCondition> doneWhen = new List<TaskCondition>();
         public List<TextToShow> textToShow = new List<TextToShow>();
         public string shortLevelName = string.Empty;
         public string completeText = string.Empty;
+        public Color completeTextColor = Color.yellow;
     }
     public static ClickableItemsController Instance { get; private set; }
     public System.Action OnTaskUpdated;
@@ -297,6 +298,11 @@ public class ClickableItemsController : MonoBehaviour
             }
         }
 
+        ClickableItem clickableItem = selectable.GetClickableItem();
+        if (clickableItem != null && clickableItem.gameObject.layer != LayerMask.NameToLayer("ClickableItem"))
+        {
+            selecting = true;
+        }
         if (selecting)
         {
             UI3DManager.Instance.UnregisterSelectable(selectable);
@@ -349,7 +355,7 @@ public class ClickableItemsController : MonoBehaviour
                     if (text.showTime == showTime && !text.shown)
                     {
                         text.shown = true;
-                        UILayersController.Instance.SetLayer(UILayersController.UILayer.NarrativeText, text.text);
+                        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.NarrativeText, text.text);
                         return true;
                     }
                 }
@@ -418,7 +424,7 @@ public class ClickableItemsController : MonoBehaviour
         }
         if (completedItem != null && !string.IsNullOrEmpty(completedItem.completeText))
         {
-            UI3DManager.Instance.ShowMessage(completedItem.completeText, selectable.GetTransform().position, Color.red);
+            UI3DManager.Instance.ShowMessage(completedItem.completeText, selectable.GetTransform().position, completedItem.completeTextColor);
         }
         if (updated) OnTaskUpdated?.Invoke();
         if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.AfterComplete, selectable)) return;
@@ -428,6 +434,27 @@ public class ClickableItemsController : MonoBehaviour
     {
         if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.BeforeStart)) return;
         if (CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.BeforeStart)) return;
+    }
+    public void OnCancelTask(ClickableItem clickableItem)
+    {
+        foreach (TaskItem item in mainTaskScenario)
+        {
+            if (item.selectable == clickableItem)
+            {
+                item.status = TaskItem.TaskItemStatus.ReadyToStart;
+                CheckActionBox();
+                return;
+            }
+        }
+        foreach (TaskItem item in sideTaskScenario)
+        {
+            if (item.selectable == clickableItem)
+            {
+                item.status = TaskItem.TaskItemStatus.ReadyToStart;
+                CheckActionBox();
+                return;
+            }
+        }
     }
 
 }

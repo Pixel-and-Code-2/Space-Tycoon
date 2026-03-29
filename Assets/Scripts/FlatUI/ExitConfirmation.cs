@@ -13,7 +13,6 @@ public class ExitConfirmation : IUILayer
     }
     void OnDisable()
     {
-        returnToPauseButton.action.Disable();
         gameObject.SetActive(false);
     }
     void Update()
@@ -25,7 +24,7 @@ public class ExitConfirmation : IUILayer
     }
     public void OnReturnToPause()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.PauseMenu);
+        UILayersController.Instance.GoBack();
     }
     public override void OnBackgroundClick()
     {

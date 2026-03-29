@@ -74,6 +74,8 @@ public class PawnController : MonoBehaviour
 
     void Start()
     {
+        if (toggleShootOnMoveAction != null)
+            toggleShootOnMoveAction.action.Enable();
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurn;
@@ -83,7 +85,7 @@ public class PawnController : MonoBehaviour
     }
     void Update()
     {
-        if (UILayersController.Instance.currentLayer != UILayersController.UILayer.GameUI) return;
+        if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI) return;
         // Polling selector brain and addressing logic to the current state
         if (currentSelector == null)
         {
@@ -104,9 +106,9 @@ public class PawnController : MonoBehaviour
             currentSelectedPawn = newSelection;
             if (newSelection != null)
             {
-                UpdateMoveOnShootButtonColor();
                 newSelection.OnSelect();
             }
+            UpdateMoveOnShootButtonColor();
             UpdateStartReloadButtonColor();
         }
 
@@ -159,24 +161,44 @@ public class PawnController : MonoBehaviour
         }
     }
 
+    private bool IsInCombat()
+    {
+        return HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f;
+    }
     public void ToggleShootOnMove()
     {
         if (currentSelectedPawn == null) return;
+        if (!IsInCombat()) return;
+        bool hasWalked = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.WALKED_KEY) > 0.5f;
+        bool hasShot = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.SHOOTED_AMOUNT_KEY) > 0.5f;
+        if (hasWalked || hasShot) return;
         float res = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) < 0.5f ? 1f : 0f;
-        if (currentSelectedPawn.GetDynamicParameterValue(PawnDataController.WALKED_KEY) > 0.5f) res = 1f;
         currentSelectedPawn.SetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY, res);
         UpdateMoveOnShootButtonColor();
     }
     public void UpdateMoveOnShootButtonColor()
     {
         if (!currentSelector.SyncUI) return;
-        if (Mathf.Abs(currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) - 0f) < 0.1f)
+        if (currentSelectedPawn == null || !IsInCombat())
         {
             shootOnMoveButton.TurnOffButton();
+            return;
+        }
+        bool isOn = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) > 0.5f;
+        bool hasWalked = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.WALKED_KEY) > 0.5f;
+        bool hasShot = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.SHOOTED_AMOUNT_KEY) > 0.5f;
+        bool locked = hasWalked || hasShot;
+        if (isOn)
+        {
+            shootOnMoveButton.TurnOnButton();
+            if (locked)
+                shootOnMoveButton.SetInteractable(false);
         }
         else
         {
-            shootOnMoveButton.TurnOnButton();
+            shootOnMoveButton.TurnOffButton();
+            if (!locked)
+                shootOnMoveButton.SetInteractable(true);
         }
     }
     public void StartReload()

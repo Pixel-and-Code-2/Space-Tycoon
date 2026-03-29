@@ -13,7 +13,6 @@ public class PauseMenu : IUILayer
     }
     void OnDisable()
     {
-        returnToGameButton.action.Disable();
         gameObject.SetActive(false);
     }
     void Update()
@@ -26,7 +25,7 @@ public class PauseMenu : IUILayer
 
     public void OnResume()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.GameUI);
+        UILayersController.Instance.GoBack();
     }
     public void OnTryMainMenu()
     {
@@ -38,6 +37,6 @@ public class PauseMenu : IUILayer
     }
     public void OnSettings()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.Settings, "pauseMenu");
+        UILayersController.Instance.SetLayer(UILayersController.UILayer.Settings);
     }
 }

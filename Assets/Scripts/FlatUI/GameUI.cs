@@ -1,22 +1,46 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using TMPro;
 
+[DefaultExecutionOrder(-100)]
 public class GameUI : IUILayer
 {
+    public static GameUI Instance { get; private set; }
     [SerializeField]
     private InputActionReference togglePause;
     [SerializeField]
     private TaskTextStyleChanger mainTaskTextStyleChanger;
     [SerializeField]
     private List<TaskTextStyleChanger> sideTaskTextStyleChangers;
+    public override bool isStoppingGame => false;
+    [SerializeField]
+    private SliderController weaponSlider;
+    [SerializeField]
+    private TextMeshProUGUI weaponSliderText;
+    void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else
+        {
+            Debug.LogError("Constructor met second GameUI instance");
+        }
+    }
     void Start()
     {
         ClickableItemsController.Instance.OnTaskUpdated += OnTaskUpdated;
+        UILayersController.Instance.OnGameResumed += OnGameResumed;
     }
     void OnDestroy()
     {
         ClickableItemsController.Instance.OnTaskUpdated -= OnTaskUpdated;
+        if (UILayersController.Instance != null)
+            UILayersController.Instance.OnGameResumed -= OnGameResumed;
+    }
+    void OnGameResumed()
+    {
+        if (togglePause != null && togglePause.action != null)
+            togglePause.action.Enable();
     }
     void OnEnable()
     {
@@ -30,14 +54,17 @@ public class GameUI : IUILayer
     }
     void Update()
     {
-        if (togglePause.action.triggered)
-        {
-            OnPause();
-        }
+        if (!togglePause.action.triggered)
+            return;
+        if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI)
+            return;
+        if (PawnController.Instance != null && PawnController.Instance.currentSelectedPawn != null)
+            return;
+        OnPause();
     }
     public void OnPause()
     {
-        UILayersController.Instance.SetLayer(UILayersController.UILayer.PauseMenu);
+        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.PauseMenu);
     }
     public void OnHelp()
     {
@@ -63,7 +90,7 @@ public class GameUI : IUILayer
         else
         {
             mainTaskTextStyleChanger.ClearText();
-            UILayersController.Instance.SetLayer(UILayersController.UILayer.AttentionText, "Победа!_persistent");
+            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.SlideShow, SlideShow.slidesDictionary[SlideShowType.Win]);
         }
         int subTaskIndex = 0;
         for (int i = 0; i < scenario.Count && subTaskIndex < sideTaskTextStyleChangers.Count; i++)
@@ -92,5 +119,15 @@ public class GameUI : IUILayer
             item.status == ClickableItemsController.TaskItem.TaskItemStatus.Done ? 1 : -1,
             item.status == ClickableItemsController.TaskItem.TaskItemStatus.InProgress ? 1 : -1
         );
+    }
+    public void OnChangeStats()
+    {
+        if (PawnController.Instance.currentSelectedPawn == null) return;
+        float curMag = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY);
+        float initMag = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
+        float curAmmo = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.TOTAL_AMMO_KEY);
+        weaponSlider.SetBounds(0f, initMag);
+        weaponSlider.SetValue(curMag);
+        weaponSliderText.text = curMag.ToString() + "/" + curAmmo.ToString();
     }
 }

@@ -37,8 +37,6 @@ MonoBehaviour:
     value: 5
   - name: DMG
     value: 5
-  - name: ShootAmount
-    value: 3
   calculatedParameters:
   - name: HP
     formula:
@@ -162,7 +160,7 @@ MonoBehaviour:
   mustHaveParameters:
   - {fileID: 11400000, guid: 51f3c6c138b324e40af38d39a8bcf6f3, type: 2}
   - {fileID: 11400000, guid: 841391b108c1aa14ba3bed0e70634795, type: 2}
-  isDirty: 0
+  isDirty: 1
   parametersDictStateCache: 'MINDMG = 0,00 (0,00)
 
     MAXDMG = 0,00 (0,00)
@@ -244,6 +242,8 @@ MonoBehaviour:
     BCW = 20,00 (20,00)
 
     BDMG
-    = 6,00 (6,00)
+    = 4,00 (4,00)
+
+    Random = 0,70 (0,70)
 
 '

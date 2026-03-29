@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class UILayersController : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class UILayersController : MonoBehaviour
     public event Action OnGameResumed;
     public enum UILayer
     {
+        Background = -2,
         GameUI = -1,
         PauseMenu = 0,
         Settings = 1,
@@ -15,7 +17,8 @@ public class UILayersController : MonoBehaviour
         MainMenu = 3,
         SaveGame = 4,
         NarrativeText = 5,
-        AttentionText = 6
+        AttentionText = 6,
+        SlideShow = 7
     }
     [System.Serializable]
     private class UILayerEntry
@@ -27,12 +30,16 @@ public class UILayersController : MonoBehaviour
     private List<UILayerEntry> layers;
     private Dictionary<UILayer, IUILayer> layersDictionary = new Dictionary<UILayer, IUILayer>();
     [SerializeField]
-    private UILayer startLayer = UILayer.PauseMenu;
-    public UILayer currentLayer { get; private set; }
+    private UILayer startLayer = UILayer.MainMenu;
+    [System.Serializable]
+    private class BackgroundObject
+    {
+        public GameObject dimScreenObject;
+        public GameObject backgoundClickableObject;
+    }
     [SerializeField]
-    private GameObject dimScreenObject;
-    [SerializeField]
-    private GameObject backgoundClickableObject;
+    private List<BackgroundObject> backgroundObjects;
+    public Stack<UILayer> overlayStack { get; private set; } = new Stack<UILayer>();
 
     void Awake()
     {
@@ -54,54 +61,104 @@ public class UILayersController : MonoBehaviour
 
     void Start()
     {
-        currentLayer = startLayer;
-        CheckCurrentLayer();
+        overlayStack.Push(startLayer);
+        CheckLayersStack();
     }
 
-    private void CheckCurrentLayer()
+    private void CheckLayersStack()
     {
         foreach (var layer in layers)
         {
-            if (layer.layer != currentLayer)
+            if (!overlayStack.Contains(layer.layer))
             {
                 layer.uiLayer.gameObject.SetActive(false);
             }
         }
-        ShowLayer(currentLayer);
-        if (currentLayer != UILayer.GameUI) StopGame();
+        if (overlayStack.Count == 0)
+        {
+            // Debug.LogWarning("Sth went wrong, no layers in stack, setting game ui");
+            overlayStack.Push(UILayer.GameUI);
+        }
+        int avBgInd = 0;
+        foreach (var layer in overlayStack.Reverse())
+        {
+            if (layer == UILayer.Background)
+            {
+                if (avBgInd < backgroundObjects.Count)
+                {
+                    backgroundObjects[avBgInd].dimScreenObject.SetActive(true);
+                    backgroundObjects[avBgInd].backgoundClickableObject.SetActive(true);
+                }
+                else
+                {
+                    Debug.LogError("Error: not enough background objects");
+                    continue;
+                }
+                backgroundObjects[avBgInd].backgoundClickableObject.gameObject.transform.SetAsLastSibling();
+                avBgInd++;
+                continue;
+            }
+            layersDictionary[layer].gameObject.SetActive(true);
+            layersDictionary[layer].gameObject.transform.SetAsLastSibling();
+        }
+        if (avBgInd < backgroundObjects.Count - 1)
+        {
+            for (int i = avBgInd; i < backgroundObjects.Count; i++)
+            {
+                backgroundObjects[i].dimScreenObject.SetActive(false);
+                backgroundObjects[i].backgoundClickableObject.SetActive(false);
+            }
+        }
+        bool isStopping = false;
+        foreach (var layer in overlayStack)
+        {
+            if (layer != UILayer.Background && layersDictionary[layer].isStoppingGame)
+            {
+                isStopping = true;
+                break;
+            }
+        }
+        if (isStopping) StopGame();
         else ResumeGame();
     }
-    private void ShowLayer(UILayer layer)
+    private void AddLayer(UILayer layer, string config = null)
     {
-        layersDictionary[layer].gameObject.SetActive(true);
-        if (layer != UILayer.GameUI)
+        if (overlayStack.Count > 0 && layersDictionary[layer].isBackgroundVisible)
         {
-            dimScreenObject.SetActive(layersDictionary[layer].isBackgroundVisible);
+            overlayStack.Push(UILayer.Background);
         }
-        else
+        overlayStack.Push(layer);
+        CheckLayersStack();
+        if (config != null && layersDictionary.ContainsKey(layer))
         {
-            dimScreenObject.SetActive(false);
-            backgoundClickableObject.SetActive(false);
+            layersDictionary[layer].Initialize(config);
         }
     }
 
     public void SetLayer(UILayer layer, string config = null)
     {
-        currentLayer = layer;
-        CheckCurrentLayer();
-        if (config != null && layersDictionary.ContainsKey(currentLayer))
+        overlayStack.Clear();
+        AddLayer(layer, config);
+    }
+    public void ShowOverlay(UILayer layer, string config = null)
+    {
+        AddLayer(layer, config);
+    }
+    public void GoBack()
+    {
+        overlayStack.Pop();
+        while (overlayStack.Count > 0 && overlayStack.Peek() == UILayer.Background)
         {
-            layersDictionary[currentLayer].Initialize(config);
+            overlayStack.Pop();
         }
+        CheckLayersStack();
     }
     private void StopGame()
     {
-        backgoundClickableObject.SetActive(true);
         Time.timeScale = 0f;
     }
     private void ResumeGame()
     {
-        backgoundClickableObject.SetActive(false);
         Time.timeScale = 1f;
         OnGameResumed?.Invoke();
     }
@@ -111,7 +168,7 @@ public class UILayersController : MonoBehaviour
     }
     public void OnBackgroundClick()
     {
-        if (currentLayer == UILayer.GameUI) return;
-        layersDictionary[currentLayer].OnBackgroundClick();
+        if (overlayStack.Peek() == UILayer.GameUI) return;
+        layersDictionary[overlayStack.Peek()].OnBackgroundClick();
     }
 }

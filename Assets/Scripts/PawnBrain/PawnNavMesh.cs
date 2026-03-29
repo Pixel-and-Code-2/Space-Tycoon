@@ -50,13 +50,13 @@ public class PawnNavMesh : MonoBehaviour
     {
         if (isDeath == 1)
         {
-            col.enabled = false;
+            // col.enabled = false;
             navMeshAgent.enabled = false;
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
         }
         if (isDeath == 0)
         {
-            col.enabled = true;
+            // col.enabled = true;
             navMeshAgent.enabled = true;
         }
         if (isMyTeamsTurn != -1) this.isMyTeamsTurn = isMyTeamsTurn;
@@ -117,6 +117,8 @@ public class PawnNavMesh : MonoBehaviour
     private void OnLoadData(LoadedData data)
     {
         SelectableType selectableType = (SelectableType)data.GetData("SelectableType", dataController.UNIQUE_ID, (int)dataController.selectableType);
+        // Debug.Log("OnLoadData: " + selectableType + " " + gameObject.name + " layer: " + gameObject.layer + " " + LayerMask.NameToLayer("DeadPawn"));
+
         if (selectableType != SelectableType.Dead)
         {
             SetTypeOfModifierVolumes(-1, -1, 0);
@@ -130,6 +132,7 @@ public class PawnNavMesh : MonoBehaviour
         else
         {
             SetTypeOfModifierVolumes(-1, -1, 1);
+            gameObject.layer = LayerMask.NameToLayer("DeadPawn");
         }
         ResetMovement();
         navMeshAgent.Warp(data.GetData("Pos", UNIQUE_ID, transform.position));
@@ -211,7 +214,7 @@ public class PawnNavMesh : MonoBehaviour
     }
     protected virtual void Update()
     {
-        if (UILayersController.Instance.currentLayer != UILayersController.UILayer.GameUI) return;
+        if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI) return;
         if (isMoving)
         {
             if (!navMeshAgent.pathPending)

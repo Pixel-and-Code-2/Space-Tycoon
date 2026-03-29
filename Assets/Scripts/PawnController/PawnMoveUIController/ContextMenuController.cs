@@ -59,6 +59,7 @@ public class ContextMenuController : MonoBehaviour
         newButton.textComponent.text = text;
         newButton.buttonComponent.onClick.AddListener(() => action());
         buttons.Add(newButton);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(newButton.button.GetComponent<RectTransform>());
     }
 
     public void AddButtons(List<ContextMenuItem> items)

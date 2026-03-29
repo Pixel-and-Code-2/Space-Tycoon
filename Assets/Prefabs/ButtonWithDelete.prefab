@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 220, y: -20}
+  m_AnchoredPosition: {x: 216.25, y: -20}
   m_SizeDelta: {x: 430, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6345397032893076941
@@ -348,13 +348,53 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1277545736479344251}
     m_Modifications:
+    - target: {fileID: 1188984155961904162, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1348801105803640704, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145950625335298184, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753901747863987885, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753901747863987885, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1952660164, guid: 92d6f723c771370438471db72335612b, type: 3}
+    - target: {fileID: 2920795610508128373, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -270673593, guid: 92d6f723c771370438471db72335612b, type: 3}
+    - target: {fileID: 4213212498890107158, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4722144835753561393, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5195463755654084312, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
       propertyPath: styleName
-      value: Delete
+      value: DeleteButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 5334481569969072141, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5634905935380291930, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
       propertyPath: m_Name
       value: ButtonExample
+      objectReference: {fileID: 0}
+    - target: {fileID: 6437860216894016705, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8346002112951299025, guid: 6361c500ac0a24748aede09c0899ebce, type: 3}
       propertyPath: m_Pivot.x

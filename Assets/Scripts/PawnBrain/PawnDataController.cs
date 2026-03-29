@@ -37,6 +37,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     public const string TOTAL_AMMO_KEY = "AvailableAmmo";
     public const string INITIAL_MOVES_TO_RELOAD_KEY = "MovesToReload";
     public const string AMOUNT_OF_DEFENDED_HITS_KEY = "Defenses";
+    public const string AMOUNT_OF_HEALINGS_KEY = "HealingsAmount";
 
     [SerializeField]
     public SelectableType selectableType = SelectableType.Player;
@@ -69,6 +70,13 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         ResetKeys();
         SaveHub.Instance.OnLoad += OnLoadData;
         SaveHub.Instance.OnSave += OnSaveData;
+        TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
+    }
+
+    private void OnTriggerZoneExit()
+    {
+        ResetActionPoints();
+        SetParameterValue(MOVES_TO_SKIP_KEY, 0);
     }
     void OnEnable()
     {
@@ -83,7 +91,6 @@ public class PawnDataController : MonoBehaviour, IFormulaData
                 TurnManager.Instance.OnEnemyTurnStart += ResetActionPoints;
             }
         }
-        if (PawnController.Instance.toggleShootOnMoveAction != null) PawnController.Instance.toggleShootOnMoveAction.action.Enable();
     }
 
     void OnDisable()
@@ -93,7 +100,6 @@ public class PawnDataController : MonoBehaviour, IFormulaData
             TurnManager.Instance.OnPlayerTurnStart -= ResetActionPoints;
             TurnManager.Instance.OnEnemyTurnStart -= ResetActionPoints;
         }
-        if (PawnController.Instance.toggleShootOnMoveAction != null) PawnController.Instance.toggleShootOnMoveAction.action.Disable();
     }
     private void OnLoadData(LoadedData data)
     {
@@ -146,21 +152,33 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         dynamicParameters[MOVES_TO_SKIP_KEY] = 0f;
         dynamicParameters[IS_SHOOT_ON_MOVE_KEY] = 0f;
         dynamicParameters[AMOUNT_OF_DEFENDED_HITS_KEY] = 0f;
+        dynamicParameters[AMOUNT_OF_HEALINGS_KEY] = 0f;
     }
 
     public void FillFormulaData(FormulaDataMonoBase formulaData, string prefix)
     {
+        bool exportCombatTurnShotMelee =
+            HandleInittingGlobalVars.globalParameters != null
+            && HandleInittingGlobalVars.globalParameters.parametersDict.TryGetValue(
+                HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY, out float stepByStepFlag)
+            && stepByStepFlag > 0.5f;
+
         formulaData.parametersDict[prefix + LAST_ROUND_WALKED_KEY] = dynamicParameters[LAST_ROUND_WALKED_KEY];
         formulaData.parametersDict[prefix + WALKED_KEY] = dynamicParameters[WALKED_KEY];
-        formulaData.parametersDict[prefix + LAST_ROUND_SHOOTED_AMOUNT_KEY] = dynamicParameters[LAST_ROUND_SHOOTED_AMOUNT_KEY];
-        formulaData.parametersDict[prefix + SHOOTED_AMOUNT_KEY] = dynamicParameters[SHOOTED_AMOUNT_KEY];
-        formulaData.parametersDict[prefix + LAST_ROUND_MELEE_AMOUNT_KEY] = dynamicParameters[LAST_ROUND_MELEE_AMOUNT_KEY];
-        formulaData.parametersDict[prefix + MELEE_AMOUNT_KEY] = dynamicParameters[MELEE_AMOUNT_KEY];
+        formulaData.parametersDict[prefix + LAST_ROUND_SHOOTED_AMOUNT_KEY] =
+            exportCombatTurnShotMelee ? dynamicParameters[LAST_ROUND_SHOOTED_AMOUNT_KEY] : 0f;
+        formulaData.parametersDict[prefix + SHOOTED_AMOUNT_KEY] =
+            exportCombatTurnShotMelee ? dynamicParameters[SHOOTED_AMOUNT_KEY] : 0f;
+        formulaData.parametersDict[prefix + LAST_ROUND_MELEE_AMOUNT_KEY] =
+            exportCombatTurnShotMelee ? dynamicParameters[LAST_ROUND_MELEE_AMOUNT_KEY] : 0f;
+        formulaData.parametersDict[prefix + MELEE_AMOUNT_KEY] =
+            exportCombatTurnShotMelee ? dynamicParameters[MELEE_AMOUNT_KEY] : 0f;
         formulaData.parametersDict[prefix + MOVES_TO_SKIP_KEY] = dynamicParameters[MOVES_TO_SKIP_KEY];
         formulaData.parametersDict[prefix + IS_SHOOT_ON_MOVE_KEY] = dynamicParameters[IS_SHOOT_ON_MOVE_KEY];
         formulaData.parametersDict[prefix + MAG_AMOUNT_KEY] = dynamicParameters[MAG_AMOUNT_KEY];
         formulaData.parametersDict[prefix + TOTAL_AMMO_KEY] = dynamicParameters[TOTAL_AMMO_KEY];
         formulaData.parametersDict[prefix + AMOUNT_OF_DEFENDED_HITS_KEY] = dynamicParameters[AMOUNT_OF_DEFENDED_HITS_KEY];
+        formulaData.parametersDict[prefix + AMOUNT_OF_HEALINGS_KEY] = dynamicParameters[AMOUNT_OF_HEALINGS_KEY];
     }
 
     public static void PreFillFormulaData(FormulaDataMonoBase formulaData, string prefix)
@@ -176,6 +194,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         formulaData.parametersDict[prefix + MAG_AMOUNT_KEY] = 0f;
         formulaData.parametersDict[prefix + TOTAL_AMMO_KEY] = 0f;
         formulaData.parametersDict[prefix + AMOUNT_OF_DEFENDED_HITS_KEY] = 0f;
+        formulaData.parametersDict[prefix + AMOUNT_OF_HEALINGS_KEY] = 0f;
     }
 
     public float GetParameterValue(string parameterName)
@@ -195,6 +214,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
     public void SetParameterValue(string parameterName, float value)
     {
+        GameUI.Instance.OnChangeStats();
         if (!dynamicParameters.ContainsKey(parameterName))
         {
             Debug.LogWarning($"Parameter {parameterName} not found in dynamicParameters of pawn data controller, creating new one");

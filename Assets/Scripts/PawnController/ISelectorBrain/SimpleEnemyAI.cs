@@ -89,7 +89,7 @@ public class SimpleEnemyAI : ISelectorBrain
     private float timeStack = 0.0f;
     void Update()
     {
-        if (UILayersController.Instance.currentLayer != UILayersController.UILayer.GameUI) return;
+        if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI) return;
         currentScenarioIndexBeforeUpdate = currentScenarioIndex;
 
         if (completedScenarioIndex == -2) return;

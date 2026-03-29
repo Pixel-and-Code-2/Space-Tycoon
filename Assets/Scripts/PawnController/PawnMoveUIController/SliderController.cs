@@ -18,13 +18,21 @@ public class SliderController : MonoBehaviour
     [SerializeField]
     private float maxValue = 100f;
     public RectTransform rectTransform;
-
+    [Header("Slider style")]
+    [SerializeField]
+    private Color fillColor;
+    [SerializeField]
+    private Color backgroundColor;
     void Awake()
     {
         slider = GetComponent<Slider>();
         slider.minValue = minValue;
         slider.maxValue = maxValue;
         if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
+        if (fillImage == null) fillImage = GetComponentInChildren<Image>();
+        if (backgroundImage == null) backgroundImage = GetComponentInChildren<Image>();
+        fillImage.color = fillColor;
+        backgroundImage.color = backgroundColor;
     }
 
     void OnValidate()
@@ -41,6 +49,8 @@ public class SliderController : MonoBehaviour
             {
                 fillImage = images[0];
                 backgroundImage = images[1];
+                fillImage.color = fillColor;
+                backgroundImage.color = backgroundColor;
             }
             else
             {
@@ -48,7 +58,11 @@ public class SliderController : MonoBehaviour
                 return;
             }
         }
-
+        else
+        {
+            fillImage.color = fillColor;
+            backgroundImage.color = backgroundColor;
+        }
     }
 
     private float cachedValue = 0f;

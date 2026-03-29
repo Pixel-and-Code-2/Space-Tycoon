@@ -41,8 +41,8 @@ public class PawnBrain : IControlableSelectable
         rb = GetComponent<Rigidbody>();
         animatorBrain = GetComponentInChildren<AnimatorBrainBase>();
         anim = GetComponentInChildren<Animator>();
-        animatorBrain.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
-        animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
+        animatorBrain?.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
+        animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
         if (dataController.selectableType == SelectableType.Player)
         {
             playersAlive.Add(this);
@@ -68,6 +68,25 @@ public class PawnBrain : IControlableSelectable
         pawnNavMesh.SetTypeOfModifierVolumes(dataController.selectableType == SelectableType.Player ? 1 : 0, 0, 0);
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE] = 0f;
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.CURRENT_TARGET_ANGLE] = 0f;
+        SaveHub.Instance.OnLoad += OnLoadData;
+    }
+    private void OnLoadData(LoadedData data)
+    {
+        SelectableType selectableType = (SelectableType)data.GetData("SelectableType", dataController.UNIQUE_ID, (int)dataController.selectableType);
+        if (selectableType != SelectableType.Dead)
+        {
+            if (!playersAlive.Contains(this) && selectableType == SelectableType.Player)
+            {
+                playersAlive.Add(this);
+            }
+        }
+        else
+        {
+            if (playersAlive.Contains(this))
+            {
+                playersAlive.Remove(this);
+            }
+        }
     }
     void OnDestroy()
     {
@@ -99,9 +118,9 @@ public class PawnBrain : IControlableSelectable
         }
         else
         {
-            if (animatorBrain.GetCurrentAnimation(0) != (int)AnimatorBrainBase.Animations.IDLE)
+            if (animatorBrain?.GetCurrentAnimation(0) != (int)AnimatorBrainBase.Animations.IDLE)
             {
-                animatorBrain.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
+                animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
             }
             if (pathDrawer.GetVisible())
             {
@@ -155,7 +174,7 @@ public class PawnBrain : IControlableSelectable
     public override void OnMove(Vector3 position)
     {
         pawnNavMesh.TravelToPosition(position);
-        animatorBrain.Play((int)AnimatorBrainBase.Animations.WALK, 0, false, false);
+        animatorBrain?.Play((int)AnimatorBrainBase.Animations.WALK, 0, false, false);
     }
 
     public override bool IsMoving()
@@ -204,7 +223,7 @@ public class PawnBrain : IControlableSelectable
     public override void OnShoot(Vector3 position, bool isAlive)
     {
         transform.LookAt(position);
-        animatorBrain.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
+        animatorBrain?.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
         dataController.SetParameterValue(
             PawnDataController.SHOOTED_AMOUNT_KEY,
             dataController.GetParameterValue(PawnDataController.SHOOTED_AMOUNT_KEY) + 1
@@ -214,6 +233,7 @@ public class PawnBrain : IControlableSelectable
             dataController.GetParameterValue(PawnDataController.MAG_AMOUNT_KEY) - 1
         );
         PawnController.Instance.UpdateStartReloadButtonColor();
+        PawnController.Instance.UpdateMoveOnShootButtonColor();
         if (!isAlive && dataController.selectableType == SelectableType.Player)
         {
             string[] boosts = new string[] { "+ 1 к защите", "+ 1 к силе", "", "+ 5% к силе", "+ 5% к защите" };
@@ -224,7 +244,7 @@ public class PawnBrain : IControlableSelectable
     public override void OnMelee(Vector3 position)
     {
         transform.LookAt(position);
-        animatorBrain.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
+        animatorBrain?.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
         dataController.SetParameterValue(
             PawnDataController.MELEE_AMOUNT_KEY,
             dataController.GetParameterValue(PawnDataController.MELEE_AMOUNT_KEY) + 1
@@ -242,13 +262,13 @@ public class PawnBrain : IControlableSelectable
             TurnManager.Instance.CheckTriggers();
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
             pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
-            animatorBrain.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
+            animatorBrain?.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
             newHealth = 0f;
             isAlive = false;
             playersAlive.Remove(this);
             if (playersAlive.Count == 0)
             {
-                UILayersController.Instance.SetLayer(UILayersController.UILayer.AttentionText, "Все члены экипажа погибли!_persistent");
+                UILayersController.Instance.SetLayer(UILayersController.UILayer.SlideShow, SlideShow.slidesDictionary[SlideShowType.Lose]);
             }
         }
         dataController.SetParameterValue(
@@ -260,6 +280,21 @@ public class PawnBrain : IControlableSelectable
             dataController.GetParameterValue(PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY) + 1
         );
         return isAlive;
+    }
+    public void OnHeal()
+    {
+        dataController.selectableType = SelectableType.Player;
+        gameObject.layer = LayerMask.NameToLayer("Player");
+        pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 0);
+        playersAlive.Add(this);
+        dataController.SetParameterValue(
+            PawnDataController.AVAILABLE_HEALTH_KEY,
+            dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY) / 2f
+        );
+        dataController.SetParameterValue(
+            PawnDataController.AMOUNT_OF_HEALINGS_KEY,
+            dataController.GetParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY) + 1
+        );
     }
 
     public override void OnGetDefendedHit(Vector3 hitDirection, bool isMelee)
