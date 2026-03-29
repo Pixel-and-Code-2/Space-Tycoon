@@ -18943,9 +18943,9 @@ MonoBehaviour:
     - Target
   calculateShootAccuracy:
     formula: "(c_AttackerMovesToSkip > 0.5 ? -4 : \n(c_AttackerMeleeAmount > 0.5
-      ? -5 :\n(c_isWallsBetween > 0.5 ? -1 : \n(c_AttackerAvailableAmmo < 0.5 ? -2
-      :\n(c_AttackerCurrentMag < 0.5 ? -3 :\n(c_AttackerShotAmount > i_ROF-0.1 ?
-      -6 :\nMath.Max(g_M, Math.Min(100-g_M,\n\n((c_AttackerShotAmount > 0.5) ?\n   
+      ? -5 :\n(c_isWallsBetween > 0.5 ? -1 : \n(c_AttackerAvailableAmmo + c_AttackerCurrentMag<
+      0.5 ? -2 :\n(c_AttackerCurrentMag < 0.5 ? -3 :\n(c_AttackerShotAmount > i_ROF-0.1
+      ? -6 :\nMath.Max(g_M, Math.Min(100-g_M,\n\n((c_AttackerShotAmount > 0.5) ?\n   
       ((c_AttackerIsShootOnMove < 0.5) ?\n        ((i_DX\n          + i_SHT\n         
       - (int)(2.5 * Math.Log((c_pawnDistance-0.2)/1.9))\n           - (c_PreyWalkedDistance
       > 0.2 ? \n              (int)(2.5 * Math.Log((c_PreyWalkedDistance-0.2)/1.9))
@@ -28132,7 +28132,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4530651479804907895, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 77
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4530651479804907895, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -28282,6 +28282,18 @@ PrefabInstance:
       propertyPath: buttonPrefab
       value: 
       objectReference: {fileID: 8097099465296226187, guid: e1748185723485f4692a44ccf69abad7, type: 3}
+    - target: {fileID: 5015325882128221168, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5015325882128221168, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5015325882128221168, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5097021393882073370, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -28381,6 +28393,10 @@ PrefabInstance:
     - target: {fileID: 5432774883929275440, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -191.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5497331264015444257, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5497987245476901017, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_LocalPosition.x

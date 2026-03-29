@@ -47,6 +47,7 @@ public class ContextMenuController : MonoBehaviour
             buttons[lastUnused].button.SetActive(true);
             buttons[lastUnused].textComponent.text = text;
             buttons[lastUnused].buttonComponent.onClick.AddListener(() => action());
+            LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
             lastUnused++;
             return;
         }
@@ -59,7 +60,7 @@ public class ContextMenuController : MonoBehaviour
         newButton.textComponent.text = text;
         newButton.buttonComponent.onClick.AddListener(() => action());
         buttons.Add(newButton);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(newButton.button.GetComponent<RectTransform>());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
 
     public void AddButtons(List<ContextMenuItem> items)
