@@ -20,9 +20,9 @@ public class SliderController : MonoBehaviour
     public RectTransform rectTransform;
     [Header("Slider style")]
     [SerializeField]
-    private Color fillColor;
+    private Color fillColor = Color.white;
     [SerializeField]
-    private Color backgroundColor;
+    private Color backgroundColor = Color.white;
     void Awake()
     {
         slider = GetComponent<Slider>();
@@ -84,8 +84,8 @@ public class SliderController : MonoBehaviour
         GlobalSettingsAssets.SliderClassColors sliderClassColor = HandleInittingGlobalVars.globalSettingsAssets.GetSliderClassColors(selectableType);
         if (sliderClassColor.selectableType == selectableType)
         {
-            fillImage.color = sliderClassColor.colorFront;
-            backgroundImage.color = sliderClassColor.colorBack;
+            fillImage.color = HandleInittingGlobalVars.globalSettingsAssets.GetColorLink(sliderClassColor.colorFront).color;
+            backgroundImage.color = HandleInittingGlobalVars.globalSettingsAssets.GetColorLink(sliderClassColor.colorBack).color;
         }
         else
         {

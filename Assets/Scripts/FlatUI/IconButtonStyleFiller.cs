@@ -1,14 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Threading.Tasks;
+using TMPro;
 
-[RequireComponent(typeof(Button))]
-[RequireComponent(typeof(ButtonStopPropagation))]
 public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField]
-    private Button button;
+    private Selectable selectable;
     [SerializeField]
     private string styleName;
     [SerializeField]
@@ -31,12 +28,16 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
     private Image mgPressedAddition;
     [SerializeField]
     private Image fgPressedAddition;
+    [SerializeField]
+    private Image highlightAddition;
+    [SerializeField]
+    private TextMeshProUGUI text;
     public bool IsButtonOn => isOnCache == 1;
     public bool IsButtonHighlighted => isHighlightedCache == 1;
     public bool IsButtonInteractable => isInteractableCache == 1;
     void Awake()
     {
-        button = GetComponent<Button>();
+        selectable = GetComponent<Selectable>();
     }
 
     void Start()
@@ -57,6 +58,7 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
             if (bgPressedAddition != null) bgPressedAddition.transform.localScale = new Vector3(-1, 1, 1);
             if (mgPressedAddition != null) mgPressedAddition.transform.localScale = new Vector3(-1, 1, 1);
             if (fgPressedAddition != null) fgPressedAddition.transform.localScale = new Vector3(-1, 1, 1);
+            if (highlightAddition != null) highlightAddition.transform.localScale = new Vector3(-1, 1, 1);
         }
         else
         {
@@ -69,6 +71,7 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
             if (bgPressedAddition != null) bgPressedAddition.transform.localScale = new Vector3(1, 1, 1);
             if (mgPressedAddition != null) mgPressedAddition.transform.localScale = new Vector3(1, 1, 1);
             if (fgPressedAddition != null) fgPressedAddition.transform.localScale = new Vector3(1, 1, 1);
+            if (highlightAddition != null) highlightAddition.transform.localScale = new Vector3(1, 1, 1);
         }
         TurnOnButton();
     }
@@ -122,18 +125,22 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
             TrySetSprite(bg, style.bgOn);
             TrySetSprite(mg, style.mgOn);
             TrySetSprite(fg, style.fgOn);
+            SetColor(style.colorOn, style.isTextOnly);
         }
         else
         {
             TrySetSprite(bg, style.bgOff);
             TrySetSprite(mg, style.mgOff);
             TrySetSprite(fg, style.fgOff);
+            SetColor(style.colorOff, style.isTextOnly);
         }
         if (isHighlighted == 1)
         {
-            TrySetSprite(bgHighlightAddition, style.bgHighlightAddition);
-            TrySetSprite(mgHighlightAddition, style.mgHighlightAddition);
-            TrySetSprite(fgHighlightAddition, style.fgHighlightAddition);
+            TrySetSprite(bgHighlightAddition, style.bgHighlight);
+            TrySetSprite(mgHighlightAddition, style.mgHighlight);
+            TrySetSprite(fgHighlightAddition, style.fgHighlight);
+            TrySetSprite(highlightAddition, style.highlightAddition);
+            SetColor(style.colorHighlight, style.isTextOnly);
         }
         else
         {
@@ -143,12 +150,15 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
                 mgHighlightAddition.enabled = false;
             if (fgHighlightAddition != null)
                 fgHighlightAddition.enabled = false;
+            if (highlightAddition != null)
+                highlightAddition.enabled = false;
         }
         if (isPressed == 1)
         {
-            TrySetSprite(bgPressedAddition, style.bgPressedAddition);
-            TrySetSprite(mgPressedAddition, style.mgPressedAddition);
-            TrySetSprite(fgPressedAddition, style.fgPressedAddition);
+            TrySetSprite(bgPressedAddition, style.bgPressed);
+            TrySetSprite(mgPressedAddition, style.mgPressed);
+            TrySetSprite(fgPressedAddition, style.fgPressed);
+            SetColor(style.colorPressed, style.isTextOnly);
         }
         else
         {
@@ -159,13 +169,9 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
             if (fgPressedAddition != null)
                 fgPressedAddition.enabled = false;
         }
-        if (isInteractable == 1)
+        if (selectable != null)
         {
-            button.interactable = true;
-        }
-        else
-        {
-            button.interactable = false;
+            selectable.interactable = isInteractable == 1;
         }
     }
     private void TrySetSprite(Image image, string spriteName)
@@ -187,5 +193,31 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
             }
         }
         // else image.enabled = false;
+    }
+    private void SetColor(string colorName, bool isTextOnly = false)
+    {
+        if (string.IsNullOrEmpty(colorName)) return;
+        var colorLink = HandleInittingGlobalVars.globalSettingsAssets.GetColorLink(colorName);
+        if (!isTextOnly)
+        {
+
+            if (bg != null) bg.color = colorLink.color;
+            if (mg != null) mg.color = colorLink.color;
+            if (fg != null) fg.color = colorLink.color;
+            if (bgHighlightAddition != null) bgHighlightAddition.color = colorLink.color;
+            if (mgHighlightAddition != null) mgHighlightAddition.color = colorLink.color;
+            if (fgHighlightAddition != null) fgHighlightAddition.color = colorLink.color;
+            if (bgPressedAddition != null) bgPressedAddition.color = colorLink.color;
+            if (mgPressedAddition != null) mgPressedAddition.color = colorLink.color;
+            if (fgPressedAddition != null) fgPressedAddition.color = colorLink.color;
+            if (highlightAddition != null) highlightAddition.color = colorLink.color;
+        }
+        if (text != null) text.color = colorLink.color;
+
+    }
+    public void UpdateStyle(string styleName)
+    {
+        this.styleName = styleName;
+        UpdateButton();
     }
 }

@@ -5,54 +5,70 @@ using System.Collections.Generic;
 public class GlobalSettingsAssets : ScriptableObject
 {
     [System.Serializable]
-    public class IconButtonStyle
+    public class ButtonStyle
     {
         public string name;
+        public string highlightAddition;
         [Header("Backgrounds")]
         public string bgOn;
         public string bgOff;
-        public string bgHighlightAddition;
-        public string bgPressedAddition;
+        public string bgHighlight;
+        public string bgPressed;
         [Header("Middlegrounds")]
         public string mgOn;
         public string mgOff;
-        public string mgHighlightAddition;
-        public string mgPressedAddition;
+        public string mgHighlight;
+        public string mgPressed;
         [Header("Foregrounds")]
         public string fgOn;
         public string fgOff;
-        public string fgHighlightAddition;
-        public string fgPressedAddition;
+        public string fgHighlight;
+        public string fgPressed;
+        [Header("Colors")]
+        public string colorOn;
+        public string colorOff;
+        public string colorHighlight;
+        public string colorPressed;
+        public bool isTextOnly = true;
     }
     [System.Serializable]
     public class SpriteLink { public string name; public Sprite sprite; }
     [System.Serializable]
-    public struct SliderClassColors { public SelectableType selectableType; public Color colorFront; public Color colorBack; }
+    public class ColorLink { public string name; public Color color; }
+    [System.Serializable]
+    public struct SliderClassColors { public SelectableType selectableType; public string colorFront; public string colorBack; }
     [Header("Slider class colors")]
     [SerializeField]
     private List<SliderClassColors> sliderClassColors;
 
     [Header("Pawn status colors")]
-    public Color selectedColorAlly = Color.yellow;
-    public Color selectedColorEnemy = Color.orange;
-    public Color deadColor = Color.gray;
-    public Color allyColor = Color.green;
-    public Color enemyColor = Color.red;
+    public string selectedColorAlly;
+    public string selectedColorEnemy;
+    public string deadColor;
+    public string allyColor;
+    public string enemyColor;
     [SerializeField]
-    private List<IconButtonStyle> iconButtonStyles;
+    private List<ButtonStyle> iconButtonStyles;
     [SerializeField]
     private List<SpriteLink> spriteLinks;
-
+    [SerializeField]
+    private List<ColorLink> colorLinks;
     public SliderClassColors GetSliderClassColors(SelectableType selectableType)
     {
         return sliderClassColors.Find(x => x.selectableType == selectableType);
     }
-    public IconButtonStyle GetIconButtonStyle(string name)
+    public ButtonStyle GetIconButtonStyle(string name)
     {
         return iconButtonStyles.Find(x => x.name == name);
     }
     public SpriteLink GetSpriteLink(string name)
     {
         return spriteLinks.Find(x => x.name == name);
+    }
+    public ColorLink GetColorLink(string name)
+    {
+        var colorLink = colorLinks.Find(x => x.name == name);
+        if (colorLink == null) return new ColorLink { name = "Default", color = Color.white };
+        return colorLink;
     }
 }

@@ -14,244 +14,384 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SliderSettingsAssets
   sliderClassColors:
   - selectableType: 0
-    colorFront: {r: 0, g: 1, b: 0, a: 1}
-    colorBack: {r: 0, g: 0.39215687, b: 0, a: 1}
+    colorFront: PlayerDefaultColor
+    colorBack: PlayerDimColor
   - selectableType: 1
-    colorFront: {r: 1, g: 0, b: 0, a: 1}
-    colorBack: {r: 0.39215687, g: 0, b: 0, a: 1}
+    colorFront: EnemyDefaultColor
+    colorBack: EnemyDimColor
   - selectableType: 2
-    colorFront: {r: 1, g: 1, b: 0, a: 1}
-    colorBack: {r: 0.39215687, g: 0.39215687, b: 0, a: 1}
+    colorFront: NeutralDefaultColor
+    colorBack: NeutralDimColor
   - selectableType: 3
-    colorFront: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 0.39215687}
-    colorBack: {r: 0.19339621, g: 0.19339621, b: 0.19339621, a: 1}
-  selectedColorAlly: {r: 0.830163, g: 1, b: 0, a: 1}
-  selectedColorEnemy: {r: 1, g: 0.4974993, b: 0, a: 1}
-  deadColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  allyColor: {r: 0, g: 1, b: 0, a: 1}
-  enemyColor: {r: 1, g: 0, b: 0, a: 1}
+    colorFront: DeadPawnDefaultColor
+    colorBack: DeadPawnDimColor
+  selectedColorAlly: PlayerDimColor
+  selectedColorEnemy: EnemyDimColor
+  deadColor: DeadPawnDefaultColor
+  allyColor: PlayerDefaultColor
+  enemyColor: EnemyDefaultColor
   iconButtonStyles:
   - name: Back
+    highlightAddition: 
     bgOn: GoBackButtonBG
     bgOff: 
-    bgHighlightAddition: GoBackButtonBGDim
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: BackIcon
     mgOff: 
-    mgHighlightAddition: BackIconDim
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: DefaultIconFG
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: ExitGameIcon
+    highlightAddition: 
     bgOn: 
     bgOff: 
-    bgHighlightAddition: 
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: ExitGameIcon
     mgOff: 
-    mgHighlightAddition: ExitGameIconHighlighted
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: 
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: SettingsIcon
+    highlightAddition: 
     bgOn: 
     bgOff: 
-    bgHighlightAddition: 
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: SettingsIcon
     mgOff: 
-    mgHighlightAddition: SettingsIconHighlighted
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: 
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: MenuTextButton
+    highlightAddition: 
     bgOn: 
     bgOff: 
-    bgHighlightAddition: MenuTextButtonHighlight
-    bgPressedAddition: MenuTextButtonPressed
+    bgHighlight: 
+    bgPressed: 
     mgOn: 
     mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: MenuTextButtonFG
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: UIMainColor
+    colorOff: 
+    colorHighlight: UISecondaryColor
+    colorPressed: UITextPressedColor
+    isTextOnly: 1
   - name: SettingsTabButton
+    highlightAddition: 
     bgOn: 
     bgOff: 
-    bgHighlightAddition: SettingsTabHighlight
-    bgPressedAddition: SettingsTabPressed
+    bgHighlight: 
+    bgPressed: 
     mgOn: 
     mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: DefaultIconFG
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: ArrowButton
+    highlightAddition: 
     bgOn: 
     bgOff: 
-    bgHighlightAddition: ArrowButtonHighLighted
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: ArrowButton
     mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: ArrowButtonClicked
+    mgHighlight: 
+    mgPressed: 
     fgOn: 
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: DeleteButton
+    highlightAddition: 
     bgOn: 
     bgOff: 
-    bgHighlightAddition: HighlightIcon40
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: DeleteIcon
     mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: DefaultIconFG
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: IsShootWalk
+    highlightAddition: 
     bgOn: IconBG
     bgOff: 
-    bgHighlightAddition: HighlightIcon70
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: PauseOverlayIcon
     mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: GreenFGIcon
-    fgOff: DefaultIconFG
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgOff: MainIconOverlayBG
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: EndTurn
+    highlightAddition: 
     bgOn: IconBG
     bgOff: 
-    bgHighlightAddition: HighlightIcon70
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: EndTurnIcon
     mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: RedFGIcon
-    fgOff: DefaultIconFG
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgOff: MainIconOverlayBG
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: Walk
+    highlightAddition: 
     bgOn: IconBG
     bgOff: 
-    bgHighlightAddition: HighlightIcon70
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: MoveIcon
     mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: GreenFGIcon
-    fgOff: DefaultIconFG
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgOff: MainIconOverlayBG
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: Attack
+    highlightAddition: 
     bgOn: IconBG
     bgOff: 
-    bgHighlightAddition: HighlightIcon70
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: AttackIcon
     mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: GreenFGIcon
-    fgOff: DefaultIconFG
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgOff: MainIconOverlayBG
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: Reload
+    highlightAddition: 
     bgOn: IconBG
     bgOff: 
-    bgHighlightAddition: HighlightIcon70
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: ReloadIcon
     mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: BlueFGIcon
-    fgOff: DefaultIconFG
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgOff: MainIconOverlayBG
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: Settings
+    highlightAddition: 
     bgOn: IconBG
     bgOff: 
-    bgHighlightAddition: HighlightIcon70
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: PauseIcon
     mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: GreenFGIcon
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: Help
+    highlightAddition: 
     bgOn: IconBG
     bgOff: 
-    bgHighlightAddition: HighlightIcon70
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: HelpIcon
     mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgHighlight: 
+    mgPressed: 
     fgOn: GreenFGIcon
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: Player1
+    highlightAddition: 
     bgOn: 
     bgOff: 
-    bgHighlightAddition: 
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: PlayerZaya
-    mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgOff: GoBackButtonBG
+    mgHighlight: 
+    mgPressed: 
     fgOn: PlayerIconOutline
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: Player2
+    highlightAddition: 
     bgOn: 
     bgOff: 
-    bgHighlightAddition: 
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: PlayerSiniy
-    mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgOff: GoBackButtonBG
+    mgHighlight: 
+    mgPressed: 
     fgOn: PlayerIconOutline
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   - name: Player3
+    highlightAddition: 
     bgOn: 
     bgOff: 
-    bgHighlightAddition: 
-    bgPressedAddition: 
+    bgHighlight: 
+    bgPressed: 
     mgOn: PlayerZeleniy
-    mgOff: 
-    mgHighlightAddition: 
-    mgPressedAddition: 
+    mgOff: GoBackButtonBG
+    mgHighlight: 
+    mgPressed: 
     fgOn: PlayerIconOutline
     fgOff: 
-    fgHighlightAddition: 
-    fgPressedAddition: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
+  - name: PlayerHPUI
+    highlightAddition: 
+    bgOn: PlayerHPBGUI
+    bgOff: 
+    bgHighlight: 
+    bgPressed: 
+    mgOn: PlayerHPMGUI
+    mgOff: 
+    mgHighlight: 
+    mgPressed: 
+    fgOn: PlayerHPFGUI
+    fgOff: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: 
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
+  - name: HeartIcon
+    highlightAddition: HeartsHighlight
+    bgOn: HeartsBG
+    bgOff: 
+    bgHighlight: 
+    bgPressed: 
+    mgOn: 
+    mgOff: 
+    mgHighlight: 
+    mgPressed: 
+    fgOn: 
+    fgOff: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: UITextAttentionColor
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   spriteLinks:
   - name: SettingsIcon
     sprite: {fileID: 1596380650, guid: 92d6f723c771370438471db72335612b, type: 3}
@@ -353,3 +493,38 @@ MonoBehaviour:
     sprite: {fileID: -2037391613, guid: 92d6f723c771370438471db72335612b, type: 3}
   - name: PlayerZeleniy
     sprite: {fileID: -452275947, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PlayerHPBGUI
+    sprite: {fileID: 94470821, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PlayerHPMGUI
+    sprite: {fileID: 1616331835, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: PlayerHPFGUI
+    sprite: {fileID: -424981597, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: HeartsHighlight
+    sprite: {fileID: 1898650077, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: HeartsBG
+    sprite: {fileID: -99854649, guid: 92d6f723c771370438471db72335612b, type: 3}
+  colorLinks:
+  - name: EnemyDefaultColor
+    color: {r: 1, g: 0, b: 0, a: 1}
+  - name: EnemyDimColor
+    color: {r: 0.627451, g: 0, b: 0, a: 1}
+  - name: PlayerDefaultColor
+    color: {r: 0, g: 1, b: 0, a: 1}
+  - name: PlayerDimColor
+    color: {r: 0, g: 0.627451, b: 0, a: 1}
+  - name: DeadPawnDefaultColor
+    color: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 0.39215687}
+  - name: DeadPawnDimColor
+    color: {r: 0.18396229, g: 0.18135905, b: 0.18135905, a: 1}
+  - name: NeutralDefaultColor
+    color: {r: 1, g: 1, b: 0, a: 1}
+  - name: NeutralDimColor
+    color: {r: 0.627451, g: 0.627451, b: 0, a: 1}
+  - name: UIMainColor
+    color: {r: 0.29411766, g: 1, b: 0.42352942, a: 1}
+  - name: UISecondaryColor
+    color: {r: 0.1764706, g: 0.61960787, b: 0, a: 1}
+  - name: UITextPressedColor
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: UITextAttentionColor
+    color: {r: 1, g: 0.57254905, b: 0.57254905, a: 1}

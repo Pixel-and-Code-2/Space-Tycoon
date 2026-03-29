@@ -6,6 +6,7 @@ using System.Collections.Generic;
 [RequireComponent(typeof(IPawnState))]
 public class InputScreenMouseControlActions : ISelectorBrainWithUI
 {
+    public static InputScreenMouseControlActions Instance { get; private set; }
     [SerializeField]
     private IPawnState meleeState;
     [SerializeField]
@@ -56,6 +57,11 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     // MonoBehaviour methods
     void Awake()
     {
+        if (Instance == null) Instance = this;
+        else
+        {
+            Debug.LogError("Constructor met second InputScreenMouseControlActions instance");
+        }
         meleeState = GetComponent<MeleeState>();
         walkState = GetComponent<WalkState>();
         shootState = GetComponent<ShootState>();

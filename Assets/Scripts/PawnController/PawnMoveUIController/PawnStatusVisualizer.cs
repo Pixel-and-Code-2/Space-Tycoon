@@ -34,15 +34,15 @@ public class PawnStatusVisualizer : MonoBehaviour
 
         if (pawnBrain.GetSelectableType() == SelectableType.Enemy)
         {
-            targetColor = current == pawnBrain ? settings.selectedColorEnemy : settings.enemyColor;
+            targetColor = current == pawnBrain ? settings.GetColorLink(settings.selectedColorEnemy).color : settings.GetColorLink(settings.enemyColor).color;
         }
         else if (pawnBrain.GetSelectableType() == SelectableType.Player)
         {
-            targetColor = current == pawnBrain ? settings.selectedColorAlly : settings.allyColor;
+            targetColor = current == pawnBrain ? settings.GetColorLink(settings.selectedColorAlly).color : settings.GetColorLink(settings.allyColor).color;
         }
         else
         {
-            targetColor = settings.deadColor;
+            targetColor = settings.GetColorLink(settings.deadColor).color;
         }
 
 

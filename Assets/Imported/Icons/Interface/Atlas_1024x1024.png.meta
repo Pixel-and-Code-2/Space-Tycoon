@@ -1218,6 +1218,116 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: PlayerHPFGUI
+      rect:
+        serializedVersion: 2
+        x: 862
+        y: 114
+        width: 106
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 1, y: 0, z: 1, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6ada0ce37c327049b31930273fea514
+      internalID: -424981597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerHPBGUI
+      rect:
+        serializedVersion: 2
+        x: 862
+        y: 124
+        width: 106
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 1, y: 0, z: 1, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c11c210553dcd374ab560df669c6ee9e
+      internalID: 94470821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerHPMGUI
+      rect:
+        serializedVersion: 2
+        x: 862
+        y: 133
+        width: 106
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 1, y: 0, z: 1, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f738b5dbc02a6fe499ff0bbe9d95ea28
+      internalID: 1616331835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HeartsHighlight
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 917
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4f9802dd04d3d943b901d49623d2643
+      internalID: 1898650077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HeartsBG
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 915
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55436562fc30c4443b8a72ac6f2a3396
+      internalID: -99854649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -1232,6 +1342,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+      36: -99854649
       ArrowButton: -844436228
       ArrowButtonClicked: 760408173
       ArrowButtonHighLighted: -1160879311
@@ -1252,6 +1363,8 @@ TextureImporter:
       GoBackButtonBGDim: -368902632
       GreenFGIcon: 635371925
       HeaderBG: 1034603082
+      HeartsBG: -99854649
+      HeartsHighlight: 1898650077
       HelpIcon: 1302277037
       HighlightIcon40: 471217748
       HighlightIcon70: 1173504058
@@ -1267,7 +1380,10 @@ TextureImporter:
       PauseOverlayIcon: -1565439613
       PawnHPBarBG: -1642081042
       PawnHPBarFG: 968314263
+      PlayerHPBGUI: 94470821
       PlayerHPBarMG: 1831619436
+      PlayerHPFGUI: -424981597
+      PlayerHPMGUI: 1616331835
       PlayerIconOutline: -472215626
       PlayerMessageBG: -1537476883
       PlayerSiniy: -2037391613
@@ -1281,6 +1397,7 @@ TextureImporter:
       SettingsTabHighlight: 387610126
       SettingsTabPressed: 1535338179
       WalkAvailableIcon: 1272724622
+      WeaponBar: -768860906
       WeaponMask: 1602112384
       WeaponOutline: -976322046
   mipmapLimitGroupName: 

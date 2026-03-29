@@ -21,6 +21,7 @@ public class HandleInittingGlobalVars : MonoBehaviour
     public const string MELEE_ATTACK_DISTANCE_KEY = "MeleeDST";
     public const string RANDOM_KEY = "Random";
     public const string UNIQUE_ID = "HandleInittingGlobalVars";
+    public const string AMOUNT_OF_HEALINGS_KEY = "Healings";
 
     void Awake()
     {
@@ -29,6 +30,7 @@ public class HandleInittingGlobalVars : MonoBehaviour
         globalParameters.AddParameter(IS_STEP_BY_STEP_KEY);
         globalParameters.AddParameter(MELEE_ATTACK_DISTANCE_KEY);
         globalParameters.AddParameter(RANDOM_KEY);
+        globalParameters.AddParameter(AMOUNT_OF_HEALINGS_KEY);
         globalParameters.SetDirty();
         globalParameters.RebuildParametersDict();
         if (pawnMustHaveParams == null)

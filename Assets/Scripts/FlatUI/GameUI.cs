@@ -18,6 +18,29 @@ public class GameUI : IUILayer
     private SliderController weaponSlider;
     [SerializeField]
     private TextMeshProUGUI weaponSliderText;
+    [System.Serializable]
+    private class PlayerGroupUIGameobjects
+    {
+        public IconButtonStyleFiller playerIcon;
+        public SliderController playerSlider;
+    }
+    [System.Serializable]
+    private class PlayerGroup
+    {
+        public string playerName;
+        public string playerStyleName;
+        public IControlableSelectable playerObject;
+    }
+    [Header("Player icons control")]
+    [SerializeField]
+    private List<PlayerGroupUIGameobjects> playerUIGameobjects;
+    [SerializeField]
+    private List<PlayerGroup> playerGroups;
+    [SerializeField]
+    private TextMeshProUGUI selectedPlayerName;
+    [SerializeField]
+    private TextMeshProUGUI selectedPlayerHealingNumber;
+    private IControlableSelectable selectedPlayer = null;
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -54,6 +77,11 @@ public class GameUI : IUILayer
     }
     void Update()
     {
+        if (selectedPlayer != PawnController.Instance.currentSelectedPawn)
+        {
+            selectedPlayer = PawnController.Instance.currentSelectedPawn;
+            UpdateSelectedPlayer();
+        }
         if (!togglePause.action.triggered)
             return;
         if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI)
@@ -129,5 +157,77 @@ public class GameUI : IUILayer
         weaponSlider.SetBounds(0f, initMag);
         weaponSlider.SetValue(curMag);
         weaponSliderText.text = curMag.ToString() + "/" + curAmmo.ToString();
+    }
+
+    private void UpdateSelectedPlayer()
+    {
+        if (selectedPlayer == null) return;
+
+        for (int i = 1; i < playerGroups.Count; i++)
+        {
+            if (playerGroups[i].playerObject == selectedPlayer)
+            {
+                var temp = playerGroups[0];
+                playerGroups[0] = playerGroups[i];
+                playerGroups[i] = temp;
+                break;
+            }
+        }
+        UpdateUI();
+    }
+    private void UpdateUI()
+    {
+        var mainPlayerGroup = playerGroups[0];
+        playerUIGameobjects[0].playerIcon.UpdateStyle(mainPlayerGroup.playerStyleName);
+        float amountOfHealings = mainPlayerGroup.playerObject.GetDynamicParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY);
+        float maxHealings = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
+        selectedPlayerHealingNumber.text = (maxHealings - amountOfHealings).ToString();
+        selectedPlayerName.text = mainPlayerGroup.playerName;
+        for (int i = 1; i < playerGroups.Count; i++)
+        {
+            playerUIGameobjects[i].playerIcon.UpdateStyle(playerGroups[i].playerStyleName);
+        }
+        UpdatePlayersSlider();
+    }
+    public void SelectPlayer(int ind)
+    {
+        if (playerGroups[ind].playerObject.GetSelectableType() != SelectableType.Player) return;
+        InputScreenMouseControlActions.Instance.SelectPlayer(playerGroups[ind].playerObject);
+        ControlsVariantEasy.Instance.SelectPlayer(playerGroups[ind].playerObject);
+    }
+    private void UpdatePlayersSlider()
+    {
+
+        for (int i = 0; i < playerGroups.Count; i++)
+        {
+            var playerGroup = playerGroups[i];
+            float initialDistance = playerGroup.playerObject.GetDynamicParameterValue(PawnDataController.INITIAL_AVAILABLE_DISTANCE_KEY);
+            float availableDistance = playerGroup.playerObject.GetDynamicParameterValue(PawnDataController.AVAILABLE_DISTANCE_KEY);
+            playerUIGameobjects[i].playerSlider.SetBounds(0f, initialDistance);
+            playerUIGameobjects[i].playerSlider.SetValue(availableDistance);
+        }
+    }
+    public void UpdatePlayerData()
+    {
+        for (int i = 0; i < playerGroups.Count; i++)
+        {
+            if (playerGroups[i].playerObject.GetSelectableType() != SelectableType.Player)
+            {
+                if (playerUIGameobjects[i].playerIcon.IsButtonOn)
+                {
+                    playerUIGameobjects[i].playerIcon.TurnOffButton();
+                    Debug.Log("turning off button for " + playerGroups[i].playerName);
+                }
+            }
+            else
+            {
+                if (!playerUIGameobjects[i].playerIcon.IsButtonOn)
+                {
+                    playerUIGameobjects[i].playerIcon.TurnOnButton();
+                    Debug.Log("turning on button for " + playerGroups[i].playerName);
+                }
+            }
+        }
+        UpdatePlayersSlider();
     }
 }

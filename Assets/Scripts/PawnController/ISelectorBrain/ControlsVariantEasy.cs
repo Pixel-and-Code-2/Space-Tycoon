@@ -12,6 +12,7 @@ public enum ControlType
 [RequireComponent(typeof(IPawnState))]
 public class ControlsVariantEasy : ISelectorBrainWithUI
 {
+    public static ControlsVariantEasy Instance { get; private set; }
     [SerializeField]
     private IPawnState meleeState;
     [SerializeField]
@@ -65,6 +66,11 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
     // MonoBehaviour methods
     void Awake()
     {
+        if (Instance == null) Instance = this;
+        else
+        {
+            Debug.LogError("Constructor met second ControlsVariantEasy instance");
+        }
         meleeState = GetComponent<MeleeState>();
         walkState = GetComponent<WalkState>();
         shootState = GetComponent<ShootState>();

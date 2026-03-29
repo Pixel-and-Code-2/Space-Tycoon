@@ -94,6 +94,7 @@ public class UILayersController : MonoBehaviour
                     Debug.LogError("Error: not enough background objects");
                     continue;
                 }
+                backgroundObjects[avBgInd].dimScreenObject.gameObject.transform.SetAsLastSibling();
                 backgroundObjects[avBgInd].backgoundClickableObject.gameObject.transform.SetAsLastSibling();
                 avBgInd++;
                 continue;
@@ -138,6 +139,13 @@ public class UILayersController : MonoBehaviour
     public void SetLayer(UILayer layer, string config = null)
     {
         overlayStack.Clear();
+        AddLayer(layer, config);
+    }
+
+    public void SetLayerKeepingGameUI(UILayer layer, string config = null)
+    {
+        overlayStack.Clear();
+        overlayStack.Push(UILayer.GameUI);
         AddLayer(layer, config);
     }
     public void ShowOverlay(UILayer layer, string config = null)
