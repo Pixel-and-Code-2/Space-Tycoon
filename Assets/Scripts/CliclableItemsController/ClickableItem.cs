@@ -43,7 +43,7 @@ public class ClickableItem : ISelectable
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnEnd += OnPlayerTurnEnd;
-            TurnManager.Instance.OnTriggerZoneExitBeforePawnReset += OnTriggerZoneExitBeforePawnReset;
+            TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
         }
         OnValidate();
         this.gameObject.layer = LayerMask.NameToLayer("ClickableItem");
@@ -69,7 +69,7 @@ public class ClickableItem : ISelectable
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnEnd -= OnPlayerTurnEnd;
-            TurnManager.Instance.OnTriggerZoneExitBeforePawnReset -= OnTriggerZoneExitBeforePawnReset;
+            TurnManager.Instance.OnTriggerZoneExit -= OnTriggerZoneExit;
         }
     }
 
@@ -200,7 +200,7 @@ public class ClickableItem : ISelectable
     {
         BoostProgressBar();
     }
-    private void OnTriggerZoneExitBeforePawnReset()
+    private void OnTriggerZoneExit()
     {
         BoostProgressBar();
     }
@@ -237,7 +237,12 @@ public class ClickableItem : ISelectable
                 PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, transform.position);
             }
             float progress = progressBarCached.GetValue();
-            progress += actionCached.progressPerRound.EvaluateFormula();
+            float boost = actionCached.progressPerRound.EvaluateFormula();
+            progress += boost;
+            if (boost <= 0.001f && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
+            {
+                progress = 100f;
+            }
             StartCoroutine(BoostProgressBarInTime(1f));
             if (progress < -0.00001f)
             {

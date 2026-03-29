@@ -31,68 +31,153 @@ MonoBehaviour:
   allyColor: {r: 0, g: 1, b: 0, a: 1}
   enemyColor: {r: 1, g: 0, b: 0, a: 1}
   iconButtonStyles:
-  - name: Exit
-    spriteOff: {fileID: 0}
-    spriteOn: {fileID: 0}
-    colorOff: {r: 0.9386792, g: 0.30551353, b: 0.30551353, a: 1}
-    colorOn: {r: 0.6367924, g: 0.4205233, b: 0.4205233, a: 1}
-  - name: Walk
-    spriteOff: {fileID: 0}
-    spriteOn: {fileID: 0}
-    colorOff: {r: 0.30588233, g: 0.3566498, b: 0.9019608, a: 1}
-    colorOn: {r: 0.41960785, g: 0.42324236, b: 0.63529414, a: 1}
-  - name: Attack
-    spriteOff: {fileID: 0}
-    spriteOn: {fileID: 0}
-    colorOff: {r: 0.9019608, g: 0.63483167, b: 0.30588236, a: 1}
-    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
-  - name: IsShootWalk
-    spriteOff: {fileID: -863166482, guid: cdfc45e5d17ab3947bc8a4c3c87371ca, type: 3}
-    spriteOn: {fileID: 1732047824, guid: e894649ef0d0a1b4b85749f25c37f37f, type: 3}
-    colorOff: {r: 0.9019608, g: 0.63483167, b: 0.30588236, a: 1}
-    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
-  - name: EndTurn
-    spriteOff: {fileID: -588120006, guid: 2d0b379754584644c95d8b2d15f789fb, type: 3}
-    spriteOn: {fileID: -831309971, guid: 32c2c0cbb77d54940986386412e7af2b, type: 3}
-    colorOff: {r: 0.9019608, g: 0.63483167, b: 0.30588236, a: 1}
-    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
-  - name: Player1
-    spriteOff: {fileID: 0}
-    spriteOn: {fileID: -1027262560, guid: b6fd8e526570f384facd74c7cd29c7c9, type: 3}
-    colorOff: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
-    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
-  - name: Player2
-    spriteOff: {fileID: 0}
-    spriteOn: {fileID: 596277690, guid: 91227a6a8032e874280171dea746bd67, type: 3}
-    colorOff: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
-    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
-  - name: Player3
-    spriteOff: {fileID: 0}
-    spriteOn: {fileID: -2000980365, guid: 36df5c68837586c448dd298e3421684b, type: 3}
-    colorOff: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
-    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
-  - name: Weapon
-    spriteOff: {fileID: 1236265581, guid: f46e9092890fd7d4989e5dce5f6d2f98, type: 3}
-    spriteOn: {fileID: -51319423, guid: e278b7bc08516254aa16d5fb2c3d4cc4, type: 3}
-    colorOff: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
-    colorOn: {r: 0.63529414, g: 0.54711396, b: 0.41960785, a: 1}
-  - name: Settings
-    spriteOff: {fileID: 0}
-    spriteOn: {fileID: 0}
-    colorOff: {r: 0.5801887, g: 0.5801887, b: 0.5801887, a: 1}
-    colorOn: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
   - name: Back
-    spriteOff: {fileID: 0}
-    spriteOn: {fileID: 0}
-    colorOff: {r: 0.9103774, g: 0.27053666, b: 0.85023457, a: 1}
-    colorOn: {r: 0.7075472, g: 0.46057317, b: 0.68739, a: 1}
-  - name: Help
-    spriteOff: {fileID: 0}
-    spriteOn: {fileID: 0}
-    colorOff: {r: 0.27058822, g: 0.9098039, b: 0.9068236, a: 1}
-    colorOn: {r: 0.45882353, g: 0.7058824, b: 0.7058824, a: 1}
-  - name: Delete
-    spriteOff: {fileID: 0}
-    spriteOn: {fileID: 0}
-    colorOff: {r: 0.27058822, g: 0.9098039, b: 0.9068236, a: 1}
-    colorOn: {r: 0.45882353, g: 0.7058824, b: 0.7058824, a: 1}
+    bgOn: GoBackButtonBG
+    bgOff: 
+    bgHighlightAddition: GoBackButtonBGDim
+    bgPressedAddition: 
+    mgOn: BackIcon
+    mgOff: 
+    mgHighlightAddition: BackIconDim
+    mgPressedAddition: 
+    fgOn: DefaultIconFG
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: ExitGameIcon
+    bgOn: 
+    bgOff: 
+    bgHighlightAddition: 
+    bgPressedAddition: 
+    mgOn: ExitGameIcon
+    mgOff: 
+    mgHighlightAddition: ExitGameIconHighlighted
+    mgPressedAddition: 
+    fgOn: 
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: SettingsIcon
+    bgOn: 
+    bgOff: 
+    bgHighlightAddition: 
+    bgPressedAddition: 
+    mgOn: SettingsIcon
+    mgOff: 
+    mgHighlightAddition: SettingsIconHighlighted
+    mgPressedAddition: 
+    fgOn: 
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: MenuTextButton
+    bgOn: 
+    bgOff: 
+    bgHighlightAddition: MenuTextButtonHighlight
+    bgPressedAddition: MenuTextButtonPressed
+    mgOn: 
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: MenuTextButtonFG
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: SettingsTabButton
+    bgOn: 
+    bgOff: 
+    bgHighlightAddition: SettingsTabHighlight
+    bgPressedAddition: SettingsTabPressed
+    mgOn: 
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: DefaultIconFG
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: ArrowButton
+    bgOn: 
+    bgOff: 
+    bgHighlightAddition: ArrowButtonHighLighted
+    bgPressedAddition: 
+    mgOn: ArrowButton
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: ArrowButtonClicked
+    fgOn: 
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  - name: DeleteButton
+    bgOn: 
+    bgOff: 
+    bgHighlightAddition: HighlightIcon40
+    bgPressedAddition: 
+    mgOn: DeleteIcon
+    mgOff: 
+    mgHighlightAddition: 
+    mgPressedAddition: 
+    fgOn: DefaultIconFG
+    fgOff: 
+    fgHighlightAddition: 
+    fgPressedAddition: 
+  spriteLinks:
+  - name: SettingsIcon
+    sprite: {fileID: 1596380650, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: SettingsIconHighlighted
+    sprite: {fileID: -1724745265, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: ExitGameIcon
+    sprite: {fileID: 1027359017, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: ExitGameIconHighlighted
+    sprite: {fileID: 1940082184, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: HighlightIcon40
+    sprite: {fileID: 471217748, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: DefaultIconFG
+    sprite: {fileID: 1952660164, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: BackIcon
+    sprite: {fileID: 1334609889, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: BackIconDim
+    sprite: {fileID: -406650387, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: GoBackButtonBG
+    sprite: {fileID: -834533165, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: GoBackButtonBGDim
+    sprite: {fileID: -368902632, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: MainIconOverlayBG
+    sprite: {fileID: 772369963, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: BG
+    sprite: {fileID: 1219010, guid: f65ef3aea39ec9543b8c76ea43035b7f, type: 3}
+  - name: logo
+    sprite: {fileID: 72859801, guid: b5f9f776fe410244f9534fc7204f5dbd, type: 3}
+  - name: Scheme_control
+    sprite: {fileID: -583306265, guid: 46ec52252af1b8045ae7f062d7bb8eaf, type: 3}
+  - name: OverlayWindowBG
+    sprite: {fileID: 769577695, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: SaveSettingsOverlayIcon
+    sprite: {fileID: 1260820737, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: HeaderBG
+    sprite: {fileID: 1034603082, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: MenuTextButtonFG
+    sprite: {fileID: 737606116, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: MenuTextButtonHighlight
+    sprite: {fileID: -1234750612, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: MenuTextButtonPressed
+    sprite: {fileID: 1652799172, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: SettingsTabHighlight
+    sprite: {fileID: 387610126, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: SettingsTabPressed
+    sprite: {fileID: 1535338179, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: ArrowButton
+    sprite: {fileID: -844436228, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: ArrowButtonHighLighted
+    sprite: {fileID: -1160879311, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: ArrowButtonClicked
+    sprite: {fileID: 760408173, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: Scheme_control_0
+    sprite: {fileID: -583306265, guid: 46ec52252af1b8045ae7f062d7bb8eaf, type: 3}
+  - name: Scheme_control_1
+    sprite: {fileID: -583306265, guid: 46ec52252af1b8045ae7f062d7bb8eaf, type: 3}
+  - name: PauseOverlayIcon
+    sprite: {fileID: -1565439613, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: DeleteIcon
+    sprite: {fileID: -270673593, guid: 92d6f723c771370438471db72335612b, type: 3}

@@ -76,7 +76,7 @@ public class UILayersController : MonoBehaviour
         }
         if (overlayStack.Count == 0)
         {
-            Debug.LogWarning("Sth went wrong, no layers in stack, setting game ui");
+            // Debug.LogWarning("Sth went wrong, no layers in stack, setting game ui");
             overlayStack.Push(UILayer.GameUI);
         }
         int avBgInd = 0;

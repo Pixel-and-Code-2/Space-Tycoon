@@ -72,12 +72,13 @@ providers = {
 objectSelectors = {
 }
 recentSearches = [
+	"h: t:Image"
 	"navigation stat"
 ]
 searchItemFavorites = [
 ]
 savedSearchesSortOrder = 0
-showSavedSearchPanel = false
+showSavedSearchPanel = true
 hideTabs = false
 expandedQueries = [
 ]
