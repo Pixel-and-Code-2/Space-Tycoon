@@ -86,6 +86,7 @@ public class SliderController : MonoBehaviour
         {
             fillImage.color = HandleInittingGlobalVars.globalSettingsAssets.GetColorLink(sliderClassColor.colorFront).color;
             backgroundImage.color = HandleInittingGlobalVars.globalSettingsAssets.GetColorLink(sliderClassColor.colorBack).color;
+            Debug.Log("Setting slider class to " + fillImage.color + " and " + backgroundImage.color);
         }
         else
         {

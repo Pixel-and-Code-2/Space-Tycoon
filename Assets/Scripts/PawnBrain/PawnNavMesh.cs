@@ -214,7 +214,7 @@ public class PawnNavMesh : MonoBehaviour
     }
     protected virtual void Update()
     {
-        if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI) return;
+        if (UILayersController.Instance.overlayStack.Count == 0 || UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI) return;
         if (isMoving)
         {
             if (!navMeshAgent.pathPending)

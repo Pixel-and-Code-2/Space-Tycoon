@@ -41,6 +41,9 @@ public class GameUI : IUILayer
     [SerializeField]
     private TextMeshProUGUI selectedPlayerHealingNumber;
     private IControlableSelectable selectedPlayer = null;
+    [Header("Background settings")]
+    [SerializeField]
+    private GameObject battleBackgroundObject;
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -64,6 +67,19 @@ public class GameUI : IUILayer
     {
         if (togglePause != null && togglePause.action != null)
             togglePause.action.Enable();
+        string key = HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY;
+        if (HandleInittingGlobalVars.globalParameters.parametersDict.TryGetValue(key, out float value))
+        {
+            if (value > 0.5f)
+            {
+                battleBackgroundObject.SetActive(true);
+            }
+            else
+            {
+                battleBackgroundObject.SetActive(false);
+            }
+        }
+
     }
     void OnEnable()
     {
@@ -217,7 +233,7 @@ public class GameUI : IUILayer
                 if (playerUIGameobjects[i].playerIcon.IsButtonOn)
                 {
                     playerUIGameobjects[i].playerIcon.TurnOffButton();
-                    Debug.Log("turning off button for " + playerGroups[i].playerName);
+                    // Debug.Log("turning off button for " + playerGroups[i].playerName);
                 }
             }
             else
@@ -225,7 +241,7 @@ public class GameUI : IUILayer
                 if (!playerUIGameobjects[i].playerIcon.IsButtonOn)
                 {
                     playerUIGameobjects[i].playerIcon.TurnOnButton();
-                    Debug.Log("turning on button for " + playerGroups[i].playerName);
+                    // Debug.Log("turning on button for " + playerGroups[i].playerName);
                 }
             }
         }

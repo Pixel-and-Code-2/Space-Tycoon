@@ -243,8 +243,8 @@ public class ClickableItem : ISelectable
             progress += boost;
             if (Math.Abs(boost) <= 0.001f && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
             {
-                Debug.LogWarning("BoostProgressBar: boost is too small, boosting more");
-                LogBoostProgressFormulaDiagnostics(boost);
+                // Debug.LogWarning("BoostProgressBar: boost is too small, boosting more");
+                // LogBoostProgressFormulaDiagnostics(boost);
                 progress += 5f;
             }
             StartCoroutine(BoostProgressBarInTime(1f));

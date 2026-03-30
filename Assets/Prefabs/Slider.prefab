@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.10239409, g: 0.2783019, b: 0.11495893, a: 0.8745098}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.9811321, b: 0.08892006, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -401,28 +401,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab9e6e41a5ea09145be883fd4246e3c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  fillImage: {fileID: 4453650326190037805}
-  backgroundImage: {fileID: 6626633606139756089}
-  showText: 1
-  textValue: {fileID: 0}
-  textValueColorRaised: {r: 0, g: 1, b: 0, a: 1}
-  textValueColorLowered: {r: 1, g: 0, b: 0, a: 1}
-  textShowTime: 1
+  fillImage: {fileID: 6626633606139756089}
+  backgroundImage: {fileID: 4453650326190037805}
   minValue: 0
   maxValue: 13
-  sliderClassColors:
-  - selectableType: 0
-    colorFront: {r: 0, g: 0.9811321, b: 0.08892006, a: 1}
-    colorBack: {r: 0.10239409, g: 0.2783019, b: 0.11495893, a: 0.8745098}
-  - selectableType: 1
-    colorFront: {r: 1, g: 0, b: 0, a: 1}
-    colorBack: {r: 0.2784314, g: 0.11372549, b: 0.11495893, a: 0.8745098}
-  - selectableType: 3
-    colorFront: {r: 0.20754719, g: 0.20167321, b: 0.20167321, a: 0.39215687}
-    colorBack: {r: 0.16509432, g: 0.16509432, b: 0.16509432, a: 0.39215687}
-  - selectableType: 2
-    colorFront: {r: 1, g: 1, b: 0, a: 1}
-    colorBack: {r: 0.2784314, g: 0.2784314, b: 0.11372549, a: 0.8745098}
+  rectTransform: {fileID: 6471202527105076433}
+  fillColor: {r: 1, g: 1, b: 1, a: 1}
+  backgroundColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &8758375538643436596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,5 +421,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   sliderController: {fileID: 5468932810931016451}
-  rectTransform: {fileID: 6471202527105076433}
   pawn: {fileID: 0}

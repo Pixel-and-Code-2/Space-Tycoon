@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnBrain
   animatorBrain: {fileID: 4717283122709828959}
-  hitForce: 100
+  hitForce: 15
   defaultMaterial: {fileID: 2100000, guid: 6393d2bdfb8420844bc7dc6f6fbcc4d5, type: 2}
   selectedMaterial: {fileID: 2100000, guid: dc487a0932c0f974a926f58de0f97bb0, type: 2}
   skinnedMeshRenderer: {fileID: 976997793479485022}
@@ -272,7 +272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PawnDataController
   initialPawnData: {fileID: 0}
   maxSampleDistance: 5
-  obstaclePushForce: 10
+  obstaclePushForce: 2
   verticalPushOverride: 1.19
   selectableType: 0
 --- !u!114 &1442275150546050204

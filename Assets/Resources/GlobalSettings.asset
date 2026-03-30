@@ -392,6 +392,25 @@ MonoBehaviour:
     colorHighlight: 
     colorPressed: 
     isTextOnly: 1
+  - name: InGameButton
+    highlightAddition: HeartsHighlight
+    bgOn: HeaderBG
+    bgOff: 
+    bgHighlight: 
+    bgPressed: 
+    mgOn: 
+    mgOff: 
+    mgHighlight: 
+    mgPressed: 
+    fgOn: 
+    fgOff: 
+    fgHighlight: 
+    fgPressed: 
+    colorOn: UITextEyeCatchingColor
+    colorOff: 
+    colorHighlight: 
+    colorPressed: 
+    isTextOnly: 1
   spriteLinks:
   - name: SettingsIcon
     sprite: {fileID: 1596380650, guid: 92d6f723c771370438471db72335612b, type: 3}
@@ -519,6 +538,14 @@ MonoBehaviour:
     sprite: {fileID: -1191087066, guid: 913292f59772f1b4f815634f9fa28e7a, type: 3}
   - name: TasksBG
     sprite: {fileID: 1001271810, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: WinZone
+    sprite: {fileID: -616220362, guid: b56a1d1a75e9f03489c70496f8299894, type: 3}
+  - name: WarZone
+    sprite: {fileID: 1555578152, guid: e70b2425d2a43ad498a9340bcec2cd15, type: 3}
+  - name: FailedTitle
+    sprite: {fileID: -95328162, guid: 845f6146fa412da4f8b3253cd63cf2a0, type: 3}
+  - name: WinTitle
+    sprite: {fileID: 481301955, guid: 74fa58adae6a6cf41b1de6dcc9ce13a0, type: 3}
   colorLinks:
   - name: EnemyDefaultColor
     color: {r: 1, g: 0, b: 0, a: 1}
@@ -528,10 +555,10 @@ MonoBehaviour:
     color: {r: 0, g: 1, b: 0, a: 1}
   - name: PlayerDimColor
     color: {r: 0, g: 0.627451, b: 0, a: 1}
-  - name: DeadPawnDefaultColor
-    color: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 0.39215687}
   - name: DeadPawnDimColor
-    color: {r: 0.18396229, g: 0.18135905, b: 0.18135905, a: 1}
+    color: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 0.39215687}
+  - name: DeadPawnDefaultColor
+    color: {r: 0.18396229, g: 0.18135905, b: 0.18135905, a: 0.39215687}
   - name: NeutralDefaultColor
     color: {r: 1, g: 1, b: 0, a: 1}
   - name: NeutralDimColor
@@ -548,3 +575,11 @@ MonoBehaviour:
     color: {r: 1, g: 1, b: 1, a: 1}
   - name: UITextAttentionColor
     color: {r: 1, g: 0.57254905, b: 0.57254905, a: 1}
+  - name: UITextInProgress
+    color: {r: 1, g: 0.94059354, b: 0.57254905, a: 1}
+  - name: UIUnavailable
+    color: {r: 0.514151, g: 0.514151, b: 0.514151, a: 1}
+  - name: GameAttentionColor
+    color: {r: 1, g: 0, b: 0, a: 1}
+  - name: GameCongratulationsColor
+    color: {r: 0, g: 1, b: 0, a: 1}

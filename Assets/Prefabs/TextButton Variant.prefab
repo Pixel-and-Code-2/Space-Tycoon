@@ -94,7 +94,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759118814704011184, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
       propertyPath: styleName
-      value: MenuTextButton
+      value: InGameButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4047962011408395169, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.57254905
+      objectReference: {fileID: 0}
+    - target: {fileID: 4047962011408395169, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.57254905
+      objectReference: {fileID: 0}
+    - target: {fileID: 4047962011408395169, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4047962011408395169, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4287795967
       objectReference: {fileID: 0}
     - target: {fileID: 4279698696011282336, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
       propertyPath: m_AnchorMax.y
@@ -124,9 +140,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7767255576928161114, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
+    - target: {fileID: 7025117106169822500, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7767255576928161114, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1034603082, guid: 92d6f723c771370438471db72335612b, type: 3}
+    - target: {fileID: 7767255576928161114, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8244566492458241371, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
       propertyPath: m_Enabled
