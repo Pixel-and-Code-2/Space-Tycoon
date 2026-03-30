@@ -134,6 +134,7 @@ public class GameUI : IUILayer
         for (int i = subTaskIndex; i < sideTaskTextStyleChangers.Count; i++)
         {
             sideTaskTextStyleChangers[i].ClearText();
+            sideTaskTextStyleChangers[i].gameObject.transform.parent.gameObject.SetActive(false);
         }
     }
     private void UpdateButton(TaskTextStyleChanger button, ClickableItemsController.TaskItem item)

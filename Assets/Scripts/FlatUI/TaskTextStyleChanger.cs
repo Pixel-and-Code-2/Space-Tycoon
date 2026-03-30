@@ -9,6 +9,13 @@ public class TaskTextStyleChanger : MonoBehaviour
     [SerializeField]
     private bool isMainTask = false;
     public string text { get { return textMeshProUGUI.text; } }
+    [Header("Colors")]
+    [SerializeField]
+    private string defaultColor = "";
+    [SerializeField]
+    private string notAvailableColor = "";
+    [SerializeField]
+    private string inProgressColor = "";
     private void Awake()
     {
         textMeshProUGUI = GetComponent<TextMeshProUGUI>();
@@ -30,15 +37,25 @@ public class TaskTextStyleChanger : MonoBehaviour
                 textMeshProUGUI.fontStyle = isCompleted == 1 ? FontStyles.Strikethrough : FontStyles.Normal;
             }
         }
-        if (isInProgress != -1)
+        if (isInProgress == 0)
         {
-            textMeshProUGUI.color = isInProgress == 0 ? Color.black : Color.yellow;
+            textMeshProUGUI.color = HandleInittingGlobalVars.globalSettingsAssets.GetColorLink(defaultColor).color;
         }
+        else if (isInProgress == 1)
+        {
+            textMeshProUGUI.color = HandleInittingGlobalVars.globalSettingsAssets.GetColorLink(inProgressColor).color;
+        }
+
         if (isMainTask) return;
-        if (isAvailable != -1)
+        if (isAvailable == 0)
         {
-            textMeshProUGUI.color = isAvailable == 0 ? Color.gray : Color.black;
+            textMeshProUGUI.color = HandleInittingGlobalVars.globalSettingsAssets.GetColorLink(notAvailableColor).color;
         }
+        else if (isAvailable == 1)
+        {
+            textMeshProUGUI.color = HandleInittingGlobalVars.globalSettingsAssets.GetColorLink(defaultColor).color;
+        }
+
     }
     void OnValidate()
     {

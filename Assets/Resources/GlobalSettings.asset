@@ -170,7 +170,7 @@ MonoBehaviour:
     bgOff: 
     bgHighlight: 
     bgPressed: 
-    mgOn: PauseOverlayIcon
+    mgOn: ShootOnMoveIcon
     mgOff: 
     mgHighlight: 
     mgPressed: 
@@ -178,11 +178,11 @@ MonoBehaviour:
     fgOff: MainIconOverlayBG
     fgHighlight: 
     fgPressed: 
-    colorOn: 
+    colorOn: UIMainColor
     colorOff: 
     colorHighlight: 
     colorPressed: 
-    isTextOnly: 1
+    isTextOnly: 0
   - name: EndTurn
     highlightAddition: 
     bgOn: IconBG
@@ -503,6 +503,22 @@ MonoBehaviour:
     sprite: {fileID: 1898650077, guid: 92d6f723c771370438471db72335612b, type: 3}
   - name: HeartsBG
     sprite: {fileID: -99854649, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: TaskIconHighlight
+    sprite: {fileID: 1654113760, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: TaskIcon
+    sprite: {fileID: 1679080349, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: TaskIconDim
+    sprite: {fileID: -1005513817, guid: 92d6f723c771370438471db72335612b, type: 3}
+  - name: ShootOnMoveIcon
+    sprite: {fileID: 1018672352, guid: 913292f59772f1b4f815634f9fa28e7a, type: 3}
+  - name: SideTaskIcon
+    sprite: {fileID: 655510415, guid: 913292f59772f1b4f815634f9fa28e7a, type: 3}
+  - name: MainTaskIcon
+    sprite: {fileID: -349086548, guid: 913292f59772f1b4f815634f9fa28e7a, type: 3}
+  - name: WindowTaskIcon
+    sprite: {fileID: -1191087066, guid: 913292f59772f1b4f815634f9fa28e7a, type: 3}
+  - name: TasksBG
+    sprite: {fileID: 1001271810, guid: 92d6f723c771370438471db72335612b, type: 3}
   colorLinks:
   - name: EnemyDefaultColor
     color: {r: 1, g: 0, b: 0, a: 1}
@@ -524,6 +540,10 @@ MonoBehaviour:
     color: {r: 0.29411766, g: 1, b: 0.42352942, a: 1}
   - name: UISecondaryColor
     color: {r: 0.1764706, g: 0.61960787, b: 0, a: 1}
+  - name: UITernaryColor
+    color: {r: 0.76862746, g: 1, b: 0.7529412, a: 1}
+  - name: UITextEyeCatchingColor
+    color: {r: 0.8156863, g: 1, b: 0.99215686, a: 1}
   - name: UITextPressedColor
     color: {r: 1, g: 1, b: 1, a: 1}
   - name: UITextAttentionColor

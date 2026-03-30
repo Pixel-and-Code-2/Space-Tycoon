@@ -1328,6 +1328,94 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: TaskIcon
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 726
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6efb3236ab12ec947a1ede0aa5339f4d
+      internalID: 1679080349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TaskIconHighlight
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 726
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3a000ffb84024b40bda30565c8e99d0
+      internalID: 1654113760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TaskIconDim
+      rect:
+        serializedVersion: 2
+        x: 441
+        y: 728
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f18cbcb3ead540c41b623441f27d9114
+      internalID: -1005513817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TasksBG
+      rect:
+        serializedVersion: 2
+        x: 631
+        y: 358
+        width: 303
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 58}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db9efa19658033e44876b66f9d36ca9b
+      internalID: 1001271810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -1396,6 +1484,10 @@ TextureImporter:
       SettingsIconOn: -894679824
       SettingsTabHighlight: 387610126
       SettingsTabPressed: 1535338179
+      TaskIcon: 1679080349
+      TaskIconDim: -1005513817
+      TaskIconHighlight: 1654113760
+      TasksBG: 1001271810
       WalkAvailableIcon: 1272724622
       WeaponBar: -768860906
       WeaponMask: 1602112384
