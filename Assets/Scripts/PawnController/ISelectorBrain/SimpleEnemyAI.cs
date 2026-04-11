@@ -302,7 +302,7 @@ public class SimpleEnemyAI : ISelectorBrain
         detailedScenario.Clear();
         foreach (var element in scenario)
         {
-            if (element.controlledPawn.GetSelectableType() != SelectableType.Enemy ||
+            if (element.controlledPawn == null || element.controlledPawn.GetSelectableType() != SelectableType.Enemy ||
                 !element.controlledPawn.IsInActiveTriggerZone()) continue;
             AddDetailedScenarioElement(DetailedScenarioElementType.SelectPawn, element);
             switch (element.capability)

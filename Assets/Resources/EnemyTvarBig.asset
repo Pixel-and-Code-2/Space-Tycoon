@@ -10,27 +10,47 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41cf6bcf5f35067458db9c0a1798ba1e, type: 3}
-  m_Name: PlayerZAYA
+  m_Name: EnemyTvarBig
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
-  - name: STR
-    value: 8
+  - name: IQ
+    value: 1
+  - name: HT
+    value: 5
+  - name: SHT
+    value: 0
   - name: BRW
-    value: 4
+    value: 3
   - name: THR
+    value: 0
+  - name: ENG
     value: 0
   - name: SCI
     value: 0
   - name: DDGB
-    value: 0
+    value: -3
   - name: SPDB
-    value: 0
-  - name: SHT
-    value: 0
-  calculatedParameters: []
+    value: -2
+  calculatedParameters:
+  - name: STR
+    formula:
+      formula: (float)Math.Round(g_Random * 5 + 9)
+      instruction: 
+      dataAssets:
+      - {fileID: 11400000}
+      names:
+      - Parameters
+  - name: DX
+    formula:
+      formula: (float)Math.Round(g_Random + g_e*4-2)
+      instruction: 
+      dataAssets:
+      - {fileID: 11400000}
+      names:
+      - Parameters
   mustHaveParameters:
-  - {fileID: 11400000, guid: 257eed4012035bf42b6b590b84ce843c, type: 2}
-  - {fileID: 11400000, guid: 262576272fac8bb469614d9ea2553731, type: 2}
+  - {fileID: 11400000, guid: 7d19a2bbc433f5f46b883786d18f1fdd, type: 2}
+  - {fileID: 11400000, guid: 3b50b5aaf3770924db86c96c6418b0d7, type: 2}
   - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   isDirty: 0
   parametersDictStateCache: 'MINDMG = 0,00 (0,00)
@@ -38,7 +58,7 @@ MonoBehaviour:
     MAXDMG = 0,00 (0,00)
 
     MDMG
-    = 3,00 (3,00)
+    = 1,00 (1,00)
 
     ROF = 1,00 (1,00)
 
@@ -63,57 +83,56 @@ MonoBehaviour:
     DMM
     = 0,00 (0,00)
 
-    DR = 21,00 (21,00)
+    DR = 9,00 (9,00)
 
-    MDR = 10,00 (10,00)
+    MDR = 6,00 (6,00)
 
-    ARMMASS
-    = 9,00 (9,00)
+    ARMMASS =
+    14,00 (14,00)
 
-    STR = 8,00 (8,00)
+    STR = 12,00 (12,00)
 
     DX = 5,00 (5,00)
 
-    IQ = 5,00
-    (5,00)
+    IQ = 1,00
+    (1,00)
 
     HT = 5,00 (5,00)
 
     SHT = 0,00 (0,00)
 
-    BRW = 4,00 (4,00)
+    BRW = 3,00 (3,00)
 
     THR
     = 0,00 (0,00)
 
-    ENG = 5,00 (5,00)
+    ENG = 0,00 (0,00)
 
     SCI = 0,00 (0,00)
 
-    DDGB = 0,00
-    (0,00)
+    DDGB = -3,00
+    (-3,00)
 
-    SPDB = 0,00 (0,00)
+    SPDB = -2,00 (-2,00)
 
     DMG = 5,00 (5,00)
 
-    HP = 13,00 (13,00)
+    HP = 10,00 (10,00)
 
     PRC
-    = 10,00 (10,00)
+    = 6,00 (6,00)
 
     FP = 10,00 (10,00)
 
-    SPD = 5,00 (5,00)
+    SPD = 3,00 (3,00)
 
-    DDG =
-    6,00 (6,00)
+    DDG = 1,00
+    (1,00)
 
-    BCW = 10,00 (10,00)
+    BCW = 6,00 (6,00)
 
-    BDMG = 10,00 (10,00)
+    BDMG = 6,00 (6,00)
 
-    Random
-    = 0,09 (0,09)
+    Random = 0,64 (0,64)
 
 '
