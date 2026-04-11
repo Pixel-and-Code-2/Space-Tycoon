@@ -31,4 +31,13 @@ public class SecondDoorOpen : IScriptForClickable
         base.OnComplete();
         navMeshLink.enabled = true;
     }
+
+    void OnDestroy()
+    {
+        if (SaveHub.Instance != null)
+        {
+            SaveHub.Instance.OnLoad -= OnLoad;
+            SaveHub.Instance.OnSave -= OnSave;
+        }
+    }
 }

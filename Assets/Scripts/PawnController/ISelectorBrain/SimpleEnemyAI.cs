@@ -91,6 +91,11 @@ public class SimpleEnemyAI : ISelectorBrain
     void OnDestroy()
     {
         TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
+        if (SaveHub.Instance != null)
+        {
+            SaveHub.Instance.OnLoad -= OnLoadData;
+            SaveHub.Instance.OnSave -= OnSaveData;
+        }
     }
     private float timeStack = 0.0f;
     void Update()

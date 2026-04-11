@@ -226,7 +226,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         }
     }
 
-    private void ResetActionPoints()
+    public void ResetActionPoints()
     {
         SetParameterValue(AVAILABLE_DISTANCE_KEY, GetParameterValue(INITIAL_AVAILABLE_DISTANCE_KEY));
 
@@ -279,4 +279,12 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         SetParameterValue(MOVES_TO_SKIP_KEY, 0f);
     }
 
+    void OnDestroy()
+    {
+        if (SaveHub.Instance != null)
+        {
+            SaveHub.Instance.OnLoad -= OnLoadData;
+            SaveHub.Instance.OnSave -= OnSaveData;
+        }
+    }
 }

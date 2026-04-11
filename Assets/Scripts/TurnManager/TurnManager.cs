@@ -590,4 +590,13 @@ public class TurnManager : MonoBehaviour
     {
         navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData);
     }
+
+    void OnDestroy()
+    {
+        if (SaveHub.Instance != null)
+        {
+            SaveHub.Instance.OnLoad -= OnLoadData;
+            SaveHub.Instance.OnSave -= OnSaveData;
+        }
+    }
 }

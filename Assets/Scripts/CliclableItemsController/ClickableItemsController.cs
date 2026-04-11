@@ -105,6 +105,11 @@ public class ClickableItemsController : MonoBehaviour
         }
         if (UILayersController.Instance != null)
             UILayersController.Instance.OnGameResumed -= OnGameResumed;
+        if (SaveHub.Instance != null)
+        {
+            SaveHub.Instance.OnLoad -= OnLoadData;
+            SaveHub.Instance.OnSave -= OnSaveData;
+        }
     }
     void Update()
     {

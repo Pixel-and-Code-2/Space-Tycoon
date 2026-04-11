@@ -135,4 +135,13 @@ public class HandleInittingGlobalVars : MonoBehaviour
             onParamsUpdated?.Invoke();
         }
     }
+
+    void OnDestroy()
+    {
+        if (SaveHub.Instance != null)
+        {
+            SaveHub.Instance.OnLoad -= OnLoadData;
+            SaveHub.Instance.OnSave -= OnSaveData;
+        }
+    }
 }

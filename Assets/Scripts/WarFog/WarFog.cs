@@ -136,4 +136,13 @@ public class WarFog : MonoBehaviour
             OnWarFogEnd?.Invoke();
         }
     }
+
+    void OnDestroy()
+    {
+        if (SaveHub.Instance != null)
+        {
+            SaveHub.Instance.OnLoad -= OnLoad;
+            SaveHub.Instance.OnSave -= OnSave;
+        }
+    }
 }

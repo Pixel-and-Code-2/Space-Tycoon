@@ -90,10 +90,17 @@ public class PawnBrain : IControlableSelectable
     }
     void OnDestroy()
     {
-        TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
-        TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
-        TurnManager.Instance.OnTriggerZoneEnter -= OnTriggerZoneEnter;
-        TurnManager.Instance.OnTriggerZoneExit -= OnTriggerZoneExit;
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
+            TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
+            TurnManager.Instance.OnTriggerZoneEnter -= OnTriggerZoneEnter;
+            TurnManager.Instance.OnTriggerZoneExit -= OnTriggerZoneExit;
+        }
+        if (SaveHub.Instance != null)
+        {
+            SaveHub.Instance.OnLoad -= OnLoadData;
+        }
         if (warFogEventsSubscribed)
         {
             WarFog.OnWarFogEnd -= OnWarFogEnd;
@@ -164,6 +171,10 @@ public class PawnBrain : IControlableSelectable
     private void OnTriggerZoneEnter()
     {
         pawnNavMesh.ResetMovement();
+        if (dataController.selectableType == SelectableType.Player)
+        {
+            dataController.ResetActionPoints();
+        }
     }
     private void OnTriggerZoneExit()
     {

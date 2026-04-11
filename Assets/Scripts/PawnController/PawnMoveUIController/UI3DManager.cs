@@ -157,8 +157,14 @@ public class UI3DManager : MonoBehaviour
 
     private void UpdateSliderPositions()
     {
+        List<GameObject> toRemove = new List<GameObject>();
         foreach (GameObject pawnObject in pawnsInScene.Keys)
         {
+            if (pawnObject == null)
+            {
+                toRemove.Add(pawnObject);
+                continue;
+            }
             SliderToPawnConnector controller = pawnsInScene[pawnObject];
             RectTransform uiElementRect = controller.rectTransform;
             Vector3 worldPosition = pawnObject.transform.position + uiOffset;
@@ -173,12 +179,26 @@ public class UI3DManager : MonoBehaviour
                 uiElementRect.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
             }
         }
+        foreach (GameObject pawnObject in toRemove)
+        {
+            if (pawnsInScene[pawnObject] != null)
+            {
+                Destroy(pawnsInScene[pawnObject].gameObject);
+            }
+            pawnsInScene.Remove(pawnObject);
+        }
     }
 
     private void UpdateActionBoxPositions()
     {
+        List<ISelectable> toRemove = new List<ISelectable>();
         foreach (ISelectable selectable in selectablesInScene.Keys)
         {
+            if (selectable == null || (selectable is UnityEngine.Object obj && obj == null) || selectable.GetTransform() == null)
+            {
+                toRemove.Add(selectable);
+                continue;
+            }
             // if (!selectablesInScene[selectable].gameObject.activeSelf)
             // {
             //     selectablesInScene[selectable].gameObject.SetActive(true);
@@ -197,12 +217,26 @@ public class UI3DManager : MonoBehaviour
                 uiElementRect.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
             }
         }
+        foreach (ISelectable selectable in toRemove)
+        {
+            if (selectablesInScene[selectable] != null)
+            {
+                Destroy(selectablesInScene[selectable].gameObject);
+            }
+            selectablesInScene.Remove(selectable);
+        }
     }
 
     private void UpdateTransformSlidersPositions()
     {
+        List<Transform> toRemove = new List<Transform>();
         foreach (Transform transform in slidersOnTransform.Keys)
         {
+            if (transform == null)
+            {
+                toRemove.Add(transform);
+                continue;
+            }
             SliderController controller = slidersOnTransform[transform];
             RectTransform uiElementRect = controller.rectTransform;
             Vector3 worldPosition = transform.position + uiOffset;
@@ -216,6 +250,14 @@ public class UI3DManager : MonoBehaviour
             {
                 uiElementRect.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
             }
+        }
+        foreach (Transform transform in toRemove)
+        {
+            if (slidersOnTransform[transform] != null)
+            {
+                Destroy(slidersOnTransform[transform].gameObject);
+            }
+            slidersOnTransform.Remove(transform);
         }
     }
 

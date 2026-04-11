@@ -310,4 +310,13 @@ public class PawnNavMesh : MonoBehaviour
         cachedPointsOutOfRange = null;
         cachedTargetPositionValid = false;
     }
+
+    void OnDestroy()
+    {
+        if (SaveHub.Instance != null)
+        {
+            SaveHub.Instance.OnLoad -= OnLoadData;
+            SaveHub.Instance.OnSave -= OnSaveData;
+        }
+    }
 }

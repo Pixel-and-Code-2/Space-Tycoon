@@ -73,6 +73,11 @@ public class ClickableItem : ISelectable
             TurnManager.Instance.OnPlayerTurnEnd -= OnPlayerTurnEnd;
             TurnManager.Instance.OnTriggerZoneExit -= OnTriggerZoneExit;
         }
+        if (SaveHub.Instance != null)
+        {
+            SaveHub.Instance.OnLoad -= OnLoadData;
+            SaveHub.Instance.OnSave -= OnSaveData;
+        }
     }
 
     private void OnSaveData(Action<SaveRecord[], string> addSaveData)
