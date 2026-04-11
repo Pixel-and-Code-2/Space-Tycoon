@@ -10,13 +10,38 @@ public class TriggerData
 {
     public GameObject triggerObject;
     public List<PawnBrain> enemies = new List<PawnBrain>();
-    public bool IsEnemiesDestroyed => enemies.Find(enemy => enemy.GetSelectableType() == SelectableType.Enemy) == null;
+    public virtual bool IsEnemiesDestroyed => enemies.Find(enemy => enemy.GetSelectableType() == SelectableType.Enemy) == null;
     [SerializeField, HideInInspector]
     public bool isActive = false;
 }
 
+[System.Serializable]
+public class DelayedTriggerData : TriggerData
+{
+    [System.Serializable]
+    public class SpawnableInstance
+    {
+        public GameObject enemy;
+        public Transform where;
+    }
+    public List<SpawnableInstance> enemySpawnPoints = new List<SpawnableInstance>();
+    [SerializeField, HideInInspector]
+    public bool spawned = false;
+}
+
 public class TurnManager : MonoBehaviour
 {
+    [System.Serializable]
+    private class DynamicEnemyRegistryEntry
+    {
+        public int registryIndex;
+        public int delayedTriggerIndex;
+        public int spawnPointIndex;
+        public Vector3 position;
+        public Quaternion rotation;
+        public string prefabName;
+    }
+
     public static TurnManager Instance { get; private set; }
     public event Action OnPlayerTurnStart;
     public event Action OnPlayerTurnEnd;
@@ -34,6 +59,8 @@ public class TurnManager : MonoBehaviour
 
     [SerializeField]
     private List<TriggerData> listOfTriggers = new List<TriggerData>();
+    [SerializeField]
+    private List<DelayedTriggerData> listOfDelayedTriggers = new List<DelayedTriggerData>();
     public bool IsPlayerTurn { get; private set; } = true;
     [SerializeField]
     private NavMeshSurface navMeshSurface;
@@ -43,6 +70,10 @@ public class TurnManager : MonoBehaviour
     [SerializeField]
     private IconButtonStyleFiller endTurnButton2;
     private const string UNIQUE_ID = "TurnManager";
+    private const string DYNAMIC_ENEMY_NAME_PREFIX = "EnemySpawned";
+    private readonly List<DynamicEnemyRegistryEntry> dynamicEnemyRegistry = new List<DynamicEnemyRegistryEntry>();
+    private readonly List<GameObject> spawnedDynamicEnemies = new List<GameObject>();
+    private int nextDynamicEnemyIndex = 0;
 
     private void Awake()
     {
@@ -71,6 +102,12 @@ public class TurnManager : MonoBehaviour
         {
             listOfTriggers[i].isActive = data.GetData("IsTriggerActive_" + i, UNIQUE_ID, listOfTriggers[i].isActive);
         }
+        for (int i = 0; i < listOfDelayedTriggers.Count; i++)
+        {
+            listOfDelayedTriggers[i].isActive = data.GetData("IsDelayedTriggerActive_" + i, UNIQUE_ID, listOfDelayedTriggers[i].isActive);
+            listOfDelayedTriggers[i].spawned = data.GetData("IsDelayedTriggerSpawned_" + i, UNIQUE_ID, listOfDelayedTriggers[i].spawned);
+        }
+        RebuildDynamicEnemiesFromSave(data);
         if (IsPlayerTurn)
         {
             UpdateNavMesh();
@@ -84,30 +121,96 @@ public class TurnManager : MonoBehaviour
     }
     private void OnSaveData(Action<SaveRecord[], string> addSaveData)
     {
-        SaveRecord[] records = new SaveRecord[1 + listOfTriggers.Count];
-        records[0] = new()
+        SyncDynamicRegistryTransforms();
+        List<SaveRecord> records = new List<SaveRecord>();
+        records.Add(new SaveRecord
         {
             recordName = "IsPlayerTurn",
             recordType = SaveRecordType.boolean,
             boolValue = IsPlayerTurn
-        };
+        });
         for (int i = 0; i < listOfTriggers.Count; i++)
         {
-            records[i + 1] = new()
+            records.Add(new SaveRecord
             {
                 recordName = "IsTriggerActive_" + i,
                 recordType = SaveRecordType.boolean,
                 boolValue = listOfTriggers[i].isActive
-            };
+            });
         }
-        addSaveData(records, UNIQUE_ID);
+        for (int i = 0; i < listOfDelayedTriggers.Count; i++)
+        {
+            records.Add(new SaveRecord
+            {
+                recordName = "IsDelayedTriggerActive_" + i,
+                recordType = SaveRecordType.boolean,
+                boolValue = listOfDelayedTriggers[i].isActive
+            });
+            records.Add(new SaveRecord
+            {
+                recordName = "IsDelayedTriggerSpawned_" + i,
+                recordType = SaveRecordType.boolean,
+                boolValue = listOfDelayedTriggers[i].spawned
+            });
+        }
+        records.Add(new SaveRecord
+        {
+            recordName = "DynamicEnemyCount",
+            recordType = SaveRecordType.integerNumber,
+            intValue = dynamicEnemyRegistry.Count
+        });
+        for (int i = 0; i < dynamicEnemyRegistry.Count; i++)
+        {
+            DynamicEnemyRegistryEntry entry = dynamicEnemyRegistry[i];
+            records.Add(new SaveRecord
+            {
+                recordName = "DynamicEnemyRegistryIndex_" + i,
+                recordType = SaveRecordType.integerNumber,
+                intValue = entry.registryIndex
+            });
+            records.Add(new SaveRecord
+            {
+                recordName = "DynamicEnemyDelayedTriggerIndex_" + i,
+                recordType = SaveRecordType.integerNumber,
+                intValue = entry.delayedTriggerIndex
+            });
+            records.Add(new SaveRecord
+            {
+                recordName = "DynamicEnemySpawnPointIndex_" + i,
+                recordType = SaveRecordType.integerNumber,
+                intValue = entry.spawnPointIndex
+            });
+            records.Add(new SaveRecord
+            {
+                recordName = "DynamicEnemyPos_" + i,
+                recordType = SaveRecordType.vector,
+                vecValue = entry.position
+            });
+            records.Add(new SaveRecord
+            {
+                recordName = "DynamicEnemyRot_" + i,
+                recordType = SaveRecordType.quaternion,
+                quatValue = entry.rotation
+            });
+            records.Add(new SaveRecord
+            {
+                recordName = "DynamicEnemyPrefabName_" + i,
+                recordType = SaveRecordType.stringValue,
+                stringValue = entry.prefabName ?? string.Empty
+            });
+        }
+        addSaveData(records.ToArray(), UNIQUE_ID);
     }
     public void EnterTrigger(GameObject triggerObject)
     {
         TriggerData trigger = listOfTriggers.Find(t => t.triggerObject == triggerObject);
         if (trigger == null)
         {
-            return;
+            trigger = listOfDelayedTriggers.Find(t => t.triggerObject == triggerObject);
+            if (!EnterDelayedTrigger(trigger as DelayedTriggerData))
+            {
+                return;
+            }
         }
         if (trigger.IsEnemiesDestroyed)
         {
@@ -127,6 +230,172 @@ public class TurnManager : MonoBehaviour
         SyncEndTurnButtonsWithMovement();
         StartFirstTurn();
     }
+    public bool EnterDelayedTrigger(DelayedTriggerData trigger)
+    {
+        if (trigger == null)
+        {
+            return false;
+        }
+        if (trigger.spawned)
+        {
+            return false;
+        }
+        int delayedTriggerIndex = listOfDelayedTriggers.IndexOf(trigger);
+        if (delayedTriggerIndex < 0)
+        {
+            return false;
+        }
+        SpawnAllFromDelayedTrigger(delayedTriggerIndex, registerInRegistry: true, loadData: null);
+        trigger.spawned = true;
+        return true;
+    }
+    private void RebuildDynamicEnemiesFromSave(LoadedData data)
+    {
+        ClearDynamicEnemiesRuntime();
+        dynamicEnemyRegistry.Clear();
+        int savedCount = data.GetData("DynamicEnemyCount", UNIQUE_ID, 0);
+        for (int i = 0; i < savedCount; i++)
+        {
+            DynamicEnemyRegistryEntry entry = new DynamicEnemyRegistryEntry
+            {
+                registryIndex = data.GetData("DynamicEnemyRegistryIndex_" + i, UNIQUE_ID, i),
+                delayedTriggerIndex = data.GetData("DynamicEnemyDelayedTriggerIndex_" + i, UNIQUE_ID, -1),
+                spawnPointIndex = data.GetData("DynamicEnemySpawnPointIndex_" + i, UNIQUE_ID, -1),
+                position = data.GetData("DynamicEnemyPos_" + i, UNIQUE_ID, Vector3.zero),
+                rotation = data.GetData("DynamicEnemyRot_" + i, UNIQUE_ID, Quaternion.identity),
+                prefabName = data.GetData("DynamicEnemyPrefabName_" + i, UNIQUE_ID, string.Empty)
+            };
+            dynamicEnemyRegistry.Add(entry);
+        }
+        dynamicEnemyRegistry.Sort((left, right) => left.registryIndex.CompareTo(right.registryIndex));
+        LoadedData loadData = data ?? SaveHub.Instance.CurrentLoadedData;
+        if (dynamicEnemyRegistry.Count > 0)
+        {
+            foreach (DynamicEnemyRegistryEntry entry in dynamicEnemyRegistry)
+            {
+                SpawnFromRegistryEntry(entry, loadData);
+            }
+        }
+        else
+        {
+            SpawnDelayedTriggerFallbackForLegacySaves(loadData);
+        }
+        nextDynamicEnemyIndex = 0;
+        for (int i = 0; i < dynamicEnemyRegistry.Count; i++)
+        {
+            if (dynamicEnemyRegistry[i].registryIndex >= nextDynamicEnemyIndex)
+            {
+                nextDynamicEnemyIndex = dynamicEnemyRegistry[i].registryIndex + 1;
+            }
+        }
+    }
+    private void SpawnDelayedTriggerFallbackForLegacySaves(LoadedData loadData)
+    {
+        for (int i = 0; i < listOfDelayedTriggers.Count; i++)
+        {
+            if (!listOfDelayedTriggers[i].spawned)
+            {
+                continue;
+            }
+            SpawnAllFromDelayedTrigger(i, registerInRegistry: true, loadData: loadData);
+        }
+    }
+    private void SpawnAllFromDelayedTrigger(int delayedTriggerIndex, bool registerInRegistry, LoadedData loadData)
+    {
+        if (delayedTriggerIndex < 0 || delayedTriggerIndex >= listOfDelayedTriggers.Count)
+        {
+            return;
+        }
+        DelayedTriggerData trigger = listOfDelayedTriggers[delayedTriggerIndex];
+        for (int spawnPointIndex = 0; spawnPointIndex < trigger.enemySpawnPoints.Count; spawnPointIndex++)
+        {
+            DelayedTriggerData.SpawnableInstance spawnPoint = trigger.enemySpawnPoints[spawnPointIndex];
+            if (spawnPoint.enemy == null || spawnPoint.where == null)
+            {
+                continue;
+            }
+            DynamicEnemyRegistryEntry entry = new DynamicEnemyRegistryEntry
+            {
+                registryIndex = nextDynamicEnemyIndex++,
+                delayedTriggerIndex = delayedTriggerIndex,
+                spawnPointIndex = spawnPointIndex,
+                position = spawnPoint.where.position,
+                rotation = spawnPoint.where.rotation,
+                prefabName = spawnPoint.enemy.name
+            };
+            if (registerInRegistry)
+            {
+                dynamicEnemyRegistry.Add(entry);
+            }
+            SpawnFromRegistryEntry(entry, loadData);
+        }
+    }
+    private void SpawnFromRegistryEntry(DynamicEnemyRegistryEntry entry, LoadedData loadData)
+    {
+        if (entry.delayedTriggerIndex < 0 || entry.delayedTriggerIndex >= listOfDelayedTriggers.Count)
+        {
+            return;
+        }
+        DelayedTriggerData trigger = listOfDelayedTriggers[entry.delayedTriggerIndex];
+        if (entry.spawnPointIndex < 0 || entry.spawnPointIndex >= trigger.enemySpawnPoints.Count)
+        {
+            return;
+        }
+        DelayedTriggerData.SpawnableInstance spawnPoint = trigger.enemySpawnPoints[entry.spawnPointIndex];
+        if (spawnPoint.enemy == null)
+        {
+            return;
+        }
+        GameObject enemy = Instantiate(spawnPoint.enemy, entry.position, entry.rotation);
+        enemy.name = DYNAMIC_ENEMY_NAME_PREFIX + entry.registryIndex;
+        spawnedDynamicEnemies.Add(enemy);
+        PawnBrain pawnBrain = enemy.GetComponent<PawnBrain>();
+        if (pawnBrain != null)
+        {
+            trigger.enemies.Add(pawnBrain);
+            SimpleEnemyAI.Instance.AddPawnToScenario(pawnBrain);
+        }
+        if (loadData != null)
+        {
+            enemy.BroadcastMessage("OnLoadData", loadData, SendMessageOptions.DontRequireReceiver);
+        }
+    }
+    private void ClearDynamicEnemiesRuntime()
+    {
+        for (int i = 0; i < listOfDelayedTriggers.Count; i++)
+        {
+            listOfDelayedTriggers[i].enemies.RemoveAll(enemy =>
+                enemy == null ||
+                enemy.gameObject == null ||
+                enemy.gameObject.name.StartsWith(DYNAMIC_ENEMY_NAME_PREFIX));
+        }
+        for (int i = 0; i < spawnedDynamicEnemies.Count; i++)
+        {
+            if (spawnedDynamicEnemies[i] != null)
+            {
+                Destroy(spawnedDynamicEnemies[i]);
+            }
+        }
+        spawnedDynamicEnemies.Clear();
+    }
+    private void SyncDynamicRegistryTransforms()
+    {
+        dynamicEnemyRegistry.RemoveAll(entry => entry == null);
+        dynamicEnemyRegistry.Sort((left, right) => left.registryIndex.CompareTo(right.registryIndex));
+        spawnedDynamicEnemies.RemoveAll(enemy => enemy == null);
+        dynamicEnemyRegistry.RemoveAll(entry =>
+            spawnedDynamicEnemies.Find(go => go != null && go.name == DYNAMIC_ENEMY_NAME_PREFIX + entry.registryIndex) == null);
+        for (int i = 0; i < dynamicEnemyRegistry.Count; i++)
+        {
+            DynamicEnemyRegistryEntry entry = dynamicEnemyRegistry[i];
+            GameObject enemy = spawnedDynamicEnemies.Find(go => go != null && go.name == DYNAMIC_ENEMY_NAME_PREFIX + entry.registryIndex);
+            if (enemy != null)
+            {
+                entry.position = enemy.transform.position;
+                entry.rotation = enemy.transform.rotation;
+            }
+        }
+    }
     private void ExitAllTriggers()
     {
         OnTriggerZoneExitBeforePawnReset?.Invoke();
@@ -135,41 +404,54 @@ public class TurnManager : MonoBehaviour
         UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "Устранено!_notpersistent_3_GameCongratulationsColor");
         SyncEndTurnButtonsWithMovement();
     }
-
+    private void CheckTrigger(TriggerData trigger)
+    {
+        if (trigger.isActive)
+        {
+            if (trigger.IsEnemiesDestroyed)
+            {
+                trigger.isActive = false;
+            }
+        }
+    }
     public void CheckTriggers()
     {
         foreach (var trigger in listOfTriggers)
         {
-            if (trigger.isActive)
-            {
-                if (trigger.IsEnemiesDestroyed)
-                {
-                    trigger.isActive = false;
-                }
-            }
+            CheckTrigger(trigger);
         }
-        if (listOfTriggers.Find(t => t.isActive) == null)
+        foreach (var trigger in listOfDelayedTriggers)
+        {
+            CheckTrigger(trigger);
+        }
+        if (listOfTriggers.Find(t => t.isActive) == null && listOfDelayedTriggers.Find(t => t.isActive) == null)
         {
             ExitAllTriggers();
         }
     }
-    public bool IsInActiveTriggerZone(PawnBrain pawn)
+    private bool IsInActiveTriggerZone(TriggerData trigger, PawnBrain pawn)
     {
-        foreach (var trigger in listOfTriggers)
+        if (trigger.isActive)
         {
-            if (trigger.isActive)
+            if (trigger.enemies.Contains(pawn))
             {
-                if (trigger.enemies.Contains(pawn))
-                {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
     }
+    public bool IsInActiveTriggerZone(PawnBrain pawn)
+    {
+        foreach (var trigger in listOfTriggers) if (IsInActiveTriggerZone(trigger, pawn)) return true;
+        foreach (var trigger in listOfDelayedTriggers) if (IsInActiveTriggerZone(trigger, pawn)) return true;
+        return false;
+    }
     public void RegisterMovingPawn(UnityEngine.Object pawn)
     {
-        if (listOfTriggers.Find(t => t.isActive) == null) return;
+        if (listOfTriggers.Find(t => t.isActive) == null && listOfDelayedTriggers.Find(t => t.isActive) == null)
+        {
+            return;
+        }
         movingPawns.Add(pawn);
         endTurnButton1.TurnOffButton();
         endTurnButton2.TurnOffButton();
@@ -183,7 +465,8 @@ public class TurnManager : MonoBehaviour
     private void SyncEndTurnButtonsWithMovement()
     {
         bool hasActiveTrigger = listOfTriggers.Find(t => t.isActive) != null;
-        if (hasActiveTrigger && IsPlayerTurn && movingPawns.Count == 0)
+        bool hasActiveDelayedTrigger = listOfDelayedTriggers.Find(t => t.isActive) != null;
+        if ((hasActiveTrigger || hasActiveDelayedTrigger) && IsPlayerTurn && movingPawns.Count == 0)
         {
             endTurnButton1.TurnOnButton();
             endTurnButton2.TurnOnButton();
@@ -219,7 +502,7 @@ public class TurnManager : MonoBehaviour
         if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f) return;
         if (movingPawns.Count > 0) return;
         CheckTriggers();
-        if (listOfTriggers.Find(t => t.isActive) == null)
+        if (listOfTriggers.Find(t => t.isActive) == null && listOfDelayedTriggers.Find(t => t.isActive) == null)
         {
             return;
         }

@@ -12,6 +12,8 @@ public class SaveHub : MonoBehaviour
     public static int DEFAULT_SAVE_SLOT = -1;
     public Action<Action<SaveRecord[], string>> OnSave;
     public Action<LoadedData> OnLoad;
+    public LoadedData CurrentLoadedData { get; private set; }
+    public bool IsLoading { get; private set; }
     private LoadedData loadedData = new LoadedData();
     private SaveData accumulatedSaveData = new SaveData();
 
@@ -84,8 +86,18 @@ public class SaveHub : MonoBehaviour
     public void LoadAllData(string fileName = null)
     {
         loadedData = DataCompressor.DecompressAllData(LoadSaveData(fileName));
-        OnLoad?.Invoke(loadedData);
-        loadedData = null;
+        CurrentLoadedData = loadedData;
+        IsLoading = true;
+        try
+        {
+            OnLoad?.Invoke(loadedData);
+        }
+        finally
+        {
+            IsLoading = false;
+            CurrentLoadedData = null;
+            loadedData = null;
+        }
     }
     private SaveData LoadSaveData(string fileName = null)
     {

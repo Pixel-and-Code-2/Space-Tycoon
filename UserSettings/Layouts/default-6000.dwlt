@@ -221,8 +221,8 @@ MonoBehaviour:
     y: 0
     width: 279.5
     height: 303
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 201, y: 226}
+  m_MaxSize: {x: 4001, y: 4026}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -406,7 +406,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 78
+    y: 24
     width: 961
     height: 533
   m_SerializedDataModeController:
@@ -797,7 +797,7 @@ MonoBehaviour:
   m_Position:
     m_Target: {x: 11.767283, y: -22.489594, z: -19.940083}
     speed: 2
-    m_Value: {x: 383.33813, y: 400.80743, z: 191.9979}
+    m_Value: {x: 11.767283, y: -22.489594, z: -19.940083}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -845,11 +845,11 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: 0.38146213, y: 0.39200017, z: -0.1826262, w: 0.81702477}
     speed: 2
-    m_Value: {x: -0.0070117735, y: -0.97512597, z: 0.21933714, w: -0.031169135}
+    m_Value: {x: 0.38146216, y: 0.39200017, z: -0.18262622, w: 0.8170248}
   m_Size:
     m_Target: 35.038815
     speed: 2
-    m_Value: 103.077644
+    m_Value: 35.038815
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1072,7 +1072,7 @@ MonoBehaviour:
   m_Zoom: 0.61536145
   m_ScrollPosition: {x: 38.563625, y: 93.81385}
   m_SelectedObject: {fileID: 0}
-  m_SelectedSpriteRectGUID: 307d7f036049ff444a268044fb55aac6
+  m_SelectedSpriteRectGUID: 00000000000000000000000000000000
   m_LastUsedModuleTypeName: UnityEditor.U2D.Sprites.SpriteFrameModule
 --- !u!114 &16
 MonoBehaviour:
@@ -1096,7 +1096,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 637
+    y: 24
     width: 278.5
     height: 277
   m_SerializedDataModeController:
@@ -1161,8 +1161,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 279.5
-    y: 637
+    x: 280.5
+    y: 24
     width: 680.5
     height: 277
   m_SerializedDataModeController:
@@ -1204,7 +1204,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 44.5}
     m_SelectedIDs: 08b10000
     m_LastClickedID: 45320
-    m_ExpandedIDs: ffffffff000000009c020000c6c60000c8c60000cac60000ccc60000cec60000d0c60000d2c60000d4c60000d6c60000d8c60000dac60000dcc60000dec60000e0c60000e2c6000020c8000054c80000
+    m_ExpandedIDs: 000000009c020000beab0000c0ab0000c2ab0000c4ab0000eccb0000eecb0000f0cb0000f2cb0000f4cb0000f6cb0000f8cb0000facb0000fccb0000fecb000000cc000002cc000004cc000006cc000008cc00000acc00000ccc0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1233,7 +1233,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 720}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: ffffffff000000009c020000c6c60000c8c60000cac60000ccc60000cec60000d0c60000d2c60000d4c60000d6c60000d8c60000dac60000dcc60000dec60000e0c60000e2c6000020c8000054c8000012af1b0014af1b0016af1b0018af1b00
+    m_ExpandedIDs: 000000009c020000beab0000c0ab0000c2ab0000c4ab0000eccb0000eecb0000f0cb0000f2cb0000f4cb0000f6cb0000f8cb0000facb0000fccb0000fecb000000cc000002cc000004cc000006cc000008cc00000acc00000ccc0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1397,8 +1397,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "GlobalSettings\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 962
-    y: 78
+    x: 963
+    y: 24
     width: 537
     height: 836
   m_SerializedDataModeController:

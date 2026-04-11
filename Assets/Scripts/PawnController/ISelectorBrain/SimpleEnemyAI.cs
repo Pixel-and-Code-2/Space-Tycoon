@@ -23,6 +23,7 @@ public enum DetailedScenarioElementType
 
 public class SimpleEnemyAI : ISelectorBrain
 {
+    public static SimpleEnemyAI Instance { get; private set; }
     // controlledPawn not null
     // targetPawn null when you want to hardcoded vector instead or to find closest target
     // position Vector3.zero when you want to use "closest target" feature instead, otherwise hardcode position
@@ -65,6 +66,11 @@ public class SimpleEnemyAI : ISelectorBrain
 
     void Awake()
     {
+        if (Instance == null) Instance = this;
+        else
+        {
+            Debug.LogError("Constructor met second SimpleEnemyAI instance");
+        }
         meleeState = GetComponent<MeleeState>();
         walkState = GetComponent<WalkState>();
     }
@@ -318,14 +324,17 @@ public class SimpleEnemyAI : ISelectorBrain
         {
             return;
         }
-        if (scenario.Exists(el => el != null && el.controlledPawn == addPawn))
+        AddPawnToScenario(addPawn);
+        addPawn = null;
+    }
+    public void AddPawnToScenario(PawnBrain pawn)
+    {
+        if (scenario.Exists(el => el != null && el.controlledPawn == pawn))
         {
-            addPawn = null;
             return;
         }
-
         int moveInsertIndex = scenario.FindLastIndex(el => el != null && el.capability == EnemyCapabilities.Move);
-        EnemyScenarioElement moveElement = CreateEnemyScenarioElement(addPawn, EnemyCapabilities.Move);
+        EnemyScenarioElement moveElement = CreateEnemyScenarioElement(pawn, EnemyCapabilities.Move);
         if (moveInsertIndex == -1)
         {
             scenario.Insert(0, moveElement);
@@ -335,9 +344,8 @@ public class SimpleEnemyAI : ISelectorBrain
             scenario.Insert(moveInsertIndex + 1, moveElement);
         }
 
-        scenario.Add(CreateEnemyScenarioElement(addPawn, EnemyCapabilities.WaitMovement));
-        scenario.Add(CreateEnemyScenarioElement(addPawn, EnemyCapabilities.Melee));
-        addPawn = null;
+        scenario.Add(CreateEnemyScenarioElement(pawn, EnemyCapabilities.WaitMovement));
+        scenario.Add(CreateEnemyScenarioElement(pawn, EnemyCapabilities.Melee));
     }
 
     private EnemyScenarioElement CreateEnemyScenarioElement(PawnBrain pawn, EnemyCapabilities capability)
