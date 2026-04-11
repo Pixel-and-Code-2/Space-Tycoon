@@ -10,19 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41cf6bcf5f35067458db9c0a1798ba1e, type: 3}
-  m_Name: ArmorHitinShell
+  m_Name: ArmorPOPKA_Zayca
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
-  - name: DMR
-    value: 0
-  - name: DMM
-    value: 0
   - name: DR
-    value: 0
+    value: 21
   - name: MDR
-    value: 0
+    value: 13
   - name: ARMMASS
-    value: 29
+    value: 9
   calculatedParameters: []
   mustHaveParameters:
   - {fileID: 11400000, guid: 51f3c6c138b324e40af38d39a8bcf6f3, type: 2}
@@ -32,10 +28,10 @@ MonoBehaviour:
     DMM = 0,00 (0,00)
 
     DR =
-    0,00 (0,00)
+    21,00 (21,00)
 
-    MDR = 0,00 (0,00)
+    MDR = 13,00 (13,00)
 
-    ARMMASS = 29,00 (29,00)
+    ARMMASS = 9,00 (9,00)
 
 '

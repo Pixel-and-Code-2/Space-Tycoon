@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41cf6bcf5f35067458db9c0a1798ba1e, type: 3}
-  m_Name: PlayerZeleniy
+  m_Name: PlayerGusev
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
   - name: STR
@@ -20,7 +20,7 @@ MonoBehaviour:
   - name: HT
     value: 4
   - name: SHT
-    value: 2
+    value: 4
   - name: BRW
     value: 0
   - name: THR
@@ -32,7 +32,9 @@ MonoBehaviour:
   - name: SPDB
     value: 1
   - name: SHT
-    value: 2
+    value: 7
+  - name: DX
+    value: 5
   calculatedParameters: []
   mustHaveParameters:
   - {fileID: 11400000, guid: 3241949e1f09f444f946c7af71443abd, type: 2}
@@ -46,7 +48,7 @@ MonoBehaviour:
     MDMG
     = 1,00 (1,00)
 
-    ROF = 13,00 (13,00)
+    ROF = 4,00 (4,00)
 
     ACC = 4,00 (4,00)
 
@@ -60,9 +62,9 @@ MonoBehaviour:
     WPMASS = 0,00 (0,00)
 
     MovesToReload
-    = 1,00 (1,00)
+    = 2,00 (2,00)
 
-    TotalAmmo = 40,00 (40,00)
+    TotalAmmo = 400,00 (400,00)
 
     DMR = 0,00 (0,00)
 
@@ -73,37 +75,35 @@ MonoBehaviour:
 
     MDR = 5,00 (5,00)
 
-    ARMMASS = 9,00
-    (9,00)
+    ARMMASS
+    = 9,00 (9,00)
 
     STR = 4,00 (4,00)
 
     DX = 5,00 (5,00)
 
-    IQ = 6,00 (6,00)
+    IQ = 6,00
+    (6,00)
 
-    HT
-    = 4,00 (4,00)
+    HT = 4,00 (4,00)
 
-    SHT = 2,00 (2,00)
+    SHT = 7,00 (7,00)
 
     BRW = 0,00 (0,00)
 
-    THR = 4,00 (4,00)
+    THR
+    = 4,00 (4,00)
 
-    ENG
-    = 0,00 (0,00)
+    ENG = 0,00 (0,00)
 
     SCI = 5,00 (5,00)
 
-    DDGB = 0,00 (0,00)
+    DDGB = 0,00
+    (0,00)
 
-    SPDB = 1,00
-    (1,00)
+    SPDB = 1,00 (1,00)
 
     DMG = 5,00 (5,00)
-
-    ShootAmount = 3,00 (3,00)
 
     HP = 9,00 (9,00)
 
@@ -119,6 +119,9 @@ MonoBehaviour:
 
     BCW = 11,50 (11,50)
 
-    BDMG = 4,00 (4,00)
+    BDMG = 3,00 (3,00)
+
+    Random = 0,51
+    (0,51)
 
 '
