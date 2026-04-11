@@ -34,7 +34,9 @@ MonoBehaviour:
   - name: MovesToReload
     value: 2
   - name: TotalAmmo
-    value: 40
+    value: 99999
+  - name: MeleeROF
+    value: 1
   calculatedParameters: []
   mustHaveParameters: []
   isDirty: 0
@@ -61,8 +63,11 @@ MonoBehaviour:
     MovesToReload
     = 2,00 (2,00)
 
-    TotalAmmo = 40,00 (40,00)
+    TotalAmmo = 99999,00 (99999,00)
 
-    Random = 0,35 (0,35)
+    MeleeROF = 1,00 (1,00)
+
+    Random
+    = 0,56 (0,56)
 
 '

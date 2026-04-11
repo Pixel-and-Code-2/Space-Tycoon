@@ -170,12 +170,10 @@ public class GameUI : IUILayer
         if (PawnController.Instance.currentSelectedPawn == null) return;
         float curMag = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY);
         float initMag = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
-        float curAmmo = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.TOTAL_AMMO_KEY);
         weaponSlider.SetBounds(0f, initMag);
         weaponSlider.SetValue(curMag);
-        weaponSliderText.text = curMag.ToString() + "/" + curAmmo.ToString();
+        weaponSliderText.text = curMag.ToString() + "/" + initMag.ToString();
     }
-
     private void UpdateSelectedPlayer()
     {
         if (selectedPlayer == null) return;

@@ -740,6 +740,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c6c0b2508611504fb61f80e24bc99e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnBrain
+--- !u!1 &95772919
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 95772920}
+  m_Layer: 0
+  m_Name: DelayedTriggers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &95772920
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 95772919}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 341609299}
+  m_Father: {fileID: 1569542968}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &111603690
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1308,6 +1340,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: listOfDelayedTriggers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
       propertyPath: listOfTriggers.Array.data[0].trigger
       value: 
       objectReference: {fileID: 1690592764}
@@ -1400,6 +1436,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: listOfDelayedTriggers.Array.data[0].triggerObject
+      value: 
+      objectReference: {fileID: 1739670645}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
       propertyPath: 'listOfTriggers.Array.data[0].enemies.Array.data[0]'
       value: 
       objectReference: {fileID: 826363222}
@@ -1487,6 +1527,38 @@ PrefabInstance:
       propertyPath: 'listOfTriggers.Array.data[9].enemies.Array.data[0]'
       value: 
       objectReference: {fileID: 1093702794}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: listOfDelayedTriggers.Array.data[0].enemies.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: listOfDelayedTriggers.Array.data[0].enemySpawnPoints.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: listOfDelayedTriggers.Array.data[0].enemySpawnPoints.Array.data[0].enemy
+      value: 
+      objectReference: {fileID: 949430363548246829, guid: 1d53de9eedcf8444a9371d2b86b637f3, type: 3}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: listOfDelayedTriggers.Array.data[0].enemySpawnPoints.Array.data[0].where
+      value: 
+      objectReference: {fileID: 398937029}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: listOfDelayedTriggers.Array.data[0].enemySpawnPoints.Array.data[1].enemy
+      value: 
+      objectReference: {fileID: 1511339220626335065, guid: 284dd80d74874a746abd7c9324a35543, type: 3}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: listOfDelayedTriggers.Array.data[0].enemySpawnPoints.Array.data[1].where
+      value: 
+      objectReference: {fileID: 970663633}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: listOfDelayedTriggers.Array.data[0].enemySpawnPoints.Array.data[2].enemy
+      value: 
+      objectReference: {fileID: 426309935783401599, guid: 504453969619fc345b6a12b64b65f670, type: 3}
+    - target: {fileID: 3850509049953558715, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
+      propertyPath: listOfDelayedTriggers.Array.data[0].enemySpawnPoints.Array.data[2].where
+      value: 
+      objectReference: {fileID: 1740517858}
     - target: {fileID: 5518004313056994089, guid: 77e64e38d777e4e4b9378081c0e9d523, type: 3}
       propertyPath: m_Name
       value: TurnManager
@@ -1883,6 +1955,38 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 3.08, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &341609298
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 341609299}
+  m_Layer: 0
+  m_Name: lvl0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &341609299
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341609298}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1739670646}
+  m_Father: {fileID: 95772920}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &353870540 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
@@ -1915,6 +2019,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01cefcc31e35924b90349e35a5bee21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IconButtonStyleFiller
+--- !u!1 &398937028
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 398937029}
+  m_Layer: 0
+  m_Name: Pos1EnemyBig
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &398937029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 398937028}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.88, y: 0, z: 18.07}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1739670646}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &439981132
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8976,6 +9111,37 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8660230075532485983, guid: bb22a4ebfce6b3849aaa460cab334ddc, type: 3}
   m_PrefabInstance: {fileID: 945951987}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &970663632
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 970663633}
+  m_Layer: 0
+  m_Name: Pos3EnemyLittle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &970663633
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970663632}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.18, y: 0, z: 19.08}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1739670646}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &992555722
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11671,6 +11837,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1505aab49e85845bfa62facdf74ba2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnHealing
+  selectTriggerIndex: -1
+  startTriggerIndex: -1
+  completeTriggerIndex: -1
+  cancelTriggerIndex: -1
   pawnBrain: {fileID: 1175933365}
 --- !u!1 &1187009916
 GameObject:
@@ -11840,6 +12010,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1505aab49e85845bfa62facdf74ba2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnHealing
+  selectTriggerIndex: -1
+  startTriggerIndex: -1
+  completeTriggerIndex: -1
+  cancelTriggerIndex: -1
   pawnBrain: {fileID: 824540571}
 --- !u!1 &1230900818 stripped
 GameObject:
@@ -18339,6 +18513,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e9eded1f7ba0142aa1584fa1673eda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FirstDoorOpen
+  selectTriggerIndex: -1
+  startTriggerIndex: -1
+  completeTriggerIndex: -1
+  cancelTriggerIndex: -1
   navMeshLink: {fileID: 1444200270}
 --- !u!1 &1483986393
 GameObject:
@@ -18565,6 +18743,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c620a594d364e054aaedeb1f1aea6ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecondDoorOpen
+  selectTriggerIndex: -1
+  startTriggerIndex: -1
+  completeTriggerIndex: -1
+  cancelTriggerIndex: -1
   navMeshLink: {fileID: 1512402889}
 --- !u!114 &1512402891
 MonoBehaviour:
@@ -18696,6 +18878,7 @@ Transform:
   - {fileID: 1061395483}
   - {fileID: 579501437}
   - {fileID: 1483986394}
+  - {fileID: 95772920}
   - {fileID: 2094444500}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18731,9 +18914,9 @@ MonoBehaviour:
     - Target
   calculateMeleeAccuracy:
     formula: "(c_pawnDistance > g_MeleeDST ? -2 :\n(c_AttackerMovesToSkip > 0 ? -5
-      :\n(c_isWallsBetween > 0 ? -1 :\n(c_AttackerMeleeAmount > i_ROF - 0.1 ? -3
-      :\n(c_AttackerShotAmount > 0.5 ? -4 :\nMath.Max(g_M, Math.Min(100 - g_M, \n(i_DX
-      + i_BRW + (c_AttackerIsShootOnMove > 0.1 ? 1 : 4)) * g_M\n)) / 100\n)))))"
+      :\n(c_isWallsBetween > 0 ? -1 :\n(c_AttackerMeleeAmount >  i_MeleeROF - 0.1
+      ? -3 :\n(c_AttackerShotAmount > 0.5 ? -4 :\nMath.Max(g_M, Math.Min(100 - g_M,
+      \n(i_DX + i_BRW + (c_AttackerIsShootOnMove > 0.1 ? 1 : 4)) * g_M\n)) / 100\n)))))"
     instruction: 
     dataAssets:
     - {fileID: 1569542970}
@@ -20220,6 +20403,93 @@ Transform:
   - {fileID: 77278518}
   m_Father: {fileID: 1061395483}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1739670645
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1739670646}
+  - component: {fileID: 1739670647}
+  m_Layer: 13
+  m_Name: DelayedTrigger1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1739670646
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739670645}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.21, y: 0, z: -10.29}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 398937029}
+  - {fileID: 1740517858}
+  - {fileID: 970663633}
+  m_Father: {fileID: 341609299}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1739670647
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739670645}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.07, y: 1.62, z: 6.6}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1740517857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1740517858}
+  m_Layer: 0
+  m_Name: Pos2EnemyNormal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1740517858
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740517857}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.23, y: 0, z: 19.48}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1739670646}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1762619543 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4937655821320672453, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
@@ -20933,6 +21203,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1505aab49e85845bfa62facdf74ba2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnHealing
+  selectTriggerIndex: -1
+  startTriggerIndex: -1
+  completeTriggerIndex: -1
+  cancelTriggerIndex: -1
   pawnBrain: {fileID: 1899494926}
 --- !u!1001 &1934439858
 PrefabInstance:
@@ -29058,6 +29332,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5263107605043886514, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5279404030397629907, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -33341,7 +33619,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: e3de1efee018d5849ae363b26626fab4, type: 2}
-  - {fileID: 2100000, guid: 06647e1ab79921249ab3c803ba230c21, type: 2}
+  - {fileID: 2100000, guid: 2e343aaada262db4d8e2e290e997d09d, type: 2}
   - {fileID: 2100000, guid: 0fef83f6e9223714298c65d3ff236d31, type: 2}
   - {fileID: 2100000, guid: 507c858c1981eac448a71b1f8017fa81, type: 2}
   - {fileID: 2100000, guid: 17f8c043cbd44a04eb3ddf22352e4736, type: 2}
@@ -33489,7 +33767,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: -241601601386485400, guid: cb5740d57b74ff6409b1bea1ac1d37f9, type: 3}
-  - {fileID: 2100000, guid: 06647e1ab79921249ab3c803ba230c21, type: 2}
+  - {fileID: 2100000, guid: 2e343aaada262db4d8e2e290e997d09d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -33630,6 +33908,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a33e5ff9193ff74aa7700da00186e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FirstComputer
+  selectTriggerIndex: -1
+  startTriggerIndex: 0
+  completeTriggerIndex: -1
+  cancelTriggerIndex: -1
+  computerOnMaterials:
+  - {fileID: -241601601386485400, guid: cb5740d57b74ff6409b1bea1ac1d37f9, type: 3}
+  - {fileID: 2100000, guid: 06647e1ab79921249ab3c803ba230c21, type: 2}
+  systemOnMaterials:
+  - {fileID: 2100000, guid: e3de1efee018d5849ae363b26626fab4, type: 2}
+  - {fileID: 2100000, guid: 06647e1ab79921249ab3c803ba230c21, type: 2}
+  - {fileID: 2100000, guid: 0fef83f6e9223714298c65d3ff236d31, type: 2}
+  - {fileID: 2100000, guid: 507c858c1981eac448a71b1f8017fa81, type: 2}
+  - {fileID: 2100000, guid: 17f8c043cbd44a04eb3ddf22352e4736, type: 2}
+  computerOffMaterials:
+  - {fileID: -241601601386485400, guid: cb5740d57b74ff6409b1bea1ac1d37f9, type: 3}
+  - {fileID: 2100000, guid: 2e343aaada262db4d8e2e290e997d09d, type: 2}
+  computerRenderer: {fileID: 4580301832448339887}
+  systemRenderer: {fileID: 4499823640975385266}
 --- !u!23 &4610762660671047381
 MeshRenderer:
   m_ObjectHideFlags: 0
