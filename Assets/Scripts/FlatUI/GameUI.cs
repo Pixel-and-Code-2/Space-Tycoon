@@ -56,6 +56,7 @@ public class GameUI : IUILayer
     {
         ClickableItemsController.Instance.OnTaskUpdated += OnTaskUpdated;
         UILayersController.Instance.OnGameResumed += OnGameResumed;
+        SaveHub.Instance.OnLoad += OnLoadData;
     }
     void OnDestroy()
     {
@@ -79,12 +80,10 @@ public class GameUI : IUILayer
                 battleBackgroundObject.SetActive(false);
             }
         }
-
     }
-    void OnEnable()
+    private void OnLoadData(LoadedData data)
     {
-        gameObject.SetActive(true);
-        togglePause.action.Enable();
+        battleBackgroundObject.SetActive(data.GetData("IsStepByStep", HandleInittingGlobalVars.UNIQUE_ID, false));
     }
     void OnDisable()
     {
