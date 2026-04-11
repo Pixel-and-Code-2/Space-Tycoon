@@ -15,6 +15,10 @@ public class TriggerData
     public bool isActive = false;
 }
 
+/// <summary>
+/// Запуск боя: через коллайдер (если задан <see cref="TriggerData.triggerObject"/> на объекте с BoxCollider) или через <see cref="TurnManager.StartDelayedEncounter"/>.
+/// Если коллайдер не нужен, оставьте triggerObject пустым и вызывайте только StartDelayedEncounter — что сработает раньше (вход в зону или вызов метода), то и запускает спавн и бой.
+/// </summary>
 [System.Serializable]
 public class DelayedTriggerData : TriggerData
 {
@@ -207,18 +211,61 @@ public class TurnManager : MonoBehaviour
         if (trigger == null)
         {
             trigger = listOfDelayedTriggers.Find(t => t.triggerObject == triggerObject);
-            if (!EnterDelayedTrigger(trigger as DelayedTriggerData))
+            if (trigger == null)
             {
                 return;
             }
+            DelayedTriggerData delayed = trigger as DelayedTriggerData;
+            if (!delayed.spawned)
+            {
+                if (!EnterDelayedTrigger(delayed))
+                {
+                    return;
+                }
+            }
+        }
+        ActivateCombatForTrigger(trigger);
+    }
+
+    /// <summary>
+    /// Запускает бой по записи delayed-триггера без входа в зону коллайдера: спавн врагов (если ещё не были) и та же активация, что при EnterTrigger.
+    /// </summary>
+    public bool StartDelayedEncounter(DelayedTriggerData delayed)
+    {
+        if (delayed == null || !listOfDelayedTriggers.Contains(delayed))
+        {
+            return false;
+        }
+        if (!delayed.spawned && !EnterDelayedTrigger(delayed))
+        {
+            return false;
+        }
+        return ActivateCombatForTrigger(delayed);
+    }
+
+    /// <inheritdoc cref="StartDelayedEncounter(DelayedTriggerData)"/>
+    public bool StartDelayedEncounterByIndex(int delayedTriggerIndex)
+    {
+        if (delayedTriggerIndex < 0 || delayedTriggerIndex >= listOfDelayedTriggers.Count)
+        {
+            return false;
+        }
+        return StartDelayedEncounter(listOfDelayedTriggers[delayedTriggerIndex]);
+    }
+
+    private bool ActivateCombatForTrigger(TriggerData trigger)
+    {
+        if (trigger == null)
+        {
+            return false;
         }
         if (trigger.IsEnemiesDestroyed)
         {
-            return;
+            return false;
         }
         if (trigger.isActive)
         {
-            return;
+            return false;
         }
         if (listOfTriggers.Find(t => t.isActive) == null)
         {
@@ -229,6 +276,7 @@ public class TurnManager : MonoBehaviour
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 1f;
         SyncEndTurnButtonsWithMovement();
         StartFirstTurn();
+        return true;
     }
     public bool EnterDelayedTrigger(DelayedTriggerData trigger)
     {

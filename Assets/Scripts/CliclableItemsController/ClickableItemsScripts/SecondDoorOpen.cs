@@ -28,6 +28,7 @@ public class SecondDoorOpen : IScriptForClickable
     }
     public override void OnComplete()
     {
+        base.OnComplete();
         navMeshLink.enabled = true;
     }
 }

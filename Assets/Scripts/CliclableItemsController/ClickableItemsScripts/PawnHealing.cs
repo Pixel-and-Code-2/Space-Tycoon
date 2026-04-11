@@ -7,6 +7,7 @@ public class PawnHealing : IScriptForClickable
     private PawnBrain pawnBrain;
     public override void OnComplete()
     {
+        base.OnComplete();
         pawnBrain.OnHeal();
     }
 }
