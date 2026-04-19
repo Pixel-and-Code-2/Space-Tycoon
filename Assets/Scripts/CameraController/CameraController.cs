@@ -1,7 +1,6 @@
 using UnityEngine;
 
 // ToDo: in cinemachine orbital follow exists sphere / three rings types, we are using second one, but the first one is better
-
 [RequireComponent(typeof(IActions))]
 public class CameraController : CameraSettings
 {
@@ -15,7 +14,6 @@ public class CameraController : CameraSettings
     private const float maxCameraRaduisCoef = 1f;
     [SerializeField] private AnimationCurve zoomChangeCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     [SerializeField] private float discreteRotationStep = 0.1f;
-
     new void OnValidate()
     {
         base.OnValidate();
@@ -26,14 +24,12 @@ public class CameraController : CameraSettings
             orbitalFollow.RadialAxis.Range[0] = minCameraRadiusCoef;
         }
     }
-
     new void Awake()
     {
         orbitalFollow.RadialAxis.Range[0] = minCameraRadiusCoef;
         orbitalFollow.RadialAxis.Range[1] = maxCameraRaduisCoef;
         base.Awake();
     }
-
     void Update()
     {
         HandleRotationInput();
@@ -41,7 +37,6 @@ public class CameraController : CameraSettings
         HandleMoveInput();
         HandleZoomInput();
     }
-
     void HandleDiscreteRotationInput()
     {
         if (cameraControlActions == null) return;
@@ -53,8 +48,6 @@ public class CameraController : CameraSettings
             {
                 newValue = Mathf.Clamp(newValue, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]);
             }
-            // orbitalFollow.HorizontalAxis.Center = newValue;
-            // orbitalFollow.HorizontalAxis.TriggerRecentering();
             orbitalFollow.HorizontalAxis.Value = newValue;
         }
         if (cameraControlActions.GetRotNegative() != 0f)
@@ -65,8 +58,6 @@ public class CameraController : CameraSettings
             {
                 newValue = Mathf.Clamp(newValue, orbitalFollow.HorizontalAxis.Range[0], orbitalFollow.HorizontalAxis.Range[1]);
             }
-            // orbitalFollow.HorizontalAxis.Center = newValue;
-            // orbitalFollow.HorizontalAxis.TriggerRecentering();
             orbitalFollow.HorizontalAxis.Value = newValue;
         }
     }
@@ -89,7 +80,6 @@ public class CameraController : CameraSettings
             orbitalFollow.VerticalAxis.Value += clampedMouseY;
         }
     }
-
     void HandleZoomInput()
     {
         if (cameraControlActions == null) return;
@@ -105,7 +95,6 @@ public class CameraController : CameraSettings
             orbitalFollow.RadialAxis.Value = Mathf.Clamp(orbitalFollow.RadialAxis.Value - change, minCameraRadiusCoef, maxCameraRaduisCoef);
         }
     }
-
     void HandleMoveInput()
     {
         if (cameraControlActions == null) return;

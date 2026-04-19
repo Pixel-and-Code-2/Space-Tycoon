@@ -20,8 +20,6 @@ public abstract class CameraSettings : MonoBehaviour
     [SerializeField] public MonoBehaviour boundsGetterRef;
     public IBoundsGetter boundsGetter { get; private set; } = null;
     [SerializeField] protected ILookTarget lookTarget;
-
-
     public void SetLookTarget(ILookTarget lookTarget)
     {
         this.lookTarget = lookTarget;
@@ -96,7 +94,6 @@ public abstract class CameraSettings : MonoBehaviour
         float bottomCameraLimitation = bottomLimRad * Mathf.Rad2Deg;
         orbitalFollow.VerticalAxis.Range[0] = bottomCameraLimitation;
         orbitalFollow.VerticalAxis.Range[1] = topСameraLimitation;
-
 
         float newTopRadius = (float)Mathf.Pow(maxCameraRadius * maxCameraRadius - cameraTopOffset * cameraTopOffset, 0.5f);
         orbitalFollow.Orbits.Top.Radius = newTopRadius;

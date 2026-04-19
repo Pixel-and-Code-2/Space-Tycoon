@@ -1,40 +1,49 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using TMPro;
+using System.Collections.Generic;
 
+public enum TriggerType
+{
+    PointerEnter,
+    PointerExit,
+    PointerDown,
+    PointerUp,
+    Off,
+    On,
+    Disabled,
+    Enabled
+}
 public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private Selectable selectable;
+    public bool IsButtonOn => isOnCache;
+    public bool IsButtonHighlighted => isHighlightedCache;
+    public bool IsButtonPressed => isPressedCache;
+    public bool IsButtonInteractable => isInteractableCache;
+    [System.Serializable]
+    private class State
+    {
+        public TriggerType triggerType;
+        public List<GameObject> objToTurnOn;
+        public List<GameObject> objToTurnOff;
+    }
     [SerializeField]
-    private string styleName;
+    private List<State> states = new List<State>();
     [SerializeField]
-    private bool isMirrored = false;
+    private TriggerType defaultState;
     [SerializeField]
-    private Image bg;
+    private bool checkInteractableOnHighlight = true;
     [SerializeField]
-    private Image mg;
+    private bool checkInteractableOnPress = true;
+    private enum OnToggleInteractableBehaviour
+    {
+        JustApplyToggle,
+        TurnOnInteractableFirst,
+        IgnoreCall
+    }
     [SerializeField]
-    private Image fg;
-    [SerializeField]
-    private Image bgHighlightAddition;
-    [SerializeField]
-    private Image mgHighlightAddition;
-    [SerializeField]
-    private Image fgHighlightAddition;
-    [SerializeField]
-    private Image bgPressedAddition;
-    [SerializeField]
-    private Image mgPressedAddition;
-    [SerializeField]
-    private Image fgPressedAddition;
-    [SerializeField]
-    private Image highlightAddition;
-    [SerializeField]
-    private TextMeshProUGUI text;
-    public bool IsButtonOn => isOnCache == 1;
-    public bool IsButtonHighlighted => isHighlightedCache == 1;
-    public bool IsButtonInteractable => isInteractableCache == 1;
+    private OnToggleInteractableBehaviour onToggleInteractableBehaviour = OnToggleInteractableBehaviour.TurnOnInteractableFirst;
     void Awake()
     {
         selectable = GetComponent<Selectable>();
@@ -42,182 +51,97 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
 
     void Start()
     {
-
         OnValidate();
     }
     void OnValidate()
     {
-        if (isMirrored)
+        ActivateState(defaultState);
+    }
+    void OnEnable()
+    {
+        ActivateState(defaultState);
+    }
+    private bool CheckToggle()
+    {
+        switch (onToggleInteractableBehaviour)
         {
-            if (bg != null) bg.transform.localScale = new Vector3(-1, 1, 1);
-            if (mg != null) mg.transform.localScale = new Vector3(-1, 1, 1);
-            if (fg != null) fg.transform.localScale = new Vector3(-1, 1, 1);
-            if (bgHighlightAddition != null) bgHighlightAddition.transform.localScale = new Vector3(-1, 1, 1);
-            if (mgHighlightAddition != null) mgHighlightAddition.transform.localScale = new Vector3(-1, 1, 1);
-            if (fgHighlightAddition != null) fgHighlightAddition.transform.localScale = new Vector3(-1, 1, 1);
-            if (bgPressedAddition != null) bgPressedAddition.transform.localScale = new Vector3(-1, 1, 1);
-            if (mgPressedAddition != null) mgPressedAddition.transform.localScale = new Vector3(-1, 1, 1);
-            if (fgPressedAddition != null) fgPressedAddition.transform.localScale = new Vector3(-1, 1, 1);
-            if (highlightAddition != null) highlightAddition.transform.localScale = new Vector3(-1, 1, 1);
+            case OnToggleInteractableBehaviour.JustApplyToggle:
+                return true;
+            case OnToggleInteractableBehaviour.TurnOnInteractableFirst:
+                SetInteractable(true);
+                return true;
+            case OnToggleInteractableBehaviour.IgnoreCall:
+                return false;
         }
-        else
-        {
-            if (bg != null) bg.transform.localScale = new Vector3(1, 1, 1);
-            if (mg != null) mg.transform.localScale = new Vector3(1, 1, 1);
-            if (fg != null) fg.transform.localScale = new Vector3(1, 1, 1);
-            if (bgHighlightAddition != null) bgHighlightAddition.transform.localScale = new Vector3(1, 1, 1);
-            if (mgHighlightAddition != null) mgHighlightAddition.transform.localScale = new Vector3(1, 1, 1);
-            if (fgHighlightAddition != null) fgHighlightAddition.transform.localScale = new Vector3(1, 1, 1);
-            if (bgPressedAddition != null) bgPressedAddition.transform.localScale = new Vector3(1, 1, 1);
-            if (mgPressedAddition != null) mgPressedAddition.transform.localScale = new Vector3(1, 1, 1);
-            if (fgPressedAddition != null) fgPressedAddition.transform.localScale = new Vector3(1, 1, 1);
-            if (highlightAddition != null) highlightAddition.transform.localScale = new Vector3(1, 1, 1);
-        }
-        TurnOnButton();
+        return false;
     }
     public void TurnOnButton()
     {
-        UpdateButton(1, -1, 1);
+        if (!CheckToggle()) return;
+        ActivateState(TriggerType.On);
+        isOnCache = true;
     }
     public void SetInteractable(bool interactable)
     {
-        UpdateButton(-1, -1, interactable ? 1 : 0);
+        selectable.interactable = interactable;
+        ActivateState(interactable ? TriggerType.Enabled : TriggerType.Disabled);
+        isInteractableCache = interactable;
     }
     public void TurnOffButton()
     {
-        UpdateButton(0, -1, 0);
+        if (!CheckToggle()) return;
+        ActivateState(TriggerType.Off);
+        isOnCache = false;
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UpdateButton(-1, 1, -1);
+        if (checkInteractableOnHighlight && !isInteractableCache) return;
+        ActivateState(TriggerType.PointerEnter);
+        isHighlightedCache = true;
     }
     public void OnPointerExit(PointerEventData eventData)
     {
-        UpdateButton(-1, 0, -1);
+        if (checkInteractableOnHighlight && !isInteractableCache) return;
+        ActivateState(TriggerType.PointerExit);
+        isHighlightedCache = false;
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        UpdateButton(-1, -1, -1, 1);
+        if (checkInteractableOnPress && !isInteractableCache) return;
+        ActivateState(TriggerType.PointerDown);
+        isPressedCache = true;
     }
     public void OnPointerUp(PointerEventData eventData)
     {
-        UpdateButton(-1, -1, 1, 0);
+        if (checkInteractableOnPress && !isInteractableCache) return;
+        ActivateState(TriggerType.PointerUp);
+        isPressedCache = false;
     }
-    int isOnCache = 1;
-    int isHighlightedCache = 0;
-    int isInteractableCache = 1;
-    int isPressedCache = 0;
-    private void UpdateButton(int isOn = -1, int isHighlighted = -1, int isInteractable = -1, int isPressed = -1)
+    bool isOnCache = true;
+    bool isHighlightedCache = false;
+    bool isInteractableCache = true;
+    bool isPressedCache = false;
+    private void ActivateState(TriggerType triggerType)
     {
-        if (isOn == -1) isOn = isOnCache;
-        else isOnCache = isOn;
-        if (isHighlighted == -1) isHighlighted = isHighlightedCache;
-        else isHighlightedCache = isHighlighted;
-        if (isInteractable == -1) isInteractable = isInteractableCache;
-        else isInteractableCache = isInteractable;
-        if (isPressed == -1) isPressed = isPressedCache;
-        else isPressedCache = isPressed;
-        if (HandleInittingGlobalVars.globalSettingsAssets == null) return;
-        var style = HandleInittingGlobalVars.globalSettingsAssets.GetIconButtonStyle(styleName);
-        if (style == null) return;
-        if (isOn == 1)
+        foreach (State state in states)
         {
-            TrySetSprite(bg, style.bgOn);
-            TrySetSprite(mg, style.mgOn);
-            TrySetSprite(fg, style.fgOn);
-            SetColor(style.colorOn, style.isTextOnly);
-        }
-        else
-        {
-            TrySetSprite(bg, style.bgOff);
-            TrySetSprite(mg, style.mgOff);
-            TrySetSprite(fg, style.fgOff);
-            SetColor(style.colorOff, style.isTextOnly);
-        }
-        if (isHighlighted == 1)
-        {
-            TrySetSprite(bgHighlightAddition, style.bgHighlight);
-            TrySetSprite(mgHighlightAddition, style.mgHighlight);
-            TrySetSprite(fgHighlightAddition, style.fgHighlight);
-            TrySetSprite(highlightAddition, style.highlightAddition);
-            SetColor(style.colorHighlight, style.isTextOnly);
-        }
-        else
-        {
-            if (bgHighlightAddition != null)
-                bgHighlightAddition.enabled = false;
-            if (mgHighlightAddition != null)
-                mgHighlightAddition.enabled = false;
-            if (fgHighlightAddition != null)
-                fgHighlightAddition.enabled = false;
-            if (highlightAddition != null)
-                highlightAddition.enabled = false;
-        }
-        if (isPressed == 1)
-        {
-            TrySetSprite(bgPressedAddition, style.bgPressed);
-            TrySetSprite(mgPressedAddition, style.mgPressed);
-            TrySetSprite(fgPressedAddition, style.fgPressed);
-            SetColor(style.colorPressed, style.isTextOnly);
-        }
-        else
-        {
-            if (bgPressedAddition != null)
-                bgPressedAddition.enabled = false;
-            if (mgPressedAddition != null)
-                mgPressedAddition.enabled = false;
-            if (fgPressedAddition != null)
-                fgPressedAddition.enabled = false;
-        }
-        if (selectable != null)
-        {
-            selectable.interactable = isInteractable == 1;
-        }
-    }
-    private void TrySetSprite(Image image, string spriteName)
-    {
-        if (image == null) return;
-        if (spriteName == string.Empty)
-        {
-            // image.enabled = false;
-            return;
-        }
-        var spriteLink = HandleInittingGlobalVars.globalSettingsAssets.GetSpriteLink(spriteName);
-        if (spriteLink != null)
-        {
-            image.sprite = spriteLink.sprite;
-            image.enabled = true;
-            if (spriteLink.sprite != null && spriteLink.sprite.border != Vector4.zero)
+            if (state.triggerType == triggerType)
             {
-                image.type = Image.Type.Sliced;
+                ActivateState(state);
+                return;
             }
         }
-        // else image.enabled = false;
+        Debug.LogWarning($"State {triggerType} not found in {name}");
     }
-    private void SetColor(string colorName, bool isTextOnly = false)
+    private void ActivateState(State state)
     {
-        if (string.IsNullOrEmpty(colorName)) return;
-        var colorLink = HandleInittingGlobalVars.globalSettingsAssets.GetColorLink(colorName);
-        if (!isTextOnly)
+        foreach (GameObject obj in state.objToTurnOn)
         {
-
-            if (bg != null) bg.color = colorLink.color;
-            if (mg != null) mg.color = colorLink.color;
-            if (fg != null) fg.color = colorLink.color;
-            if (bgHighlightAddition != null) bgHighlightAddition.color = colorLink.color;
-            if (mgHighlightAddition != null) mgHighlightAddition.color = colorLink.color;
-            if (fgHighlightAddition != null) fgHighlightAddition.color = colorLink.color;
-            if (bgPressedAddition != null) bgPressedAddition.color = colorLink.color;
-            if (mgPressedAddition != null) mgPressedAddition.color = colorLink.color;
-            if (fgPressedAddition != null) fgPressedAddition.color = colorLink.color;
-            if (highlightAddition != null) highlightAddition.color = colorLink.color;
+            obj.SetActive(true);
         }
-        if (text != null) text.color = colorLink.color;
-
-    }
-    public void UpdateStyle(string styleName)
-    {
-        this.styleName = styleName;
-        UpdateButton();
+        foreach (GameObject obj in state.objToTurnOff)
+        {
+            obj.SetActive(false);
+        }
     }
 }

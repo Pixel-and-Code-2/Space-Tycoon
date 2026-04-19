@@ -98,19 +98,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4047962011408395169, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
       propertyPath: m_fontColor.b
-      value: 0.57254905
+      value: 0.42352942
       objectReference: {fileID: 0}
     - target: {fileID: 4047962011408395169, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
       propertyPath: m_fontColor.g
-      value: 0.57254905
-      objectReference: {fileID: 0}
-    - target: {fileID: 4047962011408395169, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
-      propertyPath: m_fontColor.r
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4047962011408395169, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.29411766
+      objectReference: {fileID: 0}
+    - target: {fileID: 4047962011408395169, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4287795967
+      value: 4285333323
       objectReference: {fileID: 0}
     - target: {fileID: 4279698696011282336, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
       propertyPath: m_AnchorMax.y
@@ -125,8 +125,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4279698696011282336, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4279698696011282336, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 5944263283035079156, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
       propertyPath: m_Name
@@ -163,7 +167,7 @@ PrefabInstance:
     - target: {fileID: 9195999092934217277, guid: 86e3c967048bab047888f5fa1c60dad6, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 737606116, guid: 92d6f723c771370438471db72335612b, type: 3}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

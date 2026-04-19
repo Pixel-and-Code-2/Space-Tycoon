@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.U2D;
 
 [CreateAssetMenu(fileName = "GlobalSettings", menuName = "GlobalSettingsAssets", order = 1)]
 public class GlobalSettingsAssets : ScriptableObject
@@ -47,28 +48,27 @@ public class GlobalSettingsAssets : ScriptableObject
     public string deadColor;
     public string allyColor;
     public string enemyColor;
-    [SerializeField]
-    private List<ButtonStyle> iconButtonStyles;
-    [SerializeField]
-    private List<SpriteLink> spriteLinks;
+    public bool updater = false;
+    private bool updaterCached = false;
+    public System.Action onSpritesUpdated;
     [SerializeField]
     private List<ColorLink> colorLinks;
     public SliderClassColors GetSliderClassColors(SelectableType selectableType)
     {
         return sliderClassColors.Find(x => x.selectableType == selectableType);
     }
-    public ButtonStyle GetIconButtonStyle(string name)
-    {
-        return iconButtonStyles.Find(x => x.name == name);
-    }
-    public SpriteLink GetSpriteLink(string name)
-    {
-        return spriteLinks.Find(x => x.name == name);
-    }
     public ColorLink GetColorLink(string name)
     {
         var colorLink = colorLinks.Find(x => x.name == name);
         if (colorLink == null) return new ColorLink { name = "Default", color = Color.white };
         return colorLink;
+    }
+    void OnValidate()
+    {
+        if (updater != updaterCached)
+        {
+            updaterCached = updater;
+            onSpritesUpdated?.Invoke();
+        }
     }
 }

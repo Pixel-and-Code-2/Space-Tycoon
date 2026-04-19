@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7573115052045885594}
   - component: {fileID: 1242980193856427776}
   - component: {fileID: 3474820592113872562}
-  - component: {fileID: 4129758378885067173}
   m_Layer: 0
   m_Name: ClickableBG
   m_TagString: Untagged
@@ -116,19 +115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd4dd977b3f87448b42890b9aebc0b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonStopPropagation
---- !u!114 &4129758378885067173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1299707820030113181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53cb53cd5903ad44fa1bc4bc189a24d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MainMenu
-  isBackgroundVisible: 1
 --- !u!1 &2331929257891763049
 GameObject:
   m_ObjectHideFlags: 0
