@@ -270,7 +270,7 @@ public class TurnManager : MonoBehaviour
         if (listOfTriggers.Find(t => t.isActive) == null)
         {
             OnTriggerZoneEnter?.Invoke();
-            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "Вторжение!_notpersistent_0_GameAttentionColor");
+            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "_notpersistent_0_GameAttentionColor");
         }
         trigger.isActive = true;
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 1f;
@@ -449,7 +449,7 @@ public class TurnManager : MonoBehaviour
         OnTriggerZoneExitBeforePawnReset?.Invoke();
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 0f;
         OnTriggerZoneExit?.Invoke();
-        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "Устранено!_notpersistent_3_GameCongratulationsColor");
+        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "_notpersistent_3_GameCongratulationsColor");
         SyncEndTurnButtonsWithMovement();
     }
     private void CheckTrigger(TriggerData trigger)

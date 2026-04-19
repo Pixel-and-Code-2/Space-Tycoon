@@ -78,6 +78,7 @@ public class SpriteProvider : MonoBehaviour
             spriteCache[spriteLinkName] = sprite;
 
         }
+        if (image == null || HandleInittingGlobalVars.globalSettingsAssets == null) return;
         if (colorLinkName != null && colorLinkName != "") image.color = HandleInittingGlobalVars.globalSettingsAssets.GetColorLink(colorLinkName).color;
         else image.color = Color.white;
     }

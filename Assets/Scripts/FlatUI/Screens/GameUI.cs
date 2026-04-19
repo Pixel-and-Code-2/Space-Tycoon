@@ -161,6 +161,10 @@ public class GameUI : IUILayer
             {
                 state = PlayerIconState.Selected;
             }
+            else
+            {
+                state = PlayerIconState.NotSelected;
+            }
             playerGroups[i].playerIcon.UpdateState(state);
         }
     }

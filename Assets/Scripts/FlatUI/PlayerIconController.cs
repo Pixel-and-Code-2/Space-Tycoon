@@ -51,6 +51,11 @@ public class PlayerIconController : MonoBehaviour
                 button.interactable = true;
                 break;
         }
+        RectTransform parentRect = transform.parent as RectTransform;
+        if (parentRect != null)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(parentRect);
+        }
     }
 
     public void UpdatePlayer(GameUI.PlayerGroup player)

@@ -9,8 +9,6 @@ public class HandleInittingGlobalVars : MonoBehaviour
     [SerializeField]
     private ParameteredScriptableObject pawnMustHaveParamsSettable;
     [SerializeField]
-    private ParameteredScriptableObject calculatableParametersSettable;
-    [SerializeField]
     private GlobalSettingsAssets globalSettingsAssetsSettable;
     public static ParameteredScriptableObject pawnMustHaveParams;
     public static ParameteredScriptableObject globalParameters;

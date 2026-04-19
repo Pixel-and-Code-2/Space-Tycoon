@@ -8,15 +8,13 @@ public class AttentionText : IUILayer
     [SerializeField]
     TextMeshProUGUI textMeshProUGUI;
     [SerializeField]
-    Image backgroundImage;
-    [SerializeField]
     float duration = 1f;
     [SerializeField]
     private GameObject onlyPersistentObject;
     private float timeElapsed = 0f;
     private bool isPersistent = false;
     [SerializeField]
-    private List<string> bgLinks = new List<string>();
+    private List<GameObject> bgObjects = new List<GameObject>();
     public override void Initialize(string config)
     {
         string[] parts = config.Split('_');
@@ -45,10 +43,16 @@ public class AttentionText : IUILayer
         }
         if (index != -1)
         {
-            var temp = Resources.Load<Sprite>("Screens/" + bgLinks[index]);
-            if (temp != null)
+            for (int i = 0; i < bgObjects.Count; i++)
             {
-                backgroundImage.sprite = temp;
+                if (i == index)
+                {
+                    bgObjects[i].SetActive(true);
+                }
+                else
+                {
+                    bgObjects[i].SetActive(false);
+                }
             }
         }
         if (parts.Length > 0)

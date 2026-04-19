@@ -168,6 +168,9 @@ public class UI3DManager : MonoBehaviour
             SliderToPawnConnector controller = pawnsInScene[pawnObject];
             RectTransform uiElementRect = controller.rectTransform;
             Vector3 worldPosition = pawnObject.transform.position + uiOffset;
+            var temp1 = canvas.worldCamera;
+            var temp2 = worldPosition;
+            var temp3 = temp1.WorldToScreenPoint(temp2);
             Vector3 screenPosition = canvas.worldCamera.WorldToScreenPoint(worldPosition);
             Vector2 localPoint;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(

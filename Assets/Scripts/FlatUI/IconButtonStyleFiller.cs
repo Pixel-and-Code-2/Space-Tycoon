@@ -131,7 +131,7 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
                 return;
             }
         }
-        Debug.LogWarning($"State {triggerType} not found in {name}");
+        // Debug.LogWarning($"State {triggerType} not found in {name}");
     }
     private void ActivateState(State state)
     {

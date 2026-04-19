@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 
 [RequireComponent(typeof(IPawnState))]
@@ -379,6 +380,10 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         if (clicked)
         {
             SetHandleClick(action, true);
+            if (action == selectionClick && EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            {
+                return false;
+            }
             lastHitAction = action;
         }
         return clicked;
