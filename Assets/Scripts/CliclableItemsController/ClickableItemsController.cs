@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 public class ClickableItemsController : MonoBehaviour
 {
@@ -57,6 +56,8 @@ public class ClickableItemsController : MonoBehaviour
     public List<TaskItem> sideTaskScenario;
     private int currentTaskScenarioIndex = 0;
     private const string UNIQUE_ID = "ClickableItemsController";
+    [SerializeField]
+    private GameObject[] authorsObjects;
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -360,7 +361,17 @@ public class ClickableItemsController : MonoBehaviour
                     if (text.showTime == showTime && !text.shown)
                     {
                         text.shown = true;
-                        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.NarrativeText, text.text);
+                        int authorIndex = -1;
+                        var checker = target.GetClickableItem().taskExecutor == null ? PawnController.Instance.currentSelectedPawn.gameObject : target.GetClickableItem().taskExecutor.gameObject;
+                        for (int i = 0; i < authorsObjects.Length; i++)
+                        {
+                            if (authorsObjects[i] == checker)
+                            {
+                                authorIndex = i;
+                                break;
+                            }
+                        }
+                        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.NarrativeText, text.text + "_" + authorIndex);
                         return true;
                     }
                 }

@@ -12,10 +12,6 @@ public class SpriteProvider : MonoBehaviour
     private Image image;
     [SerializeField]
     private string colorLinkName;
-    [SerializeField]
-    private bool updater = true;
-    [SerializeField, HideInInspector]
-    private bool updaterCached = false;
     void Start()
     {
 
@@ -31,11 +27,7 @@ public class SpriteProvider : MonoBehaviour
     }
     void OnValidate()
     {
-        // if (updater != updaterCached)
-        // {
-        // updaterCached = updater;
         UpdateImage();
-        // }
     }
     void UpdateImage()
     {

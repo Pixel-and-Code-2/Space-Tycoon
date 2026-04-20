@@ -41,6 +41,10 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
     [SerializeField]
     public SelectableType selectableType = SelectableType.Player;
+    [Header("Initial state")]
+    [SerializeField]
+    private bool startDead = false;
+    public bool StartDead => startDead;
     public string UNIQUE_ID => "PawnData_" + gameObject.name;
 
     void OnValidate()
@@ -54,16 +58,16 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
     void Start()
     {
+        if (startDead)
+        {
+            selectableType = SelectableType.Dead;
+            // Ensure HP starts at 0 for dead pawns
+            dynamicParameters[AVAILABLE_HEALTH_KEY] = 0f;
+        }
         if (TurnManager.Instance != null)
         {
-            if (selectableType == SelectableType.Player)
-            {
-                TurnManager.Instance.OnPlayerTurnStart += ResetActionPoints;
-            }
-            else if (selectableType == SelectableType.Enemy)
-            {
-                TurnManager.Instance.OnEnemyTurnStart += ResetActionPoints;
-            }
+            TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
+            TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
         }
         initialPawnData.SetDirty();
         initialPawnData.RebuildParametersDict();
@@ -82,14 +86,8 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     {
         if (TurnManager.Instance != null)
         {
-            if (selectableType == SelectableType.Player)
-            {
-                TurnManager.Instance.OnPlayerTurnStart += ResetActionPoints;
-            }
-            else if (selectableType == SelectableType.Enemy)
-            {
-                TurnManager.Instance.OnEnemyTurnStart += ResetActionPoints;
-            }
+            TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
+            TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
         }
     }
 
@@ -97,14 +95,37 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     {
         if (TurnManager.Instance != null)
         {
-            TurnManager.Instance.OnPlayerTurnStart -= ResetActionPoints;
-            TurnManager.Instance.OnEnemyTurnStart -= ResetActionPoints;
+            TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
+            TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
+        }
+    }
+
+    private void OnPlayerTurnStart()
+    {
+        if (selectableType == SelectableType.Player)
+        {
+            ResetActionPoints();
+        }
+    }
+
+    private void OnEnemyTurnStart()
+    {
+        if (selectableType == SelectableType.Enemy)
+        {
+            ResetActionPoints();
         }
     }
     private void OnLoadData(LoadedData data)
     {
         dynamicParameters = data.GetData("DynamicParameters", UNIQUE_ID, dynamicParameters);
+        string selectableTypeKey = DataCompressor.GetRecordName("SelectableType", UNIQUE_ID);
+        bool hasSelectableTypeInSave = data.intData != null && data.intData.ContainsKey(selectableTypeKey);
         selectableType = (SelectableType)data.GetData("SelectableType", UNIQUE_ID, (int)selectableType);
+        if (startDead && !hasSelectableTypeInSave)
+        {
+            selectableType = SelectableType.Dead;
+            dynamicParameters[AVAILABLE_HEALTH_KEY] = 0f;
+        }
         PawnController.Instance.UpdateStartReloadButtonColor();
     }
     private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)

@@ -31,6 +31,16 @@ public class GameUI : IUILayer
     [Header("Background settings")]
     [SerializeField]
     private GameObject battleBackgroundObject;
+    [SerializeField]
+    private TextMeshProUGUI weaponNameText;
+    [SerializeField]
+    private string shootingWeaponName = "ТКБ-К";
+    [SerializeField]
+    private string meleeWeaponName = "ИТО 40000";
+    [SerializeField]
+    private GameObject shootingObject;
+    [SerializeField]
+    private GameObject meleeObject;
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -157,7 +167,8 @@ public class GameUI : IUILayer
     }
     private void UpdateSelectedPlayer()
     {
-        for (int i = 1; i < playerGroups.Count; i++)
+        int selectedInd = -1;
+        for (int i = 0; i < playerGroups.Count; i++)
         {
             PlayerIconState state = PlayerIconState.NotSelected;
             if (playerGroups[i].playerObject == null || playerGroups[i].playerObject.GetSelectableType() != SelectableType.Player)
@@ -168,14 +179,19 @@ public class GameUI : IUILayer
             {
                 state = PlayerIconState.Selected;
             }
-            else
-            {
-                state = PlayerIconState.NotSelected;
-            }
             playerGroups[i].playerIcon.UpdateState(state);
+            if (state == PlayerIconState.Selected)
+            {
+                selectedInd = i;
+            }
+        }
+        if (selectedInd != -1)
+        {
+            weaponNameText.text = selectedInd != 0 ? shootingWeaponName : meleeWeaponName;
+            shootingObject.SetActive(selectedInd != 0);
+            meleeObject.SetActive(selectedInd == 0);
         }
     }
-    //
     public void SelectPlayer(int ind)
     {
         if (playerGroups[ind].playerObject.GetSelectableType() != SelectableType.Player) return;

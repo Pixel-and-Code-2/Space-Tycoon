@@ -1,12 +1,11 @@
 using UnityEngine;
-using UnityEngine.AI;
-using System;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PathDrawer))]
 [RequireComponent(typeof(PawnDataController))]
 [RequireComponent(typeof(PawnNavMesh))]
+[DefaultExecutionOrder(200)]
 public class PawnBrain : IControlableSelectable
 {
     private PathDrawer pathDrawer;
@@ -51,6 +50,10 @@ public class PawnBrain : IControlableSelectable
 
     void Start()
     {
+        if (dataController != null && dataController.StartDead)
+        {
+            ApplyDeadStateAtStart();
+        }
         if (gameObject.layer != LayerMask.NameToLayer("WarFog"))
         {
             UI3DManager.Instance.RegisterPawn(gameObject);
@@ -69,6 +72,19 @@ public class PawnBrain : IControlableSelectable
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE] = 0f;
         HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.CURRENT_TARGET_ANGLE] = 0f;
         SaveHub.Instance.OnLoad += OnLoadData;
+    }
+
+    private void ApplyDeadStateAtStart()
+    {
+        dataController.selectableType = SelectableType.Dead;
+        gameObject.layer = LayerMask.NameToLayer("DeadPawn");
+        pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
+        animatorBrain?.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
+        dataController.SetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY, 0f);
+        if (playersAlive.Contains(this))
+        {
+            playersAlive.Remove(this);
+        }
     }
     private void OnLoadData(LoadedData data)
     {

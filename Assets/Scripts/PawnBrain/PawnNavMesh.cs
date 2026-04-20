@@ -117,6 +117,12 @@ public class PawnNavMesh : MonoBehaviour
     private void OnLoadData(LoadedData data)
     {
         SelectableType selectableType = (SelectableType)data.GetData("SelectableType", dataController.UNIQUE_ID, (int)dataController.selectableType);
+        string selectableTypeKey = DataCompressor.GetRecordName("SelectableType", dataController.UNIQUE_ID);
+        bool hasSelectableTypeInSave = data.intData != null && data.intData.ContainsKey(selectableTypeKey);
+        if (dataController.StartDead && !hasSelectableTypeInSave)
+        {
+            selectableType = SelectableType.Dead;
+        }
         // Debug.Log("OnLoadData: " + selectableType + " " + gameObject.name + " layer: " + gameObject.layer + " " + LayerMask.NameToLayer("DeadPawn"));
 
         if (selectableType != SelectableType.Dead)

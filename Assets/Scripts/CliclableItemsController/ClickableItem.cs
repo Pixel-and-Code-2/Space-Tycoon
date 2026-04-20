@@ -19,7 +19,7 @@ public class ClickableItem : ISelectable
         public List<ExitCode> exitCodes;
         public FormulaFieldWithMemo progressPerRound = new FormulaFieldWithMemo();
     }
-    private IControlableSelectable taskExecutor = null;
+    public IControlableSelectable taskExecutor { get; private set; } = null;
     [SerializeField]
     private List<InspectorContextMenuItem> availableActions = new List<InspectorContextMenuItem>();
     [SerializeField]
