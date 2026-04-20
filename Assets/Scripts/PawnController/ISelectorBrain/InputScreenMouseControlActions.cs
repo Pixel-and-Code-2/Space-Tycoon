@@ -32,6 +32,8 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     private InputActionReference attackButtonClick;
     [SerializeField]
     private InputActionReference endTurnButtonClick;
+    [SerializeField]
+    private InputActionReference toggleShootMoveAction;
     [System.Serializable]
     struct PlayerActions
     {
@@ -48,9 +50,11 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     [SerializeField]
     private bool showZeroPlane = false;
     [SerializeField]
+    private IconButtonStyleFiller attackButton;
+    [SerializeField]
     private IControlableSelectable forcedSelectedPlayer = null;
     private List<InputActionReference> actions = new List<InputActionReference>();
-    private IPawnState currentControlType => PawnController.Instance.currentState;
+    private ControlType currentControlType = ControlType.walk;
     // here we tracking certain keys, to prevent multiple click handles on the same button press
     private Dictionary<InputControl, bool> handledControls = new Dictionary<InputControl, bool>();
     public const float RAYCAST_DISTANCE = 100.0f;
@@ -226,23 +230,24 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
     public override IPawnState PollChangeState()
     {
+        IPawnState newState = null;
+        if (currentControlType == ControlType.attack)
+        {
+            (ISelectable selectable, Vector3 worldPoint, Vector2 screenPoint, ScreenCastHitResult hit) = PollForIntermidiateAiming();
+            if (selectable != null && selectable is IAttackableSelectable attackableSelectable && !meleeState.IsErrorChance(attackableSelectable))
+            {
+                newState = meleeState;
+            }
+            else
+            {
+                newState = shootState;
+            }
+        }
+        else newState = walkState;
 
-        IPawnState newState;
-        (ISelectable selectable, Vector3 _, Vector2 _, ScreenCastHitResult _) = PollForIntermidiateAiming();
-        if (selectable != null && selectable is IAttackableSelectable attackableSelectable && !meleeState.IsErrorChance(attackableSelectable))
-        {
-            newState = meleeState;
-        }
-        else if (selectable != null && selectable is IAttackableSelectable)
-        {
-            newState = shootState;
-        }
-        else
-        {
-            newState = walkState;
-        }
         if (newState != PawnController.Instance.currentState)
         {
+            UpdateControlButtons();
             return newState;
         }
         return null;
@@ -253,11 +258,12 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         {
             return (null, Vector3.zero);
         }
-        if (currentControlType == walkState && GetClickState(walkClick) || (currentControlType == shootState || currentControlType == meleeState) && GetClickState(attackClick))
+        if (currentControlType == ControlType.walk && GetClickState(walkClick) || currentControlType == ControlType.attack && GetClickState(attackClick))
         {
             (ISelectable selectable, Vector3 worldPoint, Vector2 screenPoint, ScreenCastHitResult hit) = PollForIntermidiateAiming();
             if (hit != ScreenCastHitResult.SelectableHit)
             {
+                SetHandleClick(currentControlType == ControlType.walk ? walkClick : attackClick, false);
                 return (null, worldPoint);
             }
             return (selectable, worldPoint);
@@ -284,7 +290,9 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         mousePositionCached = mousePosition;
 
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        if (Physics.Raycast(ray, out raycastHitCached, RAYCAST_DISTANCE, LayerMask.GetMask("Hitable")))
+        if (
+            (currentControlType == ControlType.attack) &&
+            Physics.Raycast(ray, out raycastHitCached, RAYCAST_DISTANCE, LayerMask.GetMask("Hitable")))
         {
             selectableCached = raycastHitCached.collider.GetComponent<ISelectable>();
             worldPointCached = raycastHitCached.point;
@@ -337,12 +345,12 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         }
         if (GetClickState(attackButtonClick))
         {
-            SetControlTypeTo(false);
+            ToggleControlType();
         }
     }
     private void SetHandleClick(InputActionReference action, bool value)
     {
-        if (action != null && action.action.controls.Count > 0 && handledControls[action.action.controls[0]] != value)
+        if (action != null && action.action.controls.Count > 0)
         {
             if (value)
             {
@@ -363,7 +371,6 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
                     handledControls[control] = false;
                 }
             }
-            // Debug.Log("SetHandleClick: " + action.action.name + " " + value + " " + currentControlType);
         }
     }
     private InputActionReference lastHitAction = null;
@@ -428,10 +435,34 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
     private void OnPlayerTurnStart()
     {
+        UpdateControlButtons();
+    }
+
+    private void UpdateControlButtons()
+    {
+        if (attackButton != null)
+        {
+            if (currentControlType == ControlType.walk)
+            {
+                attackButton.TurnOffButton();
+            }
+            else
+            {
+                attackButton.TurnOnButton();
+            }
+        }
+    }
+
+    public void ToggleControlType()
+    {
+        currentControlType = currentControlType == ControlType.walk ? ControlType.attack : ControlType.walk;
+        UpdateControlButtons();
     }
 
     public void SetControlTypeTo(bool isWalk)
     {
+        currentControlType = isWalk ? ControlType.walk : ControlType.attack;
+        UpdateControlButtons();
     }
 
     public void SelectPlayer(IControlableSelectable pl)

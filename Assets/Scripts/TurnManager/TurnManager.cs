@@ -71,8 +71,6 @@ public class TurnManager : MonoBehaviour
     private List<UnityEngine.Object> movingPawns = new List<UnityEngine.Object>();
     [SerializeField]
     private IconButtonStyleFiller endTurnButton1;
-    [SerializeField]
-    private IconButtonStyleFiller endTurnButton2;
     private const string UNIQUE_ID = "TurnManager";
     private const string DYNAMIC_ENEMY_NAME_PREFIX = "EnemySpawned";
     private readonly List<DynamicEnemyRegistryEntry> dynamicEnemyRegistry = new List<DynamicEnemyRegistryEntry>();
@@ -502,7 +500,6 @@ public class TurnManager : MonoBehaviour
         }
         movingPawns.Add(pawn);
         endTurnButton1.TurnOffButton();
-        endTurnButton2.TurnOffButton();
     }
     public void UnregisterMovingPawn(UnityEngine.Object pawn)
     {
@@ -517,12 +514,10 @@ public class TurnManager : MonoBehaviour
         if ((hasActiveTrigger || hasActiveDelayedTrigger) && IsPlayerTurn && movingPawns.Count == 0)
         {
             endTurnButton1.TurnOnButton();
-            endTurnButton2.TurnOnButton();
         }
         else
         {
             endTurnButton1.TurnOffButton();
-            endTurnButton2.TurnOffButton();
         }
     }
 

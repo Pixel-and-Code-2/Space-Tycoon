@@ -214,12 +214,12 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
     public void SetParameterValue(string parameterName, float value)
     {
-        if (GameUI.Instance != null) GameUI.Instance.OnChangeStats();
         if (!dynamicParameters.ContainsKey(parameterName))
         {
             Debug.LogWarning($"Parameter {parameterName} not found in dynamicParameters of pawn data controller, creating new one");
         }
         dynamicParameters[parameterName] = value;
+        if (GameUI.Instance != null) GameUI.Instance.OnChangeStats();
         if (parameterName == AVAILABLE_DISTANCE_KEY || parameterName == AVAILABLE_HEALTH_KEY || parameterName == AMOUNT_OF_HEALINGS_KEY)
         {
             if (GameUI.Instance != null) GameUI.Instance.UpdatePlayerData();

@@ -29,6 +29,8 @@ public class PawnController : MonoBehaviour
     public InputActionReference toggleShootOnMoveAction;
     [SerializeField]
     private IconButtonStyleFiller startReloadButton;
+    [SerializeField]
+    private InputActionReference startReloadAction;
 
 
     public ISelectorBrain currentSelector
@@ -75,6 +77,8 @@ public class PawnController : MonoBehaviour
     {
         if (toggleShootOnMoveAction != null)
             toggleShootOnMoveAction.action.Enable();
+        if (startReloadAction != null)
+            startReloadAction.action.Enable();
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurn;
@@ -109,6 +113,7 @@ public class PawnController : MonoBehaviour
             }
             UpdateMoveOnShootButtonColor();
             UpdateStartReloadButtonColor();
+            SelectableToBoxConnector.HelperTag = currentSelectedPawn == null ? "[персонаж]->[ЛКМ]" : "[ЛКМ]";
         }
 
         ISelectable selectable = currentSelector.PollSelectClickableItem(clickableItemsController.currentSelectedItem);
@@ -157,6 +162,10 @@ public class PawnController : MonoBehaviour
         if (toggleShootOnMoveAction != null && toggleShootOnMoveAction.action.triggered && currentSelectedPawn != null)
         {
             ToggleShootOnMove();
+        }
+        if (startReloadAction != null && startReloadAction.action.triggered && currentSelectedPawn != null)
+        {
+            StartReload();
         }
     }
 

@@ -150,6 +150,17 @@
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "",
+                    "id": "940ed774-dd4a-4851-96ed-64dd73a15784",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookReleaser",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "2D Vector",
                     "id": "624d26d4-c2ae-42d1-8ce5-41658032fd3d",
                     "path": "2DVector",

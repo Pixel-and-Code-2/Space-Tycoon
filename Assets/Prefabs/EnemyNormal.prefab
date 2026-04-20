@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_Name
-      value: Enemy1 Variant
+      value: EnemyNormal
       objectReference: {fileID: 0}
     - target: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_Layer
@@ -75,7 +75,7 @@ PrefabInstance:
     - target: {fileID: 8515852256048443046, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: initialPawnData
       value: 
-      objectReference: {fileID: 11400000, guid: 46d3bae482eea6545a86bd0b114e44d6, type: 2}
+      objectReference: {fileID: 11400000, guid: 53c60951c38a175499bc4666e5e3ca0b, type: 2}
     - target: {fileID: 8535413143347903252, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: m_AgentTypeID
       value: 0

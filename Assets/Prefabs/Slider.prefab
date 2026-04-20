@@ -308,7 +308,6 @@ GameObject:
   - component: {fileID: 6471202527105076433}
   - component: {fileID: 7632788493758095387}
   - component: {fileID: 5468932810931016451}
-  - component: {fileID: 8758375538643436596}
   m_Layer: 0
   m_Name: Slider
   m_TagString: Untagged
@@ -408,17 +407,3 @@ MonoBehaviour:
   rectTransform: {fileID: 6471202527105076433}
   fillColor: {r: 1, g: 1, b: 1, a: 1}
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
---- !u!114 &8758375538643436596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8949078235207085745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e9dd37fadc0fe04293172330759bb0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  sliderController: {fileID: 5468932810931016451}
-  pawn: {fileID: 0}

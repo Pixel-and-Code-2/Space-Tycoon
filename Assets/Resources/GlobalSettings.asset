@@ -30,7 +30,7 @@ MonoBehaviour:
   deadColor: DeadPawnDefaultColor
   allyColor: PlayerDefaultColor
   enemyColor: EnemyDefaultColor
-  updater: 1
+  updater: 0
   colorLinks:
   - name: EnemyDefaultColor
     color: {r: 1, g: 0, b: 0, a: 1}
@@ -75,6 +75,14 @@ MonoBehaviour:
   - name: UITransparentBGColor
     color: {r: 0, g: 0, b: 0, a: 1}
   - name: UITransparentFG
-    color: {r: 0, g: 0, b: 0, a: 0.47058824}
+    color: {r: 0, g: 0, b: 0, a: 0.78431374}
   - name: UIUnavailableColor
     color: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
+  - name: SliderStaminaFG
+    color: {r: 0, g: 0.17254902, b: 0.31764707, a: 1}
+  - name: SliderAllyFG
+    color: {r: 0, g: 0.21176471, b: 0.047058824, a: 1}
+  - name: SliderEnemyFG
+    color: {r: 0.4009434, g: 0.002252491, b: 0, a: 1}
+  - name: UIHelperTextColor
+    color: {r: 0.29411766, g: 1, b: 0.42352942, a: 1}

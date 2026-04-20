@@ -23,7 +23,7 @@ public class SettingApplier : MonoBehaviour
     }
     void Start()
     {
-        if (!changeControlsAction.action.enabled)
+        if (changeControlsAction != null && !changeControlsAction.action.enabled)
         {
             changeControlsAction.action.Enable();
         }
@@ -40,14 +40,14 @@ public class SettingApplier : MonoBehaviour
 
     void OnEnable()
     {
-        if (!changeControlsAction.action.enabled)
+        if (changeControlsAction != null && !changeControlsAction.action.enabled)
         {
             changeControlsAction.action.Enable();
         }
     }
     void OnDisable()
     {
-        if (changeControlsAction.action.enabled)
+        if (changeControlsAction != null && changeControlsAction.action.enabled)
         {
             changeControlsAction.action.Disable();
         }
@@ -55,7 +55,7 @@ public class SettingApplier : MonoBehaviour
 
     void Update()
     {
-        if (changeControlsAction.action.triggered)
+        if (changeControlsAction != null && changeControlsAction.action.triggered)
         {
             ToggleChangeControls();
         }

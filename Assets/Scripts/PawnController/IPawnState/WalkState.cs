@@ -49,9 +49,13 @@ public class WalkState : IPawnState
     }
 
 
-
+    void OnEnable()
+    {
+        SliderToPawnConnector.HelperTag = "[1]->[ЛКМ]";
+    }
     void OnDisable()
     {
+        SliderToPawnConnector.HelperTag = "[ЛКМ]";
         pathDrawer.SetVisible(false);
     }
 

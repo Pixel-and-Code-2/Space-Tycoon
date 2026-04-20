@@ -3,6 +3,10 @@ using TMPro;
 
 public class SelectableToBoxConnector : MonoBehaviour
 {
+    public static string HelperTag = "[ЛКМ]";
+    private string helperTagCached = string.Empty;
+    [SerializeField]
+    private TextMeshProUGUI helperText;
     public ISelectable selectable;
     public RectTransform rectTransform;
     private TextMeshProUGUI textObject;
@@ -22,5 +26,16 @@ public class SelectableToBoxConnector : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>();
         textObject = GetComponentInChildren<TextMeshProUGUI>();
+    }
+    void Update()
+    {
+        if (helperText != null)
+        {
+            if (helperTagCached != HelperTag)
+            {
+                helperTagCached = HelperTag;
+                helperText.text = HelperTag;
+            }
+        }
     }
 }

@@ -72,10 +72,16 @@ public class GameUI : IUILayer
     {
         battleBackgroundObject.SetActive(data.GetData("IsStepByStep", HandleInittingGlobalVars.UNIQUE_ID, false));
     }
+    void OnEnable()
+    {
+        if (togglePause != null && togglePause.action != null)
+            togglePause.action.Enable();
+    }
     void OnDisable()
     {
         gameObject.SetActive(false);
-        togglePause.action.Disable();
+        if (togglePause != null && togglePause.action != null)
+            togglePause.action.Disable();
     }
     void Update()
     {
@@ -83,8 +89,9 @@ public class GameUI : IUILayer
         {
             selectedPlayer = PawnController.Instance.currentSelectedPawn;
             UpdateSelectedPlayer();
+            OnChangeStats();
         }
-        if (!togglePause.action.triggered)
+        if (togglePause == null || togglePause.action == null || !togglePause.action.triggered)
             return;
         if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI)
             return;
@@ -168,12 +175,12 @@ public class GameUI : IUILayer
             playerGroups[i].playerIcon.UpdateState(state);
         }
     }
-
+    //
     public void SelectPlayer(int ind)
     {
         if (playerGroups[ind].playerObject.GetSelectableType() != SelectableType.Player) return;
         InputScreenMouseControlActions.Instance.SelectPlayer(playerGroups[ind].playerObject);
-        ControlsVariantEasy.Instance.SelectPlayer(playerGroups[ind].playerObject);
+        // ControlsVariantEasy.Instance.SelectPlayer(playerGroups[ind].playerObject);
     }
     public void UpdatePlayerData()
     {
