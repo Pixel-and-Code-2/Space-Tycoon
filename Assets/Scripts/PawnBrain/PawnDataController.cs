@@ -173,7 +173,14 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         dynamicParameters[MOVES_TO_SKIP_KEY] = 0f;
         dynamicParameters[IS_SHOOT_ON_MOVE_KEY] = 0f;
         dynamicParameters[AMOUNT_OF_DEFENDED_HITS_KEY] = 0f;
-        dynamicParameters[AMOUNT_OF_HEALINGS_KEY] = 0f;
+        if (selectableType == SelectableType.Enemy)
+        {
+            dynamicParameters[AMOUNT_OF_HEALINGS_KEY] = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
+        }
+        else
+        {
+            dynamicParameters[AMOUNT_OF_HEALINGS_KEY] = 0f;
+        }
     }
 
     public void FillFormulaData(FormulaDataMonoBase formulaData, string prefix)

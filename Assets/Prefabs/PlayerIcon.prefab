@@ -91,8 +91,6 @@ MonoBehaviour:
   spriteLinkName: PlayerIconOutline
   image: {fileID: 2308945891506826605}
   colorLinkName: UIMainColor
-  updater: 1
-  updaterCached: 0
 --- !u!1 &1038365980374732008
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,8 +182,6 @@ MonoBehaviour:
   spriteLinkName: HeartBG
   image: {fileID: 6892190952386847837}
   colorLinkName: UIIconBGColor
-  updater: 1
-  updaterCached: 0
 --- !u!1 &2262066176092513988
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,8 +390,6 @@ MonoBehaviour:
   spriteLinkName: PlayerIconFG
   image: {fileID: 7750192523911813072}
   colorLinkName: UIAttentionDimColor
-  updater: 1
-  updaterCached: 0
 --- !u!1 &3432534323210191068
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,8 +545,6 @@ MonoBehaviour:
   spriteLinkName: PlayerIconZaya
   image: {fileID: 2030591401667336107}
   colorLinkName: 
-  updater: 1
-  updaterCached: 0
 --- !u!1 &3932151246328489784
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,8 +574,8 @@ RectTransform:
   m_GameObject: {fileID: 3932151246328489784}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2767989776705461740}
   - {fileID: 2357835064369888763}
@@ -592,7 +584,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 15, y: -15}
-  m_SizeDelta: {x: 30, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &536161545576813030
 MonoBehaviour:
@@ -705,7 +697,6 @@ MonoBehaviour:
   DisableFG: {fileID: 2909762391723155167}
   Selected: {fileID: 2450409135862933877}
   NotSelected: {fileID: 7561999824732185063}
-  playerName: {fileID: 0}
   playerHealingNumber: {fileID: 6838235810350188501}
   button: {fileID: 8070422803836971294}
 --- !u!1 &4083181705691682568
@@ -799,8 +790,6 @@ MonoBehaviour:
   spriteLinkName: StatusMelee
   image: {fileID: 2906246934550935300}
   colorLinkName: 
-  updater: 1
-  updaterCached: 0
 --- !u!1 &4653133658746721058
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,8 +1183,6 @@ MonoBehaviour:
   spriteLinkName: HeartHighlight
   image: {fileID: 174636472600644965}
   colorLinkName: UIMainColor
-  updater: 1
-  updaterCached: 0
 --- !u!1 &7561999824732185063
 GameObject:
   m_ObjectHideFlags: 0
@@ -1326,8 +1313,6 @@ MonoBehaviour:
   spriteLinkName: HeartOutline
   image: {fileID: 6160193006597698695}
   colorLinkName: UIMainColor
-  updater: 1
-  updaterCached: 0
 --- !u!1 &7968531899246400679
 GameObject:
   m_ObjectHideFlags: 0
@@ -1419,8 +1404,6 @@ MonoBehaviour:
   spriteLinkName: StatusMelee
   image: {fileID: 1517818167637385445}
   colorLinkName: 
-  updater: 1
-  updaterCached: 0
 --- !u!1 &8340203665096254658
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,7 +1429,7 @@ RectTransform:
   m_GameObject: {fileID: 8340203665096254658}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 344066881455722333}
@@ -1552,8 +1535,6 @@ MonoBehaviour:
   spriteLinkName: HeartMG
   image: {fileID: 1227498208105845785}
   colorLinkName: UIMainDimColor
-  updater: 1
-  updaterCached: 0
 --- !u!1 &8659091049208797241
 GameObject:
   m_ObjectHideFlags: 0
@@ -1645,8 +1626,6 @@ MonoBehaviour:
   spriteLinkName: PlayerIconOutline
   image: {fileID: 2219512511946263549}
   colorLinkName: UIMainColor
-  updater: 1
-  updaterCached: 0
 --- !u!1 &8788530884063490824
 GameObject:
   m_ObjectHideFlags: 0
@@ -1738,5 +1717,3 @@ MonoBehaviour:
   spriteLinkName: PlayerIconZaya
   image: {fileID: 658117220034880144}
   colorLinkName: 
-  updater: 1
-  updaterCached: 0

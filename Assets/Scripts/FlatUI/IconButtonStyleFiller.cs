@@ -36,6 +36,8 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
     private bool checkInteractableOnHighlight = true;
     [SerializeField]
     private bool checkInteractableOnPress = true;
+    [SerializeField]
+    private bool defaultOnEnable = true;
     private enum OnToggleInteractableBehaviour
     {
         JustApplyToggle,
@@ -51,7 +53,8 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
 
     void Start()
     {
-        OnValidate();
+        if (defaultOnEnable)
+            OnValidate();
     }
     void OnValidate()
     {
@@ -59,7 +62,12 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
     }
     void OnEnable()
     {
-        ActivateState(defaultState);
+        if (defaultOnEnable)
+            ActivateState(defaultState);
+    }
+    void OnDisable()
+    {
+        ActivateState(TriggerType.Off);
     }
     private bool CheckToggle()
     {

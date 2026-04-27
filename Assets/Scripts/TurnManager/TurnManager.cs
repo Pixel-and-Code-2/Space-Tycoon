@@ -513,11 +513,11 @@ public class TurnManager : MonoBehaviour
         bool hasActiveDelayedTrigger = listOfDelayedTriggers.Find(t => t.isActive) != null;
         if ((hasActiveTrigger || hasActiveDelayedTrigger) && IsPlayerTurn && movingPawns.Count == 0)
         {
-            endTurnButton1.TurnOnButton();
+            endTurnButton1.TurnOffButton();
         }
         else
         {
-            endTurnButton1.TurnOffButton();
+            endTurnButton1.TurnOnButton();
         }
     }
 

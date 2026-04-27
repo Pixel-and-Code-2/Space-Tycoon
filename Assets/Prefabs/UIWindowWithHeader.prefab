@@ -191,7 +191,7 @@ MonoBehaviour:
     - {fileID: 8488332105619079476}
     - {fileID: 4787591989958343999}
     - {fileID: 2671369260155406717}
-  defaultState: 4
+  defaultState: 1
   checkInteractableOnHighlight: 1
   checkInteractableOnPress: 1
   onToggleInteractableBehaviour: 0
@@ -283,12 +283,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: AngledOutline2
   image: {fileID: 8085368402526589607}
   colorLinkName: UIMainColor
-  updater: 1
-  updaterCached: 1
 --- !u!1 &2121299042130503190
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,12 +598,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: BoxBackground
   image: {fileID: 2774954300605005812}
   colorLinkName: UITransparentBGColor
-  updater: 1
-  updaterCached: 1
 --- !u!1 &2671369260155406717
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,12 +689,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: 
   image: {fileID: 6559961218600149662}
   colorLinkName: 
-  updater: 1
-  updaterCached: 1
 --- !u!1 &3479750060817627678
 GameObject:
   m_ObjectHideFlags: 0
@@ -881,12 +872,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: HeaderIconBG
   image: {fileID: 3456459002291000749}
   colorLinkName: UITransparentBGColor
-  updater: 1
-  updaterCached: 1
 --- !u!1 &3921440210540104287
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,12 +963,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: 
   image: {fileID: 7116929762086095812}
   colorLinkName: 
-  updater: 1
-  updaterCached: 1
 --- !u!1 &3990303698768675890
 GameObject:
   m_ObjectHideFlags: 0
@@ -1070,12 +1055,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: AngledOutline
   image: {fileID: 2137023810723416124}
   colorLinkName: UIMainColor
-  updater: 1
-  updaterCached: 1
 --- !u!114 &5462887889902111805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1184,12 +1166,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: 
   image: {fileID: 7780068676707709293}
   colorLinkName: 
-  updater: 1
-  updaterCached: 1
 --- !u!1 &4945960547241366231
 GameObject:
   m_ObjectHideFlags: 0
@@ -1278,12 +1257,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: 
   image: {fileID: 7816976561044053276}
   colorLinkName: 
-  updater: 1
-  updaterCached: 1
 --- !u!1 &4967619274036854959
 GameObject:
   m_ObjectHideFlags: 0
@@ -1372,12 +1348,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: 
   image: {fileID: 3807824733201363227}
   colorLinkName: 
-  updater: 1
-  updaterCached: 1
 --- !u!1 &5013470810003260312
 GameObject:
   m_ObjectHideFlags: 0
@@ -1466,12 +1439,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: 
   image: {fileID: 21193575706956732}
   colorLinkName: 
-  updater: 1
-  updaterCached: 1
 --- !u!1 &6513803668529678859
 GameObject:
   m_ObjectHideFlags: 0
@@ -1560,12 +1530,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: AngledOutline2
   image: {fileID: 1400121812542478361}
   colorLinkName: UIMainColor
-  updater: 0
-  updaterCached: 0
 --- !u!1 &6630637486615377951
 GameObject:
   m_ObjectHideFlags: 0
@@ -1654,12 +1621,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: BoxOutline
   image: {fileID: 3925614886038816129}
   colorLinkName: UIMainColor
-  updater: 1
-  updaterCached: 1
 --- !u!1 &6800564284429332200
 GameObject:
   m_ObjectHideFlags: 0
@@ -1748,12 +1712,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: ExitIcon
   image: {fileID: 6411805068168987697}
   colorLinkName: UIAttentionColor
-  updater: 1
-  updaterCached: 1
 --- !u!1 &7278855314786858042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1842,12 +1803,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: HeaderIconBG
   image: {fileID: 5172706697867676583}
   colorLinkName: UIMainDimColor
-  updater: 1
-  updaterCached: 1
 --- !u!1 &7293398303508086139
 GameObject:
   m_ObjectHideFlags: 0
@@ -1936,12 +1894,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: SettingsIcon
   image: {fileID: 574919589983163325}
   colorLinkName: UIMainColor
-  updater: 1
-  updaterCached: 1
 --- !u!1 &7294905146810302434
 GameObject:
   m_ObjectHideFlags: 0
@@ -2068,12 +2023,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: SquareHighlighter
   image: {fileID: 2850216820689531406}
   colorLinkName: UIMainColor
-  updater: 1
-  updaterCached: 1
 --- !u!1 &7668020555024760533
 GameObject:
   m_ObjectHideFlags: 0
@@ -2162,12 +2114,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: 
   image: {fileID: 8624475609723327938}
   colorLinkName: 
-  updater: 1
-  updaterCached: 1
 --- !u!1 &7720926786849513295
 GameObject:
   m_ObjectHideFlags: 0
@@ -2256,12 +2205,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: HeaderIconBG
   image: {fileID: 6542805581956790163}
   colorLinkName: UIAttentionDimColor
-  updater: 0
-  updaterCached: 0
 --- !u!1 &7839184802560218512
 GameObject:
   m_ObjectHideFlags: 0
@@ -2350,12 +2296,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: 
   image: {fileID: 8810694511874992873}
   colorLinkName: 
-  updater: 1
-  updaterCached: 1
 --- !u!1 &8488332105619079476
 GameObject:
   m_ObjectHideFlags: 0
@@ -2444,9 +2387,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f8561514093ec4fa909d1adfbe5d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteProvider
-  isScreens: 0
   spriteLinkName: 
   image: {fileID: 4179775914016131438}
   colorLinkName: 
-  updater: 1
-  updaterCached: 1

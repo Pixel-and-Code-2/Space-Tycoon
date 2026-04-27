@@ -17,14 +17,6 @@ public class SpriteProvider : MonoBehaviour
 
         UpdateImage();
     }
-    void OnEnable()
-    {
-        HandleInittingGlobalVars.globalSettingsAssets.onSpritesUpdated += UpdateImage;
-    }
-    void OnDisable()
-    {
-        HandleInittingGlobalVars.globalSettingsAssets.onSpritesUpdated -= UpdateImage;
-    }
     void OnValidate()
     {
         UpdateImage();

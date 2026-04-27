@@ -18,7 +18,8 @@ public class UILayersController : MonoBehaviour
         SaveGame = 4,
         NarrativeText = 5,
         AttentionText = 6,
-        SlideShow = 7
+        SlideShow = 7,
+        Help = 8
     }
     [System.Serializable]
     private class UILayerEntry

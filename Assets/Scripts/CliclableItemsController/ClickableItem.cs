@@ -290,7 +290,7 @@ public class ClickableItem : ISelectable
         string atkW = PawnController.ATTACKER_PREFIX + PawnDataController.WALKED_KEY;
         string atkS = PawnController.ATTACKER_PREFIX + PawnDataController.SHOOTED_AMOUNT_KEY;
         string atkM = PawnController.ATTACKER_PREFIX + PawnDataController.MELEE_AMOUNT_KEY;
-        Debug.Log(
+        Debug.Log/**/(
             "BoostProgressBar context [" + gameObject.name + "] " +
             "c_pawnDistance=" + Fc(PawnController.PAWN_DISTANCE_LABEL) +
             " g_IsStepByStep=" + Fg(HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY) +

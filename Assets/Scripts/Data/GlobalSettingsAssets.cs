@@ -48,9 +48,6 @@ public class GlobalSettingsAssets : ScriptableObject
     public string deadColor;
     public string allyColor;
     public string enemyColor;
-    public bool updater = false;
-    private bool updaterCached = false;
-    public System.Action onSpritesUpdated;
     [SerializeField]
     private List<ColorLink> colorLinks;
     public SliderClassColors GetSliderClassColors(SelectableType selectableType)
@@ -62,13 +59,5 @@ public class GlobalSettingsAssets : ScriptableObject
         var colorLink = colorLinks.Find(x => x.name == name);
         if (colorLink == null) return new ColorLink { name = "Default", color = Color.white };
         return colorLink;
-    }
-    void OnValidate()
-    {
-        if (updater != updaterCached)
-        {
-            updaterCached = updater;
-            onSpritesUpdated?.Invoke();
-        }
     }
 }

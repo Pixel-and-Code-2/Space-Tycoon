@@ -1134,10 +1134,10 @@ TextureImporter:
       name: PlayerIconOutline
       rect:
         serializedVersion: 2
-        x: 610
-        y: 233
-        width: 106
-        height: 106
+        x: 603
+        y: 234
+        width: 110
+        height: 110
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1156,10 +1156,10 @@ TextureImporter:
       name: PlayerIconZeleniy
       rect:
         serializedVersion: 2
-        x: 609
-        y: 343
-        width: 106
-        height: 106
+        x: 603
+        y: 349
+        width: 110
+        height: 110
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1178,10 +1178,10 @@ TextureImporter:
       name: PlayerIconGusev
       rect:
         serializedVersion: 2
-        x: 610
-        y: 452
-        width: 106
-        height: 106
+        x: 603
+        y: 463
+        width: 110
+        height: 110
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1200,10 +1200,10 @@ TextureImporter:
       name: PlayerIconZaya
       rect:
         serializedVersion: 2
-        x: 610
-        y: 560
-        width: 106
-        height: 106
+        x: 603
+        y: 575
+        width: 110
+        height: 111
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1222,10 +1222,10 @@ TextureImporter:
       name: PlayerIconFG
       rect:
         serializedVersion: 2
-        x: 723
-        y: 723
-        width: 106
-        height: 106
+        x: 462
+        y: 5
+        width: 110
+        height: 110
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1311,7 +1311,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 527
-        y: 204
+        y: 217
         width: 41
         height: 41
       alignment: 0
@@ -1333,7 +1333,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 527
-        y: 252
+        y: 265
         width: 41
         height: 41
       alignment: 0
@@ -1355,7 +1355,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 527
-        y: 156
+        y: 169
         width: 41
         height: 41
       alignment: 0
@@ -1377,7 +1377,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 527
-        y: 108
+        y: 121
         width: 41
         height: 41
       alignment: 0
@@ -1399,7 +1399,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 527
-        y: 299
+        y: 312
         width: 41
         height: 41
       alignment: 0
@@ -1530,10 +1530,10 @@ TextureImporter:
       name: TaskBG
       rect:
         serializedVersion: 2
-        x: 308
-        y: 578
-        width: 146
-        height: 6
+        x: 311
+        y: 609
+        width: 69
+        height: 7
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1552,10 +1552,10 @@ TextureImporter:
       name: TaskFG
       rect:
         serializedVersion: 2
-        x: 308
-        y: 567
-        width: 146
-        height: 6
+        x: 311
+        y: 618
+        width: 69
+        height: 7
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1574,10 +1574,10 @@ TextureImporter:
       name: TaskMG
       rect:
         serializedVersion: 2
-        x: 307
-        y: 557
-        width: 146
-        height: 6
+        x: 311
+        y: 626
+        width: 69
+        height: 7
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1596,9 +1596,9 @@ TextureImporter:
       name: HPBG
       rect:
         serializedVersion: 2
-        x: 307
-        y: 605
-        width: 69
+        x: 312
+        y: 653
+        width: 41
         height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -1618,9 +1618,9 @@ TextureImporter:
       name: HPFG
       rect:
         serializedVersion: 2
-        x: 307
-        y: 616
-        width: 69
+        x: 312
+        y: 664
+        width: 41
         height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -1640,9 +1640,9 @@ TextureImporter:
       name: HPMGAlly
       rect:
         serializedVersion: 2
-        x: 307
-        y: 595
-        width: 69
+        x: 312
+        y: 673
+        width: 41
         height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -1662,9 +1662,9 @@ TextureImporter:
       name: HPMGEnemy
       rect:
         serializedVersion: 2
-        x: 307
-        y: 586
-        width: 69
+        x: 312
+        y: 681
+        width: 41
         height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -1684,10 +1684,10 @@ TextureImporter:
       name: StaminaBG
       rect:
         serializedVersion: 2
-        x: 307
+        x: 312
         y: 635
-        width: 106
-        height: 7
+        width: 69
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1706,10 +1706,10 @@ TextureImporter:
       name: StaminaMG
       rect:
         serializedVersion: 2
-        x: 307
-        y: 627
-        width: 106
-        height: 7
+        x: 312
+        y: 646
+        width: 69
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1728,10 +1728,10 @@ TextureImporter:
       name: StaminaFG
       rect:
         serializedVersion: 2
-        x: 307
-        y: 644
-        width: 106
-        height: 7
+        x: 312
+        y: 641
+        width: 69
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1856,6 +1856,138 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: ArrowLeftSolid
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 711
+        width: 61
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8bdd8bfaf7faac46943561073a52eb4
+      internalID: -1430340084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArrowLeftHighlighted
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 645
+        width: 61
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e8f6a5b86dabd14bb76412dd6185993
+      internalID: 1179545650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SubtaskIconMG
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 116
+        width: 43
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47ba833ac04e0f84590957a3ea68a63b
+      internalID: -985041001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ImportantTaskIconMG
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 116
+        width: 43
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a305a5f42cad9a49a6b71f8765c4881
+      internalID: 1147493297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TaskIconFG
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 69
+        width: 43
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e50bfb2196b49f40a383871a6040cc2
+      internalID: -664870534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TaskIconBG
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 69
+        width: 43
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a19f9fee39ae884db326e028bb18ca6
+      internalID: -225347462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -1872,7 +2004,8 @@ TextureImporter:
     nameFileIdTable:
       AngledOutline: 1078843146
       AngledOutline2: -1546045979
-      Atlas_04_1: -277075590
+      ArrowLeftHighlighted: 1179545650
+      ArrowLeftSolid: -1430340084
       BoxBackground: -950896088
       BoxOutline: -818944792
       ContextMenuButtonBG: -36441329
@@ -1901,6 +2034,7 @@ TextureImporter:
       IconShoot: 1015563544
       IconShootWalk: 237300062
       IconSkipMove: 497774729
+      ImportantTaskIconMG: 1147493297
       MeleeWeaponMask: -426752062
       MeleeWeaponOutline: -382811220
       MessageBG: 2139186053
@@ -1934,10 +2068,13 @@ TextureImporter:
       StatusShoot2: -1672658315
       SubTaskFG: 1488241760
       SubtaskBG: 1785288643
+      SubtaskIconMG: -985041001
       TaskBG: -893590988
       TaskFG: -1021801252
       TaskFill: -797236486
       TaskHighlight: 963672405
+      TaskIconBG: -225347462
+      TaskIconFG: -277075590
       TaskMG: 1957354138
       TaskMarkBG: -1267692009
       TaskMarkHighlight: 1928903919

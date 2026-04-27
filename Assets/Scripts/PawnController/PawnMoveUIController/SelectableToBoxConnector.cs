@@ -9,23 +9,32 @@ public class SelectableToBoxConnector : MonoBehaviour
     private TextMeshProUGUI helperText;
     public ISelectable selectable;
     public RectTransform rectTransform;
-    private TextMeshProUGUI textObject;
+    public GameObject questionObj;
+    public GameObject attentionObj;
     public string text
     {
         get
         {
-            return textObject.text;
+            return questionObj.activeSelf ? "?" : "!";
         }
         set
         {
-            textObject.text = value;
+            if (value == "?")
+            {
+                questionObj.SetActive(true);
+                attentionObj.SetActive(false);
+            }
+            else if (value == "!")
+            {
+                questionObj.SetActive(false);
+                attentionObj.SetActive(true);
+            }
         }
     }
 
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        textObject = GetComponentInChildren<TextMeshProUGUI>();
     }
     void Update()
     {

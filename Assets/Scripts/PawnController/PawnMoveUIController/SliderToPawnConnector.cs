@@ -62,6 +62,19 @@ public class SliderToPawnConnector : MonoBehaviour
             ColorTheSlider(); // Re-initialize if type changes
         }
 
+        if (pawn.selectableType == SelectableType.Dead)
+        {
+            var maxHealings = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
+            var usedHealings = pawn.GetParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY);
+            var revivesLeft = maxHealings - usedHealings;
+            helperText.enabled = revivesLeft > 0.5f;
+            if (helperText.enabled && helperTagCached != "[ЛКМ]")
+            {
+                helperTagCached = "[ЛКМ]";
+                helperText.text = "[ЛКМ]";
+            }
+            return;
+        }
         pawnHealth = TryGetParam(PawnDataController.AVAILABLE_HEALTH_KEY);
         bool isAlive = pawnSelectableType != SelectableType.Dead && pawnHealth > 0.01f;
         if (isAlive != isAliveCached)
@@ -82,11 +95,19 @@ public class SliderToPawnConnector : MonoBehaviour
             {
                 enemyHpSlider.SetValue(pawnHealth);
                 enemyHpSlider.gameObject.SetActive(isAlive);
+                if (!isAlive)
+                {
+                    helperText.enabled = false;
+                }
             }
             else if (pawnSelectableType == SelectableType.Dead)
             {
                 if (allyHpSlider != null) allyHpSlider.gameObject.SetActive(false);
-                if (enemyHpSlider != null) enemyHpSlider.gameObject.SetActive(false);
+                if (enemyHpSlider != null)
+                {
+                    enemyHpSlider.gameObject.SetActive(false);
+                    helperText.enabled = false;
+                }
             }
         }
 
@@ -117,6 +138,7 @@ public class SliderToPawnConnector : MonoBehaviour
         {
             if (pawn.selectableType == SelectableType.Player)
             {
+
                 if (helperTagCached != "[ЛКМ]")
                 {
                     helperTagCached = "[ЛКМ]";
@@ -234,7 +256,11 @@ public class SliderToPawnConnector : MonoBehaviour
         }
         else
         {
-            if (enemyHpSlider != null) enemyHpSlider.gameObject.SetActive(false);
+            if (enemyHpSlider != null)
+            {
+                enemyHpSlider.gameObject.SetActive(false);
+                helperText.enabled = false;
+            }
             if (allyHpSlider != null) allyHpSlider.gameObject.SetActive(false);
             if (allyStaminaSlider != null) allyStaminaSlider.gameObject.SetActive(false);
             UpdateActionIcons(false);

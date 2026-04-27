@@ -114,6 +114,7 @@ public class PawnController : MonoBehaviour
             UpdateMoveOnShootButtonColor();
             UpdateStartReloadButtonColor();
             SelectableToBoxConnector.HelperTag = currentSelectedPawn == null ? "[персонаж]->[ЛКМ]" : "[ЛКМ]";
+            SliderToPawnConnector.HelperTag = currentSelectedPawn == null ? "" : "[ЛКМ]";
         }
 
         ISelectable selectable = currentSelector.PollSelectClickableItem(clickableItemsController.currentSelectedItem);

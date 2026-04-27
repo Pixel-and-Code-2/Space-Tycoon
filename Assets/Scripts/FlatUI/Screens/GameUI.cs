@@ -115,7 +115,7 @@ public class GameUI : IUILayer
     }
     public void OnHelp()
     {
-        // UILayersController.Instance.SetLayer(UILayersController.UILayer.HelpMenu);
+        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.Help);
     }
     private void OnTaskUpdated()
     {
