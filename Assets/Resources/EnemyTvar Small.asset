@@ -20,7 +20,7 @@ MonoBehaviour:
   - name: SHT
     value: 0
   - name: BRW
-    value: 3
+    value: 6
   - name: THR
     value: 0
   - name: ENG
@@ -34,7 +34,7 @@ MonoBehaviour:
   calculatedParameters:
   - name: STR
     formula:
-      formula: (float)Math.Round(g_Random * 3 + 6)
+      formula: (float)Math.Round(g_Random * 3 + 4)
       instruction: 
       dataAssets:
       - {fileID: 11400000}
@@ -50,7 +50,7 @@ MonoBehaviour:
       - Parameters
   mustHaveParameters:
   - {fileID: 11400000, guid: 7d19a2bbc433f5f46b883786d18f1fdd, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 51f3c6c138b324e40af38d39a8bcf6f3, type: 2}
   - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   isDirty: 0
   parametersDictStateCache: 'MINDMG = 0,00 (0,00)
@@ -78,61 +78,64 @@ MonoBehaviour:
 
     TotalAmmo = 0,00 (0,00)
 
-    DMR = 0,00 (0,00)
+    MeleeROF = 1,00 (1,00)
 
-    DMM
+    DMR
     = 0,00 (0,00)
+
+    DMM = 0,00 (0,00)
 
     DR = 0,00 (0,00)
 
-    MDR = 0,00 (0,00)
+    MDR = 0,00
+    (0,00)
 
-    ARMMASS =
-    0,00 (0,00)
+    ARMMASS = 0,00 (0,00)
 
-    STR = 8,00 (8,00)
+    STR = 6,00 (6,00)
 
-    DX = 7,00 (7,00)
+    DX = 6,00 (6,00)
 
-    IQ = 0,00 (0,00)
-
-    HT
+    IQ
     = 0,00 (0,00)
+
+    HT = 0,00 (0,00)
 
     SHT = 0,00 (0,00)
 
-    BRW = 3,00 (3,00)
+    BRW = 6,00
+    (6,00)
 
-    THR = 0,00
-    (0,00)
+    THR = 0,00 (0,00)
 
     ENG = 0,00 (0,00)
 
     SCI = 0,00 (0,00)
 
-    DDGB = 0,00 (0,00)
-
-    SPDB
+    DDGB
     = 0,00 (0,00)
+
+    SPDB = 0,00 (0,00)
 
     DMG = 5,00 (5,00)
 
-    HP = 10,00 (10,00)
+    HP = 10,00
+    (10,00)
 
-    PRC = 5,00
-    (5,00)
+    PRC = 5,00 (5,00)
 
     FP = 5,00 (5,00)
 
     SPD = 3,75 (3,75)
 
-    DDG = 4,75 (4,75)
+    DDG
+    = 4,75 (4,75)
 
-    BCW
-    = 7,50 (7,50)
+    BCW = 7,50 (7,50)
 
-    BDMG = 6,00 (6,00)
+    BDMG = 4,00 (4,00)
 
-    Random = 0,86 (0,86)
+    Random =
+    0,65 (0,65)
 
 '

@@ -22594,47 +22594,11 @@ MonoBehaviour:
     targetPawn: {fileID: 0}
     position: {x: 0, y: 0, z: 0}
     capability: 2
-  - controlledPawn: {fileID: 890983531}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
   - controlledPawn: {fileID: 869158687}
     targetPawn: {fileID: 0}
     position: {x: 0, y: 0, z: 0}
     capability: 2
-  - controlledPawn: {fileID: 0}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 0}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 0}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 0}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 0}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 0}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 0}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 0}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 0}
+  - controlledPawn: {fileID: 869158687}
     targetPawn: {fileID: 0}
     position: {x: 0, y: 0, z: 0}
     capability: 1
@@ -28307,9 +28271,6 @@ MonoBehaviour:
   - {fileID: 1309574665}
   - {fileID: 927822975}
   - {fileID: 869158678}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!4 &1835857629249712327
 Transform:
   m_ObjectHideFlags: 0

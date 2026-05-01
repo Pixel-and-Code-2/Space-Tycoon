@@ -18,7 +18,7 @@ MonoBehaviour:
   - name: DMM
     value: 0
   - name: DR
-    value: 0
+    value: 5
   - name: MDR
     value: 0
   - name: ARMMASS
@@ -32,10 +32,13 @@ MonoBehaviour:
     DMM = 0,00 (0,00)
 
     DR =
-    0,00 (0,00)
+    5,00 (5,00)
 
     MDR = 0,00 (0,00)
 
     ARMMASS = 29,00 (29,00)
+
+    Random
+    = 0,53 (0,53)
 
 '

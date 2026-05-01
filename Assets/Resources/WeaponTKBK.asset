@@ -16,7 +16,7 @@ MonoBehaviour:
   - name: MINDMG
     value: 6
   - name: MAXDMG
-    value: 26
+    value: 15
   - name: MDMG
     value: 1
   - name: ACC
@@ -37,7 +37,7 @@ MonoBehaviour:
   isDirty: 0
   parametersDictStateCache: 'MINDMG = 6,00 (6,00)
 
-    MAXDMG = 26,00 (26,00)
+    MAXDMG = 15,00 (15,00)
 
     MDMG
     = 1,00 (1,00)
@@ -60,6 +60,9 @@ MonoBehaviour:
 
     TotalAmmo = 400,00 (400,00)
 
-    Random = 0,68 (0,68)
+    MeleeROF = 1,00 (1,00)
+
+    Random
+    = 0,50 (0,50)
 
 '

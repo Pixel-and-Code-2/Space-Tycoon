@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
   - name: STR
-    value: 6
+    value: 7
   - name: DX
     value: 7
   - name: IQ
@@ -22,7 +22,7 @@ MonoBehaviour:
   - name: HT
     value: 6
   - name: STH
-    value: 7
+    value: 6
   - name: BRW
     value: 2
   - name: THR
@@ -45,7 +45,7 @@ MonoBehaviour:
   isDirty: 0
   parametersDictStateCache: 'MINDMG = 6,00 (6,00)
 
-    MAXDMG = 26,00 (26,00)
+    MAXDMG = 15,00 (15,00)
 
     MDMG
     = 1,00 (1,00)
@@ -68,64 +68,66 @@ MonoBehaviour:
 
     TotalAmmo = 400,00 (400,00)
 
-    DMR = 0,00 (0,00)
+    MeleeROF = 1,00 (1,00)
 
-    DMM
+    DMR
     = 0,00 (0,00)
+
+    DMM = 0,00 (0,00)
 
     DR = 21,00 (21,00)
 
-    MDR = 5,00 (5,00)
+    MDR = 5,00
+    (5,00)
 
-    ARMMASS
-    = 9,00 (9,00)
+    ARMMASS = 9,00 (9,00)
 
-    STR = 6,00 (6,00)
+    STR = 7,00 (7,00)
 
     DX = 7,00 (7,00)
 
-    IQ = 4,00
-    (4,00)
+    IQ
+    = 4,00 (4,00)
 
     HT = 6,00 (6,00)
 
     SHT = 10,00 (10,00)
 
-    BRW = 2,00 (2,00)
+    BRW = 2,00
+    (2,00)
 
-    THR
-    = 0,00 (0,00)
+    THR = 0,00 (0,00)
 
     ENG = 0,00 (0,00)
 
     SCI = 0,00 (0,00)
 
-    DDGB = 0,00
-    (0,00)
+    DDGB
+    = 0,00 (0,00)
 
     SPDB = 0,00 (0,00)
 
     DMG = 5,00 (5,00)
 
-    STH = 7,00 (7,00)
+    STH = 6,00
+    (6,00)
 
-    HP
-    = 11,00 (11,00)
+    HP = 12,00 (12,00)
 
     PRC = 9,00 (9,00)
 
     FP = 11,00 (11,00)
 
-    SPD =
-    5,75 (5,75)
+    SPD
+    = 5,75 (5,75)
 
     DDG = 6,75 (6,75)
 
     BCW = 11,50 (11,50)
 
-    BDMG = 4,00
-    (4,00)
+    BDMG =
+    8,00 (8,00)
 
-    Random = 0,18 (0,18)
+    Random = 0,31 (0,31)
 
 '
