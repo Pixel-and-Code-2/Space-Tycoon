@@ -48,6 +48,7 @@ public class ClickableItem : ISelectable
             TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
         }
         OnValidate();
+        ChangeScenarioStatus(ClickableItemsController.TaskItem.TaskItemStatus.Unavailable);
         this.gameObject.layer = LayerMask.NameToLayer("ClickableItem");
         SaveHub.Instance.OnLoad += OnLoadData;
         SaveHub.Instance.OnSave += OnSaveData;
@@ -262,7 +263,10 @@ public class ClickableItem : ISelectable
             progressBarCached.SetValue(progress);
             if (progress >= 100f)
             {
-                scriptForClickable?.OnProgress(100f);
+                progress = scriptForClickable?.OnProgress(100f) ?? 100f;
+            }
+            if (progress >= 100f)
+            {
                 UI3DManager.Instance.UnregisterSlider(transform);
                 progressBarCached = null;
                 actionCached = null;
@@ -276,7 +280,7 @@ public class ClickableItem : ISelectable
                 scriptForClickable?.OnComplete();
                 return;
             }
-            scriptForClickable?.OnProgress(progress);
+            progress = scriptForClickable?.OnProgress(progress) ?? progress;
         }
     }
     void LogBoostProgressFormulaDiagnostics(float boostEvaluated)
@@ -366,4 +370,24 @@ public class ClickableItem : ISelectable
 
     public override Transform GetTransform() => transform;
     public override SelectableType GetSelectableType() => SelectableType.Neutral;
+
+    public override void ChangeScenarioStatus(ClickableItemsController.TaskItem.TaskItemStatus status)
+    {
+        switch (status)
+        {
+            case ClickableItemsController.TaskItem.TaskItemStatus.ReadyToStart:
+                col.enabled = true;
+                break;
+            case ClickableItemsController.TaskItem.TaskItemStatus.InProgress:
+            case ClickableItemsController.TaskItem.TaskItemStatus.Done:
+            case ClickableItemsController.TaskItem.TaskItemStatus.Unavailable:
+                Debug.Log("disabling " + gameObject.name);
+                if (((1 << gameObject.layer) & LayerMask.GetMask("ClickableItem", "Default")) != 0)
+                {
+                    Debug.Log("yeeees " + gameObject.name);
+                    col.enabled = false;
+                }
+                break;
+        }
+    }
 }

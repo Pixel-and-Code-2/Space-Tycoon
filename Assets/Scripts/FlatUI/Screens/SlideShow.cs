@@ -82,7 +82,7 @@ public class SlideShow : IUILayer
             switch (currentSlidesType)
             {
                 case SlideShowType.Start:
-                    UILayersController.Instance.SetLayer(UILayersController.UILayer.GameUI);
+                    UILayersController.Instance.SetLayer(UILayersController.UILayer.Help);
                     break;
                 case SlideShowType.Win:
                     UILayersController.Instance.SetLayer(UILayersController.UILayer.AttentionText, "Победа_persistent_1_GameCongratulationsColor");

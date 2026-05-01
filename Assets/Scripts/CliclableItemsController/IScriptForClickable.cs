@@ -23,5 +23,5 @@ public class IScriptForClickable : MonoBehaviour
     {
         if (cancelTriggerIndex != -1) TurnManager.Instance.StartDelayedEncounterByIndex(cancelTriggerIndex);
     }
-    public virtual void OnProgress(float newProgress) { }
+    public virtual float OnProgress(float newProgress) { return newProgress; }
 }

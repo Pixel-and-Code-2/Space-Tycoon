@@ -5,6 +5,8 @@ using System;
 
 public class SaveHub : MonoBehaviour
 {
+    [SerializeField]
+    private int currSavingsVersion = 1;
     public static SaveHub Instance { get; private set; }
 
     public const string StreamingAssetsDefaultSaveFileName = "defaultSave.dat";
@@ -26,6 +28,20 @@ public class SaveHub : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        int savingsVersion = PlayerPrefs.GetInt("SavingsVersion", -1);
+        if (savingsVersion != currSavingsVersion)
+        {
+            PlayerPrefs.SetInt("SavingsVersion", currSavingsVersion);
+            for (int i = 0; i < 5; i++)
+            {
+                PlayerPrefs.DeleteKey(SaveMenu.GetSlotName(i + 1));
+                ClearSaveData(i);
+            }
         }
     }
 

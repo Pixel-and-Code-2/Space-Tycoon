@@ -120,6 +120,7 @@ public class ClickableItemsController : MonoBehaviour
             if (item.selectable.IsWorking() && item.status != TaskItem.TaskItemStatus.InProgress)
             {
                 item.status = TaskItem.TaskItemStatus.InProgress;
+                item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.InProgress);
                 UI3DManager.Instance.UnregisterSelectable(item.selectable);
                 CheckActionBox();
                 updated = true;
@@ -130,6 +131,7 @@ public class ClickableItemsController : MonoBehaviour
             if (item.selectable.IsWorking() && item.status != TaskItem.TaskItemStatus.InProgress)
             {
                 item.status = TaskItem.TaskItemStatus.InProgress;
+                item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.InProgress);
                 UI3DManager.Instance.UnregisterSelectable(item.selectable);
                 CheckActionBox();
                 updated = true;
@@ -211,6 +213,7 @@ public class ClickableItemsController : MonoBehaviour
                 if (CheckReadyWhen(scenario[i]))
                 {
                     scenario[i].status = TaskItem.TaskItemStatus.ReadyToStart;
+                    scenario[i].selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.ReadyToStart);
                     updated = true;
                 }
             }
@@ -220,6 +223,7 @@ public class ClickableItemsController : MonoBehaviour
                 && CheckDoneWhen(scenario[i]))
             {
                 scenario[i].status = TaskItem.TaskItemStatus.Done;
+                scenario[i].selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.Done);
                 UI3DManager.Instance.UnregisterSelectable(scenario[i].selectable);
                 updated = true;
             }
@@ -338,9 +342,14 @@ public class ClickableItemsController : MonoBehaviour
     }
     public void OnContextMenu()
     {
-        if (currentSelectedItem == null) return;
-        if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.BeforeContextMenu)) return;
-        if (CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.BeforeContextMenu)) return;
+        if (currentSelectedItem == null)
+        {
+            return;
+        }
+        bool blocked = CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.BeforeContextMenu);
+        if (blocked) return;
+        blocked = CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.BeforeContextMenu);
+        if (blocked) return;
         List<ContextMenuItem> items = currentSelectedItem.OnContextMenu();
         if (items != null)
         {
@@ -421,6 +430,7 @@ public class ClickableItemsController : MonoBehaviour
             if (item.selectable == selectable)
             {
                 item.status = TaskItem.TaskItemStatus.Done;
+                item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.Done);
                 UI3DManager.Instance.UnregisterSelectable(item.selectable);
                 CheckActionBox();
                 updated = true;
@@ -432,6 +442,7 @@ public class ClickableItemsController : MonoBehaviour
             if (item.selectable == selectable)
             {
                 item.status = TaskItem.TaskItemStatus.Done;
+                item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.Done);
                 UI3DManager.Instance.UnregisterSelectable(item.selectable);
                 CheckActionBox();
                 updated = true;
@@ -458,6 +469,7 @@ public class ClickableItemsController : MonoBehaviour
             if (item.selectable == clickableItem)
             {
                 item.status = TaskItem.TaskItemStatus.ReadyToStart;
+                item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.ReadyToStart);
                 CheckActionBox();
                 return;
             }
@@ -467,6 +479,7 @@ public class ClickableItemsController : MonoBehaviour
             if (item.selectable == clickableItem)
             {
                 item.status = TaskItem.TaskItemStatus.ReadyToStart;
+                item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.ReadyToStart);
                 CheckActionBox();
                 return;
             }

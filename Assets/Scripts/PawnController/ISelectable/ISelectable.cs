@@ -16,4 +16,5 @@ public abstract class ISelectable : ILookTarget
     public virtual void OnDeselect() { }
     public virtual bool IsWorking() { return false; }
     public virtual ClickableItem GetClickableItem() { return GetComponent<ClickableItem>(); }
+    public virtual void ChangeScenarioStatus(ClickableItemsController.TaskItem.TaskItemStatus status) { }
 }

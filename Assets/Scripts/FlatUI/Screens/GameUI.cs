@@ -86,6 +86,7 @@ public class GameUI : IUILayer
     {
         if (togglePause != null && togglePause.action != null)
             togglePause.action.Enable();
+        OnTaskUpdated();
     }
     void OnDisable()
     {

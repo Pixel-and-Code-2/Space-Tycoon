@@ -63,7 +63,6 @@ public class HelpUI : IUILayer
             }
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform);
-
     }
 
 }

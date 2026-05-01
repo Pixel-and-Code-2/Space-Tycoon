@@ -2901,7 +2901,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -2916,7 +2916,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -3011,7 +3011,7 @@ GameObject:
   - component: {fileID: 363475059}
   - component: {fileID: 363475058}
   - component: {fileID: 363475057}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Radiostation_LVL0_CLICKABLE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3098,7 +3098,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -3110,10 +3110,12 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -1
     progressPerRound:
-      formula: 100*g_e
+      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
+        > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
+        > 0.5 ? 0 :\r\np_IQ*2 ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -3613,7 +3615,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -3625,10 +3627,10 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 0.5058824}
       code: -1
     progressPerRound:
-      formula: 100*g_e
+      formula: 50*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -8928,7 +8930,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -8940,12 +8942,12 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 0.5058824}
       code: -1
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
+      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerLastRoundWalked
         > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
-        > 0.5 ? 0 :\r\np_IQ*2 ))))"
+        > 0.5 ? 0 :\r\np_DX*2 ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -9499,7 +9501,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -9511,10 +9513,12 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 0.5058824}
       code: -1
     progressPerRound:
-      formula: 100*g_e
+      formula: "(c_pawnDistance > 4 ? -10 : \n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
+        > 1 ? 0 :\n(c_AttackerShotAmount > 0.5 ? 0 :\n(c_AttackerMeleeAmount > 0.5
+        ? 0 :\np_IQ*3 ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -9779,7 +9783,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -9791,12 +9795,10 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 0.5058824}
       code: -1
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
-        > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
-        > 0.5 ? 0 :\r\np_IQ*2 ))))"
+      formula: 50*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -10108,7 +10110,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -10125,7 +10127,7 @@ MonoBehaviour:
         > 0.5 ? 0 :\r\n100*g_e))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11402,7 +11404,7 @@ MonoBehaviour:
         ))'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11421,7 +11423,7 @@ MonoBehaviour:
       formula: 30*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11573,7 +11575,7 @@ MonoBehaviour:
         ))'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11592,7 +11594,7 @@ MonoBehaviour:
       formula: 40*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11843,7 +11845,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11860,7 +11862,7 @@ MonoBehaviour:
         ? 0 :\np_IQ*3 ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -17137,7 +17139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1444200267}
   - component: {fileID: 1444200270}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Door_LVL0_Link
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17369,7 +17371,7 @@ GameObject:
   - component: {fileID: 1512402891}
   - component: {fileID: 1512402890}
   - component: {fileID: 1512402889}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Door_LVL1_CLICKABLE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17457,7 +17459,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -17469,10 +17471,12 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -1
     progressPerRound:
-      formula: 100*g_e
+      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
+        > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
+        > 0.5 ? 0 :\r\np_IQ*3 ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -17639,7 +17643,7 @@ MonoBehaviour:
       (i_STR + g_e*2 + i_MDMG - t_MDR)))'
     instruction: 
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -17654,7 +17658,7 @@ MonoBehaviour:
       / 100\n))))) "
     instruction: 
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -17697,7 +17701,7 @@ MonoBehaviour:
       below to add its name to the end o\u0430 the formula (but be sure to the formula
       to be blured when clicked)."
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -17723,7 +17727,7 @@ MonoBehaviour:
       below to add its name to the end o\u0430 the formula (but be sure to the formula
       to be blured when clicked)."
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -18765,7 +18769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213dd97b2d2c8b44490e84a696271e95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveHub
-  currSavingsVersion: 4
+  currSavingsVersion: 2
 --- !u!1 &1570870379 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7092391029048808588, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
@@ -19233,7 +19237,7 @@ GameObject:
   - component: {fileID: 1878437267}
   - component: {fileID: 1878437269}
   - component: {fileID: 1878437268}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Door_LVL1_CLICKABLE_NoEntrance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19290,7 +19294,9 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -2
     progressPerRound:
-      formula: 100*g_e
+      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
+        > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
+        > 0.5 ? 0 :\r\n100 ))))"
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
@@ -19775,9 +19781,7 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 0.41960785}
       code: -1
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
-        > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
-        > 0.5 ? 0 :\r\np_IQ*2 ))))"
+      formula: 50*g_e
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
