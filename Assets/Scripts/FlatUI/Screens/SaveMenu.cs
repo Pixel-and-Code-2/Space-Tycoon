@@ -56,7 +56,7 @@ public class SaveMenu : IUILayer
             string slotName = PlayerPrefs.GetString(GetSlotName(slot), emptyLabel);
             if (string.Equals(slotName.TrimEnd(), emptyLabel, StringComparison.Ordinal))
             {
-                UILayersController.Instance.SetLayer(UILayersController.UILayer.SlideShow, SlideShow.slidesDictionary[SlideShowType.Start]);
+                UILayersController.Instance.SetLayer(UILayersController.UILayer.CutScene, "start");
             }
             else
             {

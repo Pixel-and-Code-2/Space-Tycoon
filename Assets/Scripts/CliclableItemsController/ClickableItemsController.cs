@@ -22,12 +22,19 @@ public class ClickableItemsController : MonoBehaviour
         [System.Serializable]
         public class TextToShow
         {
+            [System.Serializable]
+            public class CompleteSound
+            {
+                public AudioClip clip;
+                public int authorIndex;
+            }
             public TextShowTime showTime;
             public string text;
             [HideInInspector]
             public bool shown = false;
             public bool showOnce = true;
             public bool showOnlyOnStepByStep = false;
+            public List<CompleteSound> completeSounds = new List<CompleteSound>();
         }
         [System.Serializable]
         public class TaskCondition
@@ -372,6 +379,7 @@ public class ClickableItemsController : MonoBehaviour
                         text.shown = true;
                         int authorIndex = -1;
                         var checker = target.GetClickableItem().taskExecutor == null ? PawnController.Instance.currentSelectedPawn.gameObject : target.GetClickableItem().taskExecutor.gameObject;
+                        AudioClip clip = null;
                         for (int i = 0; i < authorsObjects.Length; i++)
                         {
                             if (authorsObjects[i] == checker)
@@ -380,6 +388,15 @@ public class ClickableItemsController : MonoBehaviour
                                 break;
                             }
                         }
+                        foreach (var sound in text.completeSounds)
+                        {
+                            if (sound.authorIndex == authorIndex)
+                            {
+                                clip = sound.clip;
+                                break;
+                            }
+                        }
+                        AudioController.Instance.Play(clip);
                         UILayersController.Instance.ShowOverlay(UILayersController.UILayer.NarrativeText, text.text + "_" + authorIndex);
                         return true;
                     }

@@ -29,6 +29,7 @@ public class ClickableItem : ISelectable
     private Collider col = null;
 
 
+
     void OnValidate()
     {
         prey = GetComponent<IControlableSelectable>();
@@ -381,10 +382,8 @@ public class ClickableItem : ISelectable
             case ClickableItemsController.TaskItem.TaskItemStatus.InProgress:
             case ClickableItemsController.TaskItem.TaskItemStatus.Done:
             case ClickableItemsController.TaskItem.TaskItemStatus.Unavailable:
-                Debug.Log("disabling " + gameObject.name);
                 if (((1 << gameObject.layer) & LayerMask.GetMask("ClickableItem", "Default")) != 0)
                 {
-                    Debug.Log("yeeees " + gameObject.name);
                     col.enabled = false;
                 }
                 break;

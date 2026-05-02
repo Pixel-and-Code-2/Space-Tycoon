@@ -7,7 +7,7 @@ public class SettingsMenu : IUILayer
 {
     [SerializeField]
     private InputActionReference returnToPauseButton;
-    private int tabNumber = 0;
+    // private int tabNumber = 0;
     [SerializeField]
     private GameObject[] tabs;
     [SerializeField]
@@ -30,10 +30,18 @@ public class SettingsMenu : IUILayer
     private string control1Description;
     [SerializeField]
     private string control2Description;
+    [SerializeField]
+    private Slider musicSlider;
+    [SerializeField]
+    private Slider soundSlider;
+    [SerializeField]
+
     void Start()
     {
         currentControl = PlayerPrefs.GetInt("SelectedBrain", 1);
         OnValidate();
+        soundSlider.value = PlayerPrefs.GetFloat("SoundVolume", 1f);
+        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
     }
     void OnValidate()
     {
@@ -96,12 +104,17 @@ public class SettingsMenu : IUILayer
     }
     public void OnChangeTab(int tabNumber)
     {
-        this.tabNumber = tabNumber;
+        // this.tabNumber = tabNumber;
         for (int i = 0; i < tabs.Length; i++)
         {
             tabs[i].gameObject.SetActive(i == tabNumber);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+    }
+    public void OnChangeVolume(bool isMusic)
+    {
+        AudioController.Instance.SetVolume(isMusic ? musicSlider.value : soundSlider.value, isMusic);
+        PlayerPrefs.SetFloat(isMusic ? "MusicVolume" : "SoundVolume", isMusic ? musicSlider.value : soundSlider.value);
     }
 }
 

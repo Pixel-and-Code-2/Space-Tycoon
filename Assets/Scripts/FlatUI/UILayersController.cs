@@ -19,7 +19,8 @@ public class UILayersController : MonoBehaviour
         NarrativeText = 5,
         AttentionText = 6,
         SlideShow = 7,
-        Help = 8
+        Help = 8,
+        CutScene = 9
     }
     [System.Serializable]
     private class UILayerEntry

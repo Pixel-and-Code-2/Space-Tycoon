@@ -295,7 +295,7 @@ public class PawnBrain : IControlableSelectable
             playersAlive.Remove(this);
             if (playersAlive.Count == 0)
             {
-                UILayersController.Instance.SetLayer(UILayersController.UILayer.SlideShow, SlideShow.slidesDictionary[SlideShowType.Lose]);
+                UILayersController.Instance.SetLayer(UILayersController.UILayer.CutScene, "lose");
             }
         }
         dataController.SetParameterValue(

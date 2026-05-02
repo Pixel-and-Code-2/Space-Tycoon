@@ -5,6 +5,7 @@ public class MainMenu : IUILayer
     void OnEnable()
     {
         gameObject.SetActive(true);
+        AudioController.Instance.Play(AudioController.Instance.mainMenuAmbient, true);
     }
     void OnDisable()
     {

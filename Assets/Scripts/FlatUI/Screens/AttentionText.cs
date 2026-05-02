@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 public class AttentionText : IUILayer
 {
@@ -21,7 +20,7 @@ public class AttentionText : IUILayer
         if (parts.Length > 1 && parts[1] == "persistent")
         {
             isPersistent = true;
-            onlyPersistentObject.SetActive(true);
+            // onlyPersistentObject.SetActive(true);
         }
         else
         {
@@ -70,11 +69,21 @@ public class AttentionText : IUILayer
     }
     void Update()
     {
-        if (isPersistent) return;
-        timeElapsed += Time.unscaledDeltaTime;
-        if (timeElapsed >= duration)
+        if (isPersistent)
         {
-            UILayersController.Instance.GoBack();
+            timeElapsed += Time.deltaTime;
+            if (timeElapsed >= 0.1f)
+            {
+                onlyPersistentObject.SetActive(true);
+            }
+        }
+        else
+        {
+            timeElapsed += Time.unscaledDeltaTime;
+            if (timeElapsed >= duration)
+            {
+                UILayersController.Instance.GoBack();
+            }
         }
     }
     public void OnExit()

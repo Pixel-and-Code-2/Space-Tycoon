@@ -52,8 +52,7 @@ public class NarrativeTextWindow : IUILayer
     {
         string[] parts = config.Split('_');
         int parsedNumber;
-        if (parts.Length > 1 && int.TryParse(parts[1], out parsedNumber) && parsedNumber >= 0 && parsedNumber <= 2) ;
-        else parsedNumber = 0;
+        if (parts.Length <= 1 || !int.TryParse(parts[1], out parsedNumber) || parsedNumber < 0 || parsedNumber > 2) parsedNumber = 0;
         textMeshProUGUI.text = parts[0];
         var rt = (RectTransform)transform;
         var p = rt.anchoredPosition;

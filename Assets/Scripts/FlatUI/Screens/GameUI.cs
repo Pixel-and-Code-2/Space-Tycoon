@@ -138,7 +138,7 @@ public class GameUI : IUILayer
         else
         {
             mainTaskController.ClearText();
-            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.SlideShow, SlideShow.slidesDictionary[SlideShowType.Win]);
+            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.CutScene, "win");
         }
         int subTaskIndex = 0;
         for (int i = 0; i < scenario.Count && subTaskIndex < sideTaskController.Count; i++)

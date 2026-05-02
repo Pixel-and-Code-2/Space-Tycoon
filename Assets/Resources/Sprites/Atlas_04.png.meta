@@ -1988,6 +1988,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: SliderHandle
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 698
+        width: 71
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84f79909fda7af7479fab44bc7a67301
+      internalID: 1747850256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -2057,6 +2079,7 @@ TextureImporter:
       ShootingWeaponOutline: 1303162581
       ShutdownButtonHighlight: -989343590
       ShutdownButtonIcon: -1162872666
+      SliderHandle: 1747850256
       SquareHighlighter: -1099174802
       StaminaBG: -389509443
       StaminaFG: -416601994
