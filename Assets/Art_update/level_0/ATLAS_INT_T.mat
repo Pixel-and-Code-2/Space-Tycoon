@@ -80,9 +80,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _1st2nd_Shades_Feather: 0.495
+    - _1st2nd_Shades_Feather: 0.5
     - _1st_ShadeColor_Feather: 0.1
-    - _2nd_ShadeColor_Feather: 0.495
+    - _2nd_ShadeColor_Feather: 0.5
     - _2nd_ShadeColor_Step: 0.5
     - _AlphaClip: 1
     - _AlphaToMask: 1
@@ -92,8 +92,10 @@ Material:
     - _IsBaseMapAlphaAsClippingMask: 1
     - _Is_LightColor_Base: 1
     - _ShadeColor_Step: 0.5
+    - _Use_1stAs2nd: 1
+    - _Use_BaseAs1st: 0
     m_Colors:
-    - _1st_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
+    - _1st_ShadeColor: {r: 0.8490566, g: 0.6840512, b: 0.6840512, a: 1}
     - _2nd_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
