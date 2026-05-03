@@ -86,7 +86,7 @@ public class GameUI : IUILayer
     {
         if (togglePause != null && togglePause.action != null)
             togglePause.action.Enable();
-        OnTaskUpdated();
+        StartCoroutine(OnTaskUpdatedDelayed());
     }
     void OnDisable()
     {
@@ -118,9 +118,16 @@ public class GameUI : IUILayer
     {
         UILayersController.Instance.ShowOverlay(UILayersController.UILayer.Help);
     }
+    private System.Collections.IEnumerator OnTaskUpdatedDelayed()
+    {
+        yield return null;
+        OnTaskUpdated();
+        UpdateSelectedPlayer();
+    }
     private void OnTaskUpdated()
     {
         ClickableItemsController.TaskItem mainTask = null;
+        if (ClickableItemsController.Instance == null) return;
         var scenario = ClickableItemsController.Instance.mainTaskScenario;
         for (int i = scenario.Count - 1; i >= 0; i--)
         {
@@ -138,7 +145,7 @@ public class GameUI : IUILayer
         else
         {
             mainTaskController.ClearText();
-            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.CutScene, "win");
+            StartCoroutine(EndGame());
         }
         int subTaskIndex = 0;
         for (int i = 0; i < scenario.Count && subTaskIndex < sideTaskController.Count; i++)
@@ -151,11 +158,25 @@ public class GameUI : IUILayer
             subTaskIndex++;
         }
 
-        for (int i = subTaskIndex; i < sideTaskController.Count; i++)
+        for (int i = 0; i < sideTaskController.Count; i++)
         {
+            if (i < subTaskIndex)
+            {
+                if (!sideTaskController[i].gameObject.activeSelf)
+                {
+                    sideTaskController[i].gameObject.SetActive(true);
+                }
+                continue;
+            }
             sideTaskController[i].ClearText();
-            sideTaskController[i].gameObject.transform.parent.gameObject.SetActive(false);
+            sideTaskController[i].gameObject.SetActive(false);
         }
+    }
+    private System.Collections.IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(2f);
+        UI3DManager.Instance.HideContextMenu();
+        UILayersController.Instance.SetLayer(UILayersController.UILayer.CutScene, "win");
     }
     public void OnChangeStats()
     {

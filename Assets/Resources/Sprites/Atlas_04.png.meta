@@ -188,10 +188,10 @@ TextureImporter:
       name: SettingsButtonIcon
       rect:
         serializedVersion: 2
-        x: 353
-        y: 954
-        width: 68
-        height: 68
+        x: 354
+        y: 955
+        width: 66
+        height: 66
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -233,9 +233,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 426
-        y: 954
-        width: 68
-        height: 68
+        y: 955
+        width: 66
+        height: 66
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -452,10 +452,10 @@ TextureImporter:
       name: SquareHighlighter
       rect:
         serializedVersion: 2
-        x: 129
-        y: 363
-        width: 88
-        height: 88
+        x: 130
+        y: 364
+        width: 86
+        height: 86
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1997,7 +1997,7 @@ TextureImporter:
         width: 71
         height: 71
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []

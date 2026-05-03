@@ -20,7 +20,7 @@ public class AttentionText : IUILayer
         if (parts.Length > 1 && parts[1] == "persistent")
         {
             isPersistent = true;
-            // onlyPersistentObject.SetActive(true);
+            onlyPersistentObject.SetActive(true);
         }
         else
         {
@@ -71,11 +71,7 @@ public class AttentionText : IUILayer
     {
         if (isPersistent)
         {
-            timeElapsed += Time.deltaTime;
-            if (timeElapsed >= 0.1f)
-            {
-                onlyPersistentObject.SetActive(true);
-            }
+
         }
         else
         {

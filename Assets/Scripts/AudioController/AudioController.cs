@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Audio;
+using System;
 
 public class AudioController : MonoBehaviour
 {
@@ -36,11 +37,54 @@ public class AudioController : MonoBehaviour
         soundSource.loop = false;
         TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
         TurnManager.Instance.OnTriggerZoneEnter += OnTriggerZoneEnter;
+        SaveHub.Instance.OnLoad += OnLoad;
+        SaveHub.Instance.OnSave += OnSave;
+        audioMixer.SetFloat("musicVol", Mathf.Log10(PlayerPrefs.GetFloat("MusicVolume", 1f)) * 20f);
+        audioMixer.SetFloat("sfxVol", Mathf.Log10(PlayerPrefs.GetFloat("SoundVolume", 1f)) * 20f);
+    }
+    private void OnSave(Action<SaveRecord[], string> addSaveData)
+    {
+        addSaveData(new SaveRecord[] {
+            new SaveRecord() {
+                recordName = "CurrentMusicClip",
+                recordType = SaveRecordType.stringValue,
+                stringValue = musicSource.clip != null ? musicSource.clip.name : ""
+            }
+        }, "AudioController");
+    }
+    private void OnLoad(LoadedData data)
+    {
+        string currentMusicClip = data.GetData("CurrentMusicClip", "AudioController", "");
+        if (currentMusicClip != "")
+        {
+            if (currentMusicClip == gameAmbient.name)
+            {
+                Play(gameAmbient, true);
+            }
+            else if (currentMusicClip == combatAmbient.name)
+            {
+                Play(combatAmbient, true);
+            }
+            else if (currentMusicClip == victoryAmbient.name)
+            {
+                Play(victoryAmbient, true);
+            }
+            else if (currentMusicClip == defeatAmbient.name)
+            {
+                Play(defeatAmbient, true);
+            }
+            else if (currentMusicClip == mainMenuAmbient.name)
+            {
+                Play(mainMenuAmbient, true);
+            }
+        }
     }
     void OnDestroy()
     {
         TurnManager.Instance.OnTriggerZoneExit -= OnTriggerZoneExit;
         TurnManager.Instance.OnTriggerZoneEnter -= OnTriggerZoneEnter;
+        SaveHub.Instance.OnLoad -= OnLoad;
+        SaveHub.Instance.OnSave -= OnSave;
     }
     private void OnTriggerZoneExit()
     {

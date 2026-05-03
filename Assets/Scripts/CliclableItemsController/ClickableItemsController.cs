@@ -233,6 +233,7 @@ public class ClickableItemsController : MonoBehaviour
                 scenario[i].selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.Done);
                 UI3DManager.Instance.UnregisterSelectable(scenario[i].selectable);
                 updated = true;
+                if (i > 1) PlayerPrefs.SetInt("EducationCompleted", 1);
             }
             if (scenario[i].selectable.IsWorking())
             {

@@ -50,7 +50,7 @@ public class CutScene : IUILayer
         videoPlayer.loopPointReached -= OnVideoEnd;
         videoPlayer.loopPointReached += OnVideoEnd;
         timeOnSlide = 0f;
-        AudioController.Instance.Stop(true, false);
+        AudioController.Instance.Stop(true, true);
     }
     private void OnVideoEnd(VideoPlayer videoPlayer)
     {
@@ -62,17 +62,17 @@ public class CutScene : IUILayer
         timeOnSlide = 0f;
         if (configCache == "start")
         {
-            UILayersController.Instance.SetLayer(UILayersController.UILayer.Help);
+            UILayersController.Instance.SetLayerKeepingGameUI(UILayersController.UILayer.Help);
             AudioController.Instance.Play(AudioController.Instance.gameAmbient, true);
         }
         if (configCache == "win")
         {
-            UILayersController.Instance.SetLayer(UILayersController.UILayer.AttentionText, "Победа_persistent_1_GameCongratulationsColor");
+            UILayersController.Instance.SetLayerKeepingGameUI(UILayersController.UILayer.AttentionText, "Победа_persistent_1_GameCongratulationsColor");
             AudioController.Instance.Play(AudioController.Instance.victoryAmbient, true);
         }
         if (configCache == "lose")
         {
-            UILayersController.Instance.SetLayer(UILayersController.UILayer.AttentionText, "Поражение_persistent_2_GameAttentionColor");
+            UILayersController.Instance.SetLayerKeepingGameUI(UILayersController.UILayer.AttentionText, "Поражение_persistent_2_GameAttentionColor");
             AudioController.Instance.Play(AudioController.Instance.defeatAmbient, true);
         }
     }

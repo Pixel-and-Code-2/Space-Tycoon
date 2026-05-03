@@ -85,6 +85,8 @@ public class PawnController : MonoBehaviour
             TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurn;
             TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
         }
+        SelectableToBoxConnector.HelperTag = currentSelectedPawn == null ? "[персонаж]->[ЛКМ]" : "[ЛКМ]";
+        SliderToPawnConnector.HelperTag = currentSelectedPawn == null ? "[персонаж]->[ЛКМ]" : "[ЛКМ]";
     }
     void Update()
     {
@@ -114,7 +116,7 @@ public class PawnController : MonoBehaviour
             UpdateMoveOnShootButtonColor();
             UpdateStartReloadButtonColor();
             SelectableToBoxConnector.HelperTag = currentSelectedPawn == null ? "[персонаж]->[ЛКМ]" : "[ЛКМ]";
-            SliderToPawnConnector.HelperTag = currentSelectedPawn == null ? "" : "[ЛКМ]";
+            SliderToPawnConnector.HelperTag = currentSelectedPawn == null ? "[персонаж]->[ЛКМ]" : "[ЛКМ]";
         }
 
         ISelectable selectable = currentSelector.PollSelectClickableItem(clickableItemsController.currentSelectedItem);

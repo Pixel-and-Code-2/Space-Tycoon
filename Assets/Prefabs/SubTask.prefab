@@ -78,7 +78,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5218682146063440397, guid: 5a694b05db5652448a7205ad5a79320f, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 17.62
+      value: 58
       objectReference: {fileID: 0}
     - target: {fileID: 5218682146063440397, guid: 5a694b05db5652448a7205ad5a79320f, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -86,7 +86,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5218682146063440397, guid: 5a694b05db5652448a7205ad5a79320f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 7.8
+      value: 28.4
       objectReference: {fileID: 0}
     - target: {fileID: 6550168703255843262, guid: 5a694b05db5652448a7205ad5a79320f, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -94,7 +94,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7472851223268337798, guid: 5a694b05db5652448a7205ad5a79320f, type: 3}
       propertyPath: m_Name
-      value: SubTask1 Variant
+      value: SubTask
       objectReference: {fileID: 0}
     - target: {fileID: 7794877809204488108, guid: 5a694b05db5652448a7205ad5a79320f, type: 3}
       propertyPath: m_text
@@ -124,7 +124,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7794877809204488108, guid: 5a694b05db5652448a7205ad5a79320f, type: 3}
       propertyPath: m_fontSizeMin
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7794877809204488108, guid: 5a694b05db5652448a7205ad5a79320f, type: 3}
       propertyPath: m_fontSizeBase

@@ -194,6 +194,7 @@ MonoBehaviour:
   defaultState: 1
   checkInteractableOnHighlight: 1
   checkInteractableOnPress: 1
+  defaultOnEnable: 1
   onToggleInteractableBehaviour: 0
 --- !u!1 &2024056938864097693
 GameObject:
@@ -1963,7 +1964,7 @@ RectTransform:
   m_GameObject: {fileID: 7412583105155650286}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.36, y: 1.36, z: 1.36}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4151858690490126432}

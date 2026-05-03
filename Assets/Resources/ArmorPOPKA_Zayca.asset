@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
   - name: DR
-    value: 26
+    value: 21
   - name: MDR
-    value: 10
+    value: 7
   - name: ARMMASS
     value: 9
   calculatedParameters: []
@@ -28,13 +28,13 @@ MonoBehaviour:
     DMM = 0,00 (0,00)
 
     DR =
-    26,00 (26,00)
+    21,00 (21,00)
 
-    MDR = 10,00 (10,00)
+    MDR = 7,00 (7,00)
 
     ARMMASS = 9,00 (9,00)
 
     Random
-    = 0,36 (0,36)
+    = 0,91 (0,91)
 
 '

@@ -34,7 +34,7 @@ MonoBehaviour:
   calculatedParameters:
   - name: STR
     formula:
-      formula: (float)Math.Round(g_Random * 5 + 5)
+      formula: (float)Math.Round(g_Random * 5 + 4)
       instruction: 
       dataAssets:
       - {fileID: 11400000}
@@ -85,17 +85,17 @@ MonoBehaviour:
 
     DMM = 0,00 (0,00)
 
-    DR = 9,00 (9,00)
+    DR = 7,00 (7,00)
 
-    MDR = 6,00
-    (6,00)
+    MDR = 3,00
+    (3,00)
 
     ARMMASS = 14,00 (14,00)
 
-    STR = 13,00 (13,00)
+    STR = 6,00 (6,00)
 
-    DX = 3,00
-    (3,00)
+    DX = 2,00
+    (2,00)
 
     IQ = 1,00 (1,00)
 
@@ -136,6 +136,6 @@ MonoBehaviour:
     BDMG = 5,00
     (5,00)
 
-    Random = 0,71 (0,71)
+    Random = 0,69 (0,69)
 
 '

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
   - name: STR
-    value: 7
+    value: 6
   - name: DX
     value: 7
   - name: IQ
@@ -43,9 +43,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3241949e1f09f444f946c7af71443abd, type: 2}
   - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   isDirty: 0
-  parametersDictStateCache: 'MINDMG = 6,00 (6,00)
+  parametersDictStateCache: 'MINDMG = 3,00 (3,00)
 
-    MAXDMG = 15,00 (15,00)
+    MAXDMG = 8,00 (8,00)
 
     MDMG
     = 1,00 (1,00)
@@ -75,14 +75,14 @@ MonoBehaviour:
 
     DMM = 0,00 (0,00)
 
-    DR = 21,00 (21,00)
+    DR = 18,00 (18,00)
 
     MDR = 5,00
     (5,00)
 
     ARMMASS = 9,00 (9,00)
 
-    STR = 7,00 (7,00)
+    STR = 6,00 (6,00)
 
     DX = 7,00 (7,00)
 
@@ -112,7 +112,7 @@ MonoBehaviour:
     STH = 6,00
     (6,00)
 
-    HP = 12,00 (12,00)
+    HP = 11,00 (11,00)
 
     PRC = 9,00 (9,00)
 
@@ -128,6 +128,6 @@ MonoBehaviour:
     BDMG =
     8,00 (8,00)
 
-    Random = 0,31 (0,31)
+    Random = 0,59 (0,59)
 
 '

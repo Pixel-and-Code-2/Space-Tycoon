@@ -237,6 +237,11 @@ public class ClickableItem : ISelectable
     {
         if (progressBarCached != null)
         {
+            if (taskExecutor.GetSelectableType() == SelectableType.Dead)
+            {
+                CancelAction();
+                return;
+            }
             if (prey != null)
             {
                 PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, prey);
@@ -281,7 +286,7 @@ public class ClickableItem : ISelectable
                 scriptForClickable?.OnComplete();
                 return;
             }
-            progress = scriptForClickable?.OnProgress(progress) ?? progress;
+            progressBarCached.SetValue(scriptForClickable?.OnProgress(progress) ?? progress);
         }
     }
     void LogBoostProgressFormulaDiagnostics(float boostEvaluated)

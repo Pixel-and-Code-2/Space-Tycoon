@@ -41,6 +41,16 @@ public class SliderToPawnConnector : MonoBehaviour
     {
         if (pawn == null) Debug.LogWarning("SliderToPawnConnector: pawn not found");
         ColorTheSlider();
+        TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
+        TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
+    }
+    private void OnPlayerTurnStart()
+    {
+        helperText.enabled = true;
+    }
+    private void OnEnemyTurnStart()
+    {
+        helperText.enabled = false;
     }
 
     private float pawnHealthCached;
@@ -113,7 +123,7 @@ public class SliderToPawnConnector : MonoBehaviour
 
         if (pawnSelectableType == SelectableType.Player)
         {
-            pawnStamina = TryGetParam(PawnDataController.AVAILABLE_DISTANCE_KEY);
+            pawnStamina = calcWalk();
             if (pawnStamina != pawnStaminaCached)
             {
                 pawnStaminaCached = pawnStamina;
@@ -152,6 +162,29 @@ public class SliderToPawnConnector : MonoBehaviour
             }
         }
     }
+    private float calcWalk()
+    {
+        bool isStepByStep = TryGetParam(HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY) > 0.5f;
+        if (!isStepByStep) return 9999f;
+        float avDist = TryGetParam(PawnDataController.AVAILABLE_DISTANCE_KEY);
+        bool shooted = TryGetParam(PawnDataController.SHOOTED_AMOUNT_KEY) > 0.5f;
+        bool melee = TryGetParam(PawnDataController.MELEE_AMOUNT_KEY) > 0.5f;
+        bool movesToSkip = TryGetParam(PawnDataController.MOVES_TO_SKIP_KEY) > 0.5f;
+        bool isShootWalk = TryGetParam(PawnDataController.IS_SHOOT_ON_MOVE_KEY) > 0.5f;
+        float prediction = (shooted && !isShootWalk) || (melee && isShootWalk) || movesToSkip ? 0f : avDist;
+        // Debug.Log("Prediction: " + pawnStamina + " AvDist: " + avDist + " shooted this round: " + shooted + " melee this round: " + melee + " moves to skip: " + movesToSkip + " isShootWalk: " + isShootWalk);
+        return prediction;
+    }
+    private bool CanAttack()
+    {
+        bool skips = TryGetParam(PawnDataController.MOVES_TO_SKIP_KEY) > 0.1f;
+        float shooted = TryGetParam(PawnDataController.SHOOTED_AMOUNT_KEY);
+        bool melee = TryGetParam(PawnDataController.MELEE_AMOUNT_KEY) > 0.5f;
+        float mag = TryGetParam(PawnDataController.MAG_AMOUNT_KEY);
+        bool canAttack = !skips && ((mag > 0.5f && !melee) || (shooted < 0.5f && !melee));
+        // Debug.Log("CanAttack: " + canAttack + " skips: " + skips + " shooted: " + shooted + " melee: " + melee + " mag: " + mag);
+        return canAttack;
+    }
 
     private void UpdateActionIcons(bool isAlive)
     {
@@ -172,7 +205,8 @@ public class SliderToPawnConnector : MonoBehaviour
 
         if (walkIcon != null)
         {
-            bool canWalk = TryGetParam(PawnDataController.AVAILABLE_DISTANCE_KEY) > 0.1f;
+            float walkAvailable = calcWalk();
+            bool canWalk = walkAvailable > 0.1f;
             walkIcon.SetActive(canWalk);
         }
 
@@ -184,11 +218,7 @@ public class SliderToPawnConnector : MonoBehaviour
 
         if (attackIcon != null)
         {
-            bool canAttack =
-                TryGetParam(PawnDataController.MOVES_TO_SKIP_KEY) < 0.1f &&
-                TryGetParam(PawnDataController.SHOOTED_AMOUNT_KEY) < 0.5f &&
-                TryGetParam(PawnDataController.MELEE_AMOUNT_KEY) <= 1.0f &&
-                TryGetParam(PawnDataController.MAG_AMOUNT_KEY) > 0.0f;
+            bool canAttack = CanAttack();
             attackIcon.SetActive(canAttack);
         }
     }

@@ -13,9 +13,12 @@ public class HelpUI : IUILayer
     private int currentPage = 0;
     [SerializeField]
     private List<HelpPage> helpPages;
+    [SerializeField]
+    private GameObject onlyEducationObj;
     void OnEnable()
     {
         UpdatePages();
+        onlyEducationObj.SetActive(PlayerPrefs.GetInt("EducationCompleted", 0) == 0);
     }
 
     public void OnClose()

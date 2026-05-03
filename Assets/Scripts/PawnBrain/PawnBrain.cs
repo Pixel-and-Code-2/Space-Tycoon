@@ -31,7 +31,7 @@ public class PawnBrain : IControlableSelectable
     [SerializeField]
     SkinnedMeshRenderer skinnedMeshRenderer;
     private bool warFogEventsSubscribed;
-    private static List<IControlableSelectable> playersAlive = new List<IControlableSelectable>();
+    private static HashSet<IControlableSelectable> playersAlive = new HashSet<IControlableSelectable>();
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
@@ -196,6 +196,19 @@ public class PawnBrain : IControlableSelectable
     {
         dataController.IsStepByStepOff();
         MakeReload();
+        if (dataController.selectableType == SelectableType.Player)
+        {
+            float hpBefore = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY);
+            dataController.SetParameterValue(
+                PawnDataController.AVAILABLE_HEALTH_KEY,
+                dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY)
+            );
+            float healed = dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY) - hpBefore;
+            if (healed > 0.001f)
+            {
+                UI3DManager.Instance.ShowMessage("+" + healed.ToString("F1") + " hp", transform.position, new Color(0f, 1f, 0f));
+            }
+        }
     }
 
     public override void OnMove(Vector3 position)
@@ -316,7 +329,7 @@ public class PawnBrain : IControlableSelectable
         playersAlive.Add(this);
         dataController.SetParameterValue(
             PawnDataController.AVAILABLE_HEALTH_KEY,
-            dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY) / 2f
+            dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY)
         );
         dataController.SetParameterValue(
             PawnDataController.AMOUNT_OF_HEALINGS_KEY,

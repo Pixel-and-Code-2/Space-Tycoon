@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
   - name: STR
-    value: 8
+    value: 7
   - name: BRW
     value: 4
   - name: THR
@@ -58,62 +58,64 @@ MonoBehaviour:
 
     TotalAmmo = 0,00 (0,00)
 
-    DMR = 0,00 (0,00)
+    MeleeROF = 1,00 (1,00)
 
-    DMM
+    DMR
     = 0,00 (0,00)
+
+    DMM = 0,00 (0,00)
 
     DR = 21,00 (21,00)
 
-    MDR = 10,00 (10,00)
+    MDR = 7,00
+    (7,00)
 
-    ARMMASS
-    = 9,00 (9,00)
+    ARMMASS = 9,00 (9,00)
 
-    STR = 8,00 (8,00)
+    STR = 7,00 (7,00)
 
     DX = 5,00 (5,00)
 
-    IQ = 5,00
-    (5,00)
+    IQ
+    = 5,00 (5,00)
 
     HT = 5,00 (5,00)
 
     SHT = 0,00 (0,00)
 
-    BRW = 4,00 (4,00)
+    BRW = 4,00
+    (4,00)
 
-    THR
-    = 0,00 (0,00)
+    THR = 0,00 (0,00)
 
     ENG = 5,00 (5,00)
 
     SCI = 0,00 (0,00)
 
-    DDGB = 0,00
-    (0,00)
+    DDGB
+    = 0,00 (0,00)
 
     SPDB = 0,00 (0,00)
 
     DMG = 5,00 (5,00)
 
-    HP = 13,00 (13,00)
+    HP = 12,00
+    (12,00)
 
-    PRC
-    = 10,00 (10,00)
+    PRC = 10,00 (10,00)
 
     FP = 10,00 (10,00)
 
     SPD = 5,00 (5,00)
 
-    DDG =
-    6,00 (6,00)
+    DDG
+    = 6,00 (6,00)
 
     BCW = 10,00 (10,00)
 
-    BDMG = 10,00 (10,00)
+    BDMG = 6,00 (6,00)
 
     Random
-    = 0,09 (0,09)
+    = 0,67 (0,67)
 
 '
