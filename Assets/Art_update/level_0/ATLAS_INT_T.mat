@@ -41,6 +41,7 @@ Material:
     RenderType: TransparentCutout
   disabledShaderPasses:
   - MOTIONVECTORS
+  - SRPDEFAULTUNLIT
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -89,10 +90,10 @@ Material:
     - _ClippingMode: 2
     - _Cull: 0
     - _IsBaseMapAlphaAsClippingMask: 1
-    - _Is_LightColor_Base: 0
+    - _Is_LightColor_Base: 1
     - _ShadeColor_Step: 0.5
     m_Colors:
-    - _1st_ShadeColor: {r: 0.42965472, g: 0.4403545, b: 0.509434, a: 1}
-    - _2nd_ShadeColor: {r: 0.09111428, g: 0.10071922, b: 0.2528302, a: 1}
+    - _1st_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
+    - _2nd_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
