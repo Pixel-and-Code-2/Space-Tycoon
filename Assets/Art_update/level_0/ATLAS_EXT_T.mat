@@ -282,7 +282,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _ClippingMatteMode: 0
     - _ClippingMode: 2
-    - _Clipping_Level: 0
+    - _Clipping_Level: 0.243
     - _CoatMask: 0
     - _ColorShift_Speed: 0
     - _ComposerMaskMode: 0
