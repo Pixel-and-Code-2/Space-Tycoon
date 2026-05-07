@@ -41,7 +41,10 @@ public class PawnBrain : IControlableSelectable
         animatorBrain = GetComponentInChildren<AnimatorBrainBase>();
         anim = GetComponentInChildren<Animator>();
         animatorBrain?.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
+        var before = animatorBrain?.GetCurrentAnimation(0);
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
+        var after = animatorBrain?.GetCurrentAnimation(0);
+        Debug.Log("Pawn " + gameObject.name + " anim before: " + before + " after: " + after);
         if (dataController.selectableType == SelectableType.Player)
         {
             playersAlive.Add(this);
@@ -79,7 +82,10 @@ public class PawnBrain : IControlableSelectable
         dataController.selectableType = SelectableType.Dead;
         gameObject.layer = LayerMask.NameToLayer("DeadPawn");
         pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
+        var before = animatorBrain?.GetCurrentAnimation(0);
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
+        var after = animatorBrain?.GetCurrentAnimation(0);
+        Debug.Log("Pawn " + gameObject.name + " anim before: " + before + " after: " + after);
         dataController.SetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY, 0f);
         if (playersAlive.Contains(this))
         {
@@ -95,6 +101,7 @@ public class PawnBrain : IControlableSelectable
             {
                 playersAlive.Add(this);
             }
+            animatorBrain?.SetLocked(false, 0);
         }
         else
         {
@@ -143,7 +150,10 @@ public class PawnBrain : IControlableSelectable
         {
             if (animatorBrain?.GetCurrentAnimation(0) != (int)AnimatorBrainBase.Animations.IDLE)
             {
+                var before = animatorBrain?.GetCurrentAnimation(0);
                 animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
+                var after = animatorBrain?.GetCurrentAnimation(0);
+                Debug.Log("Pawn 155 " + gameObject.name + " anim before: " + before + " after: " + after);
             }
             if (pathDrawer.GetVisible())
             {
@@ -263,7 +273,10 @@ public class PawnBrain : IControlableSelectable
     public override void OnShoot(Vector3 position, bool isAlive)
     {
         transform.LookAt(position);
+        var before = animatorBrain?.GetCurrentAnimation(0);
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
+        var after = animatorBrain?.GetCurrentAnimation(0);
+        Debug.Log("Pawn 278 " + gameObject.name + " anim before: " + before + " after: " + after);
         dataController.SetParameterValue(
             PawnDataController.SHOOTED_AMOUNT_KEY,
             dataController.GetParameterValue(PawnDataController.SHOOTED_AMOUNT_KEY) + 1
@@ -284,7 +297,10 @@ public class PawnBrain : IControlableSelectable
     public override void OnMelee(Vector3 position)
     {
         transform.LookAt(position);
+        var before = animatorBrain?.GetCurrentAnimation(0);
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
+        var after = animatorBrain?.GetCurrentAnimation(0);
+        Debug.Log("Pawn 303 " + gameObject.name + " anim before: " + before + " after: " + after);
         dataController.SetParameterValue(
             PawnDataController.MELEE_AMOUNT_KEY,
             dataController.GetParameterValue(PawnDataController.MELEE_AMOUNT_KEY) + 1
@@ -302,7 +318,10 @@ public class PawnBrain : IControlableSelectable
             TurnManager.Instance.CheckTriggers();
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
             pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
+            var before = animatorBrain.GetCurrentAnimation(0);
             animatorBrain?.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
+            var after = animatorBrain?.GetCurrentAnimation(0);
+            Debug.Log("Pawn 323 " + gameObject.name + " anim before: " + before + " after: " + after);
             newHealth = 0f;
             isAlive = false;
             playersAlive.Remove(this);
@@ -327,6 +346,8 @@ public class PawnBrain : IControlableSelectable
         gameObject.layer = LayerMask.NameToLayer("Player");
         pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 0);
         playersAlive.Add(this);
+        animatorBrain?.SetLocked(false, 0);
+        animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, true);
         dataController.SetParameterValue(
             PawnDataController.AVAILABLE_HEALTH_KEY,
             dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY)
