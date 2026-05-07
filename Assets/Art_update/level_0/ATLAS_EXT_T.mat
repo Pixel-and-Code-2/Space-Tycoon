@@ -27,6 +27,7 @@ Material:
     RenderType: TransparentCutout
   disabledShaderPasses:
   - MOTIONVECTORS
+  - SRPDEFAULTUNLIT
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -234,11 +235,11 @@ Material:
     m_Ints:
     - _ToonMaterialVersion: 0
     m_Floats:
-    - _1st2nd_Shades_Feather: 0.0001
-    - _1st_ShadeColor_Feather: 0.164
-    - _1st_ShadeColor_Step: 0.275
-    - _2nd_ShadeColor_Feather: 0.0001
-    - _2nd_ShadeColor_Step: 0.335
+    - _1st2nd_Shades_Feather: 0.5
+    - _1st_ShadeColor_Feather: 0.1
+    - _1st_ShadeColor_Step: 0.5
+    - _2nd_ShadeColor_Feather: 0.5
+    - _2nd_ShadeColor_Step: 0.5
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ARSampler_AlphaOn: 0
@@ -267,8 +268,8 @@ Material:
     - _AutoRenderQueue: 0
     - _BaseColorOverridden: 0
     - _BaseColorVisible: 1
-    - _BaseColor_Step: 0.275
-    - _BaseShade_Feather: 0.164
+    - _BaseColor_Step: 0.5
+    - _BaseShade_Feather: 0.1
     - _Base_Speed: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
@@ -281,7 +282,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _ClippingMatteMode: 0
     - _ClippingMode: 2
-    - _Clipping_Level: 0
+    - _Clipping_Level: 0.243
     - _CoatMask: 0
     - _ColorShift_Speed: 0
     - _ComposerMaskMode: 0
@@ -405,7 +406,7 @@ Material:
     - _SecondShadeOverridden: 0
     - _SecondShadeVisible: 1
     - _Set_SystemShadowsToBase: 1
-    - _ShadeColor_Step: 0.335
+    - _ShadeColor_Step: 0.5
     - _Smoothness: 0.5
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
@@ -454,7 +455,7 @@ Material:
     - _UVSec: 0
     - _Unlit_Intensity: 0
     - _UseShadowThreshold: 0
-    - _Use_1stAs2nd: 0
+    - _Use_1stAs2nd: 1
     - _Use_BaseAs1st: 0
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
@@ -468,8 +469,8 @@ Material:
     - _simpleUI: 0
     - _utsTechnique: 0
     m_Colors:
-    - _1st_ShadeColor: {r: 0.3885154, g: 0.39881036, b: 0.4867924, a: 1}
-    - _2nd_ShadeColor: {r: 0.08029189, g: 0.09032932, b: 0.23773581, a: 1}
+    - _1st_ShadeColor: {r: 0.8509804, g: 0.68235296, b: 0.68235296, a: 1}
+    - _2nd_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
     - _AngelRingMaskColor: {r: 0, g: 1, b: 0, a: 1}
     - _AngelRing_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Ap_RimLightColor: {r: 1, g: 1, b: 1, a: 1}

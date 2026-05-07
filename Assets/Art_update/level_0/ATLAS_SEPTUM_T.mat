@@ -27,6 +27,7 @@ Material:
     RenderType: TransparentCutout
   disabledShaderPasses:
   - MOTIONVECTORS
+  - SRPDEFAULTUNLIT
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -234,10 +235,10 @@ Material:
     m_Ints:
     - _ToonMaterialVersion: 0
     m_Floats:
-    - _1st2nd_Shades_Feather: 0.554
+    - _1st2nd_Shades_Feather: 0.5
     - _1st_ShadeColor_Feather: 0.1
     - _1st_ShadeColor_Step: 0.5
-    - _2nd_ShadeColor_Feather: 0.554
+    - _2nd_ShadeColor_Feather: 0.5
     - _2nd_ShadeColor_Step: 0.5
     - _AORemapMax: 1
     - _AORemapMin: 0
@@ -348,7 +349,7 @@ Material:
     - _Is_LightColor_2nd_Shade: 1
     - _Is_LightColor_AR: 1
     - _Is_LightColor_Ap_RimLight: 1
-    - _Is_LightColor_Base: 0
+    - _Is_LightColor_Base: 1
     - _Is_LightColor_HighColor: 1
     - _Is_LightColor_MatCap: 1
     - _Is_LightColor_Outline: 1
@@ -454,7 +455,7 @@ Material:
     - _UVSec: 0
     - _Unlit_Intensity: 0
     - _UseShadowThreshold: 0
-    - _Use_1stAs2nd: 0
+    - _Use_1stAs2nd: 1
     - _Use_BaseAs1st: 0
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
@@ -468,8 +469,8 @@ Material:
     - _simpleUI: 0
     - _utsTechnique: 0
     m_Colors:
-    - _1st_ShadeColor: {r: 0.41692415, g: 0.42503375, b: 0.4943396, a: 1}
-    - _2nd_ShadeColor: {r: 0.07849765, g: 0.084509574, b: 0.23773581, a: 1}
+    - _1st_ShadeColor: {r: 0.8509804, g: 0.68235296, b: 0.68235296, a: 1}
+    - _2nd_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
     - _AngelRingMaskColor: {r: 0, g: 1, b: 0, a: 1}
     - _AngelRing_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Ap_RimLightColor: {r: 1, g: 1, b: 1, a: 1}
