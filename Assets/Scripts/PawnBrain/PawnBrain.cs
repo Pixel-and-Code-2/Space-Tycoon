@@ -5,13 +5,14 @@ using System.Collections.Generic;
 [RequireComponent(typeof(PathDrawer))]
 [RequireComponent(typeof(PawnDataController))]
 [RequireComponent(typeof(PawnNavMesh))]
+[RequireComponent(typeof(AudioSource))]
 [DefaultExecutionOrder(200)]
 public class PawnBrain : IControlableSelectable
 {
     private PathDrawer pathDrawer;
     private PawnDataController dataController;
     private PawnNavMesh pawnNavMesh;
-
+    private AudioSource audioSource;
     public override SelectableType GetSelectableType()
     {
         return dataController.selectableType;
@@ -32,6 +33,21 @@ public class PawnBrain : IControlableSelectable
     SkinnedMeshRenderer skinnedMeshRenderer;
     private bool warFogEventsSubscribed;
     private static HashSet<IControlableSelectable> playersAlive = new HashSet<IControlableSelectable>();
+    [Header("Sounds")]
+    [SerializeField]
+    private AudioClip hitSound;
+    [SerializeField]
+    private AudioClip deathSound;
+    [SerializeField]
+    private AudioClip shootSound;
+    [SerializeField]
+    private AudioClip meleeSound;
+    [SerializeField]
+    private AudioClip walkSound;
+    [SerializeField]
+    private AudioClip noAmmoSound;
+    [SerializeField]
+    private AudioClip reloadSound;
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
@@ -41,14 +57,12 @@ public class PawnBrain : IControlableSelectable
         animatorBrain = GetComponentInChildren<AnimatorBrainBase>();
         anim = GetComponentInChildren<Animator>();
         animatorBrain?.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
-        var before = animatorBrain?.GetCurrentAnimation(0);
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
-        var after = animatorBrain?.GetCurrentAnimation(0);
-        Debug.Log("Pawn " + gameObject.name + " anim before: " + before + " after: " + after);
         if (dataController.selectableType == SelectableType.Player)
         {
             playersAlive.Add(this);
         }
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -82,10 +96,7 @@ public class PawnBrain : IControlableSelectable
         dataController.selectableType = SelectableType.Dead;
         gameObject.layer = LayerMask.NameToLayer("DeadPawn");
         pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
-        var before = animatorBrain?.GetCurrentAnimation(0);
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
-        var after = animatorBrain?.GetCurrentAnimation(0);
-        Debug.Log("Pawn " + gameObject.name + " anim before: " + before + " after: " + after);
         dataController.SetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY, 0f);
         if (playersAlive.Contains(this))
         {
@@ -150,14 +161,16 @@ public class PawnBrain : IControlableSelectable
         {
             if (animatorBrain?.GetCurrentAnimation(0) != (int)AnimatorBrainBase.Animations.IDLE)
             {
-                var before = animatorBrain?.GetCurrentAnimation(0);
                 animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
-                var after = animatorBrain?.GetCurrentAnimation(0);
-                Debug.Log("Pawn 155 " + gameObject.name + " anim before: " + before + " after: " + after);
             }
             if (pathDrawer.GetVisible())
             {
                 pathDrawer.SetVisible(false);
+            }
+            if (audioSource.clip == walkSound && audioSource.isPlaying)
+            {
+                audioSource.Stop();
+                audioSource.loop = false;
             }
         }
     }
@@ -225,6 +238,9 @@ public class PawnBrain : IControlableSelectable
     {
         pawnNavMesh.TravelToPosition(position);
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.WALK, 0, false, false);
+        audioSource.loop = true;
+        audioSource.clip = walkSound;
+        audioSource.Play();
     }
 
     public override bool IsMoving()
@@ -272,11 +288,13 @@ public class PawnBrain : IControlableSelectable
     }
     public override void OnShoot(Vector3 position, bool isAlive)
     {
+        if (audioSource != null && shootSound != null)
+        {
+            audioSource.clip = shootSound;
+            audioSource.PlayOneShot(shootSound);
+        }
         transform.LookAt(position);
-        var before = animatorBrain?.GetCurrentAnimation(0);
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
-        var after = animatorBrain?.GetCurrentAnimation(0);
-        Debug.Log("Pawn 278 " + gameObject.name + " anim before: " + before + " after: " + after);
         dataController.SetParameterValue(
             PawnDataController.SHOOTED_AMOUNT_KEY,
             dataController.GetParameterValue(PawnDataController.SHOOTED_AMOUNT_KEY) + 1
@@ -294,17 +312,27 @@ public class PawnBrain : IControlableSelectable
             UI3DManager.Instance.ShowMessage(boosts[boostIndex], transform.position, new Color(0f, 1f, 0f));
         }
     }
+    public override void OnNoAmmoShoot()
+    {
+        if (audioSource != null && noAmmoSound != null)
+        {
+            audioSource.clip = noAmmoSound;
+            audioSource.PlayOneShot(noAmmoSound);
+        }
+    }
     public override void OnMelee(Vector3 position)
     {
         transform.LookAt(position);
-        var before = animatorBrain?.GetCurrentAnimation(0);
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.ATTACK, 0, true, false);
-        var after = animatorBrain?.GetCurrentAnimation(0);
-        Debug.Log("Pawn 303 " + gameObject.name + " anim before: " + before + " after: " + after);
         dataController.SetParameterValue(
             PawnDataController.MELEE_AMOUNT_KEY,
             dataController.GetParameterValue(PawnDataController.MELEE_AMOUNT_KEY) + 1
         );
+        if (audioSource != null && meleeSound != null)
+        {
+            audioSource.clip = meleeSound;
+            audioSource.PlayOneShot(meleeSound);
+        }
     }
     public override bool OnGetHit(float damage)
     {
@@ -318,10 +346,7 @@ public class PawnBrain : IControlableSelectable
             TurnManager.Instance.CheckTriggers();
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
             pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
-            var before = animatorBrain.GetCurrentAnimation(0);
             animatorBrain?.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
-            var after = animatorBrain?.GetCurrentAnimation(0);
-            Debug.Log("Pawn 323 " + gameObject.name + " anim before: " + before + " after: " + after);
             newHealth = 0f;
             isAlive = false;
             playersAlive.Remove(this);
@@ -338,6 +363,19 @@ public class PawnBrain : IControlableSelectable
             PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY,
             dataController.GetParameterValue(PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY) + 1
         );
+        if (audioSource != null)
+        {
+            if (!isAlive && deathSound != null)
+            {
+                audioSource.clip = deathSound;
+                audioSource.PlayOneShot(deathSound);
+            }
+            if (isAlive && hitSound != null)
+            {
+                audioSource.clip = hitSound;
+                audioSource.PlayOneShot(hitSound);
+            }
+        }
         return isAlive;
     }
     public void OnHeal()
@@ -387,6 +425,11 @@ public class PawnBrain : IControlableSelectable
             float movesToSkip = Mathf.Ceil(movesToSkipForFullMag * (reloadMagWithAmount / initialMag));
             // Debug.Log("movesToSkip: " + movesToSkip + " reloadMagWithAmount: " + reloadMagWithAmount + " initialMag: " + initialMag + " movesToSkipForFullMag: " + movesToSkipForFullMag);
             dataController.SetParameterValue(PawnDataController.MOVES_TO_SKIP_KEY, movesToSkip);
+        }
+        if (audioSource != null && reloadSound != null)
+        {
+            audioSource.clip = reloadSound;
+            audioSource.PlayOneShot(reloadSound);
         }
     }
     private void OnWarFogEnd()

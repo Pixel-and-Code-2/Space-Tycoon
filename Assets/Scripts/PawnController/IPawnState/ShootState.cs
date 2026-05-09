@@ -16,6 +16,8 @@ public class ShootState : IPawnState
     private FormulaFieldWithMemo calculateShootDefense;
     [SerializeField]
     private string defenseMessage;
+    [SerializeField]
+    private int noAmmoCode = -1;
 
     public (IFormulaData, string) GetShootFormulaData() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated");
     private IFormulaData initiatorFormulaData => controlableSelectable == null ? HandleInittingGlobalVars.pawnMustHaveParams : controlableSelectable.GetFormulaData();
@@ -87,6 +89,10 @@ public class ShootState : IPawnState
                 float curr_target_angle = HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.CURRENT_TARGET_ANGLE];
                 float chance = GetShootAccuracy(attackableSelectable);
                 float defenseChance = GetShootDefense(attackableSelectable);
+                if (noAmmoCode != -1 && chance - noAmmoCode <= float.Epsilon)
+                {
+                    controlableSelectable.OnNoAmmoShoot();
+                }
                 (string message, Color color) = GetMessage(chance);
                 if (message != null)
                 {

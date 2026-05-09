@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 7664171741854589473}
   - component: {fileID: 6360029765295339956}
   - component: {fileID: 7439707776638194271}
+  - component: {fileID: 4688227952805843148}
   m_Layer: 7
   m_Name: Pawn
   m_TagString: Player
@@ -258,6 +259,13 @@ MonoBehaviour:
   defaultMaterial: {fileID: 2100000, guid: 6393d2bdfb8420844bc7dc6f6fbcc4d5, type: 2}
   selectedMaterial: {fileID: 2100000, guid: dc487a0932c0f974a926f58de0f97bb0, type: 2}
   skinnedMeshRenderer: {fileID: 976997793479485022}
+  hitSound: {fileID: 8300000, guid: 2b347fb52bf816249a2960161d62d3f5, type: 3}
+  deathSound: {fileID: 8300000, guid: e275a924a80feb14eaffde0aabc081f0, type: 3}
+  shootSound: {fileID: 8300000, guid: 50acf790ddd411443a5a5b44e215a1ee, type: 3}
+  meleeSound: {fileID: 0}
+  walkSound: {fileID: 8300000, guid: 442de955a80272b4da65deaa506655d0, type: 3}
+  noAmmoSound: {fileID: 8300000, guid: eed328ac6c3d9db4cae24853dc789adb, type: 3}
+  reloadSound: {fileID: 8300000, guid: 26c95c07510bec149b50caec42112650, type: 3}
 --- !u!114 &8515852256048443046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,6 +283,7 @@ MonoBehaviour:
   obstaclePushForce: 2
   verticalPushOverride: 1.19
   selectableType: 0
+  startDead: 0
 --- !u!114 &1442275150546050204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,6 +402,103 @@ MonoBehaviour:
     onlySelected: -1
     onlyOnMove: -1
     onlyOnDeath: 0
+--- !u!82 &4688227952805843148
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230305945013315322}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -4058306686257254218, guid: ab97c35efc46ed241923b92f768f54a4, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &2606105266857778799
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -512,14 +618,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'ring3.r'\n\tTransform 'hand.l'\n\tTransform
-    'ring2.r'\n\tTransform 'spine_02.x'\n\tTransform 'spine_01.x'\n\tTransform 'index2.l'\n\tTransform
-    'thigh_stretch.r'\n\tTransform 'ring3.l'\n\tTransform 'arm_stretch.r'\n\tTransform
-    'index2.r'\n\tand more ...\n\tFrom animation clip 'root|Z_A_IA_IDLE'\n\tFrom
-    animation clip 'root|Z_A_IA_DEATH'\n\tFrom animation clip 'root|Z_A_IA_MeleeAtack'\n\tFrom
-    animation clip 'root|Z_A_IA_WALK'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0

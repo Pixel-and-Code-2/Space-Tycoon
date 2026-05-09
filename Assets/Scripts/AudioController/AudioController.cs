@@ -26,6 +26,11 @@ public class AudioController : MonoBehaviour
     public AudioClip mainMenuAmbient;
     [SerializeField]
     private AudioMixer audioMixer;
+    [SerializeField]
+    public AudioClip buttonHover;
+    [SerializeField]
+    public AudioClip buttonClick;
+
     void Awake()
     {
         if (Instance == null) Instance = this;

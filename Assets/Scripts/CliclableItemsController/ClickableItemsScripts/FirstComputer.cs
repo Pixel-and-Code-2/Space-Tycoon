@@ -48,7 +48,7 @@ public class FirstComputer : IScriptForClickable
     {
         base.OnComplete();
         navMeshLink.enabled = true;
-        systemRenderer.materials = systemOnMaterials;
+        if (systemRenderer != null) systemRenderer.materials = systemOnMaterials;
     }
 
     public override void OnStart()

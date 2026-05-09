@@ -106,6 +106,7 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
         if (checkInteractableOnHighlight && !isInteractableCache) return;
         ActivateState(TriggerType.PointerEnter);
         isHighlightedCache = true;
+        AudioController.Instance.Play(AudioController.Instance.buttonHover);
     }
     public void OnPointerExit(PointerEventData eventData)
     {
@@ -118,6 +119,7 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
         if (checkInteractableOnPress && !isInteractableCache) return;
         ActivateState(TriggerType.PointerDown);
         isPressedCache = true;
+        AudioController.Instance.Play(AudioController.Instance.buttonClick);
     }
     public void OnPointerUp(PointerEventData eventData)
     {
