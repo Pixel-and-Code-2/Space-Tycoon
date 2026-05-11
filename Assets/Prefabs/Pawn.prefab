@@ -262,8 +262,8 @@ MonoBehaviour:
   hitSound: {fileID: 8300000, guid: 2b347fb52bf816249a2960161d62d3f5, type: 3}
   deathSound: {fileID: 8300000, guid: e275a924a80feb14eaffde0aabc081f0, type: 3}
   shootSound: {fileID: 8300000, guid: 50acf790ddd411443a5a5b44e215a1ee, type: 3}
-  meleeSound: {fileID: 0}
-  walkSound: {fileID: 8300000, guid: 442de955a80272b4da65deaa506655d0, type: 3}
+  meleeSound: {fileID: 8300000, guid: 02b9ad1f830ee8b4a93cc7685446b893, type: 3}
+  walkSound: {fileID: 8300000, guid: 6822af76fb63c674da7361ae19bc8449, type: 3}
   noAmmoSound: {fileID: 8300000, guid: eed328ac6c3d9db4cae24853dc789adb, type: 3}
   reloadSound: {fileID: 8300000, guid: 26c95c07510bec149b50caec42112650, type: 3}
 --- !u!114 &8515852256048443046

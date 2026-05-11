@@ -76,6 +76,7 @@ public class TurnManager : MonoBehaviour
     private readonly List<DynamicEnemyRegistryEntry> dynamicEnemyRegistry = new List<DynamicEnemyRegistryEntry>();
     private readonly List<GameObject> spawnedDynamicEnemies = new List<GameObject>();
     private int nextDynamicEnemyIndex = 0;
+    private AudioSource stationWarnings;
 
     private void Awake()
     {
@@ -89,6 +90,7 @@ public class TurnManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        stationWarnings = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -238,6 +240,7 @@ public class TurnManager : MonoBehaviour
         {
             return false;
         }
+        stationWarnings.Play();
         return ActivateCombatForTrigger(delayed);
     }
 

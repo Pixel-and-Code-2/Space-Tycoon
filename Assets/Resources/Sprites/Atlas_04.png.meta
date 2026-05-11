@@ -100,10 +100,10 @@ TextureImporter:
       name: ShootingWeaponOutline
       rect:
         serializedVersion: 2
-        x: 720
-        y: 164
-        width: 117
-        height: 65
+        x: 762
+        y: 161
+        width: 165
+        height: 68
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -122,10 +122,10 @@ TextureImporter:
       name: ShootingWeaponMask
       rect:
         serializedVersion: 2
-        x: 597
-        y: 164
-        width: 117
-        height: 65
+        x: 589
+        y: 161
+        width: 165
+        height: 68
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -2010,6 +2010,50 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: SkipButtonHighlight
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 76
+        width: 81
+        height: 81
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02c1c5d11fee46e4e8269e5daa509c2e
+      internalID: -1644994851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkipButtonFG
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 76
+        width: 81
+        height: 81
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2265c03a552d5f84d8f3626425ece140
+      internalID: 59653636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -2079,6 +2123,8 @@ TextureImporter:
       ShootingWeaponOutline: 1303162581
       ShutdownButtonHighlight: -989343590
       ShutdownButtonIcon: -1162872666
+      SkipButtonFG: 59653636
+      SkipButtonHighlight: -1644994851
       SliderHandle: 1747850256
       SquareHighlighter: -1099174802
       StaminaBG: -389509443

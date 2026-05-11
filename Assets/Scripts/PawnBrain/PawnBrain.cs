@@ -173,6 +173,17 @@ public class PawnBrain : IControlableSelectable
                 audioSource.loop = false;
             }
         }
+        if (Time.timeScale - 0f < 0.01f)
+        {
+            audioSource.Stop();
+        }
+        else
+        {
+            if (!audioSource.isPlaying && audioSource.clip == walkSound && pawnNavMesh.IsMoving())
+            {
+                audioSource.Play();
+            }
+        }
     }
 
     public override bool IsInActiveTriggerZone()

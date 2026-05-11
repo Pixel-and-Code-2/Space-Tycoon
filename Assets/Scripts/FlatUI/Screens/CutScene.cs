@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Video;
-using TMPro;
 
 public class CutScene : IUILayer
 {
@@ -14,16 +13,13 @@ public class CutScene : IUILayer
     private VideoClip endVideoLose;
 
     [SerializeField]
-    private TextMeshProUGUI revealingText;
+    private GameObject revealingObj;
     [SerializeField, Range(0f, 20f)]
-    private float timeBeforeRevealingText = 3f;
-    [SerializeField]
-    private AnimationCurve revealCurve = new AnimationCurve(
-        new Keyframe(0f, 0f),
-        new Keyframe(0.5f, 1f),
-        new Keyframe(1f, 0f));
-    [SerializeField, Range(0f, 0.5f)]
-    private float textAnimationStep = 0.04f;
+    private float timeBeforeRevealingObj = 3f;
+    void OnEnable()
+    {
+        revealingObj.gameObject.SetActive(false);
+    }
     void OnDisable()
     {
         videoPlayer.clip = null;
@@ -77,33 +73,12 @@ public class CutScene : IUILayer
         }
     }
     private float timeOnSlide = 0f;
-    private float revealProgress = 0f;
     private void Update()
     {
         timeOnSlide += Time.unscaledDeltaTime;
-        if (timeOnSlide >= timeBeforeRevealingText)
+        if (timeOnSlide >= timeBeforeRevealingObj)
         {
-            revealingText.gameObject.SetActive(true);
-            revealProgress += textAnimationStep;
-            if (revealProgress >= 1f)
-            {
-                revealProgress = 0f;
-            }
-            revealingText.color = new Color(
-                revealingText.color.r,
-                revealingText.color.g,
-                revealingText.color.b,
-                revealCurve.Evaluate(revealProgress)
-            );
-        }
-        else if (revealingText.color.a > 0.01f)
-        {
-            revealingText.color = new Color(
-                revealingText.color.r,
-                revealingText.color.g,
-                revealingText.color.b,
-                0f
-            );
+            revealingObj.gameObject.SetActive(true);
         }
     }
 }

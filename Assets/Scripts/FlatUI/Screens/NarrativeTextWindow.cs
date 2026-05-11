@@ -11,7 +11,7 @@ public class NarrativeTextWindow : IUILayer
     [SerializeField]
     private InputActionReference returnToGameButton;
     private RectTransform parentRect;
-    public override bool isStoppingGame => false;
+    public override bool isStoppingGame => true;
     // public override bool isBackgroundVisible => false;
     [SerializeField]
     private float duration = 1f;
@@ -38,7 +38,7 @@ public class NarrativeTextWindow : IUILayer
         {
             UILayersController.Instance.GoBack();
         }
-        timeElapsed += Time.deltaTime;
+        timeElapsed += Time.unscaledDeltaTime;
         if (timeElapsed >= duration)
         {
             UILayersController.Instance.GoBack();

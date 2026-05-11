@@ -181,6 +181,11 @@ public class ClickableItem : ISelectable
     public override void OnSelect()
     {
         ClickableItemsController.Instance.OnContextMenu();
+        StartCoroutine(OnSelectDelayed());
+    }
+    private IEnumerator OnSelectDelayed()
+    {
+        yield return new WaitForSeconds(0.1f);
         scriptForClickable?.OnSelect();
     }
 
@@ -283,11 +288,16 @@ public class ClickableItem : ISelectable
                 }
                 taskExecutor?.OnCompleteTask();
                 ClickableItemsController.Instance.OnCompleteTask(this);
-                scriptForClickable?.OnComplete();
+                StartCoroutine(OnCompleteDelayed());
                 return;
             }
             progressBarCached.SetValue(scriptForClickable?.OnProgress(progress) ?? progress);
         }
+    }
+    private IEnumerator OnCompleteDelayed()
+    {
+        yield return new WaitForSeconds(0.1f);
+        scriptForClickable?.OnComplete();
     }
     void LogBoostProgressFormulaDiagnostics(float boostEvaluated)
     {

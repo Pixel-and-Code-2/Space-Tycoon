@@ -30,7 +30,6 @@ MonoBehaviour:
   deadColor: DeadPawnDefaultColor
   allyColor: PlayerDefaultColor
   enemyColor: EnemyDefaultColor
-  updater: 0
   colorLinks:
   - name: EnemyDefaultColor
     color: {r: 1, g: 0, b: 0, a: 1}
