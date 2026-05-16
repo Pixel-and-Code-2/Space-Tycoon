@@ -96,7 +96,7 @@ public class PawnBrain : IControlableSelectable
         dataController.selectableType = SelectableType.Dead;
         gameObject.layer = LayerMask.NameToLayer("DeadPawn");
         pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
-        animatorBrain?.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
+        animatorBrain?.InstaPlay((int)AnimatorBrainBase.Animations.DEATH, 0);
         dataController.SetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY, 0f);
         if (playersAlive.Contains(this))
         {

@@ -72,6 +72,32 @@ public class AnimatorBrainBase : MonoBehaviour
         }
     }
 
+    public void InstaPlay(int animation, int layer, bool lockLayer = true, bool bypassLock = true)
+    {
+        if (animation == 0)
+        {
+            DefaultAnimation(layer);
+            if (isSubEnables && layer == 0)
+                DefaultAnimation(layer + 1);
+            return;
+        }
+
+        if (layerLocked[layer] && !bypassLock) return;
+        layerLocked[layer] = lockLayer;
+
+        if (bypassLock)
+            HandleBypassLock(layer);
+
+        currentAnimation[layer] = animation;
+        animator.Play(animations[animation], layer, 1f);
+        if (isSubEnables && layer == 0)
+        {
+            currentAnimation[layer + 1] = animation;
+            animator.Play(subAnimations[animation], layer + 1, 1f);
+        }
+        animator.Update(0f);
+    }
+
     protected virtual void HandleBypassLock(int layer)
     {
     }

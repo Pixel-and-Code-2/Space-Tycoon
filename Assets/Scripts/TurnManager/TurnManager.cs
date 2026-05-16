@@ -60,6 +60,7 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public event Action OnTriggerZoneExitBeforePawnReset;
     public event Action OnTriggerZoneExit;
+    public bool IsQuarantine = false;
 
     [SerializeField]
     private List<TriggerData> listOfTriggers = new List<TriggerData>();
@@ -224,6 +225,7 @@ public class TurnManager : MonoBehaviour
                 }
             }
         }
+        IsQuarantine = false;
         ActivateCombatForTrigger(trigger);
     }
 
@@ -241,6 +243,7 @@ public class TurnManager : MonoBehaviour
             return false;
         }
         stationWarnings.Play();
+        IsQuarantine = true;
         return ActivateCombatForTrigger(delayed);
     }
 
@@ -450,6 +453,7 @@ public class TurnManager : MonoBehaviour
         OnTriggerZoneExitBeforePawnReset?.Invoke();
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 0f;
         OnTriggerZoneExit?.Invoke();
+        IsQuarantine = false;
         UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "_notpersistent_3_GameCongratulationsColor");
         SyncEndTurnButtonsWithMovement();
     }
