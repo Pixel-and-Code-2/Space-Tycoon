@@ -10,9 +10,12 @@ public class AnimatorBrainBase : MonoBehaviour
         IDLE = 1,
         WALK = 2,
         ATTACK = 3,
-        DEATH = 4
+        DEATH = 4,
+        DAMAGE = 5,
     }
     protected static int[] animations = { 0, 0, 0, 0, 0 };
+    protected static int[] subAnimations = { 0, 0, 0, 0, 0 };
+    protected static bool isSubEnables = false;
     protected Animator animator;
     protected int[] currentAnimation;
     protected bool[] layerLocked;
@@ -47,6 +50,8 @@ public class AnimatorBrainBase : MonoBehaviour
         if (animation == 0)
         {
             DefaultAnimation(layer);
+            if (isSubEnables && layer == 0)
+                DefaultAnimation(layer + 1);
             return;
         }
 
@@ -60,6 +65,11 @@ public class AnimatorBrainBase : MonoBehaviour
 
         currentAnimation[layer] = animation;
         animator.CrossFade(animations[(int)currentAnimation[layer]], crossfade, layer);
+        if (isSubEnables && layer == 0)
+        {
+            currentAnimation[layer + 1] = animation;
+            animator.CrossFade(subAnimations[currentAnimation[layer + 1]], crossfade, layer + 1);
+        }
     }
 
     protected virtual void HandleBypassLock(int layer)

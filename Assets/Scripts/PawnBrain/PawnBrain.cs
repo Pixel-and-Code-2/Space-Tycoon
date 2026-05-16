@@ -56,7 +56,7 @@ public class PawnBrain : IControlableSelectable
         rb = GetComponent<Rigidbody>();
         animatorBrain = GetComponentInChildren<AnimatorBrainBase>();
         anim = GetComponentInChildren<Animator>();
-        animatorBrain?.Initialize(1, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
+        animatorBrain?.Initialize(2, (int)AnimatorBrainBase.Animations.IDLE, anim, (layer) => animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, layer, false, false));
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
         if (dataController.selectableType == SelectableType.Player)
         {

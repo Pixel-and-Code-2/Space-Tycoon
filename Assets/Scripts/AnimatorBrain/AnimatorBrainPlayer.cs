@@ -10,15 +10,28 @@ public class AnimatorBrainPlayer : AnimatorBrainBase
         WALK = 2,
         ATTACK = 3,
         DEATH = 4,
+        DAMAGE = 5,
     }
-    protected new readonly static int[] animations =
+    void Awake()
     {
-        0,
-        Animator.StringToHash("root|Z_A_IA_IDLE"),
-        Animator.StringToHash("root|Z_A_IA_WALK"),
-        Animator.StringToHash("root|Z_A_IA_MeleeAtack"),
-        Animator.StringToHash("root|Z_A_IA_DEATH"),
-    };
+        animations = new int[] {
+            0,
+            Animator.StringToHash("4_IDLE"),
+            Animator.StringToHash("1_MOVE"),
+            Animator.StringToHash("2_ATTACK"),
+            Animator.StringToHash("3_DEATH"),
+            Animator.StringToHash("5_DAMAGE"),
+        };
+        subAnimations = new int[] {
+            0,
+            Animator.StringToHash("4_I"),
+            Animator.StringToHash("1_M"),
+            Animator.StringToHash("2_A"),
+            Animator.StringToHash("3_D"),
+            Animator.StringToHash("5_D (1)"),
+        };
+        isSubEnables = true;
+    }
 
     protected override void HandleBypassLock(int layer)
     {
