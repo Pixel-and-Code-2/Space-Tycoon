@@ -22,7 +22,7 @@ MonoBehaviour:
   - name: HT
     value: 6
   - name: STH
-    value: 9
+    value: 10
   - name: BRW
     value: 2
   - name: THR
@@ -109,8 +109,8 @@ MonoBehaviour:
 
     DMG = 5,00 (5,00)
 
-    STH = 9,00
-    (9,00)
+    STH = 10,00
+    (10,00)
 
     HP = 11,00 (11,00)
 

@@ -30,7 +30,7 @@ MonoBehaviour:
   - name: SPDB
     value: 1
   - name: SHT
-    value: 8
+    value: 9
   - name: DX
     value: 5
   calculatedParameters: []
@@ -87,7 +87,7 @@ MonoBehaviour:
 
     HT = 4,00 (4,00)
 
-    SHT = 8,00 (8,00)
+    SHT = 9,00 (9,00)
 
     BRW = 0,00
     (0,00)

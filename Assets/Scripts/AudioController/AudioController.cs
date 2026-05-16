@@ -99,12 +99,12 @@ public class AudioController : MonoBehaviour
     {
         Play(combatAmbient, true);
     }
-    public void Play(AudioClip clip, bool isMusic = false)
+    public void Play(AudioClip clip, bool isMusic = false, float offset = 0f)
     {
         // Debug.Log("Playing " + clip.name + " as " + (isMusic ? "music" : "sound"));
         if (isMusic)
         {
-            StartCoroutine(ChangeMusic(clip));
+            StartCoroutine(ChangeMusic(clip, offset));
         }
         else
         {
@@ -119,7 +119,7 @@ public class AudioController : MonoBehaviour
     private float timeSpent = 0f;
     private bool isChanging = false;
     private int pendingId = 0;
-    private IEnumerator ChangeMusic(AudioClip music)
+    private IEnumerator ChangeMusic(AudioClip music, float offset = 0f)
     {
         int id = ++pendingId;
         while (isChanging && id == pendingId)
@@ -144,6 +144,7 @@ public class AudioController : MonoBehaviour
             {
                 timeSpent = 0f;
                 musicSource.clip = music;
+                musicSource.time = offset;
                 musicSource.Play();
                 while (timeSpent < fadeDuration)
                 {

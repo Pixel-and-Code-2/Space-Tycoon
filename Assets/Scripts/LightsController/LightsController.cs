@@ -37,6 +37,25 @@ public class LightsController : MonoBehaviour
     {
         TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
         TurnManager.Instance.OnTriggerZoneEnter += OnTriggerZoneEnter;
+        SaveHub.Instance.OnLoad += OnLoadData;
+    }
+    void OnLoadData(LoadedData data)
+    {
+        if (data.GetData("IsStepByStep", HandleInittingGlobalVars.UNIQUE_ID, false))
+        {
+            if (TurnManager.Instance.IsQuarantine)
+            {
+                ChangeLightMode(LightModeType.QUARANTINE);
+            }
+            else
+            {
+                ChangeLightMode(LightModeType.BATTLE);
+            }
+        }
+        else
+        {
+            ChangeLightMode(LightModeType.NO_BATTLE);
+        }
     }
     void Update()
     {

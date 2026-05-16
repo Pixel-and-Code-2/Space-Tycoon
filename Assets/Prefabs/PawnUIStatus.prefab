@@ -76,8 +76,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278208772
-  m_fontColor: {r: 0.013898746, g: 0.28773582, b: 0, a: 1}
+    rgba: 4285333323
+  m_fontColor: {r: 0.29411766, g: 1, b: 0.42352942, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -872,6 +872,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8884319671455312518, guid: 7c8ffb6a13ea30c419b4149445670baa, type: 3}
+      propertyPath: m_Color.b
+      value: 0.14117648
+      objectReference: {fileID: 0}
+    - target: {fileID: 8884319671455312518, guid: 7c8ffb6a13ea30c419b4149445670baa, type: 3}
+      propertyPath: m_Color.g
+      value: 0.07058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 8884319671455312518, guid: 7c8ffb6a13ea30c419b4149445670baa, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1214,6 +1226,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -2017821926, guid: 526acb39c5a20ce4e9571cd6630427f4, type: 3}
+    - target: {fileID: 8884319671455312518, guid: 7c8ffb6a13ea30c419b4149445670baa, type: 3}
+      propertyPath: m_Color.b
+      value: 0.14117648
+      objectReference: {fileID: 0}
+    - target: {fileID: 8884319671455312518, guid: 7c8ffb6a13ea30c419b4149445670baa, type: 3}
+      propertyPath: m_Color.g
+      value: 0.07058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 8884319671455312518, guid: 7c8ffb6a13ea30c419b4149445670baa, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
