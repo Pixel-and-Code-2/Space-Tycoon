@@ -30,7 +30,7 @@ public class AnimatorBrainPlayer : AnimatorBrainBase
             Animator.StringToHash("3_D"),
             Animator.StringToHash("5_H"),
         };
-        isSubEnables = true;
+        isSubEnables = false;
     }
 
     protected override void HandleBypassLock(int layer)

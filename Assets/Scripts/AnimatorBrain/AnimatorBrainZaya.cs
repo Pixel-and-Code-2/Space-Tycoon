@@ -30,7 +30,7 @@ public class AnimatorBrainZaya : AnimatorBrainBase
             Animator.StringToHash("3_D"),
             Animator.StringToHash("5_D (1)"),
         };
-        isSubEnables = true;
+        isSubEnables = false;
     }
 
     protected override void HandleBypassLock(int layer)
