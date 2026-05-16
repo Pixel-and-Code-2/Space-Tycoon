@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class AnimatorBrainPlayer : AnimatorBrainBase
+public class AnimatorBrainZaya : AnimatorBrainBase
 {
     public new enum Animations
     {
@@ -20,7 +20,7 @@ public class AnimatorBrainPlayer : AnimatorBrainBase
             Animator.StringToHash("1_MOVE"),
             Animator.StringToHash("2_ATTACK"),
             Animator.StringToHash("3_DEATH"),
-            Animator.StringToHash("5_HIT"),
+            Animator.StringToHash("5_DAMAGE"),
         };
         subAnimations = new int[] {
             0,
@@ -28,14 +28,14 @@ public class AnimatorBrainPlayer : AnimatorBrainBase
             Animator.StringToHash("1_M"),
             Animator.StringToHash("2_A"),
             Animator.StringToHash("3_D"),
-            Animator.StringToHash("5_H"),
+            Animator.StringToHash("5_D (1)"),
         };
         isSubEnables = true;
     }
 
     protected override void HandleBypassLock(int layer)
     {
-        foreach (var item in animator.GetBehaviours<OnExitPlayer>())
+        foreach (var item in animator.GetBehaviours<OnExitZaya>())
         {
             if (item.layerIndex == layer)
                 item.cancel = true;

@@ -9,19 +9,20 @@ public class AnimatorBrainEnemy : AnimatorBrainBase
         WALK = 2,
         ATTACK = 3,
         DEATH = 4,
-        DEATH1 = 5,
-        RAGE = 6,
+        DAMAGE = 5,
     }
-    protected new readonly static int[] animations =
+    void Awake()
     {
-        0,
-        Animator.StringToHash("root|UFO_Idle"),
-        Animator.StringToHash("root|UFO_Walk"),
-        Animator.StringToHash("root|UFO_Ataka"),
-        Animator.StringToHash("root|UFO_Death"),
-        Animator.StringToHash("root|UFO_Death (1)"),
-        Animator.StringToHash("root|UFO_Rage")
-    };
+        animations = new int[] {
+            0,
+            Animator.StringToHash("root|UFO_Idle"),
+            Animator.StringToHash("root|UFO_Walk"),
+            Animator.StringToHash("root|UFO_Ataka"),
+            Animator.StringToHash("root|UFO_Death"),
+            Animator.StringToHash("root|UFO_Rage"),
+        };
+        isSubEnables = false;
+    }
 
     protected override void HandleBypassLock(int layer)
     {
