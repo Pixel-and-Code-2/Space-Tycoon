@@ -13,14 +13,10 @@ MonoBehaviour:
   m_Name: ArmorHitinShell
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
-  - name: DMR
-    value: 0
-  - name: DMM
-    value: 0
   - name: DR
-    value: 6
+    value: 16
   - name: MDR
-    value: 4
+    value: 0
   - name: ARMMASS
     value: 29
   calculatedParameters: []
@@ -32,13 +28,13 @@ MonoBehaviour:
     DMM = 0,00 (0,00)
 
     DR =
-    6,00 (6,00)
+    16,00 (16,00)
 
-    MDR = 4,00 (4,00)
+    MDR = 0,00 (0,00)
 
     ARMMASS = 29,00 (29,00)
 
     Random
-    = 0,07 (0,07)
+    = 0,47 (0,47)
 
 '

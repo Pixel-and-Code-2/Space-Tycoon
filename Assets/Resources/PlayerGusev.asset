@@ -19,8 +19,6 @@ MonoBehaviour:
     value: 6
   - name: HT
     value: 4
-  - name: SHT
-    value: 3
   - name: BRW
     value: 0
   - name: THR
@@ -32,7 +30,7 @@ MonoBehaviour:
   - name: SPDB
     value: 1
   - name: SHT
-    value: 7
+    value: 8
   - name: DX
     value: 5
   calculatedParameters: []
@@ -41,9 +39,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d3b2db559de83f64693072d048142835, type: 2}
   - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
   isDirty: 0
-  parametersDictStateCache: 'MINDMG = 6,00 (6,00)
+  parametersDictStateCache: 'MINDMG = 8,00 (8,00)
 
-    MAXDMG = 15,00 (15,00)
+    MAXDMG = 25,00 (25,00)
 
     MDMG
     = 1,00 (1,00)
@@ -73,7 +71,7 @@ MonoBehaviour:
 
     DMM = 0,00 (0,00)
 
-    DR = 21,00 (21,00)
+    DR = 18,00 (18,00)
 
     MDR = 5,00
     (5,00)
@@ -89,7 +87,7 @@ MonoBehaviour:
 
     HT = 4,00 (4,00)
 
-    SHT = 7,00 (7,00)
+    SHT = 8,00 (8,00)
 
     BRW = 0,00
     (0,00)
@@ -121,9 +119,6 @@ MonoBehaviour:
 
     BCW = 11,50 (11,50)
 
-    BDMG = 4,00 (4,00)
-
-    Random
-    = 0,79 (0,79)
+    BDMG = 5,00 (5,00)
 
 '

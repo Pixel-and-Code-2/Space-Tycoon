@@ -40,8 +40,7 @@ public class HandleInittingGlobalVars : MonoBehaviour
         onParamsUpdated?.Invoke();
         ParameteredScriptableObject.OnUpdateParams += (parametersObj) =>
         {
-            // Debug.Log("RAN: " + parametersObj.name);
-            parametersObj.parametersDict[RANDOM_KEY] = Random.value;
+            globalParameters.parametersDict[RANDOM_KEY] = Random.value;
         };
     }
 

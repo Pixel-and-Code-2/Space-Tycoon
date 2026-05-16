@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
   - name: MINDMG
-    value: 3
-  - name: MAXDMG
     value: 8
+  - name: MAXDMG
+    value: 25
   - name: MDMG
     value: 1
   - name: ACC
@@ -35,9 +35,9 @@ MonoBehaviour:
   mustHaveParameters:
   - {fileID: 11400000, guid: 841391b108c1aa14ba3bed0e70634795, type: 2}
   isDirty: 0
-  parametersDictStateCache: 'MINDMG = 3,00 (3,00)
+  parametersDictStateCache: 'MINDMG = 8,00 (8,00)
 
-    MAXDMG = 8,00 (8,00)
+    MAXDMG = 25,00 (25,00)
 
     MDMG
     = 1,00 (1,00)
@@ -61,8 +61,5 @@ MonoBehaviour:
     TotalAmmo = 400,00 (400,00)
 
     MeleeROF = 1,00 (1,00)
-
-    Random
-    = 0,25 (0,25)
 
 '

@@ -18,6 +18,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
     // Dynamic parameters
     public Dictionary<string, float> dynamicParameters = new Dictionary<string, float>();
+    private Dictionary<string, float> instanceParameters = new Dictionary<string, float>();
 
     public const string AVAILABLE_DISTANCE_KEY = "AvailableDistance";
     public const string INITIAL_HP_KEY = "HP";
@@ -66,26 +67,36 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         }
         if (TurnManager.Instance != null)
         {
+            TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
+            TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
             TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
             TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
         }
-        initialPawnData.SetDirty();
-        initialPawnData.RebuildParametersDict();
+        RollInstanceParameters();
         ResetKeys();
         SaveHub.Instance.OnLoad += OnLoadData;
         SaveHub.Instance.OnSave += OnSaveData;
         TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
+        TurnManager.Instance.OnTriggerZoneEnter += OnTriggerZoneEnter;
     }
 
     private void OnTriggerZoneExit()
     {
         ResetActionPoints();
         SetParameterValue(MOVES_TO_SKIP_KEY, 0);
+        SetParameterValue(AMOUNT_OF_DEFENDED_HITS_KEY, 0);
+    }
+    private void OnTriggerZoneEnter()
+    {
+        // SetParameterValue(MOVES_TO_SKIP_KEY, 0);
+        SetParameterValue(AMOUNT_OF_DEFENDED_HITS_KEY, 0);
     }
     void OnEnable()
     {
         if (TurnManager.Instance != null)
         {
+            TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
+            TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
             TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
             TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
         }
@@ -143,9 +154,31 @@ public class PawnDataController : MonoBehaviour, IFormulaData
             }
         }, UNIQUE_ID);
     }
+    void RollInstanceParameters()
+    {
+        if (initialPawnData == null)
+            return;
+        if (HandleInittingGlobalVars.globalParameters != null)
+            HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.RANDOM_KEY] = Random.value;
+        initialPawnData.SetDirty();
+        initialPawnData.RebuildParametersDict();
+        instanceParameters.Clear();
+        foreach (var kv in initialPawnData.parametersDict)
+            instanceParameters[kv.Key] = kv.Value;
+    }
+
+    Dictionary<string, float> GetInstanceParametersDict()
+    {
+        if (instanceParameters.Count > 0)
+            return instanceParameters;
+        if (initialPawnData == null)
+            return instanceParameters;
+        return initialPawnData.GetParametersDict();
+    }
+
     private void ResetKeys()
     {
-        var dict = initialPawnData.GetParametersDict();
+        var dict = GetInstanceParametersDict();
         if (dict.ContainsKey(INITIAL_HP_KEY))
         {
             dynamicParameters[AVAILABLE_HEALTH_KEY] = dict[INITIAL_HP_KEY];
@@ -231,9 +264,9 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         {
             return dynamicParameters[parameterName];
         }
-        if (initialPawnData.GetParametersDict().ContainsKey(parameterName))
+        if (GetInstanceParametersDict().ContainsKey(parameterName))
         {
-            return initialPawnData.GetParametersDict()[parameterName];
+            return GetInstanceParametersDict()[parameterName];
         }
         // Debug.LogError($"Parameter {parameterName} not found in initialPlayerData");
         // return 12f;
@@ -271,8 +304,6 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         SetParameterValue(MOVES_TO_SKIP_KEY, movesToSkip > 0 ? movesToSkip - 1 : 0);
 
         SetParameterValue(IS_SHOOT_ON_MOVE_KEY, 0f);
-
-        // SetParameterValue(AMOUNT_OF_DEFENDED_HITS_KEY, 0f); // do we need to reset this?
     }
 
     public static float CalculateLineStringDistance(Vector3[] points)
@@ -298,7 +329,7 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     {
         get
         {
-            return initialPawnData.GetParametersDict();
+            return GetInstanceParametersDict();
         }
     }
 

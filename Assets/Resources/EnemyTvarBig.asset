@@ -20,7 +20,7 @@ MonoBehaviour:
   - name: SHT
     value: 0
   - name: BRW
-    value: 8
+    value: 1.5
   - name: THR
     value: 0
   - name: ENG
@@ -31,10 +31,12 @@ MonoBehaviour:
     value: -3
   - name: SPDB
     value: -2
+  - name: STR
+    value: 10
   calculatedParameters:
   - name: STR
     formula:
-      formula: (float)Math.Round(g_Random * 5 + 4)
+      formula: (float)Math.Round(g_Random * 5 + 6)
       instruction: 
       dataAssets:
       - {fileID: 11400000}
@@ -85,17 +87,17 @@ MonoBehaviour:
 
     DMM = 0,00 (0,00)
 
-    DR = 7,00 (7,00)
+    DR = 20,00 (20,00)
 
     MDR = 3,00
     (3,00)
 
     ARMMASS = 14,00 (14,00)
 
-    STR = 6,00 (6,00)
+    STR = 7,00 (7,00)
 
-    DX = 2,00
-    (2,00)
+    DX = 3,00
+    (3,00)
 
     IQ = 1,00 (1,00)
 
@@ -104,7 +106,7 @@ MonoBehaviour:
     SHT = 0,00 (0,00)
 
     BRW
-    = 8,00 (8,00)
+    = 1,50 (1,50)
 
     THR = 0,00 (0,00)
 
@@ -120,7 +122,7 @@ MonoBehaviour:
     DMG = 5,00
     (5,00)
 
-    HP = 10,00 (10,00)
+    HP = 15,00 (15,00)
 
     PRC = 6,00 (6,00)
 
@@ -133,9 +135,7 @@ MonoBehaviour:
 
     BCW = 6,00 (6,00)
 
-    BDMG = 5,00
-    (5,00)
-
-    Random = 0,69 (0,69)
+    BDMG = 11,00
+    (11,00)
 
 '

@@ -16,7 +16,7 @@ MonoBehaviour:
   - name: DR
     value: 21
   - name: MDR
-    value: 7
+    value: 7.5
   - name: ARMMASS
     value: 9
   calculatedParameters: []
@@ -30,11 +30,11 @@ MonoBehaviour:
     DR =
     21,00 (21,00)
 
-    MDR = 7,00 (7,00)
+    MDR = 7,50 (7,50)
 
     ARMMASS = 9,00 (9,00)
 
     Random
-    = 0,91 (0,91)
+    = 0,70 (0,70)
 
 '

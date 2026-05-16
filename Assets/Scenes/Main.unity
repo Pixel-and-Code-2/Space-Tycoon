@@ -516,6 +516,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7869846087712559139, guid: 504453969619fc345b6a12b64b65f670, type: 3}
+      propertyPath: initialPawnData
+      value: 
+      objectReference: {fileID: 11400000, guid: 12133d43ef8dfa04a8bcb5a4d6a8f465, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18052,6 +18056,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7869846087712559139, guid: 504453969619fc345b6a12b64b65f670, type: 3}
+      propertyPath: initialPawnData
+      value: 
+      objectReference: {fileID: 11400000, guid: 12133d43ef8dfa04a8bcb5a4d6a8f465, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19662,9 +19670,7 @@ MonoBehaviour:
       color: {r: 1, g: 0, b: 0, a: 0.5058824}
       code: -1
     progressPerRound:
-      formula: "(c_pawnDistance > 4 ? -10 : \r\n(g_IsStepByStep > 0.5 && c_AttackerWalkedDistance
-        > 1 ? 0 :\r\n(c_AttackerShotAmount > 0.5 ? 0 :\r\n(c_AttackerMeleeAmount
-        > 0.5 ? 0 :\r\np_IQ*2 ))))"
+      formula: '(c_pawnDistance > 4 ? -10 : 100 * g_e)'
       instruction: 
       dataAssets:
       - {fileID: 1569542970}
@@ -24315,7 +24321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5261586332104702065, guid: 504453969619fc345b6a12b64b65f670, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -74.36
+      value: -72.68
       objectReference: {fileID: 0}
     - target: {fileID: 5261586332104702065, guid: 504453969619fc345b6a12b64b65f670, type: 3}
       propertyPath: m_LocalPosition.y
@@ -24323,7 +24329,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5261586332104702065, guid: 504453969619fc345b6a12b64b65f670, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -21.97
+      value: -21.82
       objectReference: {fileID: 0}
     - target: {fileID: 5261586332104702065, guid: 504453969619fc345b6a12b64b65f670, type: 3}
       propertyPath: m_LocalRotation.w
@@ -33909,14 +33915,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeState
   calculateMeleeDamage:
-    formula: 'Math.Max(0,
+    formula: 'Math.Max(g_Random,
 
       ((i_STR + g_e*2 + i_MDMG  < t_MDR) ?
 
       (int)Math.Floor((i_STR
       + 2 + i_MDMG - t_MDR)/10) :
 
-      (i_STR + g_e*2 + i_MDMG - t_MDR)))'
+      (i_STR + g_e*2 + i_MDMG - t_MDR))) '
     instruction: 
     dataAssets:
     - {fileID: 1569542970}
@@ -33963,7 +33969,7 @@ MonoBehaviour:
   calculateMeleeDefense1:
     formula: '( c_PreyDefenses < 0.5 ?
 
-      (t_DDG + -2) * g_M :
+      (t_DDG + -2) * g_M / 100 :
 
       0)'
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
@@ -33989,7 +33995,7 @@ MonoBehaviour:
     formula: '( c_PreyDefenses < 1.5 && c_PreyDefenses > 0.5 ?
 
       (t_DDG + 0)
-      * g_M :
+      * g_M / 100 :
 
       0)'
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
@@ -34125,11 +34131,10 @@ MonoBehaviour:
       (((float)Math.Round(g_Random * (i_MAXDMG-i_MINDMG)
       + i_MINDMG)  < t_DR) ?
 
-      (int)Math.Floor((g_Random * (i_MAXDMG-i_MINDMG)
-      + i_MINDMG)/10) :
+      (g_Random * (i_MAXDMG-i_MINDMG) + i_MINDMG)/10
+      :
 
-      (g_Random * (i_MAXDMG-i_MINDMG) + i_MINDMG - t_DR+(int)Math.Floor((t_DR
-      )/10))
+      (g_Random * (i_MAXDMG-i_MINDMG) + i_MINDMG - t_DR+(t_DR )/10)
 
       ))'
     instruction: 
@@ -34195,7 +34200,7 @@ MonoBehaviour:
   calculateShootDefense:
     formula: '( c_PreyDefenses < 0.5 ?
 
-      (t_DDG - 3) * g_M :
+      (t_DDG - 3) * g_M / 100 :
 
       0)'
     instruction: "Type a mathematical expression using common '+', '-', '*', '/',
@@ -35432,7 +35437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213dd97b2d2c8b44490e84a696271e95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveHub
-  currSavingsVersion: 10
+  currSavingsVersion: 11
 --- !u!1 &1570870379 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7092391029048808588, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
@@ -37292,6 +37297,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7869846087712559139, guid: 504453969619fc345b6a12b64b65f670, type: 3}
+      propertyPath: initialPawnData
+      value: 
+      objectReference: {fileID: 11400000, guid: 12133d43ef8dfa04a8bcb5a4d6a8f465, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

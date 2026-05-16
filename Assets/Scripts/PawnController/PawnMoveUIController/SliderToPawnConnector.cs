@@ -41,16 +41,35 @@ public class SliderToPawnConnector : MonoBehaviour
     {
         if (pawn == null) Debug.LogWarning("SliderToPawnConnector: pawn not found");
         ColorTheSlider();
-        TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
-        TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
+            TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
+        }
     }
+
+    void OnDestroy()
+    {
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
+            TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
+        }
+    }
+
+    private void SetHelperTextEnabled(bool enabled)
+    {
+        if (helperText != null)
+            helperText.enabled = enabled;
+    }
+
     private void OnPlayerTurnStart()
     {
-        helperText.enabled = true;
+        SetHelperTextEnabled(true);
     }
     private void OnEnemyTurnStart()
     {
-        helperText.enabled = false;
+        SetHelperTextEnabled(false);
     }
 
     private float pawnHealthCached;
@@ -77,8 +96,8 @@ public class SliderToPawnConnector : MonoBehaviour
             var maxHealings = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
             var usedHealings = pawn.GetParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY);
             var revivesLeft = maxHealings - usedHealings;
-            helperText.enabled = revivesLeft > 0.5f;
-            if (helperText.enabled && helperTagCached != "[ЛКМ]")
+            SetHelperTextEnabled(revivesLeft > 0.5f);
+            if (helperText != null && helperText.enabled && helperTagCached != "[ЛКМ]")
             {
                 helperTagCached = "[ЛКМ]";
                 helperText.text = "[ЛКМ]";
@@ -107,7 +126,7 @@ public class SliderToPawnConnector : MonoBehaviour
                 enemyHpSlider.gameObject.SetActive(isAlive);
                 if (!isAlive)
                 {
-                    helperText.enabled = false;
+                    SetHelperTextEnabled(false);
                 }
             }
             else if (pawnSelectableType == SelectableType.Dead)
@@ -289,7 +308,7 @@ public class SliderToPawnConnector : MonoBehaviour
             if (enemyHpSlider != null)
             {
                 enemyHpSlider.gameObject.SetActive(false);
-                helperText.enabled = false;
+                SetHelperTextEnabled(false);
             }
             if (allyHpSlider != null) allyHpSlider.gameObject.SetActive(false);
             if (allyStaminaSlider != null) allyStaminaSlider.gameObject.SetActive(false);
