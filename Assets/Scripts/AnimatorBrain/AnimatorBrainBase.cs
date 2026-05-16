@@ -13,9 +13,9 @@ public class AnimatorBrainBase : MonoBehaviour
         DEATH = 4,
         DAMAGE = 5,
     }
-    protected static int[] animations = { 0, 0, 0, 0, 0 };
-    protected static int[] subAnimations = { 0, 0, 0, 0, 0 };
-    protected static bool isSubEnables = false;
+    protected int[] animations = { 0, 0, 0, 0, 0 };
+    protected int[] subAnimations = { 0, 0, 0, 0, 0 };
+    protected bool isSubEnables = false;
     protected Animator animator;
     protected int[] currentAnimation;
     protected bool[] layerLocked;
