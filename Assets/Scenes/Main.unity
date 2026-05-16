@@ -18501,7 +18501,7 @@ Animator:
   m_GameObject: {fileID: 850088759}
   m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7b78aa38725e6814db572889a3a149aa, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -25726,6 +25726,45 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.121219136, y: 0.001, z: 0.18180029}
   m_Center: {x: 0, y: -9.313226e-10, z: 0.000000059604645}
+--- !u!1 &1355054535 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4486629117643855069, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
+  m_PrefabInstance: {fileID: 2070651999}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1355054537
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355054535}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
+  m_Controller: {fileID: 9100000, guid: 7b78aa38725e6814db572889a3a149aa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1355054539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355054535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70ebd912da9a51245b60996a9a56628d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatorBrainPlayer
 --- !u!1 &1371347066 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 426309935783401599, guid: 504453969619fc345b6a12b64b65f670, type: 3}
@@ -43991,6 +44030,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 850088761}
+    - targetCorrespondingSourceObject: {fileID: 4486629117643855069, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1355054537}
+    - targetCorrespondingSourceObject: {fileID: 4486629117643855069, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1355054539}
   m_SourcePrefab: {fileID: 100100000, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
 --- !u!64 &2073658819
 MeshCollider:
