@@ -12301,7 +12301,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 0.8207547, g: 0.9132937, b: 1, a: 1}
-  m_Intensity: 0.09
+  m_Intensity: 0.06
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -42333,7 +42333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LightsController
   lightModes:
   - lightModeType: 0
-    colorA: {r: 1, g: 0.94509804, b: 0.8509804, a: 1}
+    colorA: {r: 0.8, g: 0.6974648, b: 0.52000004, a: 1}
     colorB: {r: 0, g: 0, b: 0, a: 0}
     duration: 7
     curve:
@@ -44099,10 +44099,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 824540565}
     m_Modifications:
-    - target: {fileID: 5549764426381985590, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 127eb1a58bd44fd488eccdfae602a49f, type: 2}
     - target: {fileID: -8679921383154817045, guid: c4433f60addb24a4490faf4372df525b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -44151,6 +44147,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ENGINEER_1_RELEASE_FIX
       objectReference: {fileID: 0}
+    - target: {fileID: 5549764426381985590, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 127eb1a58bd44fd488eccdfae602a49f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
