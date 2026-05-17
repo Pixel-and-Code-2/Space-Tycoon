@@ -31,6 +31,12 @@ public class PawnStatusVisualizer : MonoBehaviour
         hasShaderColor = statusMaterial.HasProperty(ColorId);
     }
 
+    void OnEnable()
+    {
+        if (statusMaterial != null && pawnBrain != null)
+            RefreshStatusColor();
+    }
+
     void Start()
     {
         UpdateStatusColor();

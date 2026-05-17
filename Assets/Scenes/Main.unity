@@ -1029,6 +1029,9 @@ MonoBehaviour:
   fogMaterial: {fileID: 2100000, guid: 9f6f5d808e3365a49a8ab8e5b6fb7919, type: 2}
   othersToInclude:
   - {fileID: 1600158395}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &72211725
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1273,6 +1276,9 @@ MonoBehaviour:
   othersToInclude:
   - {fileID: 97199497}
   - {fileID: 424955024}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &100330490
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1559,6 +1565,9 @@ MonoBehaviour:
   - {fileID: 362736795}
   - {fileID: 189826004}
   - {fileID: 1506698187}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &112930555
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6000,6 +6009,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WarFog
   fogMaterial: {fileID: 2100000, guid: 9f6f5d808e3365a49a8ab8e5b6fb7919, type: 2}
   othersToInclude: []
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &240362408
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8289,6 +8301,9 @@ MonoBehaviour:
   othersToInclude:
   - {fileID: 1810019906}
   - {fileID: 462280293}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &369781096
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8562,6 +8577,9 @@ MonoBehaviour:
   fogMaterial: {fileID: 2100000, guid: 9f6f5d808e3365a49a8ab8e5b6fb7919, type: 2}
   othersToInclude:
   - {fileID: 467644236}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &405680703
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10730,6 +10748,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WarFog
   fogMaterial: {fileID: 2100000, guid: 9f6f5d808e3365a49a8ab8e5b6fb7919, type: 2}
   othersToInclude: []
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &609807303
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20443,6 +20464,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WarFog
   fogMaterial: {fileID: 2100000, guid: 9f6f5d808e3365a49a8ab8e5b6fb7919, type: 2}
   othersToInclude: []
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &980947099
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20847,6 +20871,9 @@ MonoBehaviour:
   fogMaterial: {fileID: 2100000, guid: 9f6f5d808e3365a49a8ab8e5b6fb7919, type: 2}
   othersToInclude:
   - {fileID: 2123480810}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1011284015
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24037,6 +24064,9 @@ MonoBehaviour:
   othersToInclude:
   - {fileID: 1371347066}
   - {fileID: 805832890}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1220946153
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24457,6 +24487,9 @@ MonoBehaviour:
   - {fileID: 683951904}
   - {fileID: 1309574665}
   - {fileID: 927822975}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1266087441
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -33330,6 +33363,9 @@ MonoBehaviour:
   othersToInclude:
   - {fileID: 569644417}
   - {fileID: 1286914774}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1531037500
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -35990,6 +36026,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WarFog
   fogMaterial: {fileID: 2100000, guid: 9f6f5d808e3365a49a8ab8e5b6fb7919, type: 2}
   othersToInclude: []
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1582979472
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36236,6 +36275,9 @@ MonoBehaviour:
   fogMaterial: {fileID: 2100000, guid: 9f6f5d808e3365a49a8ab8e5b6fb7919, type: 2}
   othersToInclude:
   - {fileID: 1075849833}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1603812657
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36548,6 +36590,9 @@ MonoBehaviour:
   - {fileID: 617607709}
   - {fileID: 827548403}
   - {fileID: 675905206}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1657157582
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -37648,6 +37693,9 @@ MonoBehaviour:
   othersToInclude:
   - {fileID: 195921468}
   - {fileID: 1457166438}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1793149447
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -37845,6 +37893,9 @@ MonoBehaviour:
   fogMaterial: {fileID: 2100000, guid: 9f6f5d808e3365a49a8ab8e5b6fb7919, type: 2}
   othersToInclude:
   - {fileID: 915073812}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1829742919
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -42084,6 +42135,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 5306bc6049004db4880fea0669dc3ac2, type: 2}
     - target: {fileID: 8696655358907118961, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+      propertyPath: animatorBrain
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696655358907118961, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: defaultMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 28668861a53fbc3459d0884825a8601a, type: 2}
@@ -43180,6 +43235,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WarFog
   fogMaterial: {fileID: 2100000, guid: 9f6f5d808e3365a49a8ab8e5b6fb7919, type: 2}
   othersToInclude: []
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1987880489
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -43215,6 +43273,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WarFog
   fogMaterial: {fileID: 2100000, guid: 9f6f5d808e3365a49a8ab8e5b6fb7919, type: 2}
   othersToInclude: []
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1987880491
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -43253,6 +43314,9 @@ MonoBehaviour:
   - {fileID: 1796793364}
   - {fileID: 353870540}
   - {fileID: 1287685453}
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!65 &1987880493
 BoxCollider:
   m_ObjectHideFlags: 0
