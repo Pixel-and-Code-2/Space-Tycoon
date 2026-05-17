@@ -87,3 +87,7 @@ MonoBehaviour:
     color: {r: 0.4009434, g: 0.002252491, b: 0, a: 1}
   - name: UIHelperTextColor
     color: {r: 0.29411766, g: 1, b: 0.42352942, a: 1}
+  - name: UIbuttonmission
+    color: {r: 0, g: 0, b: 0, a: 1}
+  - name: Uihearts
+    color: {r: 1, g: 1, b: 1, a: 1}
