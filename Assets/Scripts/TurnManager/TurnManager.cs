@@ -112,6 +112,7 @@ public class TurnManager : MonoBehaviour
             listOfDelayedTriggers[i].isActive = data.GetData("IsDelayedTriggerActive_" + i, UNIQUE_ID, listOfDelayedTriggers[i].isActive);
             listOfDelayedTriggers[i].spawned = data.GetData("IsDelayedTriggerSpawned_" + i, UNIQUE_ID, listOfDelayedTriggers[i].spawned);
         }
+        IsQuarantine = data.GetData("IsQuarantine", UNIQUE_ID, false);
         RebuildDynamicEnemiesFromSave(data);
         if (IsPlayerTurn)
         {
@@ -204,6 +205,12 @@ public class TurnManager : MonoBehaviour
                 stringValue = entry.prefabName ?? string.Empty
             });
         }
+        records.Add(new SaveRecord
+        {
+            recordName = "IsQuarantine",
+            recordType = SaveRecordType.boolean,
+            boolValue = IsQuarantine
+        });
         addSaveData(records.ToArray(), UNIQUE_ID);
     }
     public void EnterTrigger(GameObject triggerObject)

@@ -28,7 +28,7 @@ MonoBehaviour:
   - name: SCI
     value: 0
   - name: DDGB
-    value: 6.25
+    value: 4.25
   - name: SPDB
     value: 3
   calculatedParameters:
@@ -94,8 +94,8 @@ MonoBehaviour:
 
     STR = 4,00 (4,00)
 
-    DX = 6,00
-    (6,00)
+    DX = 7,00
+    (7,00)
 
     IQ = 0,00 (0,00)
 
@@ -113,7 +113,7 @@ MonoBehaviour:
     SCI = 0,00
     (0,00)
 
-    DDGB = 6,25 (6,25)
+    DDGB = 4,25 (4,25)
 
     SPDB = 3,00 (3,00)
 
@@ -129,11 +129,11 @@ MonoBehaviour:
     SPD = 6,75
     (6,75)
 
-    DDG = 14,00 (14,00)
+    DDG = 12,00 (12,00)
 
     BCW = 13,50 (13,50)
 
-    BDMG = 5,00
-    (5,00)
+    BDMG = 6,00
+    (6,00)
 
 '

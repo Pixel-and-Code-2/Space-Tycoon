@@ -139,6 +139,8 @@ public class SaveHub : MonoBehaviour
 
     public void ShowLastSavedData()
     {
+        Debug.Log(PlayerPrefs.GetInt("IsFirstWin", 1));
+        PlayerPrefs.DeleteKey("IsFirstWin");
         string data = "Last saved data:\n\n";
 
         data += "Float data:\n";
