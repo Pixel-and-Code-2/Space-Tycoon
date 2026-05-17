@@ -1752,6 +1752,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy2.4
       objectReference: {fileID: 0}
+    - target: {fileID: 2061821344905218994, guid: 1d53de9eedcf8444a9371d2b86b637f3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: dfadae1956b255241a3987cca86bafe9, type: 2}
     - target: {fileID: 4738749594722304803, guid: 1d53de9eedcf8444a9371d2b86b637f3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.61
@@ -32428,6 +32432,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1035430169229590010, guid: 1762fe1826219fc4094e8c046bf9f025, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 920c6453d61d6d543b0bd108f834f915, type: 2}
+    - target: {fileID: 1035430169229590010, guid: 1762fe1826219fc4094e8c046bf9f025, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cb2f7451e804bd34898fa8232a05a760, type: 2}
     - target: {fileID: 5866666021909216657, guid: 1762fe1826219fc4094e8c046bf9f025, type: 3}
       propertyPath: m_Enabled
       value: 1
