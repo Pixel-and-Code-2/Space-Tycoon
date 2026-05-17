@@ -15,6 +15,7 @@ public class PawnStatusVisualizer : MonoBehaviour
     private bool hasShaderColor;
     private Color lastAppliedColor;
     private IControlableSelectable lastSelected;
+    private SelectableType lastSelectableType;
     private bool hasAppliedOnce;
 
     void Awake()
@@ -40,17 +41,31 @@ public class PawnStatusVisualizer : MonoBehaviour
         UpdateStatusColor();
     }
 
+    public void RefreshStatusColor()
+    {
+        IControlableSelectable current = PawnController.Instance != null ? PawnController.Instance.currentSelectedPawn : null;
+        TryApplyStatusColor(current, force: true);
+    }
+
     private void UpdateStatusColor()
     {
-        if (statusMaterial == null || pawnBrain == null || PawnController.Instance == null || settings == null)
+        if (PawnController.Instance == null)
+            return;
+        TryApplyStatusColor(PawnController.Instance.currentSelectedPawn, force: false);
+    }
+
+    private void TryApplyStatusColor(IControlableSelectable current, bool force)
+    {
+        if (statusMaterial == null || pawnBrain == null || settings == null)
             return;
 
-        IControlableSelectable current = PawnController.Instance.currentSelectedPawn;
-        if (hasAppliedOnce && current == lastSelected)
+        SelectableType type = pawnBrain.GetSelectableType();
+        if (!force && hasAppliedOnce && current == lastSelected && type == lastSelectableType)
             return;
 
         Color targetColor = ResolveTargetColor(current);
         lastSelected = current;
+        lastSelectableType = type;
         hasAppliedOnce = true;
         if (targetColor == lastAppliedColor)
             return;

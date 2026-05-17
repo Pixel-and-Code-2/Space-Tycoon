@@ -102,6 +102,14 @@ public class PawnBrain : IControlableSelectable
         {
             playersAlive.Remove(this);
         }
+        RefreshStatusVisualizers();
+    }
+
+    private void RefreshStatusVisualizers()
+    {
+        PawnStatusVisualizer[] visualizers = GetComponentsInChildren<PawnStatusVisualizer>(true);
+        for (int i = 0; i < visualizers.Length; i++)
+            visualizers[i].RefreshStatusColor();
     }
     private void OnLoadData(LoadedData data)
     {
@@ -357,6 +365,7 @@ public class PawnBrain : IControlableSelectable
             TurnManager.Instance.CheckTriggers();
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
             pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
+            RefreshStatusVisualizers();
             animatorBrain?.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
             newHealth = 0f;
             isAlive = false;
