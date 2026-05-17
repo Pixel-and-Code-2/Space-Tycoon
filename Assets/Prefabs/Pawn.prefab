@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4133363707667569886
 Transform:
   m_ObjectHideFlags: 0
@@ -721,10 +721,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307ca1a0cc2126b47876810a60951d1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnStatusVisualizer
-  objectRenderer: {fileID: 2772571386642263105}
+  objectRenderer: {fileID: 6663021269087751919}
 --- !u!4 &5493514506338760064 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 14ba05ca7d6838b419404f8f877d1adb, type: 3}
+  m_PrefabInstance: {fileID: 5455648239124189803}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6663021269087751919 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 14ba05ca7d6838b419404f8f877d1adb, type: 3}
   m_PrefabInstance: {fileID: 5455648239124189803}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6846910732322107018
