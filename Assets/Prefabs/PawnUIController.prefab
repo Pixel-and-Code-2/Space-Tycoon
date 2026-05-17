@@ -15730,7 +15730,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 398.925, y: -568.12}
+  m_AnchoredPosition: {x: 398.925, y: -547.64}
   m_SizeDelta: {x: 797.85, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4935125867687515928
@@ -28249,6 +28249,10 @@ PrefabInstance:
     - target: {fileID: 6867338148077539064, guid: 4e1f0ab8a7d46044994723cfafdab560, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: HelpUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7039798414934588432, guid: 4e1f0ab8a7d46044994723cfafdab560, type: 3}
+      propertyPath: m_Spacing
+      value: -0.24
       objectReference: {fileID: 0}
     - target: {fileID: 7593645519828579602, guid: 4e1f0ab8a7d46044994723cfafdab560, type: 3}
       propertyPath: m_text
