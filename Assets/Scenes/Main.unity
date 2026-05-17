@@ -2592,15 +2592,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2344258738908225758, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.b
-      value: 0.14117648
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2344258738908225758, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.g
-      value: 0.07058824
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2344258738908225758, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2350463359556635455, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3131,6 +3131,10 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3512753520652296361, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: titlesVideo
+      value: 
+      objectReference: {fileID: 32900000, guid: b2c1475ada3b766449e90e76441051c0, type: 3}
+    - target: {fileID: 3512753520652296361, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: textAnimationStep
       value: 0.023
       objectReference: {fileID: 0}
@@ -3308,15 +3312,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3817603722422674736, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.b
-      value: 0.14117648
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3817603722422674736, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.g
-      value: 0.07058824
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3817603722422674736, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3922335214259867479, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5044,15 +5048,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005342188044326324, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.b
-      value: 0.14117648
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9005342188044326324, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.g
-      value: 0.07058824
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9005342188044326324, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9057957384780820914, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5237,7 +5241,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -5254,7 +5258,7 @@ MonoBehaviour:
         ? 0 :\n100*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -7838,7 +7842,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -7853,7 +7857,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -8240,7 +8244,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -8255,7 +8259,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11285,7 +11289,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11300,7 +11304,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -17639,7 +17643,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -17656,7 +17660,7 @@ MonoBehaviour:
         > 0.5 ? 0 :\r\np_IQ*2 ))))"
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -18949,7 +18953,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -18966,7 +18970,7 @@ MonoBehaviour:
         ? 0 :\n100*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19209,7 +19213,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19224,7 +19228,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19783,7 +19787,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19798,7 +19802,7 @@ MonoBehaviour:
       formula: '(c_pawnDistance > 4 ? -10 : 100 * g_e)'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -21204,7 +21208,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -21221,7 +21225,7 @@ MonoBehaviour:
         > 0.5 ? 0 :\r\n100*g_e))))"
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -23678,7 +23682,7 @@ MonoBehaviour:
         ))'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -23697,7 +23701,7 @@ MonoBehaviour:
       formula: 30*g_e
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24175,7 +24179,7 @@ MonoBehaviour:
         ))'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24194,7 +24198,7 @@ MonoBehaviour:
       formula: 40*g_e
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24572,7 +24576,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24589,7 +24593,7 @@ MonoBehaviour:
         ? 0 :\n100*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25413,7 +25417,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25430,7 +25434,7 @@ MonoBehaviour:
         ? 0 :\np_IQ*3 ))))"
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25827,7 +25831,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25844,7 +25848,7 @@ MonoBehaviour:
         ? 0 :\np_IQ*3 + 2*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -33262,7 +33266,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -33277,7 +33281,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 1569542970}
+      - {fileID: 0}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -34282,7 +34286,7 @@ MonoBehaviour:
       (i_STR + g_e*2 + i_MDMG - t_MDR))) '
     instruction: 
     dataAssets:
-    - {fileID: 1569542970}
+    - {fileID: 0}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -34297,7 +34301,7 @@ MonoBehaviour:
       / 100\n))))) "
     instruction: 
     dataAssets:
-    - {fileID: 1569542970}
+    - {fileID: 0}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -34340,7 +34344,7 @@ MonoBehaviour:
       below to add its name to the end o\u0430 the formula (but be sure to the formula
       to be blured when clicked)."
     dataAssets:
-    - {fileID: 1569542970}
+    - {fileID: 0}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -34366,7 +34370,7 @@ MonoBehaviour:
       below to add its name to the end o\u0430 the formula (but be sure to the formula
       to be blured when clicked)."
     dataAssets:
-    - {fileID: 1569542970}
+    - {fileID: 0}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -44403,6 +44407,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 824540565}
     m_Modifications:
+    - target: {fileID: 5549764426381985590, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 127eb1a58bd44fd488eccdfae602a49f, type: 2}
     - target: {fileID: -8679921383154817045, guid: c4433f60addb24a4490faf4372df525b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -44451,10 +44459,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ENGINEER_1_RELEASE_FIX
       objectReference: {fileID: 0}
-    - target: {fileID: 5549764426381985590, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 127eb1a58bd44fd488eccdfae602a49f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
