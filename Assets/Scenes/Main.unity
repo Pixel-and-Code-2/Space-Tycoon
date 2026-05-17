@@ -3214,6 +3214,14 @@ PrefabInstance:
       value: 0.023
       objectReference: {fileID: 0}
     - target: {fileID: 3512753520652296361, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: titlesAudioOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512753520652296361, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: titlesAudioOverride
+      value: 
+      objectReference: {fileID: 8300000, guid: e816e2df116d58347a9f270fc541f1c0, type: 3}
+    - target: {fileID: 3512753520652296361, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: timeBeforeRevealingText
       value: 5
       objectReference: {fileID: 0}
@@ -26377,11 +26385,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  gameAmbient: {fileID: 8300000, guid: 62428bdb7aeb362478a45d9196ace052, type: 3}
-  combatAmbient: {fileID: 8300000, guid: 688e3f3308e021f48babc8735a057ee7, type: 3}
-  victoryAmbient: {fileID: 8300000, guid: 2aebc78e0546053459dd23301ab5fd10, type: 3}
-  defeatAmbient: {fileID: 8300000, guid: 2aebc78e0546053459dd23301ab5fd10, type: 3}
-  mainMenuAmbient: {fileID: 8300000, guid: bf1975ff705c3f84681bb507e8af1c47, type: 3}
+  gameAmbient: {fileID: 8300000, guid: cc5c521c07e93bf40bbb9faef3babffe, type: 3}
+  combatAmbient: {fileID: 8300000, guid: e816e2df116d58347a9f270fc541f1c0, type: 3}
+  victoryAmbient: {fileID: 8300000, guid: e816e2df116d58347a9f270fc541f1c0, type: 3}
+  defeatAmbient: {fileID: 8300000, guid: e816e2df116d58347a9f270fc541f1c0, type: 3}
+  mainMenuAmbient: {fileID: 8300000, guid: a6fad00777f5cc749bcf3bb8d0e62c9a, type: 3}
   audioMixer: {fileID: 24100000, guid: ab97c35efc46ed241923b92f768f54a4, type: 2}
   buttonHover: {fileID: 8300000, guid: 51825c0b1fd682049bcf68da266c6446, type: 3}
   buttonClick: {fileID: 8300000, guid: 9bc58a6c725f3dd4889de9f8989b152c, type: 3}
@@ -35657,7 +35665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213dd97b2d2c8b44490e84a696271e95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveHub
-  currSavingsVersion: 11
+  currSavingsVersion: 12
 --- !u!1 &1570870379 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7092391029048808588, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
