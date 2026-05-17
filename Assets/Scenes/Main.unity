@@ -3136,12 +3136,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3512753520652296361, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: titlesAudioOffset
-      value: 174
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3512753520652296361, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: titlesAudioOverride
       value: 
-      objectReference: {fileID: 8300000, guid: 91a8543eee98930449fb85a74c780f29, type: 3}
+      objectReference: {fileID: 8300000, guid: 2d646ae238a67844a929ed1da34be688, type: 3}
     - target: {fileID: 3512753520652296361, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: timeBeforeRevealingText
       value: 5
@@ -5237,7 +5237,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -5254,7 +5254,7 @@ MonoBehaviour:
         ? 0 :\n100*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -7838,7 +7838,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -7853,7 +7853,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -8240,7 +8240,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -8255,7 +8255,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11285,7 +11285,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11300,7 +11300,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -17639,7 +17639,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -17656,7 +17656,7 @@ MonoBehaviour:
         > 0.5 ? 0 :\r\np_IQ*2 ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -18949,7 +18949,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -18966,7 +18966,7 @@ MonoBehaviour:
         ? 0 :\n100*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19209,7 +19209,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19224,7 +19224,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19783,7 +19783,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19798,7 +19798,7 @@ MonoBehaviour:
       formula: '(c_pawnDistance > 4 ? -10 : 100 * g_e)'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -21204,7 +21204,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -21221,7 +21221,7 @@ MonoBehaviour:
         > 0.5 ? 0 :\r\n100*g_e))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -23678,7 +23678,7 @@ MonoBehaviour:
         ))'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -23697,7 +23697,7 @@ MonoBehaviour:
       formula: 30*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24175,7 +24175,7 @@ MonoBehaviour:
         ))'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24194,7 +24194,7 @@ MonoBehaviour:
       formula: 40*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24572,7 +24572,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24589,7 +24589,7 @@ MonoBehaviour:
         ? 0 :\n100*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25413,7 +25413,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25430,7 +25430,7 @@ MonoBehaviour:
         ? 0 :\np_IQ*3 ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25827,7 +25827,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25844,7 +25844,7 @@ MonoBehaviour:
         ? 0 :\np_IQ*3 + 2*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -33262,7 +33262,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -33277,7 +33277,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -34282,7 +34282,7 @@ MonoBehaviour:
       (i_STR + g_e*2 + i_MDMG - t_MDR))) '
     instruction: 
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -34297,7 +34297,7 @@ MonoBehaviour:
       / 100\n))))) "
     instruction: 
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -34340,7 +34340,7 @@ MonoBehaviour:
       below to add its name to the end o\u0430 the formula (but be sure to the formula
       to be blured when clicked)."
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -34366,7 +34366,7 @@ MonoBehaviour:
       below to add its name to the end o\u0430 the formula (but be sure to the formula
       to be blured when clicked)."
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
