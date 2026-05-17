@@ -108,12 +108,10 @@ public class LightsController : MonoBehaviour
     {
         if (TurnManager.Instance.IsQuarantine)
         {
-            Debug.Log("Quarantine");
             ChangeLightMode(LightModeType.QUARANTINE);
         }
         else
         {
-            Debug.Log("Battle");
             ChangeLightMode(LightModeType.BATTLE);
         }
     }

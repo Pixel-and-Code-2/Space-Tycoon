@@ -6,13 +6,9 @@ public class FirstComputer : IScriptForClickable
     [SerializeField]
     private Material[] computerOnMaterials;
     [SerializeField]
-    private Material[] systemOnMaterials;
-    [SerializeField]
     private Material[] computerOffMaterials;
     [SerializeField]
     private MeshRenderer computerRenderer;
-    [SerializeField]
-    private MeshRenderer systemRenderer;
     [SerializeField]
     private NavMeshLink navMeshLink;
     private string UNIQUE_ID => "FirstDoorOpen_" + gameObject.name;
@@ -21,10 +17,19 @@ public class FirstComputer : IScriptForClickable
         navMeshLink.enabled = false;
         SaveHub.Instance.OnLoad += OnLoad;
         SaveHub.Instance.OnSave += OnSave;
+        // computerRenderer.materials = computerOffMaterials;
     }
     private void OnLoad(LoadedData data)
     {
         navMeshLink.enabled = data.GetData("enabled", UNIQUE_ID, false);
+        // if (navMeshLink.enabled)
+        // {
+        //     computerRenderer.materials = computerOnMaterials;
+        // }
+        // else
+        // {
+        //     computerRenderer.materials = computerOffMaterials;
+        // }
     }
     private void OnSave(System.Action<SaveRecord[], string> addSaveData)
     {
@@ -48,12 +53,6 @@ public class FirstComputer : IScriptForClickable
     {
         base.OnComplete();
         navMeshLink.enabled = true;
-        if (systemRenderer != null) systemRenderer.materials = systemOnMaterials;
-    }
-
-    public override void OnStart()
-    {
-        base.OnStart();
         computerRenderer.materials = computerOnMaterials;
     }
     public override void OnCancel()
