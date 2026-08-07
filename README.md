@@ -11,9 +11,8 @@ Assets/                                     # место хранения все
 
     Scripts/                                # папка со всеми C# скриптами проекта
         CameraController/                   # группа скриптов для работы камеры
-        ModulesScripts (unattachable)/      # папка со вспомогательными скриптами для модулей
-
     Settings/                               # настройки проекта: input bindings, graphics
+/Space-Tycoon ideas                         # заметки
 .gitignore
 README.md                                   # вы находитесь здесь)
 ```

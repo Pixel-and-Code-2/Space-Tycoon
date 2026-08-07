@@ -2,4 +2,4 @@
 
 Работаем в: Unity
 
-Ссылка на ГДД: https://docs.google.com/document/d/14qGmtmJztoV9hilhX4w0hczbEE9apuQLMw_mIQP1XW0/edit?tab=t.mdof37yqv1rs
+Ссылка на ГДД: https://docs.google.com/document/d/1DZG3A8wbD5FrlAyx0fcNzjz38Tl6B2MQ5QbVaify5bo/edit?tab=t.xk8w049jf9ht
