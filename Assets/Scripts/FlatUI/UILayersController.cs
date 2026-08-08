@@ -126,6 +126,10 @@ public class UILayersController : MonoBehaviour
     }
     private void AddLayer(UILayer layer, string config = null)
     {
+        if (layersDictionary[layer].isQueueable && layer == overlayStack.Peek()) {
+            layersDictionary[layer].Queue(config);
+            return;
+        }
         if (overlayStack.Count > 0 && layersDictionary[layer].isBackgroundVisible)
         {
             overlayStack.Push(UILayer.Background);

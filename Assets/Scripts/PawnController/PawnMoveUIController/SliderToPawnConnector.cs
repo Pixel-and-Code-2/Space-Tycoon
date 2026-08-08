@@ -21,6 +21,7 @@ public class SliderToPawnConnector : MonoBehaviour
 
     public PawnDataController pawn;
     private PawnDataController pawnCached;
+    private ClickableItem otherSelectable;
 
     [Header("Sliders")]
     [SerializeField] private SliderController allyHpSlider;
@@ -40,12 +41,14 @@ public class SliderToPawnConnector : MonoBehaviour
     void Start()
     {
         if (pawn == null) Debug.LogWarning("SliderToPawnConnector: pawn not found");
+        else otherSelectable = pawn.gameObject.GetComponent<ClickableItem>();
         ColorTheSlider();
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
             TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
         }
+
     }
 
     void OnDestroy()
@@ -93,14 +96,19 @@ public class SliderToPawnConnector : MonoBehaviour
 
         if (pawn.selectableType == SelectableType.Dead)
         {
-            var maxHealings = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
-            var usedHealings = pawn.GetParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY);
-            var revivesLeft = maxHealings - usedHealings;
-            SetHelperTextEnabled(revivesLeft > 0.5f);
-            if (helperText != null && helperText.enabled && helperTagCached != "[ЛКМ]")
-            {
-                helperTagCached = "[ЛКМ]";
-                helperText.text = "[ЛКМ]";
+            if (otherSelectable != null && otherSelectable.OccupiedBy != null) {
+                helperText.text = "";
+            }
+            else {
+                var maxHealings = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
+                var usedHealings = pawn.GetParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY);
+                var revivesLeft = maxHealings - usedHealings;
+                SetHelperTextEnabled(revivesLeft > 0.5f);
+                if (helperText != null && helperText.enabled && helperTagCached != HelperTag)
+                {
+                    helperTagCached = HelperTag;
+                    helperText.text = HelperTag;
+                }
             }
             return;
         }

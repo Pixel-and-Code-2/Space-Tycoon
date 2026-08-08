@@ -15,6 +15,7 @@ public class PawnBrain : IControlableSelectable
     private AudioSource audioSource;
     public override SelectableType GetSelectableType()
     {
+        if (dataController == null) return SelectableType.Neutral;
         return dataController.selectableType;
     }
 

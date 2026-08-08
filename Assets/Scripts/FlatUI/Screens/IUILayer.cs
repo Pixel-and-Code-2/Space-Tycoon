@@ -7,4 +7,6 @@ public abstract class IUILayer : MonoBehaviour
     public virtual void OnBackgroundClick() { }
     public virtual void Initialize(string config) { }
     public virtual bool isStoppingGame => true;
+    public virtual bool isQueueable => false;
+    public virtual void Queue(string config) { }
 }

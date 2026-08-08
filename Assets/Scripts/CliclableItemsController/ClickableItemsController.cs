@@ -34,6 +34,7 @@ public class ClickableItemsController : MonoBehaviour
             public bool shown = false;
             public bool showOnce = true;
             public bool showOnlyOnStepByStep = false;
+            public int author = -1;
             public List<CompleteSound> completeSounds = new List<CompleteSound>();
         }
         [System.Serializable]
@@ -45,7 +46,6 @@ public class ClickableItemsController : MonoBehaviour
             public bool atLeast;
         }
         public ISelectable selectable;
-        // [HideInInspector]
         public TaskItemStatus status = TaskItemStatus.Unavailable;
         public List<TaskCondition> readyWhen = new List<TaskCondition>();
         public List<TaskCondition> doneWhen = new List<TaskCondition>();
@@ -53,6 +53,7 @@ public class ClickableItemsController : MonoBehaviour
         public string shortLevelName = string.Empty;
         public string completeText = string.Empty;
         public Color completeTextColor = Color.yellow;
+        public bool onlyShowText = false;
     }
     public static ClickableItemsController Instance { get; private set; }
     public System.Action OnTaskUpdated;
@@ -128,7 +129,7 @@ public class ClickableItemsController : MonoBehaviour
             {
                 item.status = TaskItem.TaskItemStatus.InProgress;
                 item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.InProgress);
-                UI3DManager.Instance.UnregisterSelectable(item.selectable);
+                UnregisterSelectable(item.selectable);
                 CheckActionBox();
                 updated = true;
             }
@@ -139,7 +140,7 @@ public class ClickableItemsController : MonoBehaviour
             {
                 item.status = TaskItem.TaskItemStatus.InProgress;
                 item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.InProgress);
-                UI3DManager.Instance.UnregisterSelectable(item.selectable);
+                UnregisterSelectable(item.selectable);
                 CheckActionBox();
                 updated = true;
             }
@@ -226,12 +227,12 @@ public class ClickableItemsController : MonoBehaviour
             }
             if (scenario[i].status != TaskItem.TaskItemStatus.Done
                 && scenario[i].status != TaskItem.TaskItemStatus.Unavailable
-                && scenario[i].doneWhen.Count > 0
+                && (scenario[i].doneWhen.Count > 0 || scenario[i].onlyShowText)
                 && CheckDoneWhen(scenario[i]))
             {
                 scenario[i].status = TaskItem.TaskItemStatus.Done;
                 scenario[i].selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.Done);
-                UI3DManager.Instance.UnregisterSelectable(scenario[i].selectable);
+                UnregisterSelectable(scenario[i].selectable);
                 updated = true;
                 if (i > 1) PlayerPrefs.SetInt("EducationCompleted", 1);
             }
@@ -245,14 +246,28 @@ public class ClickableItemsController : MonoBehaviour
             }
             if (scenario[i].status != TaskItem.TaskItemStatus.ReadyToStart)
             {
-                UI3DManager.Instance.UnregisterSelectable(scenario[i].selectable);
+                if (scenario[i].selectable.OccupiedBy == scenario[i]){
+                    UnregisterSelectable(scenario[i].selectable);
+                }
             }
             else
             {
-                UI3DManager.Instance.RegisterSelectable(scenario[i].selectable, label);
+                if (scenario[i].selectable.OccupiedBy == null)
+                {
+                    scenario[i].selectable.OccupiedBy = scenario[i];
+                    UI3DManager.Instance.RegisterSelectable(scenario[i].selectable, label);
+                }
             }
         }
         return updated;
+    }
+    private void UnregisterSelectable(ISelectable selectable)
+    {
+        if (selectable.OccupiedBy != null)
+        {
+            selectable.OccupiedBy = null;
+            UI3DManager.Instance.UnregisterSelectable(selectable);
+        }
     }
     private void CheckActionBox()
     {
@@ -294,6 +309,14 @@ public class ClickableItemsController : MonoBehaviour
             if (StatusMatchesCondition(scenario[cond.itemIndex].status, cond))
                 return true;
         }
+        if (item.onlyShowText) {
+            foreach (var text in item.textToShow) {
+                if (!text.showOnce || !text.shown) {
+                    return false;
+                }
+            }
+            return true;
+        }
         return false;
     }
     public bool OnSelect(ISelectable selectable)
@@ -323,7 +346,7 @@ public class ClickableItemsController : MonoBehaviour
         }
         if (selecting)
         {
-            UI3DManager.Instance.UnregisterSelectable(selectable);
+            UnregisterSelectable(selectable);
             if (currentSelectedItem == null)
             {
                 currentSelectedItem = selectable;
@@ -363,10 +386,11 @@ public class ClickableItemsController : MonoBehaviour
         {
             UI3DManager.Instance.ShowContextMenu(currentSelectedItem.GetTransform().position, items);
         }
-        UI3DManager.Instance.UnregisterSelectable(currentSelectedItem);
+        UnregisterSelectable(currentSelectedItem);
     }
     bool CheckScenarioForText(List<TaskItem> taskScenario, TaskItem.TextShowTime showTime, ISelectable target = null)
     {
+        bool res = false;
         if (target == null) target = currentSelectedItem;
         foreach (TaskItem item in taskScenario)
         {
@@ -379,14 +403,18 @@ public class ClickableItemsController : MonoBehaviour
                     {
                         text.shown = true;
                         int authorIndex = -1;
-                        var checker = target.GetClickableItem().taskExecutor == null ? PawnController.Instance.currentSelectedPawn.gameObject : target.GetClickableItem().taskExecutor.gameObject;
                         AudioClip clip = null;
-                        for (int i = 0; i < authorsObjects.Length; i++)
-                        {
-                            if (authorsObjects[i] == checker)
+                        if (text.author != -1) {
+                            authorIndex = text.author;
+                        } else {
+                            var checker = target.GetClickableItem().taskExecutor == null ? PawnController.Instance.currentSelectedPawn.gameObject : target.GetClickableItem().taskExecutor.gameObject;
+                            for (int i = 0; i < authorsObjects.Length; i++)
                             {
-                                authorIndex = i;
-                                break;
+                                if (authorsObjects[i] == checker)
+                                {
+                                    authorIndex = i;
+                                    break;
+                                }
                             }
                         }
                         foreach (var sound in text.completeSounds)
@@ -399,12 +427,12 @@ public class ClickableItemsController : MonoBehaviour
                         }
                         AudioController.Instance.Play(clip);
                         UILayersController.Instance.ShowOverlay(UILayersController.UILayer.NarrativeText, text.text + "_" + authorIndex);
-                        return true;
+                        res = true;
                     }
                 }
             }
         }
-        return false;
+        return res;
     }
 
     private void OnGameResumed()
@@ -426,14 +454,14 @@ public class ClickableItemsController : MonoBehaviour
             {
                 if (item.status == TaskItem.TaskItemStatus.ReadyToStart)
                 {
-                    UI3DManager.Instance.UnregisterSelectable(item.selectable);
+                    UnregisterSelectable(item.selectable);
                 }
             }
             foreach (TaskItem item in sideTaskScenario)
             {
                 if (item.status == TaskItem.TaskItemStatus.ReadyToStart)
                 {
-                    UI3DManager.Instance.UnregisterSelectable(item.selectable);
+                    UnregisterSelectable(item.selectable);
                 }
             }
         }
@@ -449,7 +477,7 @@ public class ClickableItemsController : MonoBehaviour
             {
                 item.status = TaskItem.TaskItemStatus.Done;
                 item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.Done);
-                UI3DManager.Instance.UnregisterSelectable(item.selectable);
+                UnregisterSelectable(item.selectable);
                 CheckActionBox();
                 updated = true;
                 completedItem = item;
@@ -461,7 +489,7 @@ public class ClickableItemsController : MonoBehaviour
             {
                 item.status = TaskItem.TaskItemStatus.Done;
                 item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.Done);
-                UI3DManager.Instance.UnregisterSelectable(item.selectable);
+                UnregisterSelectable(item.selectable);
                 CheckActionBox();
                 updated = true;
                 completedItem = item;

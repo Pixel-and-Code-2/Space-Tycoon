@@ -51,7 +51,7 @@ public class WalkState : IPawnState
 
     void OnEnable()
     {
-        SliderToPawnConnector.HelperTag = "[1]->[ЛКМ]";
+        SliderToPawnConnector.HelperTag = "[Персонаж]->[ЛКМ]";
     }
     void OnDisable()
     {
