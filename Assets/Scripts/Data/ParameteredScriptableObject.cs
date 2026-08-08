@@ -15,7 +15,7 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
     private List<ParameteredScriptableObject> mustHaveParameters = new List<ParameteredScriptableObject>();
 
     [SerializeField, HideInInspector]
-    private bool isDirty = true; // Cache. If nothing is changed, we don't need to rebuild the dictionary
+    private bool isDirty = true; // Cache. If nothing is changed we don't need to rebuild the dictionary
     [SerializeField, HideInInspector]
     private string parametersDictStateCache = string.Empty;
     public Dictionary<string, float> parametersDict { get; private set; } = new Dictionary<string, float>();

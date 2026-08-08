@@ -19,6 +19,13 @@ public class NamedFormula
         SetContext(context);
     }
 
+    public NamedFormula(NamedFormula other, ParameteredScriptableObject context)
+    {
+        this.name = other.name;
+        this.formula = new FormulaField();
+        this.formula.formula = other.formula.formula;
+        SetContext(context);
+    }
     public bool IsAvailable()
     {
         // #if UNITY_EDITOR
@@ -53,11 +60,4 @@ public class NamedFormula
         formula.names.Add("Parameters");
     }
 
-    public NamedFormula(NamedFormula other, ParameteredScriptableObject context)
-    {
-        this.name = other.name;
-        this.formula = new FormulaField();
-        this.formula.formula = other.formula.formula;
-        SetContext(context);
-    }
 }
