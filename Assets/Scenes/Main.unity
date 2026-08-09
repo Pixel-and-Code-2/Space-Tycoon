@@ -2592,15 +2592,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2344258738908225758, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.14117648
       objectReference: {fileID: 0}
     - target: {fileID: 2344258738908225758, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.07058824
       objectReference: {fileID: 0}
     - target: {fileID: 2344258738908225758, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2350463359556635455, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3312,15 +3312,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3817603722422674736, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.14117648
       objectReference: {fileID: 0}
     - target: {fileID: 3817603722422674736, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.07058824
       objectReference: {fileID: 0}
     - target: {fileID: 3817603722422674736, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3922335214259867479, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5048,15 +5048,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005342188044326324, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.14117648
       objectReference: {fileID: 0}
     - target: {fileID: 9005342188044326324, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.07058824
       objectReference: {fileID: 0}
     - target: {fileID: 9005342188044326324, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9057957384780820914, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5241,7 +5241,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -5258,7 +5258,7 @@ MonoBehaviour:
         ? 0 :\n100*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -7842,7 +7842,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -7857,7 +7857,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -8244,7 +8244,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -8259,7 +8259,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11289,7 +11289,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -11304,7 +11304,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -17643,7 +17643,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -17660,7 +17660,7 @@ MonoBehaviour:
         > 0.5 ? 0 :\r\np_IQ*2 ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -18953,7 +18953,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -18970,7 +18970,7 @@ MonoBehaviour:
         ? 0 :\n100*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19213,7 +19213,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19228,7 +19228,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19787,7 +19787,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -19802,7 +19802,7 @@ MonoBehaviour:
       formula: '(c_pawnDistance > 4 ? -10 : 100 * g_e)'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -21208,7 +21208,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -21225,7 +21225,7 @@ MonoBehaviour:
         > 0.5 ? 0 :\r\n100*g_e))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -21867,7 +21867,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4702315125008643062, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.95
       objectReference: {fileID: 0}
     - target: {fileID: 4702315125008643062, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -21875,7 +21875,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4702315125008643062, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 4.59
       objectReference: {fileID: 0}
     - target: {fileID: 4702315125008643062, guid: e63aecc04dc2b1a409fbb58781b77af7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -23682,7 +23682,7 @@ MonoBehaviour:
         ))'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -23701,7 +23701,7 @@ MonoBehaviour:
       formula: 30*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24179,7 +24179,7 @@ MonoBehaviour:
         ))'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24198,7 +24198,7 @@ MonoBehaviour:
       formula: 40*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24576,7 +24576,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -24593,7 +24593,7 @@ MonoBehaviour:
         ? 0 :\n100*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25417,7 +25417,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25434,7 +25434,7 @@ MonoBehaviour:
         ? 0 :\np_IQ*3 ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25831,7 +25831,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -25848,7 +25848,7 @@ MonoBehaviour:
         ? 0 :\np_IQ*3 + 2*g_e ))))"
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -33266,7 +33266,7 @@ MonoBehaviour:
         )'
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -33281,7 +33281,7 @@ MonoBehaviour:
       formula: 100*g_e
       instruction: 
       dataAssets:
-      - {fileID: 0}
+      - {fileID: 1569542970}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
       names:
@@ -34286,7 +34286,7 @@ MonoBehaviour:
       (i_STR + g_e*2 + i_MDMG - t_MDR))) '
     instruction: 
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -34301,7 +34301,7 @@ MonoBehaviour:
       / 100\n))))) "
     instruction: 
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -34344,7 +34344,7 @@ MonoBehaviour:
       below to add its name to the end o\u0430 the formula (but be sure to the formula
       to be blured when clicked)."
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -34370,7 +34370,7 @@ MonoBehaviour:
       below to add its name to the end o\u0430 the formula (but be sure to the formula
       to be blured when clicked)."
     dataAssets:
-    - {fileID: 0}
+    - {fileID: 1569542970}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
     names:
@@ -35052,27 +35052,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ClickableItemsController
   mainTaskScenario:
   - selectable: {fileID: 1175933377}
-    status: 1
-    readyWhen: []
+    status: 0
+    readyWhen:
+    - itemIndex: 10
+      requiredStatus: 3
+      isMain: 0
+      atLeast: 0
     doneWhen: []
     textToShow:
-    - showTime: 0
-      text: "\u041D\u0430 \u044D\u0442\u043E\u0439 \u0441\u0442\u0430\u043D\u0446\u0438\u0438
-        \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043B\u0430\u0441\u044C
-        \u0442\u0435\u0445\u043D\u043E\u043B\u043E\u0433\u0438\u044F \u0417.\u0410.\u042F.
-        - \u043E\u043D \u0441\u043F\u043E\u0441\u043E\u0431\u0435\u043D \u0432\u044B\u043F\u043E\u043B\u043D\u044F\u0442\u044C
-        \u043B\u044E\u0431\u044B\u0435 \u0437\u0430\u0434\u0430\u0447\u0438, \u043A\u043E\u0442\u043E\u0440\u044B\u0435
-        \u043C\u043E\u0436\u0435\u0442 \u0434\u0435\u043B\u0430\u0442\u044C \u0447\u0435\u043B\u043E\u0432\u0435\u043A.
-        \u041D\u0430\u043C \u043D\u0443\u0436\u043D\u043E \u0435\u0433\u043E \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C
-        \u0438 \u043F\u043E\u043D\u044F\u0442\u044C, \u0447\u0442\u043E \u043F\u0440\u043E\u0438\u0437\u043E\u0448\u043B\u043E"
-      shown: 0
-      showOnce: 1
-      showOnlyOnStepByStep: 0
-      completeSounds:
-      - clip: {fileID: 8300000, guid: 49c5754adaa4f1049a360c68830de8c0, type: 3}
-        authorIndex: 1
-      - clip: {fileID: 8300000, guid: 49c5754adaa4f1049a360c68830de8c0, type: 3}
-        authorIndex: 2
     - showTime: 2
       text: "\u0422\u0435\u043F\u0435\u0440\u044C \u043D\u0430\u0441 \u0441\u0442\u0430\u043B\u043E
         \u0431\u043E\u043B\u044C\u0448\u0435, \u0430 \u043D\u0430 \u0441\u0442\u0430\u043D\u0446\u0438\u0438
@@ -35084,6 +35071,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 9c824be1e25ec1242a0836aca94c91eb, type: 3}
         authorIndex: 1
@@ -35092,6 +35080,7 @@ MonoBehaviour:
     shortLevelName: "\u041F\u043E\u0447\u0438\u043D\u0438\u0442\u044C \u0434\u0440\u0443\u0433\u0430"
     completeText: Yay!
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 4580301832448339888}
     status: 0
     readyWhen:
@@ -35112,6 +35101,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 3c592b22f5669c44f9a435ee8ccaf93f, type: 3}
         authorIndex: 0
@@ -35123,6 +35113,7 @@ MonoBehaviour:
     completeText: "\u0414\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u043A\u0430
       \u043F\u0440\u043E\u0432\u0435\u0434\u0435\u043D\u0430"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 1878437268}
     status: 0
     readyWhen:
@@ -35138,6 +35129,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: fc5bdd2e794be7940b7a2916675f136d, type: 3}
         authorIndex: 0
@@ -35149,6 +35141,7 @@ MonoBehaviour:
       \u043C\u043E\u0434\u0443\u043B\u044C"
     completeText: "\u041D\u0443\u0436\u0435\u043D \u043A\u043B\u044E\u0447"
     completeTextColor: {r: 1, g: 0.07603065, b: 0, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 7423991045303590523}
     status: 0
     readyWhen:
@@ -35165,6 +35158,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 55f8f9776f0a2ec4dbfb6f42583ea8f1, type: 3}
         authorIndex: 0
@@ -35175,6 +35169,7 @@ MonoBehaviour:
     shortLevelName: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447"
     completeText: "\u041A\u043B\u044E\u0447 \u043D\u0430\u0439\u0434\u0435\u043D"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 7030045181592525981}
     status: 0
     readyWhen:
@@ -35195,6 +35190,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 9b470cc266c855c4db5f9c7de3b90a42, type: 3}
         authorIndex: 0
@@ -35206,6 +35202,7 @@ MonoBehaviour:
       \u043A\u0430\u0440\u0442\u0443"
     completeText: "\u041A\u0430\u0440\u0442\u0430 \u0441\u043B\u043E\u043C\u0430\u043D\u0430"
     completeTextColor: {r: 1, g: 0, b: 0.024233818, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 1512402891}
     status: 0
     readyWhen:
@@ -35219,6 +35216,7 @@ MonoBehaviour:
       \u043A\u043B\u044E\u0447\u043E\u043C"
     completeText: "\u0420\u0430\u0437\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D\u043E"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 6892028548969385538}
     status: 0
     readyWhen:
@@ -35234,6 +35232,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 9e267924ec755c149a982b1e65390cbb, type: 3}
         authorIndex: 0
@@ -35249,6 +35248,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: d918ffa882cd66f4d830746a45caa48c, type: 3}
         authorIndex: 0
@@ -35260,6 +35260,7 @@ MonoBehaviour:
       \u043F\u0438\u0442\u0430\u043D\u0438\u0435"
     completeText: "\u041D\u0435 \u0441\u0440\u0430\u0431\u043E\u0442\u0430\u043B\u043E"
     completeTextColor: {r: 1, g: 0.11694209, b: 0, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 892536129}
     status: 0
     readyWhen:
@@ -35278,6 +35279,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 77d6268e0fc42fd4c858d5119fd76a0f, type: 3}
         authorIndex: 0
@@ -35289,6 +35291,7 @@ MonoBehaviour:
       \u0441\u043E\u043B\u043D\u0435\u0447\u043D\u044B\u0445 \u043F\u0430\u043D\u0435\u043B\u0435\u0439"
     completeText: "\u041E\u0442\u043B\u0438\u0447\u043D\u043E"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 1306689788}
     status: 0
     readyWhen:
@@ -35309,6 +35312,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 6a7477f3577900d48a2a1942ff5a3aae, type: 3}
         authorIndex: 0
@@ -35320,6 +35324,7 @@ MonoBehaviour:
       \u043F\u0438\u0442\u0430\u043D\u0438\u0435"
     completeText: "+ \u044D\u043D\u0435\u0440\u0433\u0438\u044F"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 779137259}
     status: 0
     readyWhen:
@@ -35339,6 +35344,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 594463069c08da04eb90014231db8894, type: 3}
         authorIndex: 0
@@ -35350,6 +35356,7 @@ MonoBehaviour:
       \u0443\u0440\u043E\u0432\u0435\u043D\u044C \u043A\u0438\u0441\u043B\u043E\u0440\u043E\u0434\u0430"
     completeText: "+ \u0432\u043E\u0437\u0434\u0443\u0445"
     completeTextColor: {r: 0, g: 1, b: 0.07667947, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 1339243697}
     status: 0
     readyWhen:
@@ -35370,6 +35377,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 2f9917ed882a8b44c9450d4023be7af3, type: 3}
         authorIndex: 0
@@ -35381,6 +35389,7 @@ MonoBehaviour:
       \u0448\u0438\u0444\u0440\u043E\u0432\u0430\u043D\u0438\u044F"
     completeText: "\u0415\u0441\u0442\u044C!"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 363475059}
     status: 0
     readyWhen:
@@ -35401,6 +35410,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: d5147df5676855f46892c2fb72cb01f1, type: 3}
         authorIndex: 0
@@ -35412,6 +35422,7 @@ MonoBehaviour:
       \u0437\u0435\u043C\u043B\u0451\u0439"
     completeText: win
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
+    onlyShowText: 0
   sideTaskScenario:
   - selectable: {fileID: 2053269064}
     status: 0
@@ -35431,6 +35442,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 082cde97df24ed644826cf55a3496212, type: 3}
         authorIndex: 0
@@ -35442,6 +35454,7 @@ MonoBehaviour:
       \u0441\u0442\u0435\u043D\u0443 \u0441 \u043F\u0440\u043E\u0432\u043E\u0434\u0430\u043C\u0438"
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 2108247185}
     status: 0
     readyWhen:
@@ -35463,6 +35476,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 49f7781da5115e14ca96151fe89f3db8, type: 3}
         authorIndex: 0
@@ -35474,6 +35488,7 @@ MonoBehaviour:
       \u0441\u0442\u043E\u043B"
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 928134607}
     status: 0
     readyWhen:
@@ -35497,6 +35512,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 87aa485394fc3e3418e0ad23cbf4a574, type: 3}
         authorIndex: 0
@@ -35508,6 +35524,7 @@ MonoBehaviour:
       \u0441\u0442\u043E\u043B"
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 1038951782}
     status: 0
     readyWhen:
@@ -35530,6 +35547,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 8a6cdd1a0011a3348ba492ab5c668f41, type: 3}
         authorIndex: 0
@@ -35540,6 +35558,7 @@ MonoBehaviour:
     shortLevelName: "\u0417\u0430\u043B?!"
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 293719871}
     status: 0
     readyWhen:
@@ -35565,6 +35584,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 8d418d0e3227c9b4ba87c4249d22e675, type: 3}
         authorIndex: 0
@@ -35576,6 +35596,7 @@ MonoBehaviour:
       \u0441\u0442\u0430\u0442\u0443\u044E"
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 675672623}
     status: 0
     readyWhen:
@@ -35601,6 +35622,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: ea221ab7efc2cf046acd7d0abf791861, type: 3}
         authorIndex: 0
@@ -35612,6 +35634,7 @@ MonoBehaviour:
       \u043A\u043E\u043C\u043F\u044C\u044E\u0442\u0435\u0440"
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 2099003808}
     status: 0
     readyWhen:
@@ -35636,6 +35659,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 95ef327d4cc0d6f48a2de00da6883f08, type: 3}
         authorIndex: 0
@@ -35646,6 +35670,7 @@ MonoBehaviour:
     shortLevelName: "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0434\u0432\u0435\u0440\u044C"
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 148340769}
     status: 0
     readyWhen:
@@ -35673,6 +35698,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: dc079ff8dac5f4e4ca26df033a6b69ff, type: 3}
         authorIndex: 0
@@ -35684,6 +35710,7 @@ MonoBehaviour:
       \u0441\u0442\u043E\u043B"
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 1270954053}
     status: 0
     readyWhen:
@@ -35707,6 +35734,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: 204f4c54ab7bd9447adcea4ecad7ab6e, type: 3}
         authorIndex: 0
@@ -35718,6 +35746,7 @@ MonoBehaviour:
       \u043F\u043E\u043B"
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    onlyShowText: 0
   - selectable: {fileID: 873894165}
     status: 0
     readyWhen:
@@ -35742,6 +35771,7 @@ MonoBehaviour:
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
+      author: -1
       completeSounds:
       - clip: {fileID: 8300000, guid: a59300fc6f1d34245a2eeab9ace612e2, type: 3}
         authorIndex: 0
@@ -35753,6 +35783,45 @@ MonoBehaviour:
       \u0441\u0442\u0435\u043D\u0443"
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    onlyShowText: 0
+  - selectable: {fileID: 1175933377}
+    status: 1
+    readyWhen: []
+    doneWhen: []
+    textToShow:
+    - showTime: 0
+      text: "\u041D\u0430 \u044D\u0442\u043E\u0439 \u0441\u0442\u0430\u043D\u0446\u0438\u0438
+        \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043B\u0430\u0441\u044C
+        \u0442\u0435\u0445\u043D\u043E\u043B\u043E\u0433\u0438\u044F \u0417.\u0410.\u042F.
+        - \u043E\u043D \u0441\u043F\u043E\u0441\u043E\u0431\u0435\u043D \u0432\u044B\u043F\u043E\u043B\u043D\u044F\u0442\u044C
+        \u043B\u044E\u0431\u044B\u0435 \u0437\u0430\u0434\u0430\u0447\u0438, \u043A\u043E\u0442\u043E\u0440\u044B\u0435
+        \u043C\u043E\u0436\u0435\u0442 \u0434\u0435\u043B\u0430\u0442\u044C \u0447\u0435\u043B\u043E\u0432\u0435\u043A."
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 1
+      completeSounds:
+      - clip: {fileID: 8300000, guid: 49c5754adaa4f1049a360c68830de8c0, type: 3}
+        authorIndex: 1
+      - clip: {fileID: 8300000, guid: 49c5754adaa4f1049a360c68830de8c0, type: 3}
+        authorIndex: 2
+    - showTime: 0
+      text: "\u041D\u0430\u043C \u043D\u0443\u0436\u043D\u043E \u0435\u0433\u043E
+        \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C
+        \u0438 \u043F\u043E\u043D\u044F\u0442\u044C, \u0447\u0442\u043E \u043F\u0440\u043E\u0438\u0437\u043E\u0448\u043B\u043E"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 2
+      completeSounds:
+      - clip: {fileID: 8300000, guid: 49c5754adaa4f1049a360c68830de8c0, type: 3}
+        authorIndex: 1
+      - clip: {fileID: 8300000, guid: 49c5754adaa4f1049a360c68830de8c0, type: 3}
+        authorIndex: 2
+    shortLevelName: "\u041F\u043E\u0447\u0438\u043D\u0438\u0442\u044C \u0434\u0440\u0443\u0433\u0430"
+    completeText: Yay!
+    completeTextColor: {r: 0, g: 1, b: 0, a: 1}
+    onlyShowText: 1
   authorsObjects:
   - {fileID: 861419552}
   - {fileID: 1222671049}
@@ -35801,7 +35870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213dd97b2d2c8b44490e84a696271e95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveHub
-  currSavingsVersion: 14
+  currSavingsVersion: 16
 --- !u!1 &1570870379 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7092391029048808588, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
@@ -44326,10 +44395,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 824540565}
     m_Modifications:
-    - target: {fileID: 5549764426381985590, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 127eb1a58bd44fd488eccdfae602a49f, type: 2}
     - target: {fileID: -8679921383154817045, guid: c4433f60addb24a4490faf4372df525b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -44378,6 +44443,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ENGINEER_1_RELEASE_FIX
       objectReference: {fileID: 0}
+    - target: {fileID: 5549764426381985590, guid: 0ddc216d2dd5db34da82ab78491402e0, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 127eb1a58bd44fd488eccdfae602a49f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

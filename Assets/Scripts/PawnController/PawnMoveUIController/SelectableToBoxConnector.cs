@@ -4,7 +4,6 @@ using TMPro;
 public class SelectableToBoxConnector : MonoBehaviour
 {
     public static string HelperTag = "[ЛКМ]";
-    private string helperTagCached = string.Empty;
     [SerializeField]
     private TextMeshProUGUI helperText;
     public ISelectable selectable;
@@ -40,9 +39,8 @@ public class SelectableToBoxConnector : MonoBehaviour
     {
         if (helperText != null)
         {
-            if (helperTagCached != HelperTag)
+            if (helperText.text != HelperTag)
             {
-                helperTagCached = HelperTag;
                 helperText.text = HelperTag;
             }
         }

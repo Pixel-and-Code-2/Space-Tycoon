@@ -37,11 +37,6 @@ public class PawnStatusVisualizer : MonoBehaviour
             RefreshStatusColor();
     }
 
-    void Start()
-    {
-        UpdateStatusColor();
-    }
-
     void Update()
     {
         UpdateStatusColor();

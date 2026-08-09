@@ -17,4 +17,6 @@ public abstract class ISelectable : ILookTarget
     public virtual bool IsWorking() { return false; }
     public virtual ClickableItem GetClickableItem() { return GetComponent<ClickableItem>(); }
     public virtual void ChangeScenarioStatus(ClickableItemsController.TaskItem.TaskItemStatus status) { }
+    [System.NonSerialized]
+    public ClickableItemsController.TaskItem OccupiedBy = null;
 }

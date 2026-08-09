@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using NUnit.Framework;
 
 [System.Serializable]
 public class MessageObject
