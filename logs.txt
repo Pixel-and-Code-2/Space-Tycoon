@@ -1,0 +1,313 @@
+Unexpected timestamp values detected. This can occur in H.264 videos not encoded with the baseline profile. Timestamps will be skewed to correct the playback for D:\Vlad-Unity\Space-Tycoon\Assets\Art_update\SYSTEM.mp4
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+NullReferenceException: Object reference not set to an instance of an object
+PawnBrain.GetSelectableType () (at Assets/Scripts/PawnBrain/PawnBrain.cs:18)
+PawnStatusVisualizer.TryApplyStatusColor (IControlableSelectable current, System.Boolean force) (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:63)
+PawnStatusVisualizer.RefreshStatusColor () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:48)
+PawnStatusVisualizer.OnEnable () (at Assets/Scripts/PawnController/PawnMoveUIController/PawnStatusVisualizer.cs:37)
+
+Reduced additional punctual light shadows resolution by 8 to make 156 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame
+UnityEngine.GUIUtility:ProcessEvent (int,intptr,bool&)
+
+ClickableItemsController: Checking done when for item WallWithWires_LVL0_CLICKABLE
+UnityEngine.Debug:Log (object)
+ClickableItemsController:CheckDoneWhen (ClickableItemsController/TaskItem) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:306)
+ClickableItemsController:CheckActionBoxInternal (System.Collections.Generic.List`1<ClickableItemsController/TaskItem>,string) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:228)
+ClickableItemsController:CheckActionBox () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:280)
+ClickableItemsController:OnLoadData (LoadedData) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:211)
+SaveHub:LoadAllData (string) (at Assets/Scripts/SaveHub/SaveHub.cs:109)
+SaveHub:LoadAllData (int) (at Assets/Scripts/SaveHub/SaveHub.cs:93)
+SaveMenu:LoadGame (int) (at Assets/Scripts/FlatUI/Screens/SaveMenu.cs:81)
+SaveMenu:OnSaveGame (int) (at Assets/Scripts/FlatUI/Screens/SaveMenu.cs:65)
+UnityEngine.EventSystems.EventSystem:Update () (at ./Library/PackageCache/com.unity.ugui@7056cb05de4c/Runtime/UGUI/EventSystem/EventSystem.cs:514)
+
+ClickableItemsController: Checking done when for item Zaya
+UnityEngine.Debug:Log (object)
+ClickableItemsController:CheckDoneWhen (ClickableItemsController/TaskItem) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:306)
+ClickableItemsController:CheckActionBoxInternal (System.Collections.Generic.List`1<ClickableItemsController/TaskItem>,string) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:228)
+ClickableItemsController:CheckActionBox () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:280)
+ClickableItemsController:OnLoadData (LoadedData) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:211)
+SaveHub:LoadAllData (string) (at Assets/Scripts/SaveHub/SaveHub.cs:109)
+SaveHub:LoadAllData (int) (at Assets/Scripts/SaveHub/SaveHub.cs:93)
+SaveMenu:LoadGame (int) (at Assets/Scripts/FlatUI/Screens/SaveMenu.cs:81)
+SaveMenu:OnSaveGame (int) (at Assets/Scripts/FlatUI/Screens/SaveMenu.cs:65)
+UnityEngine.EventSystems.EventSystem:Update () (at ./Library/PackageCache/com.unity.ugui@7056cb05de4c/Runtime/UGUI/EventSystem/EventSystem.cs:514)
+
+ClickableItemsController: Checking done when for item WallWithWires_LVL0_CLICKABLE
+UnityEngine.Debug:Log (object)
+ClickableItemsController:CheckDoneWhen (ClickableItemsController/TaskItem) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:306)
+ClickableItemsController:CheckActionBoxInternal (System.Collections.Generic.List`1<ClickableItemsController/TaskItem>,string) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:228)
+ClickableItemsController:CheckActionBox () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:280)
+ClickableItemsController:OnPlayerTurnStart () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:448)
+TurnManager:StartPlayerTurn () (at Assets/Scripts/TurnManager/TurnManager.cs:552)
+TurnManager:<OnLoadData>b__44_0 () (at Assets/Scripts/TurnManager/TurnManager.cs:120)
+TurnManager/<DelayFrame>d__66:MoveNext () (at Assets/Scripts/TurnManager/TurnManager.cs:546)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+ClickableItemsController: Checking done when for item Zaya
+UnityEngine.Debug:Log (object)
+ClickableItemsController:CheckDoneWhen (ClickableItemsController/TaskItem) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:306)
+ClickableItemsController:CheckActionBoxInternal (System.Collections.Generic.List`1<ClickableItemsController/TaskItem>,string) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:228)
+ClickableItemsController:CheckActionBox () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:280)
+ClickableItemsController:OnPlayerTurnStart () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:448)
+TurnManager:StartPlayerTurn () (at Assets/Scripts/TurnManager/TurnManager.cs:552)
+TurnManager:<OnLoadData>b__44_0 () (at Assets/Scripts/TurnManager/TurnManager.cs:120)
+TurnManager/<DelayFrame>d__66:MoveNext () (at Assets/Scripts/TurnManager/TurnManager.cs:546)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+NarrativeTextWindow: Queue item removed: 0
+UnityEngine.Debug:Log (object)
+NarrativeTextWindow:OnBackgroundClick () (at Assets/Scripts/FlatUI/Screens/NarrativeTextWindow.cs:63)
+UILayersController:OnBackgroundClick () (at Assets/Scripts/FlatUI/UILayersController.cs:186)
+UnityEngine.EventSystems.EventSystem:Update () (at ./Library/PackageCache/com.unity.ugui@7056cb05de4c/Runtime/UGUI/EventSystem/EventSystem.cs:514)
+
+ClickableItemsController: Checking done when for item WallWithWires_LVL0_CLICKABLE
+UnityEngine.Debug:Log (object)
+ClickableItemsController:CheckDoneWhen (ClickableItemsController/TaskItem) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:306)
+ClickableItemsController:CheckActionBoxInternal (System.Collections.Generic.List`1<ClickableItemsController/TaskItem>,string) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:228)
+ClickableItemsController:CheckActionBox () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:280)
+ClickableItemsController:OnDeselect () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:373)
+ClickableItemsController:OnGameResumed () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:442)
+UILayersController:ResumeGame () (at Assets/Scripts/FlatUI/UILayersController.cs:177)
+UILayersController:CheckLayersStack () (at Assets/Scripts/FlatUI/UILayersController.cs:125)
+UILayersController:GoBack () (at Assets/Scripts/FlatUI/UILayersController.cs:168)
+NarrativeTextWindow:OnBackgroundClick () (at Assets/Scripts/FlatUI/Screens/NarrativeTextWindow.cs:65)
+UILayersController:OnBackgroundClick () (at Assets/Scripts/FlatUI/UILayersController.cs:186)
+UnityEngine.EventSystems.EventSystem:Update () (at ./Library/PackageCache/com.unity.ugui@7056cb05de4c/Runtime/UGUI/EventSystem/EventSystem.cs:514)
+
+ClickableItemsController: Checking done when for item Zaya
+UnityEngine.Debug:Log (object)
+ClickableItemsController:CheckDoneWhen (ClickableItemsController/TaskItem) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:306)
+ClickableItemsController:CheckActionBoxInternal (System.Collections.Generic.List`1<ClickableItemsController/TaskItem>,string) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:228)
+ClickableItemsController:CheckActionBox () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:280)
+ClickableItemsController:OnDeselect () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:373)
+ClickableItemsController:OnGameResumed () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:442)
+UILayersController:ResumeGame () (at Assets/Scripts/FlatUI/UILayersController.cs:177)
+UILayersController:CheckLayersStack () (at Assets/Scripts/FlatUI/UILayersController.cs:125)
+UILayersController:GoBack () (at Assets/Scripts/FlatUI/UILayersController.cs:168)
+NarrativeTextWindow:OnBackgroundClick () (at Assets/Scripts/FlatUI/Screens/NarrativeTextWindow.cs:65)
+UILayersController:OnBackgroundClick () (at Assets/Scripts/FlatUI/UILayersController.cs:186)
+UnityEngine.EventSystems.EventSystem:Update () (at ./Library/PackageCache/com.unity.ugui@7056cb05de4c/Runtime/UGUI/EventSystem/EventSystem.cs:514)
+
+ClickableItemsController: Item Zaya is done because it only shows text and all text is shown
+UnityEngine.Debug:Log (object)
+ClickableItemsController:CheckDoneWhen (ClickableItemsController/TaskItem) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:319)
+ClickableItemsController:CheckActionBoxInternal (System.Collections.Generic.List`1<ClickableItemsController/TaskItem>,string) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:228)
+ClickableItemsController:CheckActionBox () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:280)
+ClickableItemsController:OnDeselect () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:373)
+ClickableItemsController:OnGameResumed () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:442)
+UILayersController:ResumeGame () (at Assets/Scripts/FlatUI/UILayersController.cs:177)
+UILayersController:CheckLayersStack () (at Assets/Scripts/FlatUI/UILayersController.cs:125)
+UILayersController:GoBack () (at Assets/Scripts/FlatUI/UILayersController.cs:168)
+NarrativeTextWindow:OnBackgroundClick () (at Assets/Scripts/FlatUI/Screens/NarrativeTextWindow.cs:65)
+UILayersController:OnBackgroundClick () (at Assets/Scripts/FlatUI/UILayersController.cs:186)
+UnityEngine.EventSystems.EventSystem:Update () (at ./Library/PackageCache/com.unity.ugui@7056cb05de4c/Runtime/UGUI/EventSystem/EventSystem.cs:514)
+
+NarrativeTextWindow: No queue items left, going back
+UnityEngine.Debug:Log (object)
+NarrativeTextWindow:OnBackgroundClick () (at Assets/Scripts/FlatUI/Screens/NarrativeTextWindow.cs:66)
+UILayersController:OnBackgroundClick () (at Assets/Scripts/FlatUI/UILayersController.cs:186)
+UnityEngine.EventSystems.EventSystem:Update () (at ./Library/PackageCache/com.unity.ugui@7056cb05de4c/Runtime/UGUI/EventSystem/EventSystem.cs:514)
+
+ClickableItemsController: Checking done when for item WallWithWires_LVL0_CLICKABLE
+UnityEngine.Debug:Log (object)
+ClickableItemsController:CheckDoneWhen (ClickableItemsController/TaskItem) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:306)
+ClickableItemsController:CheckActionBoxInternal (System.Collections.Generic.List`1<ClickableItemsController/TaskItem>,string) (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:228)
+ClickableItemsController:CheckActionBox () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:280)
+ClickableItemsController:OnDeselect () (at Assets/Scripts/CliclableItemsController/ClickableItemsController.cs:373)
+ClickableItem/<>c__DisplayClass33_0:<OnContextMenu>b__0 () (at Assets/Scripts/CliclableItemsController/ClickableItem.cs:378)
+ContextMenuController/<>c__DisplayClass5_0:<AddButton>b__1 () (at Assets/Scripts/PawnController/PawnMoveUIController/ContextMenuController.cs:61)
+UnityEngine.EventSystems.EventSystem:Update () (at ./Library/PackageCache/com.unity.ugui@7056cb05de4c/Runtime/UGUI/EventSystem/EventSystem.cs:514)
+

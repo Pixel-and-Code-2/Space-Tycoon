@@ -349,6 +349,7 @@ public class ClickableItem : ISelectable
                 case AvailableActions.StartWork:
                     actionDelegate = () =>
                     {
+                        UI3DManager.Instance.HideContextMenu();
                         taskExecutor = PawnController.Instance.currentSelectedPawn;
                         if (prey != null)
                         {

@@ -60,8 +60,9 @@ public class PlayerIconController : MonoBehaviour
 
     public void UpdatePlayer(GameUI.PlayerGroup player)
     {
+        if (playerHealingNumber == null || player.playerObject == null) return;
         float amountOfHealings = player.playerObject.GetDynamicParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY);
         float maxHealings = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
-        playerHealingNumber.text = (maxHealings - amountOfHealings).ToString();
+        playerHealingNumber.text = (maxHealings - amountOfHealings).ToString("0");
     }
 }

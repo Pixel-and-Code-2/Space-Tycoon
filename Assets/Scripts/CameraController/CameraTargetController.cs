@@ -16,6 +16,7 @@ public class CameraTargetController : MonoBehaviour
     [SerializeField]
     private bool lockOnForceSelect = true;
     private bool isForced = false;
+    private bool manualFocus;
     void Awake()
     {
         if (Instance == null)
@@ -56,18 +57,11 @@ public class CameraTargetController : MonoBehaviour
                 return;
             }
         }
-        // if (ClickableItemsController.Instance.currentSelectedItem != null)
-        // {
-        //     if (currentLookTarget != ClickableItemsController.Instance.currentSelectedItem)
-        //     {
-        //         currentLookTarget = ClickableItemsController.Instance.currentSelectedItem;
-        //         SetPawnTarget(currentLookTarget);
-        //     }
-        // }
-        // else
-        CheckTarget();
+        if (!manualFocus)
+            CheckTarget();
         if (cameraController.cameraControlActions.GetMoveValue() != Vector2.zero)
         {
+            manualFocus = false;
             if (isLockedOnTarget)
             {
                 UnlockTarget();
@@ -87,6 +81,16 @@ public class CameraTargetController : MonoBehaviour
         isForced = true;
     }
 
+    public void FocusOnLookTarget(ILookTarget lookTarget)
+    {
+        if (lookTarget == null) return;
+        if (isLockedOnTarget)
+            UnlockTarget();
+        manualFocus = true;
+        currentLookTarget = lookTarget;
+        LockTarget();
+    }
+
     public void CheckTarget()
     {
         if (currentLookTarget != PawnController.Instance.currentSelectedPawn)
@@ -98,6 +102,7 @@ public class CameraTargetController : MonoBehaviour
 
     private void SetPawnTarget(ILookTarget lookTarget)
     {
+        manualFocus = false;
         currentLookTarget = lookTarget;
         if (lockOnSelect || (isForced && lockOnForceSelect))
         {

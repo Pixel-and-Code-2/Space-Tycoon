@@ -201,7 +201,11 @@ public class GameUI : IUILayer
             {
                 state = PlayerIconState.Selected;
             }
-            playerGroups[i].playerIcon.UpdateState(state);
+            if (playerGroups[i].playerIcon != null)
+            {
+                playerGroups[i].playerIcon.UpdatePlayer(playerGroups[i]);
+                playerGroups[i].playerIcon.UpdateState(state);
+            }
             if (state == PlayerIconState.Selected)
             {
                 selectedInd = i;
@@ -217,6 +221,11 @@ public class GameUI : IUILayer
     public void SelectPlayer(int ind)
     {
         if (playerGroups[ind].playerObject.GetSelectableType() != SelectableType.Player) return;
+        if (PawnController.Instance != null && PawnController.Instance.IsSelectionLockedToCurrentActor())
+        {
+            IControlableSelectable locked = PawnController.Instance.GetLockedActor();
+            if (locked != null && playerGroups[ind].playerObject != locked) return;
+        }
         InputScreenMouseControlActions.Instance.SelectPlayer(playerGroups[ind].playerObject);
         // ControlsVariantEasy.Instance.SelectPlayer(playerGroups[ind].playerObject);
     }
@@ -224,6 +233,8 @@ public class GameUI : IUILayer
     {
         for (int i = 0; i < playerGroups.Count; i++)
         {
+            if (playerGroups[i].playerObject == null || playerGroups[i].playerIcon == null) continue;
+            playerGroups[i].playerIcon.UpdatePlayer(playerGroups[i]);
             if (playerGroups[i].playerObject.GetSelectableType() != SelectableType.Player)
             {
                 playerGroups[i].playerIcon.UpdateState(PlayerIconState.Disable);

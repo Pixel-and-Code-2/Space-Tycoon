@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
@@ -51,13 +52,16 @@ public class PawnNavMesh : MonoBehaviour
         if (isDeath == 1)
         {
             // col.enabled = false;
-            navMeshAgent.enabled = false;
+            if (navMeshAgent != null) navMeshAgent.enabled = false;
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
         }
         if (isDeath == 0)
         {
-            // col.enabled = true;
-            navMeshAgent.enabled = true;
+            // Enabling NavMeshAgent synchronously can freeze the Editor when the corpse is off-mesh.
+            if (isActiveAndEnabled)
+                StartCoroutine(EnableNavAgentDeferred());
+            else if (navMeshAgent != null)
+                navMeshAgent.enabled = true;
         }
         if (isMyTeamsTurn != -1) this.isMyTeamsTurn = isMyTeamsTurn;
         if (isSelected != -1) this.isSelected = isSelected;
@@ -66,6 +70,26 @@ public class PawnNavMesh : MonoBehaviour
         {
             bool newVal = scriptEnabler.CheckEnabled(this.isMyTeamsTurn, this.isSelected, isMoving ? 1 : 0, this.isDeath);
             if (scriptEnabler.script != null) scriptEnabler.script.enabled = newVal;
+        }
+    }
+
+    private IEnumerator EnableNavAgentDeferred()
+    {
+        yield return null;
+        if (navMeshAgent == null) yield break;
+        Vector3 pos = transform.position;
+        if (NavMesh.SamplePosition(pos, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+            pos = hit.position;
+        navMeshAgent.enabled = true;
+        if (navMeshAgent.isOnNavMesh)
+            navMeshAgent.Warp(pos);
+        else
+        {
+            navMeshAgent.enabled = false;
+            transform.position = pos;
+            navMeshAgent.enabled = true;
+            if (navMeshAgent.isOnNavMesh)
+                navMeshAgent.Warp(pos);
         }
     }
 

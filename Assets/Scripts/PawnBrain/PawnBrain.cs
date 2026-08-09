@@ -415,6 +415,7 @@ public class PawnBrain : IControlableSelectable
             PawnDataController.AMOUNT_OF_HEALINGS_KEY,
             dataController.GetParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY) + 1
         );
+        RefreshStatusVisualizers();
     }
 
     public override void OnGetDefendedHit(Vector3 hitDirection, bool isMelee)

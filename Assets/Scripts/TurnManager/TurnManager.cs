@@ -36,6 +36,13 @@ public class DelayedTriggerData : TriggerData
 public class TurnManager : MonoBehaviour
 {
     [System.Serializable]
+    public class TurnSlot
+    {
+        public IControlableSelectable pawn;
+        public float initiative;
+    }
+
+    [System.Serializable]
     private class DynamicEnemyRegistryEntry
     {
         public int registryIndex;
@@ -60,6 +67,7 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     public event Action OnTriggerZoneExitBeforePawnReset;
     public event Action OnTriggerZoneExit;
+    public event Action OnTurnQueueChanged;
     public bool IsQuarantine = false;
 
     [SerializeField]
@@ -67,11 +75,26 @@ public class TurnManager : MonoBehaviour
     [SerializeField]
     private List<DelayedTriggerData> listOfDelayedTriggers = new List<DelayedTriggerData>();
     public bool IsPlayerTurn { get; private set; } = true;
+    public IControlableSelectable CurrentActor { get; private set; }
+    public IReadOnlyList<TurnSlot> RoundQueue => roundQueue;
+    public int CurrentQueueIndex => currentQueueIndex;
     [SerializeField]
     private NavMeshSurface navMeshSurface;
     private List<UnityEngine.Object> movingPawns = new List<UnityEngine.Object>();
     [SerializeField]
     private IconButtonStyleFiller endTurnButton1;
+    [Header("Initiative")]
+    [SerializeField]
+    private string agilityParameterKey = "SPD";
+    [SerializeField]
+    private float initiativeRandomMax = 10f;
+    [SerializeField]
+    private float defaultAgility = 1f;
+    private readonly List<TurnSlot> roundQueue = new List<TurnSlot>();
+    private int currentQueueIndex = 0;
+    private bool turnInProgress = false;
+    private SelectableType lastActorSide = (SelectableType)(-1);
+    private AsyncOperation navMeshUpdateOp;
     private const string UNIQUE_ID = "TurnManager";
     private const string DYNAMIC_ENEMY_NAME_PREFIX = "EnemySpawned";
     private readonly List<DynamicEnemyRegistryEntry> dynamicEnemyRegistry = new List<DynamicEnemyRegistryEntry>();
@@ -114,15 +137,18 @@ public class TurnManager : MonoBehaviour
         }
         IsQuarantine = data.GetData("IsQuarantine", UNIQUE_ID, false);
         RebuildDynamicEnemiesFromSave(data);
-        if (IsPlayerTurn)
+        bool inCombat = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f
+            || listOfTriggers.Exists(t => t.isActive)
+            || listOfDelayedTriggers.Exists(t => t.isActive);
+        if (inCombat)
         {
             UpdateNavMesh();
-            StartCoroutine(DelayFrame(() => StartPlayerTurn()));
-        }
-        else
-        {
-            UpdateNavMesh();
-            StartCoroutine(DelayFrame(() => StartEnemyTurn()));
+            StartCoroutine(DelayFrame(() =>
+            {
+                RebuildRoundQueue();
+                currentQueueIndex = 0;
+                StartCurrentActorTurn();
+            }));
         }
     }
     private void OnSaveData(Action<SaveRecord[], string> addSaveData)
@@ -283,10 +309,19 @@ public class TurnManager : MonoBehaviour
             OnTriggerZoneEnter?.Invoke();
             UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "_notpersistent_0_GameAttentionColor");
         }
+        bool alreadyInCombat = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f;
         trigger.isActive = true;
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 1f;
         SyncEndTurnButtonsWithMovement();
-        StartFirstTurn();
+        if (alreadyInCombat)
+        {
+            AppendMissingCombatantsToQueue();
+            OnTurnQueueChanged?.Invoke();
+        }
+        else
+        {
+            StartCoroutine(StartFirstTurn());
+        }
         return true;
     }
     public bool EnterDelayedTrigger(DelayedTriggerData trigger)
@@ -413,6 +448,8 @@ public class TurnManager : MonoBehaviour
         {
             trigger.enemies.Add(pawnBrain);
             SimpleEnemyAI.Instance.AddPawnToScenario(pawnBrain);
+            if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f)
+                RegisterCombatant(pawnBrain);
         }
         if (loadData != null)
         {
@@ -459,6 +496,10 @@ public class TurnManager : MonoBehaviour
     {
         OnTriggerZoneExitBeforePawnReset?.Invoke();
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 0f;
+        ClearTurnQueue();
+        CurrentActor = null;
+        turnInProgress = false;
+        lastActorSide = (SelectableType)(-1);
         OnTriggerZoneExit?.Invoke();
         IsQuarantine = false;
         UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "_notpersistent_3_GameCongratulationsColor");
@@ -537,8 +578,10 @@ public class TurnManager : MonoBehaviour
 
     private IEnumerator StartFirstTurn()
     {
-        yield return null; // Wait one frame to ensure all components are initialized
-        EndEnemyTurn();
+        yield return null;
+        RebuildRoundQueue();
+        currentQueueIndex = 0;
+        StartCurrentActorTurn();
     }
     private IEnumerator DelayFrame(System.Action action)
     {
@@ -546,58 +589,190 @@ public class TurnManager : MonoBehaviour
         action?.Invoke();
     }
 
-    private void StartPlayerTurn()
+    public float RollInitiative(IControlableSelectable pawn)
     {
-        IsPlayerTurn = true;
-        OnPlayerTurnStart?.Invoke();
+        return GetAgility(pawn) + UnityEngine.Random.Range(0f, initiativeRandomMax);
+    }
+
+    private float GetAgility(IControlableSelectable pawn)
+    {
+        if (pawn == null) return defaultAgility;
+        try
+        {
+            return pawn.GetDynamicParameterValue(agilityParameterKey);
+        }
+        catch
+        {
+            try
+            {
+                return pawn.GetDynamicParameterValue(PawnDataController.INITIAL_AVAILABLE_DISTANCE_KEY);
+            }
+            catch
+            {
+                return defaultAgility;
+            }
+        }
+    }
+
+    private bool IsAliveCombatant(IControlableSelectable pawn)
+    {
+        if (pawn == null) return false;
+        SelectableType type = pawn.GetSelectableType();
+        if (type == SelectableType.Dead) return false;
+        if (type == SelectableType.Enemy && !pawn.IsInActiveTriggerZone()) return false;
+        return type == SelectableType.Player || type == SelectableType.Enemy;
+    }
+
+    public void RebuildRoundQueue()
+    {
+        ClearTurnQueue();
+        PawnBrain[] brains = FindObjectsByType<PawnBrain>(FindObjectsSortMode.None);
+        for (int i = 0; i < brains.Length; i++)
+        {
+            PawnBrain brain = brains[i];
+            if (!IsAliveCombatant(brain)) continue;
+            roundQueue.Add(new TurnSlot
+            {
+                pawn = brain,
+                initiative = RollInitiative(brain)
+            });
+        }
+        roundQueue.Sort((a, b) => b.initiative.CompareTo(a.initiative));
+        OnTurnQueueChanged?.Invoke();
+    }
+
+    private void AppendMissingCombatantsToQueue()
+    {
+        PawnBrain[] brains = FindObjectsByType<PawnBrain>(FindObjectsSortMode.None);
+        for (int i = 0; i < brains.Length; i++)
+        {
+            RegisterCombatant(brains[i]);
+        }
+    }
+
+    public void RegisterCombatant(IControlableSelectable pawn)
+    {
+        if (!IsAliveCombatant(pawn)) return;
+        for (int i = 0; i < roundQueue.Count; i++)
+        {
+            if (roundQueue[i].pawn == pawn) return;
+        }
+        roundQueue.Add(new TurnSlot
+        {
+            pawn = pawn,
+            initiative = RollInitiative(pawn)
+        });
+        OnTurnQueueChanged?.Invoke();
+    }
+
+    private void ClearTurnQueue()
+    {
+        roundQueue.Clear();
+        currentQueueIndex = 0;
+        OnTurnQueueChanged?.Invoke();
+    }
+
+    private void PruneDeadFromQueue()
+    {
+        bool changed = false;
+        for (int i = roundQueue.Count - 1; i >= 0; i--)
+        {
+            if (!IsAliveCombatant(roundQueue[i].pawn))
+            {
+                if (i < currentQueueIndex) currentQueueIndex--;
+                roundQueue.RemoveAt(i);
+                changed = true;
+            }
+        }
+        if (currentQueueIndex < 0) currentQueueIndex = 0;
+        if (changed) OnTurnQueueChanged?.Invoke();
+    }
+
+    private void StartCurrentActorTurn()
+    {
+        StartCurrentActorTurn(0);
+    }
+
+    private void StartCurrentActorTurn(int skipGuard)
+    {
+        if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
+            return;
+        if (skipGuard > 64)
+        {
+            Debug.LogError("TurnManager: StartCurrentActorTurn skip guard exceeded");
+            return;
+        }
+        PruneDeadFromQueue();
+        if (roundQueue.Count == 0)
+        {
+            CheckTriggers();
+            return;
+        }
+        if (currentQueueIndex >= roundQueue.Count)
+            currentQueueIndex = 0;
+        CurrentActor = roundQueue[currentQueueIndex].pawn;
+        if (!IsAliveCombatant(CurrentActor))
+        {
+            currentQueueIndex++;
+            StartCurrentActorTurn(skipGuard + 1);
+            return;
+        }
+        turnInProgress = true;
+        IsPlayerTurn = CurrentActor.GetSelectableType() == SelectableType.Player;
+        SelectableType side = CurrentActor.GetSelectableType();
+        if (side != lastActorSide)
+        {
+            lastActorSide = side;
+            UpdateNavMesh();
+        }
+        OnTurnQueueChanged?.Invoke();
+        if (IsPlayerTurn)
+            OnPlayerTurnStart?.Invoke();
+        else
+            OnEnemyTurnStart?.Invoke();
         SyncEndTurnButtonsWithMovement();
     }
 
     public void EndPlayerTurn()
     {
         if (!IsPlayerTurn) return;
-        if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f) return;
-        if (movingPawns.Count > 0) return;
-        CheckTriggers();
-        if (listOfTriggers.Find(t => t.isActive) == null && listOfDelayedTriggers.Find(t => t.isActive) == null)
-        {
-            return;
-        }
-        IsPlayerTurn = false;
-        OnPlayerTurnEnd?.Invoke();
-        StartEnemyTurn();
-    }
-
-    private void StartEnemyTurn()
-    {
-        UpdateNavMesh();
-        EnemyTurn();
-    }
-
-    private void EnemyTurn()
-    {
-        OnEnemyTurnStart?.Invoke();
+        EndCurrentActorTurn();
     }
 
     public void EndEnemyTurn()
     {
         if (IsPlayerTurn) return;
-        OnEnemyTurnEnd?.Invoke();
-        StartCoroutine(StartPlayerTurnWithDelay());
+        EndCurrentActorTurn();
     }
 
-    private IEnumerator StartPlayerTurnWithDelay()
+    public void EndCurrentActorTurn()
     {
-        // yield return new WaitForSeconds(0.1f);
-        UpdateNavMesh();
-        // yield return new WaitForSeconds(0.1f);
-        StartPlayerTurn();
+        if (!turnInProgress) return;
+        if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f) return;
+        if (movingPawns.Count > 0) return;
+        CheckTriggers();
+        if (listOfTriggers.Find(t => t.isActive) == null && listOfDelayedTriggers.Find(t => t.isActive) == null)
+            return;
+        turnInProgress = false;
+        if (IsPlayerTurn)
+            OnPlayerTurnEnd?.Invoke();
+        else
+            OnEnemyTurnEnd?.Invoke();
+        currentQueueIndex++;
+        StartCoroutine(AdvanceToNextActor());
+    }
+
+    private IEnumerator AdvanceToNextActor()
+    {
         yield return null;
+        StartCurrentActorTurn();
     }
 
     public void UpdateNavMesh()
     {
-        navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData);
+        if (navMeshSurface == null || navMeshSurface.navMeshData == null) return;
+        if (navMeshUpdateOp != null && !navMeshUpdateOp.isDone) return;
+        navMeshUpdateOp = navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData);
     }
 
     void OnDestroy()

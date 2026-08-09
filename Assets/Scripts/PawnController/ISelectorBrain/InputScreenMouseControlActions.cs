@@ -158,12 +158,25 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     // ISelectorBrain methods
     public override IControlableSelectable PollSelectPawn(IControlableSelectable defaultPawn)
     {
+        IControlableSelectable locked = null;
+        if (PawnController.Instance != null && PawnController.Instance.IsSelectionLockedToCurrentActor())
+            locked = PawnController.Instance.GetLockedActor();
+
         if (forcedSelectedPlayer != null)
         {
             IControlableSelectable pl = forcedSelectedPlayer;
             forcedSelectedPlayer = null;
+            if (locked != null && pl != locked) pl = locked;
             CameraTargetController.Instance.ForceLockTarget();
             return pl;
+        }
+        if (locked != null)
+        {
+            if (GetClickState(selectionClick))
+                SetHandleClick(selectionClick, false);
+            if (GetClickState(deselectionClick))
+                SetHandleClick(deselectionClick, false);
+            return locked;
         }
         if (GetClickState(selectionClick))
         {
@@ -332,7 +345,15 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         {
             if (GetClickState(playerAction.whenSelect))
             {
-                SelectPlayer(playerAction.playerToSelect);
+                if (PawnController.Instance != null && PawnController.Instance.IsSelectionLockedToCurrentActor())
+                {
+                    IControlableSelectable locked = PawnController.Instance.GetLockedActor();
+                    if (locked != null) SelectPlayer(locked);
+                }
+                else
+                {
+                    SelectPlayer(playerAction.playerToSelect);
+                }
             }
         }
         if (GetClickState(endTurnButtonClick))
@@ -467,6 +488,11 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
     public void SelectPlayer(IControlableSelectable pl)
     {
+        if (PawnController.Instance != null && PawnController.Instance.IsSelectionLockedToCurrentActor())
+        {
+            IControlableSelectable locked = PawnController.Instance.GetLockedActor();
+            if (locked != null && pl != locked) return;
+        }
         forcedSelectedPlayer = pl;
     }
 

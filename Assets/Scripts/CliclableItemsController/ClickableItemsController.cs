@@ -125,7 +125,9 @@ public class ClickableItemsController : MonoBehaviour
         bool updated = false;
         foreach (TaskItem item in mainTaskScenario)
         {
-            if (item.selectable.IsWorking() && item.status != TaskItem.TaskItemStatus.InProgress)
+            if (item.selectable.IsWorking()
+                && item.status != TaskItem.TaskItemStatus.InProgress
+                && item.status != TaskItem.TaskItemStatus.Done)
             {
                 item.status = TaskItem.TaskItemStatus.InProgress;
                 item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.InProgress);
@@ -136,7 +138,9 @@ public class ClickableItemsController : MonoBehaviour
         }
         foreach (TaskItem item in sideTaskScenario)
         {
-            if (item.selectable.IsWorking() && item.status != TaskItem.TaskItemStatus.InProgress)
+            if (item.selectable.IsWorking()
+                && item.status != TaskItem.TaskItemStatus.InProgress
+                && item.status != TaskItem.TaskItemStatus.Done)
             {
                 item.status = TaskItem.TaskItemStatus.InProgress;
                 item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.InProgress);
@@ -238,7 +242,8 @@ public class ClickableItemsController : MonoBehaviour
             }
             if (scenario[i].selectable.IsWorking())
             {
-                if (scenario[i].status != TaskItem.TaskItemStatus.InProgress)
+                if (scenario[i].status != TaskItem.TaskItemStatus.InProgress
+                    && scenario[i].status != TaskItem.TaskItemStatus.Done)
                 {
                     scenario[i].status = TaskItem.TaskItemStatus.InProgress;
                     updated = true;
@@ -273,12 +278,18 @@ public class ClickableItemsController : MonoBehaviour
     {
         bool anyUpdated = false;
         bool updated;
+        int guard = 0;
         do
         {
             updated = false;
             updated |= CheckActionBoxInternal(mainTaskScenario, "!");
             updated |= CheckActionBoxInternal(sideTaskScenario, "?");
             anyUpdated |= updated;
+            if (++guard > 256)
+            {
+                Debug.LogError("ClickableItemsController: CheckActionBox loop exceeded guard");
+                break;
+            }
         } while (updated);
         if (anyUpdated) OnTaskUpdated?.Invoke();
     }

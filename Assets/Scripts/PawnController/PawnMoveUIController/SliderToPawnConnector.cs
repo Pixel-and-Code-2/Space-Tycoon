@@ -73,6 +73,21 @@ public class SliderToPawnConnector : MonoBehaviour
     private void OnEnemyTurnStart()
     {
         SetHelperTextEnabled(false);
+        if (helperText != null) helperText.text = "";
+        helperTagCached = string.Empty;
+    }
+
+    private bool ShouldHideDeadHelperHint()
+    {
+        if (otherSelectable != null && otherSelectable.OccupiedBy != null) return true;
+        if (ClickableItemsController.Instance != null
+            && otherSelectable != null
+            && ClickableItemsController.Instance.currentSelectedItem == otherSelectable)
+            return true;
+        if (TurnManager.Instance == null) return false;
+        if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
+            return false;
+        return !TurnManager.Instance.IsPlayerTurn;
     }
 
     private float pawnHealthCached;
@@ -96,18 +111,26 @@ public class SliderToPawnConnector : MonoBehaviour
 
         if (pawn.selectableType == SelectableType.Dead)
         {
-            if (otherSelectable != null && otherSelectable.OccupiedBy != null) {
-                helperText.text = "";
+            bool hideHint = ShouldHideDeadHelperHint();
+            if (hideHint)
+            {
+                if (helperText != null) helperText.text = "";
+                SetHelperTextEnabled(false);
             }
-            else {
+            else
+            {
                 var maxHealings = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
                 var usedHealings = pawn.GetParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY);
                 var revivesLeft = maxHealings - usedHealings;
                 SetHelperTextEnabled(revivesLeft > 0.5f);
-                if (helperText != null && helperText.enabled && helperTagCached != HelperTag)
+                if (helperText != null && helperText.enabled)
                 {
-                    helperTagCached = HelperTag;
-                    helperText.text = HelperTag;
+                    const string deadHint = "[ЛКМ]";
+                    if (helperTagCached != deadHint)
+                    {
+                        helperTagCached = deadHint;
+                        helperText.text = deadHint;
+                    }
                 }
             }
             return;

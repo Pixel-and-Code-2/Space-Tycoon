@@ -270,7 +270,15 @@ public class SimpleEnemyAI : ISelectorBrain
             startingFromBeggining = false;
         }
         BuildDetailedScenario();
-        // Debug.Log("SimpleEnemyAI OnEnemyTurnStart " + detailedScenario.Count);
+        if (detailedScenario.Count == 0)
+        {
+            completedScenarioIndex = -2;
+            currentScenarioIndex = -1;
+            TurnManager.Instance.EndEnemyTurn();
+            return;
+        }
+        currentScenarioIndex = 0;
+        completedScenarioIndex = -1;
     }
 
     private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
@@ -300,10 +308,12 @@ public class SimpleEnemyAI : ISelectorBrain
     private void BuildDetailedScenario()
     {
         detailedScenario.Clear();
+        IControlableSelectable currentActor = TurnManager.Instance != null ? TurnManager.Instance.CurrentActor : null;
         foreach (var element in scenario)
         {
             if (element.controlledPawn == null || element.controlledPawn.GetSelectableType() != SelectableType.Enemy ||
                 !element.controlledPawn.IsInActiveTriggerZone()) continue;
+            if (currentActor != null && element.controlledPawn != currentActor) continue;
             AddDetailedScenarioElement(DetailedScenarioElementType.SelectPawn, element);
             switch (element.capability)
             {

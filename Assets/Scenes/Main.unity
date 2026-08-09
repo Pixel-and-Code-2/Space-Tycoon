@@ -18381,6 +18381,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1222671062}
+    - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1222671075}
   m_SourcePrefab: {fileID: 100100000, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
 --- !u!4 &824540565 stripped
 Transform:
@@ -23637,6 +23640,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1175933378}
+    - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1175933391}
   m_SourcePrefab: {fileID: 100100000, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
 --- !u!4 &1175933359 stripped
 Transform:
@@ -23726,6 +23732,19 @@ MonoBehaviour:
   completeTriggerIndex: -1
   cancelTriggerIndex: -1
   pawnBrain: {fileID: 1175933365}
+--- !u!114 &1175933391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861419552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdcdc6cadd599ab4e8c5f4efb16b8fbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TurnOrderPortrait
+  portrait: {fileID: 1803851092, guid: 526acb39c5a20ce4e9571cd6630427f4, type: 3}
 --- !u!1 &1182271805
 GameObject:
   m_ObjectHideFlags: 0
@@ -24223,6 +24242,19 @@ MonoBehaviour:
   completeTriggerIndex: -1
   cancelTriggerIndex: -1
   pawnBrain: {fileID: 824540571}
+--- !u!114 &1222671075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222671049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdcdc6cadd599ab4e8c5f4efb16b8fbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TurnOrderPortrait
+  portrait: {fileID: 1337701844, guid: 526acb39c5a20ce4e9571cd6630427f4, type: 3}
 --- !u!1 &1227266814
 GameObject:
   m_ObjectHideFlags: 0
@@ -42248,6 +42280,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1917569762}
+    - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1917569775}
   m_SourcePrefab: {fileID: 100100000, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
 --- !u!4 &1899494917 stripped
 Transform:
@@ -42404,6 +42439,19 @@ MonoBehaviour:
   completeTriggerIndex: -1
   cancelTriggerIndex: -1
   pawnBrain: {fileID: 1899494926}
+--- !u!114 &1917569775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917569749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdcdc6cadd599ab4e8c5f4efb16b8fbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TurnOrderPortrait
+  portrait: {fileID: 295612240, guid: 526acb39c5a20ce4e9571cd6630427f4, type: 3}
 --- !u!64 &1922096471
 MeshCollider:
   m_ObjectHideFlags: 0

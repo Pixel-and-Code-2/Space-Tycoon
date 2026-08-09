@@ -307,11 +307,29 @@ public class PawnController : MonoBehaviour
     void OnPlayerTurn()
     {
         ChangeSelectorBrain(playerSelectorBrain);
+        IControlableSelectable actor = TurnManager.Instance != null ? TurnManager.Instance.CurrentActor : null;
+        if (actor != null && actor.GetSelectableType() == SelectableType.Player)
+        {
+            if (InputScreenMouseControlActions.Instance != null)
+                InputScreenMouseControlActions.Instance.SelectPlayer(actor);
+        }
     }
 
     void OnEnemyTurn()
     {
         ChangeSelectorBrain(enemySelectorBrain);
+    }
+
+    public bool IsSelectionLockedToCurrentActor()
+    {
+        if (!IsInCombat()) return false;
+        if (TurnManager.Instance == null || TurnManager.Instance.CurrentActor == null) return false;
+        return TurnManager.Instance.CurrentActor.GetSelectableType() == SelectableType.Player;
+    }
+
+    public IControlableSelectable GetLockedActor()
+    {
+        return TurnManager.Instance != null ? TurnManager.Instance.CurrentActor : null;
     }
 
     public static bool isValidStage1 = false;

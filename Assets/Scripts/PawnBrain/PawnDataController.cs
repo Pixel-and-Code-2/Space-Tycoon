@@ -113,18 +113,23 @@ public class PawnDataController : MonoBehaviour, IFormulaData
 
     private void OnPlayerTurnStart()
     {
-        if (selectableType == SelectableType.Player)
-        {
-            ResetActionPoints();
-        }
+        if (selectableType != SelectableType.Player) return;
+        if (!IsCurrentActor()) return;
+        ResetActionPoints();
     }
 
     private void OnEnemyTurnStart()
     {
-        if (selectableType == SelectableType.Enemy)
-        {
-            ResetActionPoints();
-        }
+        if (selectableType != SelectableType.Enemy) return;
+        if (!IsCurrentActor()) return;
+        ResetActionPoints();
+    }
+
+    private bool IsCurrentActor()
+    {
+        if (TurnManager.Instance == null || TurnManager.Instance.CurrentActor == null) return true;
+        PawnBrain brain = GetComponent<PawnBrain>();
+        return brain != null && TurnManager.Instance.CurrentActor == brain;
     }
     private void OnLoadData(LoadedData data)
     {
