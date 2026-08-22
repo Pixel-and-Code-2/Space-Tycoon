@@ -21,6 +21,14 @@ public class SpriteProvider : MonoBehaviour
     {
         UpdateImage();
     }
+    public void SetLinks(string spriteName, string colorName = null)
+    {
+        spriteLinkName = spriteName;
+        if (colorName != null)
+            colorLinkName = colorName;
+        UpdateImage();
+    }
+
     void UpdateImage()
     {
         if (string.IsNullOrEmpty(spriteLinkName)) return;

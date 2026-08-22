@@ -360,17 +360,44 @@ PrefabInstance:
       propertyPath: initialPawnData
       value: 
       objectReference: {fileID: 11400000, guid: a1133450909f71c4a9176aeaba482733, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -6913410222830464560}
     m_RemovedGameObjects:
     - {fileID: 2889496457845632466, guid: 504453969619fc345b6a12b64b65f670, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5261586332104702065, guid: 504453969619fc345b6a12b64b65f670, type: 3}
       insertIndex: 0
       addedObject: {fileID: 6537201069796937947}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 426309935783401599, guid: 504453969619fc345b6a12b64b65f670, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8659444313011225866}
   m_SourcePrefab: {fileID: 100100000, guid: 504453969619fc345b6a12b64b65f670, type: 3}
 --- !u!4 &3644908071087234933 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5261586332104702065, guid: 504453969619fc345b6a12b64b65f670, type: 3}
   m_PrefabInstance: {fileID: 8904100729870706436}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &9113938540691701627 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 426309935783401599, guid: 504453969619fc345b6a12b64b65f670, type: 3}
+  m_PrefabInstance: {fileID: 8904100729870706436}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-8659444313011225866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9113938540691701627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdcdc6cadd599ab4e8c5f4efb16b8fbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TurnOrderPortrait
+  portraitSpriteName: 
+  portraitSpriteVariants:
+  - TopIconShooterEnemyV1
+  - TopIconShooterEnemyV2
+  - TopIconShooterEnemyV3
+  isEnemy: 1

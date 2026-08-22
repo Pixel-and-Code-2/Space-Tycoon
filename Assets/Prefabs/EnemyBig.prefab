@@ -129,8 +129,35 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       insertIndex: 0
       addedObject: {fileID: 2804546982893909277}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5106266233080634982}
   m_SourcePrefab: {fileID: 100100000, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+--- !u!1 &949430363548246829 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2230305945013315322, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
+  m_PrefabInstance: {fileID: 1431773674154132951}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-5106266233080634982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949430363548246829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdcdc6cadd599ab4e8c5f4efb16b8fbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TurnOrderPortrait
+  portraitSpriteName: 
+  portraitSpriteVariants:
+  - TopIconMeleeEnemyV1
+  - TopIconMeleeEnemyV2
+  - TopIconMeleeEnemyV3
+  - TopIconMeleeEnemyV4
+  isEnemy: 1
 --- !u!4 &4738749594722304803 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5917102314145285876, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
@@ -144,10 +171,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4738749594722304803}
     m_Modifications:
-    - target: {fileID: 3841983654617449692, guid: 6518db4e78ea7214a950f51766944afc, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: dfadae1956b255241a3987cca86bafe9, type: 2}
     - target: {fileID: -8679921383154817045, guid: 5b837814e60ad204f9d064ba46292954, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -188,6 +211,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3841983654617449692, guid: 6518db4e78ea7214a950f51766944afc, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: dfadae1956b255241a3987cca86bafe9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

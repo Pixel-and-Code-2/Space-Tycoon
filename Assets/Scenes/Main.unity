@@ -4100,19 +4100,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6275447940373105447, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6275447940373105447, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6275447940373105447, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6275447940373105447, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6290685059966645832, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4732,19 +4732,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8226315388731436483, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 30
+      value: 111
       objectReference: {fileID: 0}
     - target: {fileID: 8226315388731436483, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8226315388731436483, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 15
+      value: 55.5
       objectReference: {fileID: 0}
     - target: {fileID: 8226315388731436483, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -15
+      value: -65
       objectReference: {fileID: 0}
     - target: {fileID: 8274767577740660271, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5112,15 +5112,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9005342188044326324, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.14117648
       objectReference: {fileID: 0}
     - target: {fileID: 9005342188044326324, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.07058824
       objectReference: {fileID: 0}
     - target: {fileID: 9005342188044326324, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9057957384780820914, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5227,6 +5227,7 @@ PrefabInstance:
     - {fileID: 1536764848970536189, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
     - {fileID: 357469372584167491, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
     - {fileID: 1624132451980089332, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+    - {fileID: 1271264168795907434, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3814985720047612709, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
@@ -24183,7 +24184,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdcdc6cadd599ab4e8c5f4efb16b8fbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurnOrderPortrait
-  portrait: {fileID: 1803851092, guid: 526acb39c5a20ce4e9571cd6630427f4, type: 3}
+  portraitSpriteName: TopIconZaya
+  portraitSpriteVariants: []
+  isEnemy: 0
 --- !u!1 &1182271805
 GameObject:
   m_ObjectHideFlags: 0
@@ -24693,7 +24696,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdcdc6cadd599ab4e8c5f4efb16b8fbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurnOrderPortrait
-  portrait: {fileID: 1337701844, guid: 526acb39c5a20ce4e9571cd6630427f4, type: 3}
+  portraitSpriteName: TopIconGusev
+  portraitSpriteVariants: []
+  isEnemy: 0
 --- !u!1 &1227266814
 GameObject:
   m_ObjectHideFlags: 0
@@ -42962,7 +42967,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdcdc6cadd599ab4e8c5f4efb16b8fbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurnOrderPortrait
-  portrait: {fileID: 295612240, guid: 526acb39c5a20ce4e9571cd6630427f4, type: 3}
+  portraitSpriteName: TopIconZeleniy
+  portraitSpriteVariants: []
+  isEnemy: 0
 --- !u!64 &1922096471
 MeshCollider:
   m_ObjectHideFlags: 0
