@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "unity": {
+      "command": "unity",
+      "args": [
+        "mcp",
+        "--project-path",
+        "F:\\Game Projects\\Space-Tycoon"
+      ]
+    }
+  }
+}

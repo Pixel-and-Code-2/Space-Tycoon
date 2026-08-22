@@ -209,6 +209,8 @@ public class ClickableItem : ISelectable
         progressBarCached.SetClass(SelectableType.Neutral);
         scriptForClickable?.OnStart();
         ClickableItemsController.Instance.OnStartTask(this);
+        if (ClickableItemsController.Instance.IsOnlyShowTextTask(this))
+            progressBarCached.SetValue(100f);
     }
     private void StartWorkAction(InspectorContextMenuItem action)
     {

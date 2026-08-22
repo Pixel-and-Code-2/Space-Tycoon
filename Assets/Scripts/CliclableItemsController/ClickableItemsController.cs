@@ -123,33 +123,27 @@ public class ClickableItemsController : MonoBehaviour
     void Update()
     {
         bool updated = false;
-        foreach (TaskItem item in mainTaskScenario)
-        {
-            if (item.selectable.IsWorking()
-                && item.status != TaskItem.TaskItemStatus.InProgress
-                && item.status != TaskItem.TaskItemStatus.Done)
-            {
-                item.status = TaskItem.TaskItemStatus.InProgress;
-                item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.InProgress);
-                UnregisterSelectable(item.selectable);
-                CheckActionBox();
-                updated = true;
-            }
-        }
-        foreach (TaskItem item in sideTaskScenario)
-        {
-            if (item.selectable.IsWorking()
-                && item.status != TaskItem.TaskItemStatus.InProgress
-                && item.status != TaskItem.TaskItemStatus.Done)
-            {
-                item.status = TaskItem.TaskItemStatus.InProgress;
-                item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.InProgress);
-                UnregisterSelectable(item.selectable);
-                CheckActionBox();
-                updated = true;
-            }
-        }
+        updated |= TryEnterInProgressFromWork(mainTaskScenario);
+        updated |= TryEnterInProgressFromWork(sideTaskScenario);
         if (updated) OnTaskUpdated?.Invoke();
+    }
+
+    private bool TryEnterInProgressFromWork(List<TaskItem> scenario)
+    {
+        bool updated = false;
+        foreach (TaskItem item in scenario)
+        {
+            if (item.selectable.IsWorking()
+                && item.status == TaskItem.TaskItemStatus.ReadyToStart)
+            {
+                item.status = TaskItem.TaskItemStatus.InProgress;
+                item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.InProgress);
+                UnregisterSelectable(item.selectable);
+                CheckActionBox();
+                updated = true;
+            }
+        }
+        return updated;
     }
     private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
     {
@@ -231,7 +225,7 @@ public class ClickableItemsController : MonoBehaviour
             }
             if (scenario[i].status != TaskItem.TaskItemStatus.Done
                 && scenario[i].status != TaskItem.TaskItemStatus.Unavailable
-                && (scenario[i].doneWhen.Count > 0 || scenario[i].onlyShowText)
+                && scenario[i].doneWhen.Count > 0
                 && CheckDoneWhen(scenario[i]))
             {
                 scenario[i].status = TaskItem.TaskItemStatus.Done;
@@ -240,14 +234,11 @@ public class ClickableItemsController : MonoBehaviour
                 updated = true;
                 if (i > 1) PlayerPrefs.SetInt("EducationCompleted", 1);
             }
-            if (scenario[i].selectable.IsWorking())
+            if (scenario[i].selectable.IsWorking()
+                && scenario[i].status == TaskItem.TaskItemStatus.ReadyToStart)
             {
-                if (scenario[i].status != TaskItem.TaskItemStatus.InProgress
-                    && scenario[i].status != TaskItem.TaskItemStatus.Done)
-                {
-                    scenario[i].status = TaskItem.TaskItemStatus.InProgress;
-                    updated = true;
-                }
+                scenario[i].status = TaskItem.TaskItemStatus.InProgress;
+                updated = true;
             }
             if (scenario[i].status != TaskItem.TaskItemStatus.ReadyToStart)
             {
@@ -320,13 +311,24 @@ public class ClickableItemsController : MonoBehaviour
             if (StatusMatchesCondition(scenario[cond.itemIndex].status, cond))
                 return true;
         }
-        if (item.onlyShowText) {
-            foreach (var text in item.textToShow) {
-                if (!text.showOnce || !text.shown) {
-                    return false;
-                }
-            }
-            return true;
+        return false;
+    }
+
+    public bool IsOnlyShowTextTask(ISelectable selectable)
+    {
+        foreach (TaskItem item in mainTaskScenario)
+        {
+            if (item.onlyShowText
+                && item.selectable == selectable
+                && (item.status == TaskItem.TaskItemStatus.ReadyToStart || item.status == TaskItem.TaskItemStatus.InProgress))
+                return true;
+        }
+        foreach (TaskItem item in sideTaskScenario)
+        {
+            if (item.onlyShowText
+                && item.selectable == selectable
+                && (item.status == TaskItem.TaskItemStatus.ReadyToStart || item.status == TaskItem.TaskItemStatus.InProgress))
+                return true;
         }
         return false;
     }
@@ -406,42 +408,53 @@ public class ClickableItemsController : MonoBehaviour
         foreach (TaskItem item in taskScenario)
         {
             if (item.selectable == target)
+                res |= ShowTaskTexts(item, showTime);
+        }
+        return res;
+    }
+
+    private bool ShowTaskTexts(TaskItem item, TaskItem.TextShowTime? onlyShowTime = null)
+    {
+        bool res = false;
+        ISelectable target = item.selectable;
+        foreach (TaskItem.TextToShow text in item.textToShow)
+        {
+            if (text.showOnlyOnStepByStep && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f) continue;
+            if (onlyShowTime.HasValue && text.showTime != onlyShowTime.Value) continue;
+            if (text.shown) continue;
+            text.shown = true;
+            int authorIndex = -1;
+            AudioClip clip = null;
+            if (text.author != -1)
             {
-                foreach (TaskItem.TextToShow text in item.textToShow)
+                authorIndex = text.author;
+            }
+            else if (target != null && target.GetClickableItem() != null)
+            {
+                var clickable = target.GetClickableItem();
+                var checker = clickable.taskExecutor == null
+                    ? PawnController.Instance.currentSelectedPawn.gameObject
+                    : clickable.taskExecutor.gameObject;
+                for (int i = 0; i < authorsObjects.Length; i++)
                 {
-                    if (text.showOnlyOnStepByStep && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f) continue;
-                    if (text.showTime == showTime && !text.shown)
+                    if (authorsObjects[i] == checker)
                     {
-                        text.shown = true;
-                        int authorIndex = -1;
-                        AudioClip clip = null;
-                        if (text.author != -1) {
-                            authorIndex = text.author;
-                        } else {
-                            var checker = target.GetClickableItem().taskExecutor == null ? PawnController.Instance.currentSelectedPawn.gameObject : target.GetClickableItem().taskExecutor.gameObject;
-                            for (int i = 0; i < authorsObjects.Length; i++)
-                            {
-                                if (authorsObjects[i] == checker)
-                                {
-                                    authorIndex = i;
-                                    break;
-                                }
-                            }
-                        }
-                        foreach (var sound in text.completeSounds)
-                        {
-                            if (sound.authorIndex == authorIndex)
-                            {
-                                clip = sound.clip;
-                                break;
-                            }
-                        }
-                        AudioController.Instance.Play(clip);
-                        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.NarrativeText, text.text + "_" + authorIndex);
-                        res = true;
+                        authorIndex = i;
+                        break;
                     }
                 }
             }
+            foreach (var sound in text.completeSounds)
+            {
+                if (sound.authorIndex == authorIndex)
+                {
+                    clip = sound.clip;
+                    break;
+                }
+            }
+            AudioController.Instance.Play(clip);
+            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.NarrativeText, text.text + "_" + authorIndex);
+            res = true;
         }
         return res;
     }
@@ -482,48 +495,60 @@ public class ClickableItemsController : MonoBehaviour
     {
         bool updated = false;
         TaskItem completedItem = null;
-        foreach (TaskItem item in mainTaskScenario)
-        {
-            if (item.selectable == selectable)
-            {
-                item.status = TaskItem.TaskItemStatus.Done;
-                item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.Done);
-                UnregisterSelectable(item.selectable);
-                CheckActionBox();
-                updated = true;
-                completedItem = item;
-            }
-        }
-        foreach (TaskItem item in sideTaskScenario)
-        {
-            if (item.selectable == selectable)
-            {
-                item.status = TaskItem.TaskItemStatus.Done;
-                item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.Done);
-                UnregisterSelectable(item.selectable);
-                CheckActionBox();
-                updated = true;
-                completedItem = item;
-            }
-        }
+        completedItem = CompleteInProgressTask(mainTaskScenario, selectable, ref updated);
+        if (completedItem == null)
+            completedItem = CompleteInProgressTask(sideTaskScenario, selectable, ref updated);
         if (completedItem != null && !string.IsNullOrEmpty(completedItem.completeText))
         {
             UI3DManager.Instance.ShowMessage(completedItem.completeText, selectable.GetTransform().position, completedItem.completeTextColor);
         }
         if (updated) OnTaskUpdated?.Invoke();
-        if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.AfterComplete, selectable)) return;
-        if (CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.AfterComplete, selectable)) return;
+        if (completedItem != null)
+            ShowTaskTexts(completedItem, TaskItem.TextShowTime.AfterComplete);
     }
+
+    private TaskItem CompleteInProgressTask(List<TaskItem> scenario, ISelectable selectable, ref bool updated)
+    {
+        foreach (TaskItem item in scenario)
+        {
+            if (item.selectable != selectable) continue;
+            if (item.status != TaskItem.TaskItemStatus.InProgress) continue;
+            item.status = TaskItem.TaskItemStatus.Done;
+            item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.Done);
+            UnregisterSelectable(item.selectable);
+            CheckActionBox();
+            updated = true;
+            return item;
+        }
+        return null;
+    }
+
     public void OnStartTask(ISelectable selectable)
     {
-        if (CheckScenarioForText(mainTaskScenario, TaskItem.TextShowTime.BeforeStart)) return;
-        if (CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.BeforeStart)) return;
+        foreach (TaskItem item in mainTaskScenario)
+        {
+            if (item.selectable == selectable
+                && (item.status == TaskItem.TaskItemStatus.ReadyToStart || item.status == TaskItem.TaskItemStatus.InProgress))
+            {
+                ShowTaskTexts(item, TaskItem.TextShowTime.BeforeStart);
+                return;
+            }
+        }
+        foreach (TaskItem item in sideTaskScenario)
+        {
+            if (item.selectable == selectable
+                && (item.status == TaskItem.TaskItemStatus.ReadyToStart || item.status == TaskItem.TaskItemStatus.InProgress))
+            {
+                ShowTaskTexts(item, TaskItem.TextShowTime.BeforeStart);
+                return;
+            }
+        }
     }
     public void OnCancelTask(ClickableItem clickableItem)
     {
         foreach (TaskItem item in mainTaskScenario)
         {
-            if (item.selectable == clickableItem)
+            if (item.selectable == clickableItem && item.status == TaskItem.TaskItemStatus.InProgress)
             {
                 item.status = TaskItem.TaskItemStatus.ReadyToStart;
                 item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.ReadyToStart);
@@ -533,7 +558,7 @@ public class ClickableItemsController : MonoBehaviour
         }
         foreach (TaskItem item in sideTaskScenario)
         {
-            if (item.selectable == clickableItem)
+            if (item.selectable == clickableItem && item.status == TaskItem.TaskItemStatus.InProgress)
             {
                 item.status = TaskItem.TaskItemStatus.ReadyToStart;
                 item.selectable.ChangeScenarioStatus(TaskItem.TaskItemStatus.ReadyToStart);
