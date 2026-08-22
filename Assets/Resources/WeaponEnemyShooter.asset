@@ -10,64 +10,56 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41cf6bcf5f35067458db9c0a1798ba1e, type: 3}
-  m_Name: WeaponMustHaveParams
+  m_Name: WeaponEnemyShooter
   m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
   parameters:
   - name: MINDMG
-    value: 0
+    value: 5
   - name: MAXDMG
-    value: 0
+    value: 14
   - name: MDMG
-    value: 0
-  - name: ROF
     value: 1
   - name: ACC
-    value: 0
+    value: 3
+  - name: ROF
+    value: 3
   - name: MAG
-    value: 0
+    value: 6
   - name: BULK
-    value: 0
+    value: 4
   - name: RCL
-    value: 0
-  - name: WPMASS
-    value: 0
-  - name: MovesToReload
-    value: 1
+    value: 4
   - name: TotalAmmo
-    value: 99999
-  - name: MeleeROF
-    value: 1
+    value: 120
   calculatedParameters: []
-  mustHaveParameters: []
+  mustHaveParameters:
+  - {fileID: 11400000, guid: 841391b108c1aa14ba3bed0e70634795, type: 2}
   isDirty: 0
-  parametersDictStateCache: 'MINDMG = 0,00 (0,00)
+  parametersDictStateCache: 'MINDMG = 8,00 (8,00)
 
-    MAXDMG = 0,00 (0,00)
+    MAXDMG = 25,00 (25,00)
 
     MDMG
-    = 0,00 (0,00)
+    = 1,00 (1,00)
 
-    ROF = 1,00 (1,00)
+    ROF = 4,00 (4,00)
 
-    ACC = 0,00 (0,00)
+    ACC = 4,00 (4,00)
 
-    MAG = 0,00
-    (0,00)
+    MAG = 4,00 (4,00)
 
-    BULK = 0,00 (0,00)
+    BULK
+    = 4,00 (4,00)
 
-    RCL = 0,00 (0,00)
+    RCL = 4,00 (4,00)
 
     WPMASS = 0,00 (0,00)
 
     MovesToReload
-    = 1,00 (1,00)
+    = 2,00 (2,00)
 
-    TotalAmmo = 99999,00 (99999,00)
+    TotalAmmo = 400,00 (400,00)
 
     MeleeROF = 1,00 (1,00)
-
-    Random
-    = 0,56 (0,56)
 
 '

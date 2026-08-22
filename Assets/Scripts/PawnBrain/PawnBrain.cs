@@ -416,6 +416,11 @@ public class PawnBrain : IControlableSelectable
             dataController.GetParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY) + 1
         );
         RefreshStatusVisualizers();
+        if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f
+            && TurnManager.Instance != null)
+        {
+            TurnManager.Instance.RegisterCombatant(this);
+        }
     }
 
     public override void OnGetDefendedHit(Vector3 hitDirection, bool isMelee)

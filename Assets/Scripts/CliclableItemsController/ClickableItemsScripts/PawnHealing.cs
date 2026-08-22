@@ -8,6 +8,7 @@ public class PawnHealing : IScriptForClickable
     public override void OnComplete()
     {
         base.OnComplete();
+        if (!IsTask || IsSide) return;
         pawnBrain.OnHeal();
     }
 }

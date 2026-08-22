@@ -332,6 +332,38 @@ public class ClickableItemsController : MonoBehaviour
         }
         return false;
     }
+
+    public ClickableTaskInfo GetTaskInfo(ISelectable selectable)
+    {
+        if (selectable.OccupiedBy != null)
+        {
+            for (int i = 0; i < mainTaskScenario.Count; i++)
+            {
+                if (mainTaskScenario[i] == selectable.OccupiedBy)
+                    return new ClickableTaskInfo { isTask = true, isSide = false, taskId = i };
+            }
+            for (int i = 0; i < sideTaskScenario.Count; i++)
+            {
+                if (sideTaskScenario[i] == selectable.OccupiedBy)
+                    return new ClickableTaskInfo { isTask = true, isSide = true, taskId = i };
+            }
+        }
+        for (int i = 0; i < mainTaskScenario.Count; i++)
+        {
+            TaskItem item = mainTaskScenario[i];
+            if (item.selectable != selectable) continue;
+            if (item.status == TaskItem.TaskItemStatus.InProgress || item.status == TaskItem.TaskItemStatus.ReadyToStart)
+                return new ClickableTaskInfo { isTask = true, isSide = false, taskId = i };
+        }
+        for (int i = 0; i < sideTaskScenario.Count; i++)
+        {
+            TaskItem item = sideTaskScenario[i];
+            if (item.selectable != selectable) continue;
+            if (item.status == TaskItem.TaskItemStatus.InProgress || item.status == TaskItem.TaskItemStatus.ReadyToStart)
+                return new ClickableTaskInfo { isTask = true, isSide = true, taskId = i };
+        }
+        return ClickableTaskInfo.None;
+    }
     public bool OnSelect(ISelectable selectable)
     {
         bool selecting = false;

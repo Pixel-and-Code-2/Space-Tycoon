@@ -1,0 +1,138 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41cf6bcf5f35067458db9c0a1798ba1e, type: 3}
+  m_Name: EnemyTvarShooter
+  m_EditorClassIdentifier: Assembly-CSharp::ParameteredScriptableObject
+  parameters:
+  - name: IQ
+    value: 0
+  - name: HT
+    value: 0
+  - name: SHT
+    value: 6
+  - name: BRW
+    value: 4
+  - name: THR
+    value: 0
+  - name: ENG
+    value: 0
+  - name: SCI
+    value: 0
+  - name: DDGB
+    value: 4.25
+  - name: SPDB
+    value: 3
+  calculatedParameters:
+  - name: STR
+    formula:
+      formula: (float)Math.Round(g_Random * 3 + 4)
+      instruction: 
+      dataAssets:
+      - {fileID: 11400000}
+      names:
+      - Parameters
+  - name: DX
+    formula:
+      formula: (float)Math.Round(g_Random + g_e*6)
+      instruction: 
+      dataAssets:
+      - {fileID: 11400000}
+      names:
+      - Parameters
+  mustHaveParameters:
+  - {fileID: 11400000, guid: dc8e32fe89cad8049865c252300641b6, type: 2}
+  - {fileID: 11400000, guid: 52f1062fd6d074c4a87160d90aaa59b0, type: 2}
+  - {fileID: 11400000, guid: cc0d7718186f99944bd1a02642224a2e, type: 2}
+  isDirty: 0
+  parametersDictStateCache: 'MINDMG = 0,00 (0,00)
+
+    MAXDMG = 0,00 (0,00)
+
+    MDMG
+    = 1,00 (1,00)
+
+    ROF = 1,00 (1,00)
+
+    ACC = 0,00 (0,00)
+
+    MAG = 0,00 (0,00)
+
+    BULK
+    = 0,00 (0,00)
+
+    RCL = 0,00 (0,00)
+
+    WPMASS = 5,00 (5,00)
+
+    MovesToReload
+    = 2,00 (2,00)
+
+    TotalAmmo = 0,00 (0,00)
+
+    MeleeROF = 1,00 (1,00)
+
+    DMR
+    = 0,00 (0,00)
+
+    DMM = 0,00 (0,00)
+
+    DR = 16,00 (16,00)
+
+    MDR = 0,00
+    (0,00)
+
+    ARMMASS = 29,00 (29,00)
+
+    STR = 4,00 (4,00)
+
+    DX = 7,00 (7,00)
+
+    IQ
+    = 0,00 (0,00)
+
+    HT = 0,00 (0,00)
+
+    SHT = 0,00 (0,00)
+
+    BRW = 6,00 (6,00)
+
+    THR
+    = 0,00 (0,00)
+
+    ENG = 0,00 (0,00)
+
+    SCI = 0,00 (0,00)
+
+    DDGB = 4,25
+    (4,25)
+
+    SPDB = 3,00 (3,00)
+
+    DMG = 5,00 (5,00)
+
+    HP = 10,00 (10,00)
+
+    PRC
+    = 5,00 (5,00)
+
+    FP = 5,00 (5,00)
+
+    SPD = 6,75 (6,75)
+
+    DDG = 12,00 (12,00)
+
+    BCW
+    = 13,50 (13,50)
+
+    BDMG = 6,00 (6,00)
+
+'

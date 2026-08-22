@@ -186,11 +186,22 @@ public class ClickableItem : ISelectable
     private IEnumerator OnSelectDelayed()
     {
         yield return new WaitForSeconds(0.1f);
+        ApplyTaskInfoToScript();
         scriptForClickable?.OnSelect();
     }
 
     private SliderController progressBarCached = null;
     private InspectorContextMenuItem actionCached = null;
+    private ClickableTaskInfo activeTaskInfo = ClickableTaskInfo.None;
+
+    private void ApplyTaskInfoToScript()
+    {
+        if (scriptForClickable == null) return;
+        ClickableTaskInfo info = activeTaskInfo.isTask
+            ? activeTaskInfo
+            : ClickableItemsController.Instance.GetTaskInfo(this);
+        scriptForClickable.ApplyTaskInfo(info);
+    }
     public override bool IsWorking() => progressBarCached != null;
     private void StartWork()
     {
@@ -207,6 +218,8 @@ public class ClickableItem : ISelectable
         progressBarCached.SetBounds(0f, 100f);
         progressBarCached.SetValue(0f);
         progressBarCached.SetClass(SelectableType.Neutral);
+        activeTaskInfo = ClickableItemsController.Instance.GetTaskInfo(this);
+        ApplyTaskInfoToScript();
         scriptForClickable?.OnStart();
         ClickableItemsController.Instance.OnStartTask(this);
         if (ClickableItemsController.Instance.IsOnlyShowTextTask(this))
@@ -276,6 +289,7 @@ public class ClickableItem : ISelectable
             progressBarCached.SetValue(progress);
             if (progress >= 100f)
             {
+                ApplyTaskInfoToScript();
                 progress = scriptForClickable?.OnProgress(100f) ?? 100f;
             }
             if (progress >= 100f)
@@ -293,13 +307,16 @@ public class ClickableItem : ISelectable
                 StartCoroutine(OnCompleteDelayed());
                 return;
             }
+            ApplyTaskInfoToScript();
             progressBarCached.SetValue(scriptForClickable?.OnProgress(progress) ?? progress);
         }
     }
     private IEnumerator OnCompleteDelayed()
     {
         yield return new WaitForSeconds(0.1f);
+        ApplyTaskInfoToScript();
         scriptForClickable?.OnComplete();
+        activeTaskInfo = ClickableTaskInfo.None;
     }
     void LogBoostProgressFormulaDiagnostics(float boostEvaluated)
     {
@@ -332,8 +349,10 @@ public class ClickableItem : ISelectable
         actionCached = null;
         UI3DManager.Instance.ShowMessage("Отменено", transform.position, Color.red);
         taskExecutor = null;
+        ApplyTaskInfoToScript();
         scriptForClickable?.OnCancel();
         ClickableItemsController.Instance.OnCancelTask(this);
+        activeTaskInfo = ClickableTaskInfo.None;
     }
 
     public override List<ContextMenuItem> OnContextMenu()
