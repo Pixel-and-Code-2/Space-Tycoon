@@ -43,6 +43,7 @@ public class SliderToPawnConnector : MonoBehaviour
         if (pawn == null) Debug.LogWarning("SliderToPawnConnector: pawn not found");
         else otherSelectable = pawn.gameObject.GetComponent<ClickableItem>();
         ColorTheSlider();
+        PawnDataController.OnStaminaChanged += OnStaminaChanged;
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
@@ -53,11 +54,29 @@ public class SliderToPawnConnector : MonoBehaviour
 
     void OnDestroy()
     {
+        PawnDataController.OnStaminaChanged -= OnStaminaChanged;
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
             TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
         }
+    }
+
+    private void OnStaminaChanged(PawnDataController changed)
+    {
+        if (changed != pawn) return;
+        RefreshStaminaBar();
+    }
+
+    private void RefreshStaminaBar()
+    {
+        if (pawn == null || allyStaminaSlider == null) return;
+        if (pawn.selectableType != SelectableType.Player) return;
+        pawnStamina = TryGetParam(PawnDataController.STAMINA_KEY);
+        if (Mathf.Abs(pawnStamina - pawnStaminaCached) < 0.01f) return;
+        pawnStaminaCached = pawnStamina;
+        allyStaminaSlider.SetValue(pawnStamina);
+        UpdateActionIcons(pawnSelectableType != SelectableType.Dead && pawnHealth > 0.01f);
     }
 
     private void SetHelperTextEnabled(bool enabled)
@@ -173,15 +192,7 @@ public class SliderToPawnConnector : MonoBehaviour
 
         if (pawnSelectableType == SelectableType.Player)
         {
-            pawnStamina = calcWalk();
-            if (pawnStamina != pawnStaminaCached)
-            {
-                pawnStaminaCached = pawnStamina;
-                if (allyStaminaSlider != null)
-                {
-                    allyStaminaSlider.SetValue(pawnStamina);
-                }
-            }
+            RefreshStaminaBar();
             if (allyStaminaSlider != null)
             {
                 allyStaminaSlider.gameObject.SetActive(isAlive);
@@ -212,26 +223,24 @@ public class SliderToPawnConnector : MonoBehaviour
             }
         }
     }
-    private float calcWalk()
+    private float GetStamina()
     {
         bool isStepByStep = TryGetParam(HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY) > 0.5f;
         if (!isStepByStep) return 9999f;
-        float avDist = TryGetParam(PawnDataController.AVAILABLE_DISTANCE_KEY);
-        bool shooted = TryGetParam(PawnDataController.SHOOTED_AMOUNT_KEY) > 0.5f;
-        bool melee = TryGetParam(PawnDataController.MELEE_AMOUNT_KEY) > 0.5f;
-        bool movesToSkip = TryGetParam(PawnDataController.MOVES_TO_SKIP_KEY) > 0.5f;
-        bool isShootWalk = pawn != null && pawn.HasMovedThisTurn;
-        float prediction = (shooted && !isShootWalk) || (melee && isShootWalk) || movesToSkip ? 0f : avDist;
-        // Debug.Log("Prediction: " + pawnStamina + " AvDist: " + avDist + " shooted this round: " + shooted + " melee this round: " + melee + " moves to skip: " + movesToSkip + " isShootWalk: " + isShootWalk);
-        return prediction;
+        return TryGetParam(PawnDataController.STAMINA_KEY);
     }
+
     private bool CanAttack()
     {
         bool skips = TryGetParam(PawnDataController.MOVES_TO_SKIP_KEY) > 0.1f;
-        float shooted = TryGetParam(PawnDataController.SHOOTED_AMOUNT_KEY);
-        bool melee = TryGetParam(PawnDataController.MELEE_AMOUNT_KEY) > 0.5f;
-        bool canAttack = !skips && !melee;
-        return canAttack;
+        if (skips || pawn == null) return false;
+        float stamina = GetStamina();
+        float rangedCost = GlobalSettingsAssets.GetStaminaCosts().rangedAttackCost;
+        float meleeCost = pawn.HasRanged
+            ? GlobalSettingsAssets.GetStaminaCosts().shooterMeleeAttackCost
+            : GlobalSettingsAssets.GetStaminaCosts().meleeAttackCost;
+        float minCost = Mathf.Min(rangedCost, meleeCost);
+        return stamina >= minCost - 0.01f;
     }
 
     private void UpdateActionIcons(bool isAlive)
@@ -253,8 +262,8 @@ public class SliderToPawnConnector : MonoBehaviour
 
         if (walkIcon != null)
         {
-            float walkAvailable = calcWalk();
-            bool canWalk = walkAvailable > 0.1f;
+            bool isStepByStep = TryGetParam(HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY) > 0.5f;
+            bool canWalk = !isStepByStep || (pawn != null && pawn.MaxMoveMetersFromStamina > 0.1f);
             walkIcon.SetActive(canWalk);
         }
 
@@ -306,9 +315,9 @@ public class SliderToPawnConnector : MonoBehaviour
             if (allyStaminaSlider != null)
             {
                 allyStaminaSlider.gameObject.SetActive(isAlive);
-                float maxStamina = TryGetParam(PawnDataController.INITIAL_AVAILABLE_DISTANCE_KEY);
+                float maxStamina = TryGetParam(PawnDataController.MAX_STAMINA_KEY);
                 allyStaminaSlider.SetBounds(0f, maxStamina);
-                pawnStamina = TryGetParam(PawnDataController.AVAILABLE_DISTANCE_KEY);
+                pawnStamina = TryGetParam(PawnDataController.STAMINA_KEY);
                 pawnStaminaCached = pawnStamina;
                 allyStaminaSlider.SetValue(pawnStamina);
             }

@@ -11,7 +11,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fd3074baaffbf9419d01127dda02ebe, type: 3}
   m_Name: GlobalSettings
-  m_EditorClassIdentifier: Assembly-CSharp::SliderSettingsAssets
+  m_EditorClassIdentifier: Assembly-CSharp::GlobalSettingsAssets
+  staminaCosts:
+    maxStamina: 100
+    rangedAttackCost: 50
+    meleeAttackCost: 60
+    shooterMeleeAttackCost: 50
+    reviveCost: 10
   sliderClassColors:
   - selectableType: 0
     colorFront: PlayerDefaultColor

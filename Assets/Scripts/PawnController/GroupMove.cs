@@ -18,6 +18,22 @@ public static class GroupMove
     static readonly HashSet<IControlableSelectable> pendingSoloBusy = new HashSet<IControlableSelectable>();
     static IControlableSelectable rallyAnchor;
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void ResetOnPlay()
+    {
+        ResetRuntimeState();
+    }
+
+    public static void ResetRuntimeState()
+    {
+        rallying.Clear();
+        pendingSoloBusy.Clear();
+        rallyAnchor = null;
+        HasLastCommand = false;
+        LastTarget = Vector3.zero;
+        LastApproachDir = Vector3.forward;
+    }
+
     public static bool IsCtrlHeld()
     {
         if (Keyboard.current == null) return false;
@@ -142,6 +158,17 @@ public static class GroupMove
             if (pawn is MonoBehaviour mb)
                 mb.StartCoroutine(WatchBusyExpire(pawn));
         }
+    }
+
+    public static void OnRevived(IControlableSelectable pawn)
+    {
+        if (pawn == null || !pawn.IsAlive) return;
+        pendingSoloBusy.Remove(pawn);
+        pawn.SetOnTask(false);
+        pawn.ClearMoveHold();
+        if (PawnController.Instance != null && PawnController.Instance.IsInCombat()) return;
+        if (!HasLastCommand) return;
+        OnBusyDropped(pawn);
     }
 
     public static void OnBusyDropped(IControlableSelectable pawn)

@@ -71,7 +71,7 @@ PrefabInstance:
     - target: {fileID: 8515852256048443046, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: combatantStats
       value: 
-      objectReference: {fileID: 11400000, guid: 39361dae911fa114490eca91c1790640, type: 2}
+      objectReference: {fileID: 11400000, guid: b2c3d4e5f678901234567890abcdef01, type: 2}
     - target: {fileID: 8515852256048443046, guid: c5e1e22a0e596224082ce8b56e773932, type: 3}
       propertyPath: selectableType
       value: 1

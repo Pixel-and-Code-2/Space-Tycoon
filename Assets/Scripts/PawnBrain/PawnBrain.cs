@@ -38,6 +38,21 @@ public class PawnBrain : IControlableSelectable
     private bool onTask;
     private float busyUntilTime = -9999f;
     private Vector3 lastDrawnPathTarget = new Vector3(99999f, 99999f, 99999f);
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void RebuildAlivePlayers()
+    {
+        playersAlive.Clear();
+        PawnBrain[] brains = Object.FindObjectsByType<PawnBrain>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        for (int i = 0; i < brains.Length; i++)
+        {
+            PawnBrain brain = brains[i];
+            if (brain == null) continue;
+            PawnDataController data = brain.GetComponent<PawnDataController>();
+            if (data != null && data.selectableType == SelectableType.Player)
+                playersAlive.Add(brain);
+        }
+    }
     [Header("Sounds")]
     [SerializeField]
     private AudioClip hitSound;
@@ -142,6 +157,7 @@ public class PawnBrain : IControlableSelectable
     }
     void OnDestroy()
     {
+        playersAlive.Remove(this);
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnStart -= OnPlayerTurnStart;
@@ -460,6 +476,7 @@ public class PawnBrain : IControlableSelectable
         {
             TurnManager.Instance.RegisterCombatant(this);
         }
+        GroupMove.OnRevived(this);
     }
 
     public override void OnGetDefendedHit(Vector3 hitDirection, bool isMelee)

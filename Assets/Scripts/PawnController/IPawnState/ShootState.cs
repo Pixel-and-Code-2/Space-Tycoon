@@ -66,10 +66,12 @@ public class ShootState : IPawnState
             PawnDataController attacker = AttackerData;
             PawnDataController target = attackable.GetComponent<PawnDataController>();
             CombatResolver.Preview p = CombatResolver.GetPreview(attacker, target, originPoint, attackable.GetTransform().position);
+            Vector3[] line = new Vector3[] { originPoint, attackable.GetTransform().position };
             if (!p.canAttack)
             {
                 pathDrawer.SetTextColor(Color.red);
                 pathDrawer.SetText(dist.ToString("F1") + "m, " + p.blockMessage, screenPoint);
+                pathDrawer.SetPathPoints(null, line);
             }
             else
             {
@@ -80,14 +82,20 @@ public class ShootState : IPawnState
                 string tag = p.disadvantage ? " помеха" : "";
                 string kind = p.isMelee ? " melee" : "";
                 pathDrawer.SetText(dist.ToString("F1") + "m, " + (accuracy * 100f).ToString("F0") + "%" + tag + kind, screenPoint);
+                pathDrawer.SetPathPoints(line, null);
             }
         }
         else if (hit == ScreenCastHitResult.FloorHit)
         {
             pathDrawer.SetTextColor(Color.red);
             pathDrawer.SetText(dist.ToString("F1") + "m", screenPoint);
+            pathDrawer.SetPathPoints(null, new Vector3[] { originPoint, worldPoint });
         }
-        pathDrawer.SetPathPoints(new Vector3[] { originPoint, worldPoint }, null);
+        else
+        {
+            pathDrawer.SetVisible(false);
+            return;
+        }
         pathDrawer.SetVisible(true);
     }
 

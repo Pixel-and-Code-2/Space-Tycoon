@@ -15,10 +15,12 @@ MonoBehaviour:
   displayName: EnemyMelee
   weaponName: Kleshni
   movePerTurn: 10
+  staminaPerMeter: 10
   maxHp: 40
   strength: 5
   dexterity: 4
-  armorClass: 10
-  meleeDamage: 1d10+3
+  armorClass: 14
+  meleeDamage: 1d4+1
   rangedDamage: 
   attackRange: 3
+  meleeReach: 3

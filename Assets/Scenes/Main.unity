@@ -2408,11 +2408,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1259539432454235774, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 88
+      value: 53
       objectReference: {fileID: 0}
     - target: {fileID: 1259539432454235774, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -19.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1269207526974801490, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_VideoClip
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1306394337026590783, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_SizeDelta.x
@@ -3151,6 +3155,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 32900000, guid: b2c1475ada3b766449e90e76441051c0, type: 3}
     - target: {fileID: 3512753520652296361, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: skipVideoInEditor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512753520652296361, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: skipVideoInPlayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3512753520652296361, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: textAnimationStep
       value: 0.023
       objectReference: {fileID: 0}
@@ -3328,15 +3340,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3817603722422674736, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.b
-      value: 0.14117648
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3817603722422674736, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.g
-      value: 0.07058824
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3817603722422674736, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3922335214259867479, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3709,6 +3721,10 @@ PrefabInstance:
     - target: {fileID: 4920783978361680827, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5027928009806410148, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_VideoClip
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5094041873559221572, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4372,15 +4388,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6848928968837499640, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.b
-      value: 0.14117648
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6848928968837499640, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.g
-      value: 0.07058824
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6848928968837499640, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6879939576106447157, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4569,6 +4585,10 @@ PrefabInstance:
     - target: {fileID: 7189042521263534021, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244753540784988217, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
+      propertyPath: m_VideoClip
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7424828377555118215, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4888,7 +4908,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8474162657400810758, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 123
+      value: 53
       objectReference: {fileID: 0}
     - target: {fileID: 8474162657400810758, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -5057,7 +5077,7 @@ PrefabInstance:
     - target: {fileID: 8821632977412654380, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_VideoClip
       value: 
-      objectReference: {fileID: 32900000, guid: c4648f1df3f31b14381f85332a63007d, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8821632977412654380, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
       propertyPath: m_AudioOutputMode
       value: 1
@@ -8151,17 +8171,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2660236282919759376, guid: c4d40634992a7784da0b5337aa297658, type: 3}
---- !u!114 &355818988 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2827683959006434074, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
-  m_PrefabInstance: {fileID: 144794314}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a01cefcc31e35924b90349e35a5bee21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::IconButtonStyleFiller
 --- !u!1 &362736795 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 426309935783401599, guid: 504453969619fc345b6a12b64b65f670, type: 3}
@@ -10010,17 +10019,6 @@ MonoBehaviour:
   colorA: {r: 1, g: 0.945, b: 0.851, a: 1}
   colorB: {r: 0.863, g: 0.369, b: 0.349, a: 1}
   duration: 1
---- !u!114 &535593526 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7208302941297284740, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
-  m_PrefabInstance: {fileID: 144794314}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a01cefcc31e35924b90349e35a5bee21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::IconButtonStyleFiller
 --- !u!64 &542120376
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -34341,9 +34339,9 @@ MonoBehaviour:
   playerSelectorBrain: {fileID: 1569542973}
   enemySelectorBrain: {fileID: 1569542978}
   pathDrawer: {fileID: 144794315}
-  shootOnMoveButton: {fileID: 355818988}
+  shootOnMoveButton: {fileID: 0}
   toggleShootOnMoveAction: {fileID: -8480799163055771326, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
-  startReloadButton: {fileID: 535593526}
+  startReloadButton: {fileID: 0}
   startReloadAction: {fileID: 1506291196024978629, guid: c4dfaef7a94f6a349a7f05b683214c5d, type: 3}
   _currentSelectedPawn: {fileID: 0}
 --- !u!114 &1569542975
@@ -44490,8 +44488,8 @@ VideoPlayer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1850942099}
-  m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 4f897a870d31a8940b6ee6a5ecc8668d, type: 3}
+  m_Enabled: 0
+  m_VideoClip: {fileID: 0}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -44511,7 +44509,7 @@ VideoPlayer:
   m_EnabledAudioTracks: 
   m_DirectAudioMutes: 
   m_ControlledAudioTrackCount: 0
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_SkipOnDrop: 0
   m_Looping: 1
   m_WaitForFirstFrame: 0

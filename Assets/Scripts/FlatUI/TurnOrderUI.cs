@@ -20,6 +20,8 @@ public class TurnOrderUI : MonoBehaviour
             TurnManager.Instance.OnTurnQueueChanged += Refresh;
             TurnManager.Instance.OnTriggerZoneExit += Hide;
         }
+        if (UILayersController.Instance != null)
+            UILayersController.Instance.OnGameResumed += OnGameResumed;
         Hide();
     }
 
@@ -30,6 +32,15 @@ public class TurnOrderUI : MonoBehaviour
             TurnManager.Instance.OnTurnQueueChanged -= Refresh;
             TurnManager.Instance.OnTriggerZoneExit -= Hide;
         }
+        if (UILayersController.Instance != null)
+            UILayersController.Instance.OnGameResumed -= OnGameResumed;
+    }
+
+    void OnGameResumed()
+    {
+        if (TurnManager.Instance == null || TurnManager.Instance.RoundQueue == null
+            || TurnManager.Instance.RoundQueue.Count == 0)
+            Hide();
     }
 
     private void Hide()

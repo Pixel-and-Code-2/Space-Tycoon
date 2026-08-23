@@ -65,20 +65,17 @@ public class PawnController : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Debug.LogError("Awake met second PawnController instance");
-        }
+        Instance = this;
         SetSelectorBrain(GetComponent<ISelectorBrain>());
         clickableItemsController = GetComponent<ClickableItemsController>();
     }
 
     void Start()
     {
-        if (toggleShootOnMoveAction != null)
-            toggleShootOnMoveAction.action.Enable();
-        if (startReloadAction != null)
-            startReloadAction.action.Enable();
+        if (shootOnMoveButton != null)
+            shootOnMoveButton.gameObject.SetActive(false);
+        if (startReloadButton != null)
+            startReloadButton.gameObject.SetActive(false);
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurn;
@@ -156,60 +153,31 @@ public class PawnController : MonoBehaviour
         }
         isValidStage1 = false;
         isValidStage2 = false;
-
-        if (toggleShootOnMoveAction != null && toggleShootOnMoveAction.action.triggered && currentSelectedPawn != null)
-        {
-            ToggleShootOnMove();
-        }
-        if (startReloadAction != null && startReloadAction.action.triggered && currentSelectedPawn != null)
-        {
-            StartReload();
-        }
     }
 
     public bool IsInCombat()
     {
         return HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f;
     }
+
+    public bool CanEnterShootMode()
+    {
+        if (!IsInCombat()) return false;
+        if (currentSelectedPawn == null) return false;
+        if (currentSelectedPawn.IsMoving()) return false;
+        return true;
+    }
+
     public void ToggleShootOnMove()
     {
-        if (currentSelectedPawn == null) return;
-        if (!IsInCombat()) return;
-        PawnDataController data = currentSelectedPawn.PawnData;
-        if (data == null) return;
-        if (data.WalkedDistance > 0.5f || data.ShotAmount > 0.5f) return;
-        data.SetHasMovedThisTurn(!data.HasMovedThisTurn);
-        UpdateMoveOnShootButtonColor();
     }
     public void UpdateMoveOnShootButtonColor()
     {
-        if (!currentSelector.SyncUI) return;
-        if (currentSelectedPawn == null || !IsInCombat())
-        {
-            shootOnMoveButton.TurnOffButton();
-            return;
-        }
-        PawnDataController data = currentSelectedPawn.PawnData;
-        bool isOn = data != null && data.HasMovedThisTurn;
-        bool hasWalked = data != null && data.WalkedDistance > 0.5f;
-        bool hasShot = data != null && data.ShotAmount > 0.5f;
-        bool locked = hasWalked || hasShot;
-        if (isOn)
-        {
-            shootOnMoveButton.TurnOnButton();
-            if (locked)
-                shootOnMoveButton.SetInteractable(false);
-        }
-        else
-        {
-            shootOnMoveButton.TurnOffButton();
-            if (!locked)
-                shootOnMoveButton.SetInteractable(true);
-        }
+        if (shootOnMoveButton != null && shootOnMoveButton.gameObject.activeSelf)
+            shootOnMoveButton.gameObject.SetActive(false);
     }
     public void StartReload()
     {
-        UpdateStartReloadButtonColor();
     }
 
     public void OnTriggerZoneExit()
@@ -217,9 +185,8 @@ public class PawnController : MonoBehaviour
     }
     public void UpdateStartReloadButtonColor()
     {
-        if (!currentSelector.SyncUI) return;
-        if (startReloadButton != null)
-            startReloadButton.TurnOffButton();
+        if (startReloadButton != null && startReloadButton.gameObject.activeSelf)
+            startReloadButton.gameObject.SetActive(false);
     }
 
     void OnValidate()

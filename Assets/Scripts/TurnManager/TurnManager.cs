@@ -713,6 +713,27 @@ public class TurnManager : MonoBehaviour
         OnTurnQueueChanged?.Invoke();
     }
 
+    public void AbortCombatForMenu()
+    {
+        bool hadCombat = roundQueue.Count > 0;
+        if (HandleInittingGlobalVars.globalParameters != null
+            && HandleInittingGlobalVars.globalParameters.parametersDict != null)
+        {
+            if (HandleInittingGlobalVars.globalParameters.parametersDict.TryGetValue(
+                    HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY, out float step)
+                && step > 0.5f)
+                hadCombat = true;
+            HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 0f;
+        }
+        ClearTurnQueue();
+        CurrentActor = null;
+        turnInProgress = false;
+        lastActorSide = (SelectableType)(-1);
+        if (hadCombat)
+            OnTriggerZoneExit?.Invoke();
+        SyncEndTurnButtonsWithMovement();
+    }
+
     private void PruneDeadFromQueue()
     {
         bool changed = false;

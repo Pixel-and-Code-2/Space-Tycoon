@@ -2,8 +2,6 @@ using UnityEngine;
 
 public static class CombatResolver
 {
-    public const float MeleeReach = 3f;
-
     public struct Preview
     {
         public bool canAttack;
@@ -35,10 +33,11 @@ public static class CombatResolver
         }
         p.distance = Vector3.Distance(attackerPos, targetPos);
         float range = attacker.AttackRange;
-        p.isMelee = !attacker.HasRanged || p.distance <= MeleeReach;
+        float reach = attacker.MeleeReach;
+        p.isMelee = !attacker.HasRanged || p.distance <= reach;
         if (p.isMelee)
         {
-            if (p.distance > MeleeReach + 0.05f)
+            if (p.distance > reach + 0.05f)
             {
                 p.blockMessage = "Слишком далеко";
                 return p;
@@ -57,6 +56,13 @@ public static class CombatResolver
             bool rangeDisadv = p.distance >= range - 0.05f;
             p.disadvantage = attacker.HasMovedThisTurn || rangeDisadv;
         }
+        float cost = attacker.GetAttackStaminaCost(p.isMelee);
+        if (attacker.Stamina < cost - 0.001f)
+        {
+            p.canAttack = false;
+            p.blockMessage = "Нет стамины";
+            return p;
+        }
         int mod = p.isMelee ? Mathf.RoundToInt(attacker.Strength) : Mathf.RoundToInt(attacker.Dexterity);
         int ac = Mathf.RoundToInt(target.ArmorClass);
         p.hitChance = HitChance(mod, ac, p.disadvantage);
@@ -71,7 +77,9 @@ public static class CombatResolver
         r.isMelee = p.isMelee;
         r.hitChance = p.hitChance;
         r.blockMessage = p.blockMessage;
-        if (!p.canAttack) return r;
+        if (!r.canAttack) return r;
+
+        attacker.SpendStamina(attacker.GetAttackStaminaCost(p.isMelee));
 
         int mod = p.isMelee ? Mathf.RoundToInt(attacker.Strength) : Mathf.RoundToInt(attacker.Dexterity);
         int ac = Mathf.RoundToInt(target.ArmorClass);
@@ -119,13 +127,11 @@ public static class CombatResolver
 
     static bool HasWallBetween(Vector3 from, Vector3 to)
     {
-        Vector3 a = from + Vector3.up * 1.2f;
-        Vector3 b = to + Vector3.up * 1.2f;
-        Vector3 dir = b - a;
+        Vector3 dir = to - from;
         float dist = dir.magnitude;
         if (dist < 0.05f) return false;
         int mask = LayerMask.GetMask("Wall");
-        if (Physics.Raycast(a, dir / dist, out RaycastHit hit, dist, mask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(from, dir / dist, out RaycastHit hit, dist, mask, QueryTriggerInteraction.Ignore))
             return true;
         return false;
     }

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a68dc6b262965541a1683a4c7167470, type: 3}
-  m_Name: CombatantEnemyShooter
+  m_Name: CombatantEnemyMeleeReinforced
   m_EditorClassIdentifier: Assembly-CSharp::CombatantStats
-  displayName: EnemyShooter
-  weaponName: Vintovka
-  movePerTurn: 9
-  staminaPerMeter: 11
-  maxHp: 36
-  strength: 3
-  dexterity: 8
-  armorClass: 13
-  meleeDamage: 1d3+1
-  rangedDamage: 1d4+1
-  attackRange: 10
-  meleeReach: 1
+  displayName: EnemyMeleeReinforced
+  weaponName: Kleshni
+  movePerTurn: 8
+  staminaPerMeter: 12
+  maxHp: 52
+  strength: 6
+  dexterity: 3
+  armorClass: 14
+  meleeDamage: 1d4+2
+  rangedDamage: 
+  attackRange: 3
+  meleeReach: 3

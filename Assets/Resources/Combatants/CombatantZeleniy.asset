@@ -15,10 +15,12 @@ MonoBehaviour:
   displayName: Zeleniy
   weaponName: Pistolet
   movePerTurn: 9
+  staminaPerMeter: 11
   maxHp: 32
   strength: 4
   dexterity: 7
-  armorClass: 11
-  meleeDamage: 1d6
-  rangedDamage: 1d6+3
+  armorClass: 13
+  meleeDamage: 3d8
+  rangedDamage: 3d8+12
   attackRange: 7
+  meleeReach: 1

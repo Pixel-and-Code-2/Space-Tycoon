@@ -243,16 +243,21 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
     public override IPawnState PollChangeState()
     {
+        if (currentControlType == ControlType.attack
+            && (PawnController.Instance == null || !PawnController.Instance.CanEnterShootMode()))
+        {
+            currentControlType = ControlType.walk;
+        }
+
+        UpdateControlButtons();
+
         IPawnState newState = null;
         if (currentControlType == ControlType.attack)
             newState = shootState;
         else newState = walkState;
 
         if (newState != PawnController.Instance.currentState)
-        {
-            UpdateControlButtons();
             return newState;
-        }
         return null;
     }
     public override (ISelectable selectable, Vector3 worldPoint) PollSelectPosForState()
@@ -461,27 +466,29 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
 
     private void UpdateControlButtons()
     {
+        bool canShoot = PawnController.Instance != null && PawnController.Instance.CanEnterShootMode();
+        if (!canShoot && currentControlType == ControlType.attack)
+            currentControlType = ControlType.walk;
+
         if (attackButton != null)
         {
             if (currentControlType == ControlType.walk)
-            {
                 attackButton.TurnOffButton();
-            }
             else
-            {
                 attackButton.TurnOnButton();
-            }
+            attackButton.SetInteractable(canShoot);
         }
     }
 
     public void ToggleControlType()
     {
-        currentControlType = currentControlType == ControlType.walk ? ControlType.attack : ControlType.walk;
-        UpdateControlButtons();
+        SetControlTypeTo(currentControlType == ControlType.walk ? false : true);
     }
 
     public void SetControlTypeTo(bool isWalk)
     {
+        if (!isWalk && (PawnController.Instance == null || !PawnController.Instance.CanEnterShootMode()))
+            isWalk = true;
         currentControlType = isWalk ? ControlType.walk : ControlType.attack;
         UpdateControlButtons();
     }

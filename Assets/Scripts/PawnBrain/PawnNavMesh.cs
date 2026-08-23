@@ -11,7 +11,9 @@ public class PawnNavMesh : MonoBehaviour
     private PawnDataController dataController;
     public NavMeshAgent navMeshAgent;
     public Collider col;
-    private float distanceTravelling = 0f;
+    private float pendingPathMeters = 0f;
+    private Vector3 moveStartPos;
+    private bool trackStaminaSpend = false;
     [HideInInspector]
     public Vector3 targetPosition { get; private set; } = Vector3.zero;
     private bool isMoving = false;
@@ -52,13 +54,11 @@ public class PawnNavMesh : MonoBehaviour
     {
         if (isDeath == 1)
         {
-            // col.enabled = false;
             if (navMeshAgent != null) navMeshAgent.enabled = false;
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
         }
         if (isDeath == 0)
         {
-            // Enabling NavMeshAgent synchronously can freeze the Editor when the corpse is off-mesh.
             if (isActiveAndEnabled)
                 StartCoroutine(EnableNavAgentDeferred());
             else if (navMeshAgent != null)
@@ -148,7 +148,6 @@ public class PawnNavMesh : MonoBehaviour
         {
             selectableType = SelectableType.Dead;
         }
-        // Debug.Log("OnLoadData: " + selectableType + " " + gameObject.name + " layer: " + gameObject.layer + " " + LayerMask.NameToLayer("DeadPawn"));
 
         if (selectableType != SelectableType.Dead)
         {
@@ -184,9 +183,9 @@ public class PawnNavMesh : MonoBehaviour
         }
     }
 
-    private float GetAvDist()
+    float GetMaxMoveMeters(bool ignoreStamina)
     {
-        return dataController.GetParameterValue(PawnDataController.AVAILABLE_DISTANCE_KEY);
+        return ignoreStamina ? 99999f : dataController.MaxMoveMetersFromStamina;
     }
 
     public void TravelToPosition(Vector3 position)
@@ -196,69 +195,69 @@ public class PawnNavMesh : MonoBehaviour
 
     public void TravelToPosition(Vector3 position, bool ignoreStamina)
     {
-        NavMeshHit navHit;
-        if (!NavMesh.SamplePosition(position, out navHit, dataController.maxSampleDistance, NavMesh.AllAreas))
+        NavMeshPathCost.PathPlan plan = NavMeshPathCost.Plan(navMeshAgent, position, dataController.maxSampleDistance);
+        if (!plan.valid)
         {
+            if (ignoreStamina && NavMeshPathCost.TrySample(position, dataController.maxSampleDistance, out Vector3 sampled))
+            {
+                navMeshAgent.SetDestination(sampled);
+                targetPosition = sampled;
+                cachedTargetPositionValid = false;
+                isMoving = true;
+                TurnManager.Instance.RegisterMovingPawn(gameObject);
+            }
             return;
         }
-        Vector3 samplePosition = navHit.position;
 
-        distanceTravelling = 0f;
-        NavMeshPath path = new NavMeshPath();
-        float limit = ignoreStamina ? 99999f : GetAvDist();
+        pendingPathMeters = 0f;
+        plan = NavMeshPathCost.ClampMeters(plan, GetMaxMoveMeters(ignoreStamina));
+        if (!plan.valid || plan.pathMeters <= 0.001f) return;
 
-        if (navMeshAgent.CalculatePath(samplePosition, path))
-        {
-            for (int i = 0; i < path.corners.Length - 1; i++)
-            {
-                Vector3 pointPrev = path.corners[i];
-                Vector3 pointNext = path.corners[i + 1];
-                float dist = Vector3.Distance(pointPrev, pointNext);
+        moveStartPos = transform.position;
+        trackStaminaSpend = !ignoreStamina;
 
-                if (!ignoreStamina && distanceTravelling + dist > limit)
-                {
-                    float sectionDistance = (limit - distanceTravelling) / dist;
-                    Vector3 pointInTheMiddleOfTheSection = Vector3.Lerp(pointPrev, pointNext, sectionDistance);
-                    distanceTravelling += sectionDistance * dist;
+        navMeshAgent.SetDestination(plan.destination);
+        targetPosition = plan.destination;
+        cachedTargetPositionValid = false;
+        pendingPathMeters = plan.pathMeters;
 
-                    navMeshAgent.SetDestination(pointInTheMiddleOfTheSection);
-                    targetPosition = pointInTheMiddleOfTheSection;
-                    cachedTargetPositionValid = false;
-
-                    AddWalkedDistance(limit);
-                    isMoving = true;
-                    TurnManager.Instance.RegisterMovingPawn(gameObject);
-                    return;
-                }
-                distanceTravelling += dist;
-            }
-
-            navMeshAgent.SetDestination(samplePosition);
-            targetPosition = samplePosition;
-            cachedTargetPositionValid = false;
-
-            if (!ignoreStamina) AddWalkedDistance(distanceTravelling);
-            isMoving = true;
-            TurnManager.Instance.RegisterMovingPawn(gameObject);
-        }
-        else if (ignoreStamina)
-        {
-            navMeshAgent.SetDestination(samplePosition);
-            targetPosition = samplePosition;
-            cachedTargetPositionValid = false;
-            isMoving = true;
-            TurnManager.Instance.RegisterMovingPawn(gameObject);
-        }
+        isMoving = true;
+        TurnManager.Instance.RegisterMovingPawn(gameObject);
     }
 
-    private void AddWalkedDistance(float distance)
+    void ChargeMoveStamina()
     {
-        dataController.SetParameterValue(PawnDataController.AVAILABLE_DISTANCE_KEY, GetAvDist() - distance);
-        dataController.SetParameterValue(
-            PawnDataController.WALKED_KEY,
-            dataController.GetParameterValue(PawnDataController.WALKED_KEY) + distance
-        );
+        if (!trackStaminaSpend) return;
+        trackStaminaSpend = false;
+
+        float straight = HorizontalDistance(moveStartPos, transform.position);
+        float agentPath = NavMeshPathCost.AgentPathMeters(navMeshAgent);
+        float chargeMeters = Mathf.Max(straight, agentPath);
+        if (chargeMeters < 0.15f) chargeMeters = straight;
+
+        dataController.SpendMoveMeters(chargeMeters);
+        pendingPathMeters = 0f;
     }
+
+    void FinishMove()
+    {
+        ChargeMoveStamina();
+        isMoving = false;
+        SetTypeOfModifierVolumes(-1, -1);
+        navMeshAgent.ResetPath();
+        pendingPathMeters = 0f;
+        if (TurnManager.Instance != null)
+            TurnManager.Instance.UnregisterMovingPawn(gameObject);
+        OnMoveStopped?.Invoke();
+    }
+
+    static float HorizontalDistance(Vector3 a, Vector3 b)
+    {
+        a.y = 0f;
+        b.y = 0f;
+        return Vector3.Distance(a, b);
+    }
+
     protected virtual void Update()
     {
         if (isMoving)
@@ -269,13 +268,7 @@ public class PawnNavMesh : MonoBehaviour
                 {
                     if (!navMeshAgent.hasPath || navMeshAgent.velocity.sqrMagnitude == 0f)
                     {
-                        isMoving = false;
-                        SetTypeOfModifierVolumes(-1, -1);
-                        navMeshAgent.ResetPath();
-                        distanceTravelling = 0f;
-                        if (TurnManager.Instance != null)
-                            TurnManager.Instance.UnregisterMovingPawn(gameObject);
-                        OnMoveStopped?.Invoke();
+                        FinishMove();
                     }
                 }
             }
@@ -288,69 +281,64 @@ public class PawnNavMesh : MonoBehaviour
         {
             return (cachedPointsAvailable, cachedPointsOutOfRange);
         }
-        else
-        {
-            cachedTargetPositionValid = false;
-        }
+        cachedTargetPositionValid = false;
 
-        NavMeshHit navHit;
-        if (!NavMesh.SamplePosition(position, out navHit, dataController.maxSampleDistance, NavMesh.AllAreas))
-        {
+        NavMeshPathCost.PathPlan plan = NavMeshPathCost.Plan(navMeshAgent, position, dataController.maxSampleDistance);
+        if (!plan.valid)
             return (null, null);
-        }
-        Vector3 samplePosition = navHit.position;
 
-        NavMeshPath path = new NavMeshPath();
-        if (navMeshAgent.CalculatePath(samplePosition, path))
-        {
-            (cachedPointsAvailable, cachedPointsOutOfRange) = DividePath(path.corners);
-            cachedTargetPosition = position;
-            cachedTargetPositionValid = true;
-            return (cachedPointsAvailable, cachedPointsOutOfRange);
-        }
-        return (null, null);
+        float budgetMeters = UsesStaminaBudget()
+            ? dataController.MaxMoveMetersFromStamina
+            : 99999f;
+        (cachedPointsAvailable, cachedPointsOutOfRange) = DividePath(plan.corners, plan.pathMeters, budgetMeters);
+        cachedTargetPosition = position;
+        cachedTargetPositionValid = true;
+        return (cachedPointsAvailable, cachedPointsOutOfRange);
     }
 
-    (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) DividePath(Vector3[] points)
+    (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) DividePath(Vector3[] corners, float fullMeters, float budgetMeters)
     {
-        float limit = GetAvDist() + distanceTravelling;
-        if (Mathf.Abs(limit) < 0.001f) return (null, points);
-        if (limit < 0f) return (points, null);
+        if (corners == null || corners.Length < 2) return (null, null);
+        if (budgetMeters <= 0.001f) return (null, corners);
+        if (fullMeters <= budgetMeters + 0.001f) return (corners, null);
 
-        float distCalc = 0f;
-        for (int i = 0; i < points.Length - 1; i++)
+        Vector3 splitPoint = NavMeshPathCost.PointAtDistance(corners, budgetMeters, out _);
+        float walked = 0f;
+        for (int i = 0; i < corners.Length - 1; i++)
         {
-            float segmentDist = Vector3.Distance(points[i], points[i + 1]);
-
-            if (distCalc + segmentDist > limit)
+            float segmentDist = Vector3.Distance(corners[i], corners[i + 1]);
+            if (walked + segmentDist >= budgetMeters - 0.001f)
             {
-                float remaining = limit - distCalc;
-                float ratio = remaining / segmentDist;
-
-                Vector3 splitPoint = Vector3.Lerp(points[i], points[i + 1], ratio);
-
                 Vector3[] pointsAvailable = new Vector3[i + 2];
-                System.Array.Copy(points, pointsAvailable, i + 1);
-                pointsAvailable[^1] = splitPoint;
+                System.Array.Copy(corners, pointsAvailable, i + 1);
+                pointsAvailable[i + 1] = splitPoint;
 
-                Vector3[] pointsOutOfRange = new Vector3[points.Length - i];
+                Vector3[] pointsOutOfRange = new Vector3[corners.Length - i];
                 pointsOutOfRange[0] = splitPoint;
-                System.Array.Copy(points, i + 1, pointsOutOfRange, 1, points.Length - i - 1);
-
+                System.Array.Copy(corners, i + 1, pointsOutOfRange, 1, corners.Length - i - 1);
                 return (pointsAvailable, pointsOutOfRange);
             }
-            distCalc += segmentDist;
+            walked += segmentDist;
         }
-        return (points, null);
+        return (corners, null);
+    }
+
+    bool UsesStaminaBudget()
+    {
+        if (dataController.selectableType != SelectableType.Player) return false;
+        if (PawnController.Instance == null) return false;
+        return PawnController.Instance.IsInCombat();
     }
 
     public void ResetMovement()
     {
+        if (trackStaminaSpend)
+            ChargeMoveStamina();
         if (navMeshAgent.enabled)
         {
             navMeshAgent.ResetPath();
         }
-        distanceTravelling = 0f;
+        pendingPathMeters = 0f;
         targetPosition = Vector3.zero;
         bool wasMoving = isMoving;
         isMoving = false;

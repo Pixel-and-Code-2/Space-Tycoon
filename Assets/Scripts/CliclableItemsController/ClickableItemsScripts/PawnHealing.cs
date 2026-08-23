@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(PawnBrain))]
+[RequireComponent(typeof(ClickableItem))]
 public class PawnHealing : IScriptForClickable
 {
     [SerializeField]
@@ -29,6 +30,13 @@ public class PawnHealing : IScriptForClickable
         if (IsTask && IsSide) return;
         if (pawnBrain == null) pawnBrain = GetComponent<PawnBrain>();
         if (!CanRevive(pawnBrain)) return;
+
+        ClickableItem item = GetComponent<ClickableItem>();
+        PawnDataController healerData = item?.taskExecutor?.PawnData;
+        float reviveCost = GlobalSettingsAssets.GetStaminaCosts().reviveCost;
+        if (healerData != null && !healerData.CanSpendStamina(reviveCost)) return;
+        healerData?.SpendStamina(reviveCost);
+
         pawnBrain.OnHeal();
     }
 }

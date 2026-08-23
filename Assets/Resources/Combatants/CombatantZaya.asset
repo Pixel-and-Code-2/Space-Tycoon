@@ -15,10 +15,12 @@ MonoBehaviour:
   displayName: Zaya
   weaponName: Molot
   movePerTurn: 11
+  staminaPerMeter: 9
   maxHp: 44
   strength: 8
   dexterity: 5
-  armorClass: 11
-  meleeDamage: 1d6
+  armorClass: 14
+  meleeDamage: 3d8+3
   rangedDamage: 
   attackRange: 1
+  meleeReach: 3
