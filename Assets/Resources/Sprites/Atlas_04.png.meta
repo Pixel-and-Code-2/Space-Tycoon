@@ -101,7 +101,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 762
-        y: 161
+        y: 160
         width: 165
         height: 68
       alignment: 0
@@ -123,7 +123,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 589
-        y: 161
+        y: 160
         width: 165
         height: 68
       alignment: 0
@@ -145,7 +145,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 546
-        y: 700
+        y: 699
         width: 167
         height: 67
       alignment: 0
@@ -167,7 +167,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 546
-        y: 775
+        y: 774
         width: 167
         height: 67
       alignment: 0
@@ -189,7 +189,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 354
-        y: 955
+        y: 954
         width: 66
         height: 66
       alignment: 0
@@ -211,7 +211,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 209
-        y: 954
+        y: 953
         width: 68
         height: 68
       alignment: 0
@@ -233,7 +233,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 426
-        y: 955
+        y: 954
         width: 66
         height: 66
       alignment: 0
@@ -255,7 +255,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 281
-        y: 954
+        y: 953
         width: 68
         height: 68
       alignment: 0
@@ -277,7 +277,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 577
-        y: 6
+        y: 5
         width: 335
         height: 65
       alignment: 0
@@ -299,7 +299,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 577
-        y: 84
+        y: 83
         width: 335
         height: 65
       alignment: 0
@@ -321,7 +321,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 75
-        y: 959
+        y: 958
         width: 63
         height: 63
       alignment: 0
@@ -343,7 +343,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 142
-        y: 959
+        y: 958
         width: 63
         height: 63
       alignment: 0
@@ -365,7 +365,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 8
-        y: 959
+        y: 958
         width: 63
         height: 63
       alignment: 0
@@ -387,7 +387,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 422
-        y: 375
+        y: 374
         width: 65
         height: 65
       alignment: 0
@@ -431,7 +431,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 360
-        y: 875
+        y: 874
         width: 64
         height: 64
       alignment: 0
@@ -453,7 +453,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 130
-        y: 364
+        y: 363
         width: 86
         height: 86
       alignment: 0
@@ -475,7 +475,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 4
-        y: 270
+        y: 268
         width: 118
         height: 118
       alignment: 0
@@ -497,7 +497,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 4
-        y: 394
+        y: 393
         width: 118
         height: 118
       alignment: 0
@@ -519,7 +519,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 4
-        y: 518
+        y: 517
         width: 118
         height: 118
       alignment: 0
@@ -563,7 +563,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 128
-        y: 270
+        y: 269
         width: 88
         height: 88
       alignment: 0
@@ -585,7 +585,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 198
-        y: 165
+        y: 164
         width: 98
         height: 98
       alignment: 0
@@ -607,7 +607,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 928
-        y: 7
+        y: 6
         width: 91
         height: 67
       alignment: 0
@@ -629,7 +629,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 928
-        y: 82
+        y: 81
         width: 91
         height: 67
       alignment: 0
@@ -651,7 +651,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 181
-        y: 777
+        y: 776
         width: 82
         height: 83
       alignment: 0
@@ -673,7 +673,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 270
-        y: 778
+        y: 777
         width: 81
         height: 81
       alignment: 0
@@ -695,7 +695,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 91
-        y: 778
+        y: 777
         width: 81
         height: 81
       alignment: 0
@@ -717,7 +717,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 270
-        y: 867
+        y: 866
         width: 81
         height: 81
       alignment: 0
@@ -739,7 +739,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 181
-        y: 867
+        y: 866
         width: 81
         height: 81
       alignment: 0
@@ -761,7 +761,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 93
-        y: 867
+        y: 866
         width: 81
         height: 81
       alignment: 0
@@ -783,7 +783,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 5
-        y: 867
+        y: 866
         width: 81
         height: 81
       alignment: 0
@@ -805,7 +805,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 359
-        y: 778
+        y: 777
         width: 81
         height: 81
       alignment: 0
@@ -827,7 +827,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 356
-        y: 466
+        y: 465
         width: 76
         height: 76
       alignment: 0
@@ -849,7 +849,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 438
-        y: 466
+        y: 465
         width: 76
         height: 76
       alignment: 0
@@ -871,7 +871,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 520
-        y: 468
+        y: 467
         width: 76
         height: 76
       alignment: 0
@@ -893,7 +893,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 274
-        y: 466
+        y: 465
         width: 76
         height: 76
       alignment: 0
@@ -915,7 +915,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 192
-        y: 466
+        y: 465
         width: 76
         height: 76
       alignment: 0
@@ -937,7 +937,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 489
-        y: 309
+        y: 308
         width: 28
         height: 28
       alignment: 0
@@ -959,7 +959,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 500
-        y: 933
+        y: 932
         width: 40
         height: 40
       alignment: 0
@@ -981,7 +981,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 499
-        y: 980
+        y: 979
         width: 40
         height: 40
       alignment: 0
@@ -1025,7 +1025,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 499
-        y: 838
+        y: 837
         width: 42
         height: 42
       alignment: 0
@@ -1047,7 +1047,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 500
-        y: 791
+        y: 790
         width: 40
         height: 40
       alignment: 0
@@ -1069,7 +1069,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 718
-        y: 467
+        y: 466
         width: 303
         height: 234
       alignment: 0
@@ -1091,7 +1091,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 718
-        y: 708
+        y: 707
         width: 303
         height: 4
       alignment: 0
@@ -1135,7 +1135,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 603
-        y: 234
+        y: 233
         width: 110
         height: 110
       alignment: 0
@@ -1157,7 +1157,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 603
-        y: 349
+        y: 348
         width: 110
         height: 110
       alignment: 0
@@ -1179,7 +1179,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 603
-        y: 463
+        y: 462
         width: 110
         height: 110
       alignment: 0
@@ -1201,7 +1201,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 603
-        y: 575
+        y: 574
         width: 110
         height: 111
       alignment: 0
@@ -1223,7 +1223,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 462
-        y: 5
+        y: 4
         width: 110
         height: 110
       alignment: 0
@@ -1289,7 +1289,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 526
-        y: 558
+        y: 557
         width: 24
         height: 24
       alignment: 0
@@ -1311,7 +1311,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 527
-        y: 217
+        y: 215
         width: 41
         height: 41
       alignment: 0
@@ -1333,7 +1333,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 527
-        y: 265
+        y: 264
         width: 41
         height: 41
       alignment: 0
@@ -1355,7 +1355,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 527
-        y: 169
+        y: 168
         width: 41
         height: 41
       alignment: 0
@@ -1377,7 +1377,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 527
-        y: 121
+        y: 120
         width: 41
         height: 41
       alignment: 0
@@ -1399,7 +1399,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 527
-        y: 312
+        y: 311
         width: 41
         height: 41
       alignment: 0
@@ -1421,7 +1421,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 423
-        y: 185
+        y: 184
         width: 64
         height: 59
       alignment: 0
@@ -1443,7 +1443,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 318
-        y: 183
+        y: 182
         width: 67
         height: 62
       alignment: 0
@@ -1465,7 +1465,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 21
-        y: 676
+        y: 675
         width: 55
         height: 55
       alignment: 0
@@ -1487,7 +1487,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 20
-        y: 739
+        y: 738
         width: 55
         height: 55
       alignment: 0
@@ -1509,7 +1509,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 21
-        y: 804
+        y: 803
         width: 55
         height: 55
       alignment: 0
@@ -1531,7 +1531,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 311
-        y: 609
+        y: 608
         width: 69
         height: 7
       alignment: 0
@@ -1553,7 +1553,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 311
-        y: 618
+        y: 617
         width: 69
         height: 7
       alignment: 0
@@ -1575,7 +1575,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 311
-        y: 626
+        y: 625
         width: 69
         height: 7
       alignment: 0
@@ -1597,7 +1597,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 312
-        y: 653
+        y: 652
         width: 41
         height: 9
       alignment: 0
@@ -1619,7 +1619,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 312
-        y: 664
+        y: 663
         width: 41
         height: 9
       alignment: 0
@@ -1641,7 +1641,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 312
-        y: 673
+        y: 672
         width: 41
         height: 9
       alignment: 0
@@ -1663,7 +1663,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 312
-        y: 681
+        y: 680
         width: 41
         height: 9
       alignment: 0
@@ -1685,7 +1685,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 312
-        y: 635
+        y: 634
         width: 69
         height: 5
       alignment: 0
@@ -1707,7 +1707,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 312
-        y: 646
+        y: 645
         width: 69
         height: 5
       alignment: 0
@@ -1729,7 +1729,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 312
-        y: 641
+        y: 640
         width: 69
         height: 5
       alignment: 0
@@ -1751,7 +1751,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 555
-        y: 559
+        y: 558
         width: 18
         height: 18
       alignment: 0
@@ -1773,7 +1773,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 555
-        y: 580
+        y: 579
         width: 18
         height: 18
       alignment: 0
@@ -1795,7 +1795,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 555
-        y: 601
+        y: 600
         width: 18
         height: 18
       alignment: 0
@@ -1817,7 +1817,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 578
-        y: 581
+        y: 580
         width: 20
         height: 20
       alignment: 0
@@ -1839,7 +1839,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 578
-        y: 558
+        y: 557
         width: 20
         height: 20
       alignment: 0
@@ -1861,7 +1861,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 90
-        y: 712
+        y: 711
         width: 59
         height: 59
       alignment: 0
@@ -1883,7 +1883,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 90
-        y: 646
+        y: 645
         width: 59
         height: 59
       alignment: 0
@@ -1905,7 +1905,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 379
-        y: 116
+        y: 115
         width: 43
         height: 43
       alignment: 0
@@ -1927,7 +1927,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 332
-        y: 116
+        y: 115
         width: 43
         height: 43
       alignment: 0
@@ -1949,7 +1949,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 332
-        y: 69
+        y: 68
         width: 43
         height: 43
       alignment: 0
@@ -1971,7 +1971,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 379
-        y: 69
+        y: 68
         width: 43
         height: 43
       alignment: 0
@@ -1993,7 +1993,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 162
-        y: 698
+        y: 697
         width: 71
         height: 71
       alignment: 0
@@ -2015,7 +2015,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 153
-        y: 76
+        y: 75
         width: 81
         height: 81
       alignment: 0
@@ -2036,8 +2036,8 @@ TextureImporter:
       name: SkipButtonFG
       rect:
         serializedVersion: 2
-        x: 242
-        y: 76
+        x: 241
+        y: 75
         width: 81
         height: 81
       alignment: 0
@@ -2050,6 +2050,402 @@ TextureImporter:
       bones: []
       spriteID: 2265c03a552d5f84d8f3626425ece140
       internalID: 59653636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconFrameAlly
+      rect:
+        serializedVersion: 2
+        x: 1037
+        y: 827
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 4, y: 4, z: 4, w: 4}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76029c428204fb149ab885b8951c4adc
+      internalID: -1869280353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconFrameEnemy
+      rect:
+        serializedVersion: 2
+        x: 1164
+        y: 827
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 4, y: 4, z: 4, w: 4}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5bbd08d8bae86044babc51acfe683b5
+      internalID: 1142888291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconBGAlly
+      rect:
+        serializedVersion: 2
+        x: 1037
+        y: 622
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7070b3258971e748b072438984ef85d
+      internalID: 1220948446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconBGEnemy
+      rect:
+        serializedVersion: 2
+        x: 1164
+        y: 622
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d21e99a010b89a49bb27785149bf92c
+      internalID: 824453647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconGusev
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 426
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f54126c72653a144089f7ea28704ea6f
+      internalID: 1483492769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconShooterEnemyV1
+      rect:
+        serializedVersion: 2
+        x: 1162
+        y: 425
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3f53d2b57e145d44a739f0ea9f55a64
+      internalID: 1219271906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconMeleeEnemyV1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 621
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcc827352b918774796ca50aeeac296b
+      internalID: -1259328762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconMeleeEnemyV2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 425
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60ed9108ab045bc449c05d0ce8d34f77
+      internalID: 1500564670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconZeleniy
+      rect:
+        serializedVersion: 2
+        x: 1042
+        y: 230
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba5a1e934f4ddbb409da2a20d967ea08
+      internalID: -1613648418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconShooterEnemyV2
+      rect:
+        serializedVersion: 2
+        x: 1165
+        y: 229
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb7474d083b111a4b8b62d6508183e4c
+      internalID: 596510691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconMeleeEnemyV3
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 229
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19d4f79b8ebe38f40adcbf9103133793
+      internalID: -1639015187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconZaya
+      rect:
+        serializedVersion: 2
+        x: 1043
+        y: 34
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d8076dd763f094478aced4b40bac11e
+      internalID: 2146112256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconShooterEnemyV3
+      rect:
+        serializedVersion: 2
+        x: 1166
+        y: 33
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01855a44192d5c142b9d12c7f5eab60b
+      internalID: -181612116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TopIconMeleeEnemyV4
+      rect:
+        serializedVersion: 2
+        x: 1289
+        y: 30
+        width: 111
+        height: 195
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4503f87726a278d4091c35660fb62d76
+      internalID: -1975389802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PistolWeaponMask
+      rect:
+        serializedVersion: 2
+        x: 1414
+        y: 247
+        width: 167
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81bc65cf7ef7915498a090bbf49e71ff
+      internalID: 1749871837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PistolWeaponOutline
+      rect:
+        serializedVersion: 2
+        x: 1414
+        y: 169
+        width: 167
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72539547f60cbb94cb9f5094c1852d9d
+      internalID: 98083396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SniperWeaponOutline
+      rect:
+        serializedVersion: 2
+        x: 1413
+        y: 92
+        width: 167
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5113992700a7adc46bc45e4dcde2f4b7
+      internalID: -1331741133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SniperWeaponMask
+      rect:
+        serializedVersion: 2
+        x: 1414
+        y: 16
+        width: 167
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b04b4c845b01ff24581bba99e709e802
+      internalID: -1292730507
       vertices: []
       indices: 
       edges: []
@@ -2105,6 +2501,8 @@ TextureImporter:
       MeleeWeaponOutline: -382811220
       MessageBG: 2139186053
       MessageOutline: -963998881
+      PistolWeaponMask: 1749871837
+      PistolWeaponOutline: 98083396
       PlayerIconFG: -860414281
       PlayerIconGusev: 1337701844
       PlayerIconOutline: -2134628126
@@ -2126,6 +2524,8 @@ TextureImporter:
       SkipButtonFG: 59653636
       SkipButtonHighlight: -1644994851
       SliderHandle: 1747850256
+      SniperWeaponMask: -1292730507
+      SniperWeaponOutline: -1331741133
       SquareHighlighter: -1099174802
       StaminaBG: -389509443
       StaminaFG: -416601994
@@ -2155,6 +2555,20 @@ TextureImporter:
       TextButtonHighlighted: -794199395
       TextButtonOuline: -1197052532
       TextButtonPressed: 796597821
+      TopIconBGAlly: 1220948446
+      TopIconBGEnemy: 824453647
+      TopIconFrameAlly: -1869280353
+      TopIconFrameEnemy: 1142888291
+      TopIconGusev: 1483492769
+      TopIconMeleeEnemyV1: -1259328762
+      TopIconMeleeEnemyV2: 1500564670
+      TopIconMeleeEnemyV3: -1639015187
+      TopIconMeleeEnemyV4: -1975389802
+      TopIconShooterEnemyV1: 1219271906
+      TopIconShooterEnemyV2: 596510691
+      TopIconShooterEnemyV3: -181612116
+      TopIconZaya: 2146112256
+      TopIconZeleniy: -1613648418
       VerticalLine: 1101495467
       WalkAvailableIcon: 805777335
       c: 1957354138

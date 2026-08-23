@@ -247,20 +247,16 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
 
     public override IPawnState PollChangeState()
     {
+        if (currentControlType == ControlType.attack
+            && (PawnController.Instance == null || !PawnController.Instance.CanEnterShootMode()))
+        {
+            currentControlType = ControlType.walk;
+            UpdateControlButtons();
+        }
 
         IPawnState newState = null;
         if (currentControlType == ControlType.attack)
-        {
-            (ISelectable selectable, Vector3 worldPoint, Vector2 screenPoint, ScreenCastHitResult hit) = PollForIntermidiateAiming();
-            if (selectable != null && selectable is IAttackableSelectable attackableSelectable && !meleeState.IsErrorChance(attackableSelectable))
-            {
-                newState = meleeState;
-            }
-            else
-            {
-                newState = shootState;
-            }
-        }
+            newState = shootState;
         else newState = walkState;
         if (newState != PawnController.Instance.currentState)
         {
@@ -277,6 +273,16 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
         }
         if (currentControlType == ControlType.walk && GetClickState(walkClick) || currentControlType == ControlType.attack && GetClickState(attackClick))
         {
+            if (currentControlType == ControlType.walk)
+            {
+                Vector2 mousePosition = Mouse.current.position.ReadValue();
+                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit playerHit, RAYCAST_DISTANCE, LayerMask.GetMask("Player")))
+                {
+                    SetHandleClick(walkClick, false);
+                    return (null, Vector3.zero);
+                }
+            }
             (ISelectable selectable, Vector3 worldPoint, Vector2 screenPoint, ScreenCastHitResult hit) = PollForIntermidiateAiming();
             if (hit != ScreenCastHitResult.SelectableHit)
             {
@@ -370,7 +376,7 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
         }
         if (GetClickState(attackButtonClick))
         {
-            SetControlTypeTo(false);
+            ToggleControlType();
         }
     }
     private void SetHandleClick(InputActionReference action, bool value)
@@ -458,6 +464,10 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
 
     private void UpdateControlButtons()
     {
+        bool canShoot = PawnController.Instance != null && PawnController.Instance.CanEnterShootMode();
+        if (!canShoot && currentControlType == ControlType.attack)
+            currentControlType = ControlType.walk;
+
         if (currentControlType == ControlType.walk)
         {
             walkButton.TurnOffButton();
@@ -468,9 +478,19 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
             attackButton.TurnOffButton();
             walkButton.TurnOnButton();
         }
+        if (attackButton != null)
+            attackButton.SetInteractable(canShoot);
     }
+
+    public void ToggleControlType()
+    {
+        SetControlTypeTo(currentControlType == ControlType.walk ? false : true);
+    }
+
     public void SetControlTypeTo(bool isWalk)
     {
+        if (!isWalk && (PawnController.Instance == null || !PawnController.Instance.CanEnterShootMode()))
+            isWalk = true;
         currentControlType = isWalk ? ControlType.walk : ControlType.attack;
         UpdateControlButtons();
     }

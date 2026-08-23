@@ -1,13 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PawnDataController : MonoBehaviour, IFormulaData
+public class PawnDataController : MonoBehaviour
 {
-    // Static data storages
     [SerializeField]
-    private ParameteredScriptableObject initialPawnData;
-    private ParameteredScriptableObject pawnDataCached;
-    // Additional developing params
+    private CombatantStats combatantStats;
     [Header("Additional Developing params")]
     [SerializeField, Tooltip("Max distance from mouse to walkable area, to show path")]
     public float maxSampleDistance = 5f;
@@ -16,13 +14,31 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     [SerializeField, Tooltip("Override of vertical push when pawn collides with obstacle, -1 to disable")]
     public float verticalPushOverride = 0.2f;
 
-    // Dynamic parameters
-    public Dictionary<string, float> dynamicParameters = new Dictionary<string, float>();
-    private Dictionary<string, float> instanceParameters = new Dictionary<string, float>();
+    float maxHp;
+    float movePerTurn;
+    float staminaPerMeter;
+    float maxStamina;
+    float strength;
+    float dexterity;
+    float armorClass;
+    float attackRange;
+    float meleeReach;
 
-    public const string AVAILABLE_DISTANCE_KEY = "AvailableDistance";
+    float currentHp;
+    float stamina;
+    float walkedMeters;
+    float lastRoundWalked;
+    float shotAmount;
+    float lastRoundShot;
+    float meleeAmount;
+    float lastRoundMelee;
+    float movesToSkip;
+    bool hasMovedThisTurn;
+    float healingsAmount;
+
+    public const string STAMINA_KEY = "Stamina";
+    public const string MAX_STAMINA_KEY = "MaxStamina";
     public const string INITIAL_HP_KEY = "HP";
-    public const string INITIAL_AVAILABLE_DISTANCE_KEY = "SPD";
     public const string AVAILABLE_HEALTH_KEY = "AvailableHealth";
     public const string LAST_ROUND_WALKED_KEY = "LastRoundWalked";
     public const string WALKED_KEY = "WalkedDistance";
@@ -32,13 +48,11 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     public const string MELEE_AMOUNT_KEY = "MeleeAmount";
     public const string MOVES_TO_SKIP_KEY = "MovesToSkip";
     public const string IS_SHOOT_ON_MOVE_KEY = "IsShootOnMove";
-    public const string INITIAL_MAG_AMOUNT_KEY = "MAG";
-    public const string INITIAL_TOTAL_AMMO_KEY = "TotalAmmo";
-    public const string MAG_AMOUNT_KEY = "CurrentMag";
-    public const string TOTAL_AMMO_KEY = "AvailableAmmo";
-    public const string INITIAL_MOVES_TO_RELOAD_KEY = "MovesToReload";
-    public const string AMOUNT_OF_DEFENDED_HITS_KEY = "Defenses";
     public const string AMOUNT_OF_HEALINGS_KEY = "HealingsAmount";
+    public const string DEXTERITY_KEY = "DEX";
+    public const string INITIAL_AVAILABLE_DISTANCE_KEY = "SPD";
+
+    public static event Action<PawnDataController> OnStaminaChanged;
 
     [SerializeField]
     public SelectableType selectableType = SelectableType.Player;
@@ -48,22 +62,83 @@ public class PawnDataController : MonoBehaviour, IFormulaData
     public bool StartDead => startDead;
     public string UNIQUE_ID => "PawnData_" + gameObject.name;
 
+    public CombatantStats Stats => combatantStats;
+    public float MaxHp => maxHp;
+    public float CurrentHp => currentHp;
+    public float MovePerTurn => movePerTurn;
+    public float StaminaPerMeter => staminaPerMeter;
+    public float MaxStamina => maxStamina;
+    public float Stamina => stamina;
+    public float Strength => strength;
+    public float Dexterity => dexterity;
+    public float ArmorClass => armorClass;
+    public float AttackRange => attackRange;
+    public float MeleeReach => meleeReach;
+    public float WalkedMeters => walkedMeters;
+    public bool HasMovedThisTurn => hasMovedThisTurn;
+    public bool HasRanged => combatantStats != null && combatantStats.HasRanged;
+    public float ShotAmount => shotAmount;
+    public float MeleeAmount => meleeAmount;
+    public float MovesToSkip => movesToSkip;
+    public float HealingsAmount => healingsAmount;
+
+    public float MaxMoveMetersFromStamina =>
+        staminaPerMeter > 0.001f ? stamina / staminaPerMeter : 0f;
+
+    public float MoveStaminaCost(float meters) => meters * staminaPerMeter;
+
+    public float RollMeleeDamage() => combatantStats != null ? combatantStats.RollMeleeDamage() : 1f;
+    public float RollRangedDamage() => combatantStats != null ? combatantStats.RollRangedDamage() : 1f;
+
+    public float GetAttackStaminaCost(bool isMelee)
+    {
+        GlobalSettingsAssets.StaminaCostSettings costs = GlobalSettingsAssets.GetStaminaCosts();
+        if (isMelee && HasRanged) return costs.shooterMeleeAttackCost;
+        if (isMelee) return costs.meleeAttackCost;
+        return costs.rangedAttackCost;
+    }
+
+    public bool CanSpendStamina(float amount) => stamina >= amount - 0.001f;
+
+    public bool SpendStamina(float amount)
+    {
+        if (!CanSpendStamina(amount)) return false;
+        stamina = Mathf.Max(0f, stamina - amount);
+        NotifyStaminaChanged();
+        return true;
+    }
+
+    public void SpendMoveMeters(float meters)
+    {
+        if (meters <= 0.001f) return;
+        float cost = MoveStaminaCost(meters);
+        walkedMeters += meters;
+        hasMovedThisTurn = true;
+        SpendStamina(cost);
+    }
+
+    public void RefundMoveMeters(float meters)
+    {
+        if (meters <= 0.001f) return;
+        float refund = MoveStaminaCost(meters);
+        walkedMeters = Mathf.Max(0f, walkedMeters - meters);
+        stamina = Mathf.Min(maxStamina, stamina + refund);
+        NotifyStaminaChanged();
+    }
+
     void OnValidate()
     {
-        if (pawnDataCached != initialPawnData)
-        {
-            pawnDataCached = initialPawnData;
-            ResetKeys();
-        }
+        if (!Application.isPlaying && combatantStats != null)
+            ApplyStatsFromAsset(false);
     }
 
     void Start()
     {
+        ApplyStatsFromAsset(true);
         if (startDead)
         {
             selectableType = SelectableType.Dead;
-            // Ensure HP starts at 0 for dead pawns
-            dynamicParameters[AVAILABLE_HEALTH_KEY] = 0f;
+            currentHp = 0f;
         }
         if (TurnManager.Instance != null)
         {
@@ -72,25 +147,57 @@ public class PawnDataController : MonoBehaviour, IFormulaData
             TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
             TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
         }
-        RollInstanceParameters();
-        ResetKeys();
         SaveHub.Instance.OnLoad += OnLoadData;
         SaveHub.Instance.OnSave += OnSaveData;
         TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
         TurnManager.Instance.OnTriggerZoneEnter += OnTriggerZoneEnter;
     }
 
+    void ApplyStatsFromAsset(bool resetRuntime)
+    {
+        if (combatantStats == null) return;
+        maxHp = combatantStats.RollMaxHp();
+        staminaPerMeter = combatantStats.RollStaminaPerMeter();
+        maxStamina = GlobalSettingsAssets.GetStaminaCosts().maxStamina;
+        movePerTurn = staminaPerMeter > 0.001f ? maxStamina / staminaPerMeter : combatantStats.RollMove();
+        strength = combatantStats.RollStrength();
+        dexterity = combatantStats.RollDexterity();
+        armorClass = combatantStats.RollArmorClass();
+        attackRange = combatantStats.RollAttackRange();
+        meleeReach = combatantStats.RollMeleeReach();
+        if (resetRuntime)
+            ResetRuntimeFromStats();
+    }
+
+    void ResetRuntimeFromStats()
+    {
+        currentHp = maxHp;
+        stamina = maxStamina;
+        walkedMeters = 0f;
+        lastRoundWalked = 0f;
+        shotAmount = 0f;
+        lastRoundShot = 0f;
+        meleeAmount = 0f;
+        lastRoundMelee = 0f;
+        movesToSkip = 0f;
+        hasMovedThisTurn = false;
+        if (selectableType == SelectableType.Enemy
+            && HandleInittingGlobalVars.globalParameters != null
+            && HandleInittingGlobalVars.globalParameters.parametersDict.ContainsKey(HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY))
+            healingsAmount = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
+        else
+            healingsAmount = 0f;
+    }
+
     private void OnTriggerZoneExit()
     {
         ResetActionPoints();
-        SetParameterValue(MOVES_TO_SKIP_KEY, 0);
-        SetParameterValue(AMOUNT_OF_DEFENDED_HITS_KEY, 0);
+        movesToSkip = 0f;
     }
     private void OnTriggerZoneEnter()
     {
-        // SetParameterValue(MOVES_TO_SKIP_KEY, 0);
-        SetParameterValue(AMOUNT_OF_DEFENDED_HITS_KEY, 0);
     }
+
     void OnEnable()
     {
         if (TurnManager.Instance != null)
@@ -131,216 +238,120 @@ public class PawnDataController : MonoBehaviour, IFormulaData
         PawnBrain brain = GetComponent<PawnBrain>();
         return brain != null && TurnManager.Instance.CurrentActor == brain;
     }
+
     private void OnLoadData(LoadedData data)
     {
-        dynamicParameters = data.GetData("DynamicParameters", UNIQUE_ID, dynamicParameters);
+        currentHp = data.GetData("CurrentHp", UNIQUE_ID, currentHp);
+        stamina = data.GetData("Stamina", UNIQUE_ID, data.GetData("AvailableDistance", UNIQUE_ID, stamina));
+        walkedMeters = data.GetData("WalkedDistance", UNIQUE_ID, walkedMeters);
+        hasMovedThisTurn = data.GetData("HasMovedThisTurn", UNIQUE_ID, hasMovedThisTurn ? 1f : 0f) > 0.5f;
+        healingsAmount = data.GetData("HealingsAmount", UNIQUE_ID, healingsAmount);
         string selectableTypeKey = DataCompressor.GetRecordName("SelectableType", UNIQUE_ID);
         bool hasSelectableTypeInSave = data.intData != null && data.intData.ContainsKey(selectableTypeKey);
         selectableType = (SelectableType)data.GetData("SelectableType", UNIQUE_ID, (int)selectableType);
         if (startDead && !hasSelectableTypeInSave)
         {
             selectableType = SelectableType.Dead;
-            dynamicParameters[AVAILABLE_HEALTH_KEY] = 0f;
+            currentHp = 0f;
         }
-        PawnController.Instance.UpdateStartReloadButtonColor();
     }
+
     private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
     {
         addSaveData(new SaveRecord[] {
-            new SaveRecord() {
-                recordName = "DynamicParameters",
-                recordType = SaveRecordType.dictionary,
-                dictValue = dynamicParameters
-            },
-            new SaveRecord() {
-                recordName = "SelectableType",
-                recordType = SaveRecordType.integerNumber,
-                intValue = (int)selectableType
-            }
+            new SaveRecord() { recordName = "CurrentHp", recordType = SaveRecordType.floatNumber, floatValue = currentHp },
+            new SaveRecord() { recordName = "Stamina", recordType = SaveRecordType.floatNumber, floatValue = stamina },
+            new SaveRecord() { recordName = "WalkedDistance", recordType = SaveRecordType.floatNumber, floatValue = walkedMeters },
+            new SaveRecord() { recordName = "HasMovedThisTurn", recordType = SaveRecordType.floatNumber, floatValue = hasMovedThisTurn ? 1f : 0f },
+            new SaveRecord() { recordName = "HealingsAmount", recordType = SaveRecordType.floatNumber, floatValue = healingsAmount },
+            new SaveRecord() { recordName = "SelectableType", recordType = SaveRecordType.integerNumber, intValue = (int)selectableType }
         }, UNIQUE_ID);
-    }
-    void RollInstanceParameters()
-    {
-        if (initialPawnData == null)
-            return;
-        if (HandleInittingGlobalVars.globalParameters != null)
-            HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.RANDOM_KEY] = Random.value;
-        initialPawnData.SetDirty();
-        initialPawnData.RebuildParametersDict();
-        instanceParameters.Clear();
-        foreach (var kv in initialPawnData.parametersDict)
-            instanceParameters[kv.Key] = kv.Value;
-    }
-
-    Dictionary<string, float> GetInstanceParametersDict()
-    {
-        if (instanceParameters.Count > 0)
-            return instanceParameters;
-        if (initialPawnData == null)
-            return instanceParameters;
-        return initialPawnData.GetParametersDict();
-    }
-
-    private void ResetKeys()
-    {
-        var dict = GetInstanceParametersDict();
-        if (dict.ContainsKey(INITIAL_HP_KEY))
-        {
-            dynamicParameters[AVAILABLE_HEALTH_KEY] = dict[INITIAL_HP_KEY];
-        }
-        if (dict.ContainsKey(INITIAL_AVAILABLE_DISTANCE_KEY))
-        {
-            dynamicParameters[AVAILABLE_DISTANCE_KEY] = dict[INITIAL_AVAILABLE_DISTANCE_KEY];
-        }
-        if (!dynamicParameters.ContainsKey(MAG_AMOUNT_KEY))
-        {
-            dynamicParameters[MAG_AMOUNT_KEY] = dict[INITIAL_MAG_AMOUNT_KEY];
-        }
-        if (!dynamicParameters.ContainsKey(TOTAL_AMMO_KEY))
-        {
-            dynamicParameters[TOTAL_AMMO_KEY] = dict[INITIAL_TOTAL_AMMO_KEY];
-        }
-        dynamicParameters[LAST_ROUND_WALKED_KEY] = 0f;
-        dynamicParameters[WALKED_KEY] = 0f;
-
-        dynamicParameters[LAST_ROUND_SHOOTED_AMOUNT_KEY] = 0f;
-        dynamicParameters[SHOOTED_AMOUNT_KEY] = 0f;
-
-        dynamicParameters[LAST_ROUND_MELEE_AMOUNT_KEY] = 0f;
-        dynamicParameters[MELEE_AMOUNT_KEY] = 0f;
-        dynamicParameters[MOVES_TO_SKIP_KEY] = 0f;
-        dynamicParameters[IS_SHOOT_ON_MOVE_KEY] = 0f;
-        dynamicParameters[AMOUNT_OF_DEFENDED_HITS_KEY] = 0f;
-        if (selectableType == SelectableType.Enemy)
-        {
-            dynamicParameters[AMOUNT_OF_HEALINGS_KEY] = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
-        }
-        else
-        {
-            dynamicParameters[AMOUNT_OF_HEALINGS_KEY] = 0f;
-        }
-    }
-
-    public void FillFormulaData(FormulaDataMonoBase formulaData, string prefix)
-    {
-        bool exportCombatTurnShotMelee =
-            HandleInittingGlobalVars.globalParameters != null
-            && HandleInittingGlobalVars.globalParameters.parametersDict.TryGetValue(
-                HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY, out float stepByStepFlag)
-            && stepByStepFlag > 0.5f;
-
-        formulaData.parametersDict[prefix + LAST_ROUND_WALKED_KEY] = dynamicParameters[LAST_ROUND_WALKED_KEY];
-        formulaData.parametersDict[prefix + WALKED_KEY] = dynamicParameters[WALKED_KEY];
-        formulaData.parametersDict[prefix + LAST_ROUND_SHOOTED_AMOUNT_KEY] =
-            exportCombatTurnShotMelee ? dynamicParameters[LAST_ROUND_SHOOTED_AMOUNT_KEY] : 0f;
-        formulaData.parametersDict[prefix + SHOOTED_AMOUNT_KEY] =
-            exportCombatTurnShotMelee ? dynamicParameters[SHOOTED_AMOUNT_KEY] : 0f;
-        formulaData.parametersDict[prefix + LAST_ROUND_MELEE_AMOUNT_KEY] =
-            exportCombatTurnShotMelee ? dynamicParameters[LAST_ROUND_MELEE_AMOUNT_KEY] : 0f;
-        formulaData.parametersDict[prefix + MELEE_AMOUNT_KEY] =
-            exportCombatTurnShotMelee ? dynamicParameters[MELEE_AMOUNT_KEY] : 0f;
-        formulaData.parametersDict[prefix + MOVES_TO_SKIP_KEY] = dynamicParameters[MOVES_TO_SKIP_KEY];
-        formulaData.parametersDict[prefix + IS_SHOOT_ON_MOVE_KEY] = dynamicParameters[IS_SHOOT_ON_MOVE_KEY];
-        formulaData.parametersDict[prefix + MAG_AMOUNT_KEY] = dynamicParameters[MAG_AMOUNT_KEY];
-        formulaData.parametersDict[prefix + TOTAL_AMMO_KEY] = dynamicParameters[TOTAL_AMMO_KEY];
-        formulaData.parametersDict[prefix + AMOUNT_OF_DEFENDED_HITS_KEY] = dynamicParameters[AMOUNT_OF_DEFENDED_HITS_KEY];
-        formulaData.parametersDict[prefix + AMOUNT_OF_HEALINGS_KEY] = dynamicParameters[AMOUNT_OF_HEALINGS_KEY];
-    }
-
-    public static void PreFillFormulaData(FormulaDataMonoBase formulaData, string prefix)
-    {
-        formulaData.parametersDict[prefix + LAST_ROUND_WALKED_KEY] = 0f;
-        formulaData.parametersDict[prefix + WALKED_KEY] = 0f;
-        formulaData.parametersDict[prefix + LAST_ROUND_SHOOTED_AMOUNT_KEY] = 0f;
-        formulaData.parametersDict[prefix + SHOOTED_AMOUNT_KEY] = 0f;
-        formulaData.parametersDict[prefix + LAST_ROUND_MELEE_AMOUNT_KEY] = 0f;
-        formulaData.parametersDict[prefix + MELEE_AMOUNT_KEY] = 0f;
-        formulaData.parametersDict[prefix + MOVES_TO_SKIP_KEY] = 0f;
-        formulaData.parametersDict[prefix + IS_SHOOT_ON_MOVE_KEY] = 0f;
-        formulaData.parametersDict[prefix + MAG_AMOUNT_KEY] = 0f;
-        formulaData.parametersDict[prefix + TOTAL_AMMO_KEY] = 0f;
-        formulaData.parametersDict[prefix + AMOUNT_OF_DEFENDED_HITS_KEY] = 0f;
-        formulaData.parametersDict[prefix + AMOUNT_OF_HEALINGS_KEY] = 0f;
     }
 
     public float GetParameterValue(string parameterName)
     {
-        if (dynamicParameters.ContainsKey(parameterName))
+        switch (parameterName)
         {
-            return dynamicParameters[parameterName];
+            case INITIAL_HP_KEY: return maxHp;
+            case AVAILABLE_HEALTH_KEY: return currentHp;
+            case STAMINA_KEY: return stamina;
+            case MAX_STAMINA_KEY: return maxStamina;
+            case INITIAL_AVAILABLE_DISTANCE_KEY: return movePerTurn;
+            case WALKED_KEY: return walkedMeters;
+            case LAST_ROUND_WALKED_KEY: return lastRoundWalked;
+            case SHOOTED_AMOUNT_KEY: return shotAmount;
+            case LAST_ROUND_SHOOTED_AMOUNT_KEY: return lastRoundShot;
+            case MELEE_AMOUNT_KEY: return meleeAmount;
+            case LAST_ROUND_MELEE_AMOUNT_KEY: return lastRoundMelee;
+            case MOVES_TO_SKIP_KEY: return movesToSkip;
+            case IS_SHOOT_ON_MOVE_KEY: return hasMovedThisTurn ? 1f : 0f;
+            case AMOUNT_OF_HEALINGS_KEY: return healingsAmount;
+            case DEXTERITY_KEY: return dexterity;
+            default: return 0f;
         }
-        if (GetInstanceParametersDict().ContainsKey(parameterName))
-        {
-            return GetInstanceParametersDict()[parameterName];
-        }
-        // Debug.LogError($"Parameter {parameterName} not found in initialPlayerData");
-        // return 12f;
-        throw new System.Exception($"Parameter {parameterName} not found in initialPlayerData");
     }
 
     public void SetParameterValue(string parameterName, float value)
     {
-        if (!dynamicParameters.ContainsKey(parameterName))
+        switch (parameterName)
         {
-            Debug.LogWarning($"Parameter {parameterName} not found in dynamicParameters of pawn data controller, creating new one");
+            case AVAILABLE_HEALTH_KEY: currentHp = value; break;
+            case STAMINA_KEY: stamina = value; NotifyStaminaChanged(); break;
+            case WALKED_KEY: walkedMeters = value; break;
+            case LAST_ROUND_WALKED_KEY: lastRoundWalked = value; break;
+            case SHOOTED_AMOUNT_KEY: shotAmount = value; break;
+            case LAST_ROUND_SHOOTED_AMOUNT_KEY: lastRoundShot = value; break;
+            case MELEE_AMOUNT_KEY: meleeAmount = value; break;
+            case LAST_ROUND_MELEE_AMOUNT_KEY: lastRoundMelee = value; break;
+            case MOVES_TO_SKIP_KEY: movesToSkip = value; break;
+            case IS_SHOOT_ON_MOVE_KEY: hasMovedThisTurn = value > 0.5f; break;
+            case AMOUNT_OF_HEALINGS_KEY: healingsAmount = value; break;
         }
-        dynamicParameters[parameterName] = value;
         if (GameUI.Instance != null) GameUI.Instance.OnChangeStats();
-        if (parameterName == AVAILABLE_DISTANCE_KEY || parameterName == AVAILABLE_HEALTH_KEY || parameterName == AMOUNT_OF_HEALINGS_KEY)
+        if (parameterName == STAMINA_KEY || parameterName == AVAILABLE_HEALTH_KEY || parameterName == AMOUNT_OF_HEALINGS_KEY)
         {
             if (GameUI.Instance != null) GameUI.Instance.UpdatePlayerData();
         }
     }
 
+    void NotifyStaminaChanged()
+    {
+        OnStaminaChanged?.Invoke(this);
+        if (GameUI.Instance != null)
+        {
+            GameUI.Instance.OnChangeStats();
+            GameUI.Instance.UpdatePlayerData();
+        }
+    }
+
+    public void SetHasMovedThisTurn(bool value) => hasMovedThisTurn = value;
+
     public void ResetActionPoints()
     {
-        SetParameterValue(AVAILABLE_DISTANCE_KEY, GetParameterValue(INITIAL_AVAILABLE_DISTANCE_KEY));
-
-        SetParameterValue(LAST_ROUND_WALKED_KEY, GetParameterValue(WALKED_KEY));
-        SetParameterValue(WALKED_KEY, 0f);
-
-        SetParameterValue(LAST_ROUND_SHOOTED_AMOUNT_KEY, GetParameterValue(SHOOTED_AMOUNT_KEY));
-        SetParameterValue(SHOOTED_AMOUNT_KEY, 0f);
-
-        SetParameterValue(LAST_ROUND_MELEE_AMOUNT_KEY, GetParameterValue(MELEE_AMOUNT_KEY));
-        SetParameterValue(MELEE_AMOUNT_KEY, 0f);
-
-        float movesToSkip = GetParameterValue(MOVES_TO_SKIP_KEY);
-        SetParameterValue(MOVES_TO_SKIP_KEY, movesToSkip > 0 ? movesToSkip - 1 : 0);
-
-        SetParameterValue(IS_SHOOT_ON_MOVE_KEY, 0f);
+        stamina = maxStamina;
+        lastRoundWalked = walkedMeters;
+        walkedMeters = 0f;
+        lastRoundShot = shotAmount;
+        shotAmount = 0f;
+        lastRoundMelee = meleeAmount;
+        meleeAmount = 0f;
+        if (movesToSkip > 0) movesToSkip -= 1f;
+        hasMovedThisTurn = false;
+        NotifyStaminaChanged();
     }
 
     public static float CalculateLineStringDistance(Vector3[] points)
     {
-        if (points == null || points.Length == 0)
-        {
-            return 0f;
-        }
+        if (points == null || points.Length < 2) return 0f;
         float distance = 0f;
         for (int i = 0; i < points.Length - 1; i++)
-        {
             distance += Vector3.Distance(points[i], points[i + 1]);
-        }
         return distance;
-    }
-
-    public List<string> GetParameterNames()
-    {
-        return initialPawnData.GetParameterNames();
-    }
-
-    public Dictionary<string, float> parametersDict
-    {
-        get
-        {
-            return GetInstanceParametersDict();
-        }
     }
 
     public void IsStepByStepOff()
     {
-        SetParameterValue(MOVES_TO_SKIP_KEY, 0f);
+        movesToSkip = 0f;
     }
 
     void OnDestroy()

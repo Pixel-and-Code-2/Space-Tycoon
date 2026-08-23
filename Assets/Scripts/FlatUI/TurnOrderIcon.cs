@@ -8,9 +8,9 @@ public class TurnOrderIcon : MonoBehaviour
     [SerializeField]
     private GameObject bigIcon;
     [SerializeField]
-    private Image smallImage;
+    private TopIconStack smallStack;
     [SerializeField]
-    private Image bigImage;
+    private TopIconStack bigStack;
     [SerializeField]
     private Button button;
 
@@ -18,6 +18,10 @@ public class TurnOrderIcon : MonoBehaviour
 
     void Awake()
     {
+        if (smallStack == null && smallIcon != null)
+            smallStack = smallIcon.GetComponent<TopIconStack>() ?? smallIcon.AddComponent<TopIconStack>();
+        if (bigStack == null && bigIcon != null)
+            bigStack = bigIcon.GetComponent<TopIconStack>() ?? bigIcon.AddComponent<TopIconStack>();
         if (button == null) button = GetComponent<Button>();
         if (button != null)
         {
@@ -26,11 +30,13 @@ public class TurnOrderIcon : MonoBehaviour
         }
     }
 
-    public void Bind(IControlableSelectable pawn, Sprite sprite)
+    public void Bind(IControlableSelectable pawn, TurnOrderPortrait portrait)
     {
         boundPawn = pawn;
-        if (smallImage != null) smallImage.sprite = sprite;
-        if (bigImage != null) bigImage.sprite = sprite;
+        if (portrait == null && pawn != null)
+            portrait = TurnOrderPortrait.GetFromPawn(pawn);
+        if (smallStack != null) smallStack.Apply(portrait);
+        if (bigStack != null) bigStack.Apply(portrait);
         SetCurrent(false);
     }
 
@@ -38,8 +44,15 @@ public class TurnOrderIcon : MonoBehaviour
     {
         if (smallIcon != null) smallIcon.SetActive(!isCurrent);
         if (bigIcon != null) bigIcon.SetActive(isCurrent);
-        RectTransform parentRect = transform.parent as RectTransform;
-        if (parentRect != null)
+        RebuildLayout();
+    }
+
+    void RebuildLayout()
+    {
+        var rt = transform as RectTransform;
+        if (rt != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
+        if (transform.parent is RectTransform parentRect)
             LayoutRebuilder.ForceRebuildLayoutImmediate(parentRect);
     }
 

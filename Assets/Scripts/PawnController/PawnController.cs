@@ -65,20 +65,17 @@ public class PawnController : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Debug.LogError("Awake met second PawnController instance");
-        }
+        Instance = this;
         SetSelectorBrain(GetComponent<ISelectorBrain>());
         clickableItemsController = GetComponent<ClickableItemsController>();
     }
 
     void Start()
     {
-        if (toggleShootOnMoveAction != null)
-            toggleShootOnMoveAction.action.Enable();
-        if (startReloadAction != null)
-            startReloadAction.action.Enable();
+        if (shootOnMoveButton != null)
+            shootOnMoveButton.gameObject.SetActive(false);
+        if (startReloadButton != null)
+            startReloadButton.gameObject.SetActive(false);
         if (TurnManager.Instance != null)
         {
             TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurn;
@@ -122,11 +119,6 @@ public class PawnController : MonoBehaviour
         ISelectable selectable = currentSelector.PollSelectClickableItem(clickableItemsController.currentSelectedItem);
         if (selectable != null)
         {
-            HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PAWN_DISTANCE_LABEL] =
-                Vector3.Distance(
-                    currentSelectedPawn.GetTransform().position,
-                    selectable.GetTransform().position
-                );
             if (selectable != clickableItemsController.currentSelectedItem)
             {
                 bool selecting = clickableItemsController.OnSelect(selectable);
@@ -161,105 +153,40 @@ public class PawnController : MonoBehaviour
         }
         isValidStage1 = false;
         isValidStage2 = false;
-
-        if (toggleShootOnMoveAction != null && toggleShootOnMoveAction.action.triggered && currentSelectedPawn != null)
-        {
-            ToggleShootOnMove();
-        }
-        if (startReloadAction != null && startReloadAction.action.triggered && currentSelectedPawn != null)
-        {
-            StartReload();
-        }
     }
 
-    private bool IsInCombat()
+    public bool IsInCombat()
     {
         return HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f;
     }
+
+    public bool CanEnterShootMode()
+    {
+        if (!IsInCombat()) return false;
+        if (currentSelectedPawn == null) return false;
+        if (currentSelectedPawn.IsMoving()) return false;
+        return true;
+    }
+
     public void ToggleShootOnMove()
     {
-        if (currentSelectedPawn == null) return;
-        if (!IsInCombat()) return;
-        bool hasWalked = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.WALKED_KEY) > 0.5f;
-        bool hasShot = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.SHOOTED_AMOUNT_KEY) > 0.5f;
-        if (hasWalked || hasShot) return;
-        float res = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) < 0.5f ? 1f : 0f;
-        currentSelectedPawn.SetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY, res);
-        UpdateMoveOnShootButtonColor();
     }
     public void UpdateMoveOnShootButtonColor()
     {
-        if (!currentSelector.SyncUI) return;
-        if (currentSelectedPawn == null || !IsInCombat())
-        {
-            shootOnMoveButton.TurnOffButton();
-            return;
-        }
-        bool isOn = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.IS_SHOOT_ON_MOVE_KEY) > 0.5f;
-        bool hasWalked = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.WALKED_KEY) > 0.5f;
-        bool hasShot = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.SHOOTED_AMOUNT_KEY) > 0.5f;
-        bool locked = hasWalked || hasShot;
-        if (isOn)
-        {
-            shootOnMoveButton.TurnOnButton();
-            if (locked)
-                shootOnMoveButton.SetInteractable(false);
-        }
-        else
-        {
-            shootOnMoveButton.TurnOffButton();
-            if (!locked)
-                shootOnMoveButton.SetInteractable(true);
-        }
+        if (shootOnMoveButton != null && shootOnMoveButton.gameObject.activeSelf)
+            shootOnMoveButton.gameObject.SetActive(false);
     }
     public void StartReload()
     {
-        if (currentSelectedPawn == null)
-        {
-            UpdateStartReloadButtonColor();
-            return;
-        }
-        if (currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY) > 0.001f)
-        {
-            UpdateStartReloadButtonColor();
-            return;
-        }
-        float currentMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY);
-        float initialMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
-        if (currentMag >= initialMag)
-        {
-            UpdateStartReloadButtonColor();
-            return;
-        }
-
-        currentSelectedPawn.MakeReload();
-        UpdateStartReloadButtonColor();
     }
 
     public void OnTriggerZoneExit()
     {
-        StartReload();
     }
     public void UpdateStartReloadButtonColor()
     {
-        if (!currentSelector.SyncUI) return;
-        if (currentSelectedPawn == null)
-        {
-            startReloadButton.TurnOffButton();
-            return;
-        }
-        float currentMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY);
-        float initialMag = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
-        bool canReload = currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MOVES_TO_SKIP_KEY) < 0.1f
-                         && currentMag < initialMag;
-        if (canReload)
-        {
-            startReloadButton.TurnOnButton();
-        }
-        else
-        {
-            startReloadButton.TurnOffButton();
-        }
+        if (startReloadButton != null && startReloadButton.gameObject.activeSelf)
+            startReloadButton.gameObject.SetActive(false);
     }
 
     void OnValidate()
@@ -335,36 +262,13 @@ public class PawnController : MonoBehaviour
     public static bool isValidStage1 = false;
     public static void SetCalculatableParamsForTwoPawns(IControlableSelectable attacker, Vector3 target)
     {
-        if (isValidStage1) return;
-        Vector3 origin = attacker.GetTransform().position;
-        Vector3 direction = (target - origin).normalized;
-        float distance = Vector3.Distance(origin, target);
-        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PAWN_DISTANCE_LABEL] = distance;
-        // float randomValue = Random.value;
-        HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.RANDOM_KEY] = Random.value;
-
-        Vector3 dir2D = new Vector3(direction.x, 0f, direction.z).normalized;
-        float angle = Mathf.Atan2(dir2D.z, dir2D.x) * Mathf.Rad2Deg;
-        if (angle < 0) angle += 360f;
-        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[CURRENT_TARGET_ANGLE] = angle;
-
-        RaycastHit hitInfo;
-        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[IS_WALLS_BETWEEN_KEY] =
-            Physics.Raycast(origin, direction, out hitInfo, distance, LayerMask.GetMask("Wall")) ? 1f : 0f;
-
-        attacker.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.ATTACKER_PREFIX);
-
         isValidStage1 = true;
     }
 
     public static bool isValidStage2 = false;
     public static void SetCalculatableParamsForTwoPawns(IControlableSelectable attacker, IAttackableSelectable prey)
     {
-        if (isValidStage2) return;
-
         SetCalculatableParamsForTwoPawns(attacker, prey.GetTransform().position);
-        prey.FillFormulaData(HandleInittingGlobalVars.mainCalculatedFormulaData, PawnController.PREY_PREFIX);
-
         isValidStage2 = true;
     }
 }

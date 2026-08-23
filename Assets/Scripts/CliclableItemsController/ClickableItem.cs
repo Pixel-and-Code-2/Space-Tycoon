@@ -15,9 +15,9 @@ public class ClickableItem : ISelectable
     {
         public string text;
         public AvailableActions action;
-        public FormulaFieldWithMemo chanceToLaunch = new FormulaFieldWithMemo();
-        public List<ExitCode> exitCodes;
-        public FormulaFieldWithMemo progressPerRound = new FormulaFieldWithMemo();
+        public float chanceToLaunch = 1f;
+        public List<TaskExitCode> exitCodes;
+        public float progressPerRound = 10f;
     }
     public IControlableSelectable taskExecutor { get; private set; } = null;
     [SerializeField]
@@ -33,11 +33,6 @@ public class ClickableItem : ISelectable
     void OnValidate()
     {
         prey = GetComponent<IControlableSelectable>();
-        foreach (InspectorContextMenuItem action in availableActions)
-        {
-            UpdateFormula(action.chanceToLaunch);
-            UpdateFormula(action.progressPerRound);
-        }
         if (col == null) col = GetComponent<Collider>();
     }
 
@@ -166,18 +161,6 @@ public class ClickableItem : ISelectable
         }
     }
 
-    void UpdateFormula(FormulaFieldWithMemo formula)
-    {
-        if (formula.memorySize != 2)
-        {
-            formula.ClearMemorizedDatasets();
-            formula.AddMemorizedDataset(() => (HandleInittingGlobalVars.mainCalculatedFormulaData, "Calculated"));
-            formula.AddMemorizedDataset(() => (taskExecutor == null ? HandleInittingGlobalVars.pawnMustHaveParams : taskExecutor.GetFormulaData(), "Player"));
-            formula.AddMemorizedDataset(() => (prey == null || prey.GetFormulaData() == null ? HandleInittingGlobalVars.pawnMustHaveParams : prey.GetFormulaData(), "Prey"));
-        }
-        formula.OnParamsUpdated();
-    }
-
     public override void OnSelect()
     {
         ClickableItemsController.Instance.OnContextMenu();
@@ -186,11 +169,22 @@ public class ClickableItem : ISelectable
     private IEnumerator OnSelectDelayed()
     {
         yield return new WaitForSeconds(0.1f);
+        ApplyTaskInfoToScript();
         scriptForClickable?.OnSelect();
     }
 
     private SliderController progressBarCached = null;
     private InspectorContextMenuItem actionCached = null;
+    private ClickableTaskInfo activeTaskInfo = ClickableTaskInfo.None;
+
+    private void ApplyTaskInfoToScript()
+    {
+        if (scriptForClickable == null) return;
+        ClickableTaskInfo info = activeTaskInfo.isTask
+            ? activeTaskInfo
+            : ClickableItemsController.Instance.GetTaskInfo(this);
+        scriptForClickable.ApplyTaskInfo(info);
+    }
     public override bool IsWorking() => progressBarCached != null;
     private void StartWork()
     {
@@ -207,6 +201,8 @@ public class ClickableItem : ISelectable
         progressBarCached.SetBounds(0f, 100f);
         progressBarCached.SetValue(0f);
         progressBarCached.SetClass(SelectableType.Neutral);
+        activeTaskInfo = ClickableItemsController.Instance.GetTaskInfo(this);
+        ApplyTaskInfoToScript();
         scriptForClickable?.OnStart();
         ClickableItemsController.Instance.OnStartTask(this);
         if (ClickableItemsController.Instance.IsOnlyShowTextTask(this))
@@ -249,23 +245,15 @@ public class ClickableItem : ISelectable
                 CancelAction();
                 return;
             }
-            if (prey != null)
+            float dist = Vector3.Distance(taskExecutor.GetTransform().position, transform.position);
+            if (dist > 4f)
             {
-                PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, prey);
-            }
-            else
-            {
-                PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, transform.position);
+                CancelAction();
+                return;
             }
             float progress = progressBarCached.GetValue();
-            float boost = actionCached.progressPerRound.EvaluateFormula();
+            float boost = actionCached != null ? actionCached.progressPerRound : 10f;
             progress += boost;
-            if (Math.Abs(boost) <= 0.001f && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
-            {
-                // Debug.LogWarning("BoostProgressBar: boost is too small, boosting more");
-                // LogBoostProgressFormulaDiagnostics(boost);
-                progress += 5f;
-            }
             StartCoroutine(BoostProgressBarInTime(1f));
             if (progress < -0.00001f)
             {
@@ -276,6 +264,7 @@ public class ClickableItem : ISelectable
             progressBarCached.SetValue(progress);
             if (progress >= 100f)
             {
+                ApplyTaskInfoToScript();
                 progress = scriptForClickable?.OnProgress(100f) ?? 100f;
             }
             if (progress >= 100f)
@@ -293,47 +282,29 @@ public class ClickableItem : ISelectable
                 StartCoroutine(OnCompleteDelayed());
                 return;
             }
+            ApplyTaskInfoToScript();
             progressBarCached.SetValue(scriptForClickable?.OnProgress(progress) ?? progress);
         }
     }
     private IEnumerator OnCompleteDelayed()
     {
         yield return new WaitForSeconds(0.1f);
+        ApplyTaskInfoToScript();
         scriptForClickable?.OnComplete();
+        activeTaskInfo = ClickableTaskInfo.None;
     }
-    void LogBoostProgressFormulaDiagnostics(float boostEvaluated)
-    {
-        var calc = HandleInittingGlobalVars.mainCalculatedFormulaData?.parametersDict;
-        var globals = HandleInittingGlobalVars.globalParameters?.GetParametersDict();
-        var playerDict = taskExecutor?.GetFormulaData()?.parametersDict;
-        string Fc(string k) => calc != null && calc.TryGetValue(k, out float v) ? v.ToString() : "—";
-        string Fg(string k) => globals != null && globals.TryGetValue(k, out float v) ? v.ToString() : "—";
-        string Fp(string k) => playerDict != null && playerDict.TryGetValue(k, out float v) ? v.ToString() : "—";
-        string atkW = PawnController.ATTACKER_PREFIX + PawnDataController.WALKED_KEY;
-        string atkS = PawnController.ATTACKER_PREFIX + PawnDataController.SHOOTED_AMOUNT_KEY;
-        string atkM = PawnController.ATTACKER_PREFIX + PawnDataController.MELEE_AMOUNT_KEY;
-        Debug.Log/**/(
-            "BoostProgressBar context [" + gameObject.name + "] " +
-            "c_pawnDistance=" + Fc(PawnController.PAWN_DISTANCE_LABEL) +
-            " g_IsStepByStep=" + Fg(HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY) +
-            " c_AttackerWalkedDistance=" + Fc(atkW) +
-            " c_AttackerShotAmount=" + Fc(atkS) +
-            " c_AttackerMeleeAmount=" + Fc(atkM) +
-            " p_IQ=" + Fp("IQ") +
-            " prey=" + (prey != null ? prey.gameObject.name : "null") +
-            " boost=" + boostEvaluated
-        );
-    }
-
     private void CancelAction()
     {
         UI3DManager.Instance.UnregisterSlider(transform);
         progressBarCached = null;
         actionCached = null;
         UI3DManager.Instance.ShowMessage("Отменено", transform.position, Color.red);
+        taskExecutor?.SetOnTask(false);
         taskExecutor = null;
+        ApplyTaskInfoToScript();
         scriptForClickable?.OnCancel();
         ClickableItemsController.Instance.OnCancelTask(this);
+        activeTaskInfo = ClickableTaskInfo.None;
     }
 
     public override List<ContextMenuItem> OnContextMenu()
@@ -361,8 +332,8 @@ public class ClickableItem : ISelectable
                         {
                             PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, transform.position);
                         }
-                        float chance = action.chanceToLaunch.EvaluateFormula();
-                        foreach (ExitCode exitCode in action.exitCodes)
+                        float chance = action.chanceToLaunch;
+                        foreach (TaskExitCode exitCode in action.exitCodes)
                         {
                             if (exitCode.IsEqual(chance))
                             {
@@ -371,6 +342,17 @@ public class ClickableItem : ISelectable
                         }
                         if (chance >= UnityEngine.Random.Range(0f, 1f))
                         {
+                            PawnBrain deadBrain = GetComponent<PawnBrain>();
+                            if (deadBrain != null
+                                && deadBrain.GetSelectableType() == SelectableType.Dead
+                                && GetComponent<PawnHealing>() != null
+                                && !PawnHealing.CanRevive(deadBrain))
+                            {
+                                UI3DManager.Instance.ShowMessage("Нет подъёмов", transform.position, Color.red);
+                                ClickableItemsController.Instance.OnDeselect();
+                                return;
+                            }
+                            taskExecutor.SetOnTask(true);
                             StartWorkAction(action);
                         }
                         else
@@ -392,15 +374,18 @@ public class ClickableItem : ISelectable
 
     public override void ChangeScenarioStatus(ClickableItemsController.TaskItem.TaskItemStatus status)
     {
+        if (col == null) col = GetComponent<Collider>();
         switch (status)
         {
             case ClickableItemsController.TaskItem.TaskItemStatus.ReadyToStart:
                 col.enabled = true;
                 break;
             case ClickableItemsController.TaskItem.TaskItemStatus.InProgress:
+                break;
             case ClickableItemsController.TaskItem.TaskItemStatus.Done:
             case ClickableItemsController.TaskItem.TaskItemStatus.Unavailable:
-                if (((1 << gameObject.layer) & LayerMask.GetMask("ClickableItem", "Default")) != 0)
+                if (((1 << gameObject.layer) & LayerMask.GetMask("ClickableItem", "Default")) != 0
+                    && !ClickableItemsController.Instance.HasReadyOrProgressTask(this))
                 {
                     col.enabled = false;
                 }

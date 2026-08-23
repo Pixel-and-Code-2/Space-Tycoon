@@ -39,10 +39,14 @@ public class ExitConfirmation : IUILayer
         }
         SettingApplier.SaveSlot();
         SaveHub.Instance.MakeSave(SaveHub.DEFAULT_SAVE_SLOT);
+        if (TurnManager.Instance != null)
+            TurnManager.Instance.AbortCombatForMenu();
         UILayersController.Instance.SetLayer(UILayersController.UILayer.MainMenu);
     }
     public void OnExitWithoutSave()
     {
+        if (TurnManager.Instance != null)
+            TurnManager.Instance.AbortCombatForMenu();
         UILayersController.Instance.SetLayer(UILayersController.UILayer.MainMenu);
     }
 }

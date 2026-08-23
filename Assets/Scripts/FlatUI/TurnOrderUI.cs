@@ -9,10 +9,6 @@ public class TurnOrderUI : MonoBehaviour
     [SerializeField]
     private TurnOrderIcon iconPrefab;
     [SerializeField]
-    private Sprite defaultPlayerSprite;
-    [SerializeField]
-    private Sprite defaultEnemySprite;
-    [SerializeField]
     private GameObject rootPanel;
 
     private readonly List<TurnOrderIcon> spawnedIcons = new List<TurnOrderIcon>();
@@ -24,6 +20,8 @@ public class TurnOrderUI : MonoBehaviour
             TurnManager.Instance.OnTurnQueueChanged += Refresh;
             TurnManager.Instance.OnTriggerZoneExit += Hide;
         }
+        if (UILayersController.Instance != null)
+            UILayersController.Instance.OnGameResumed += OnGameResumed;
         Hide();
     }
 
@@ -34,6 +32,15 @@ public class TurnOrderUI : MonoBehaviour
             TurnManager.Instance.OnTurnQueueChanged -= Refresh;
             TurnManager.Instance.OnTriggerZoneExit -= Hide;
         }
+        if (UILayersController.Instance != null)
+            UILayersController.Instance.OnGameResumed -= OnGameResumed;
+    }
+
+    void OnGameResumed()
+    {
+        if (TurnManager.Instance == null || TurnManager.Instance.RoundQueue == null
+            || TurnManager.Instance.RoundQueue.Count == 0)
+            Hide();
     }
 
     private void Hide()
@@ -70,19 +77,10 @@ public class TurnOrderUI : MonoBehaviour
             icon.gameObject.SetActive(true);
             icon.transform.SetSiblingIndex(i);
             IControlableSelectable pawn = queue[i].pawn;
-            icon.Bind(pawn, ResolveSprite(pawn));
+            icon.Bind(pawn, TurnOrderPortrait.GetFromPawn(pawn));
             icon.SetCurrent(pawn == current);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(iconsParent);
-    }
-
-    private Sprite ResolveSprite(IControlableSelectable pawn)
-    {
-        if (pawn == null) return defaultEnemySprite;
-        TurnOrderPortrait portrait = pawn.GetComponent<TurnOrderPortrait>();
-        if (portrait != null && portrait.Portrait != null) return portrait.Portrait;
-        if (pawn.GetSelectableType() == SelectableType.Player) return defaultPlayerSprite;
-        return defaultEnemySprite;
     }
 
     private void ClearIcons()

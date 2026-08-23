@@ -38,6 +38,26 @@ public class GlobalSettingsAssets : ScriptableObject
     public class ColorLink { public string name; public Color color; }
     [System.Serializable]
     public struct SliderClassColors { public SelectableType selectableType; public string colorFront; public string colorBack; }
+    [Header("Stamina (global action costs, scale 0–100)")]
+    public StaminaCostSettings staminaCosts = new StaminaCostSettings();
+
+    [System.Serializable]
+    public class StaminaCostSettings
+    {
+        public float maxStamina = 100f;
+        public float rangedAttackCost = 50f;
+        public float meleeAttackCost = 60f;
+        public float shooterMeleeAttackCost = 50f;
+        public float reviveCost = 10f;
+    }
+
+    public static StaminaCostSettings GetStaminaCosts()
+    {
+        if (HandleInittingGlobalVars.globalSettingsAssets != null)
+            return HandleInittingGlobalVars.globalSettingsAssets.staminaCosts;
+        return new StaminaCostSettings();
+    }
+
     [Header("Slider class colors")]
     [SerializeField]
     private List<SliderClassColors> sliderClassColors;

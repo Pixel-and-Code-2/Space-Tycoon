@@ -12,6 +12,8 @@ public class MainMenu : IUILayer
     void OnEnable()
     {
         gameObject.SetActive(true);
+        if (TurnManager.Instance != null)
+            TurnManager.Instance.AbortCombatForMenu();
         AudioController.Instance.Play(AudioController.Instance.mainMenuAmbient, true);
     }
     void OnDisable()

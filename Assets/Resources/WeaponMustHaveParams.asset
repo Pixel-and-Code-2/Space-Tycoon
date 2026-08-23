@@ -32,7 +32,7 @@ MonoBehaviour:
   - name: WPMASS
     value: 0
   - name: MovesToReload
-    value: 2
+    value: 1
   - name: TotalAmmo
     value: 99999
   - name: MeleeROF
@@ -61,7 +61,7 @@ MonoBehaviour:
     WPMASS = 0,00 (0,00)
 
     MovesToReload
-    = 2,00 (2,00)
+    = 1,00 (1,00)
 
     TotalAmmo = 99999,00 (99999,00)
 

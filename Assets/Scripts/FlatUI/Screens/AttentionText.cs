@@ -84,7 +84,7 @@ public class AttentionText : IUILayer
     }
     public void OnExit()
     {
+        TurnManager.Instance?.AbortCombatForMenu();
         UILayersController.Instance.SetLayer(UILayersController.UILayer.MainMenu);
-        // Debug.Log("Going back to main menu");
     }
 }

@@ -41,12 +41,28 @@ public class GameUI : IUILayer
     private GameObject shootingObject;
     [SerializeField]
     private GameObject meleeObject;
+
+    private SpriteProvider shootOutlineProvider;
+    private SpriteProvider shootMaskProvider;
+
     void Awake()
     {
         if (Instance == null) Instance = this;
         else
         {
             Debug.LogError("Constructor met second GameUI instance");
+        }
+        CacheWeaponProviders();
+    }
+
+    void CacheWeaponProviders()
+    {
+        if (shootingObject == null) return;
+        var providers = shootingObject.GetComponentsInChildren<SpriteProvider>(true);
+        for (int i = 0; i < providers.Length; i++)
+        {
+            if (providers[i].gameObject.name == "WeaponOutline") shootOutlineProvider = providers[i];
+            if (providers[i].gameObject.name == "WeaponMask") shootMaskProvider = providers[i];
         }
     }
     void Start()
@@ -181,11 +197,12 @@ public class GameUI : IUILayer
     public void OnChangeStats()
     {
         if (PawnController.Instance.currentSelectedPawn == null) return;
-        float curMag = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY);
-        float initMag = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
-        weaponSlider.SetBounds(0f, initMag);
-        weaponSlider.SetValue(curMag);
-        weaponSliderText.text = curMag.ToString() + "/" + initMag.ToString();
+        if (weaponSlider != null)
+        {
+            weaponSlider.gameObject.SetActive(false);
+        }
+        if (weaponSliderText != null)
+            weaponSliderText.text = "";
     }
     private void UpdateSelectedPlayer()
     {
@@ -213,9 +230,33 @@ public class GameUI : IUILayer
         }
         if (selectedInd != -1)
         {
-            weaponNameText.text = selectedInd != 0 ? shootingWeaponName : meleeWeaponName;
-            shootingObject.SetActive(selectedInd != 0);
-            meleeObject.SetActive(selectedInd == 0);
+            ApplyWeaponBar(selectedInd);
+        }
+    }
+
+    void ApplyWeaponBar(int selectedInd)
+    {
+        if (selectedInd == 0)
+        {
+            weaponNameText.text = meleeWeaponName;
+            shootingObject.SetActive(false);
+            meleeObject.SetActive(true);
+            return;
+        }
+
+        shootingObject.SetActive(true);
+        meleeObject.SetActive(false);
+        if (selectedInd == 1)
+        {
+            weaponNameText.text = shootingWeaponName;
+            if (shootOutlineProvider != null) shootOutlineProvider.SetLinks("SniperWeaponOutline", "UIMainColor");
+            if (shootMaskProvider != null) shootMaskProvider.SetLinks("SniperWeaponMask", "UIWeaponMaskColor");
+        }
+        else
+        {
+            weaponNameText.text = shootingWeaponName;
+            if (shootOutlineProvider != null) shootOutlineProvider.SetLinks("PistolWeaponOutline", "UIMainColor");
+            if (shootMaskProvider != null) shootMaskProvider.SetLinks("PistolWeaponMask", "UIWeaponMaskColor");
         }
     }
     public void SelectPlayer(int ind)
