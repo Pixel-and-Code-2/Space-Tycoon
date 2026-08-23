@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System;
 
 [CreateAssetMenu(fileName = "Parameters", menuName = "Parameters", order = 1)]
-public class ParameteredScriptableObject : ScriptableObject, IFormulaData
+public class ParameteredScriptableObject : ScriptableObject
 {
-
     [SerializeField]
     private List<NamedFloat> parameters = new List<NamedFloat>();
-    [SerializeField]
-    private List<NamedFormula> calculatedParameters = new List<NamedFormula>();
 
-    [SerializeField, Tooltip("Parameters which must be added to the parameters dictionary of the current object BEFORE ANY OF YOURS, you can override them! ")]
+    [SerializeField, Tooltip("Parameters merged before local ones; local values override.")]
     private List<ParameteredScriptableObject> mustHaveParameters = new List<ParameteredScriptableObject>();
 
     [SerializeField, HideInInspector]
-    private bool isDirty = true; // Cache. If nothing is changed we don't need to rebuild the dictionary
+    private bool isDirty = true;
     [SerializeField, HideInInspector]
     private string parametersDictStateCache = string.Empty;
     public Dictionary<string, float> parametersDict { get; private set; } = new Dictionary<string, float>();
@@ -27,17 +24,17 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         var lst = new List<string>();
         RebuildParametersDict();
         foreach (var kv in parametersDict)
-        {
             lst.Add(kv.Key);
-        }
         return lst;
     }
+
     public void AddParameter(string name)
     {
         if (parameters.Find(x => x.name == name) != null) return;
         parameters.Add(new NamedFloat(name, 0f));
         SetDirty();
     }
+
     public Dictionary<string, float> GetParametersDict()
     {
         RebuildParametersDict();
@@ -54,8 +51,7 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         }
         var sb = new System.Text.StringBuilder();
         foreach (var kv in parametersDict)
-            sb.AppendLine(kv.Key + " = " + kv.Value.ToString("F2") + " (" + kv.Value.ToString("F2") + ")");
-
+            sb.AppendLine(kv.Key + " = " + kv.Value.ToString("F2"));
         parametersDictStateCache = sb.ToString();
         return parametersDictStateCache;
     }
@@ -67,7 +63,6 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
 
     public void RebuildParametersDict()
     {
-        // Debug.Log("INvoking");
         OnUpdateParams?.Invoke(this);
         if (!isDirty && parametersDict.Count > 0) return;
         RebuildParametersDict(new HashSet<ParameteredScriptableObject>());
@@ -84,7 +79,6 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         if (visited.Contains(this)) return;
         visited.Add(this);
         parametersDict.Clear();
-        CheckCalculatedParameters();
         for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
         {
             var dep = mustHaveParameters[i];
@@ -94,23 +88,6 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
                 parametersDict[kv.Key] = kv.Value;
         }
         AddParametersAsConsts(parameters);
-
-        var formulas = new List<NamedFormula>();
-        for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
-        {
-            var dep = mustHaveParameters[i];
-            if (dep == null || dep == this) continue;
-            dep.CollectCalculatedFormulas(visited, formulas);
-        }
-        foreach (var cf in calculatedParameters)
-            formulas.Add(cf);
-        foreach (var cf in formulas)
-        {
-            if (cf.IsAvailable())
-                parametersDict[cf.name] = cf.formula.EvaluateFormula(new Dictionary<string, float>[] { parametersDict });
-            else
-                Debug.LogWarning("Calculated parameter formula not available (must be compiled): " + cf.name);
-        }
     }
 
     public Dictionary<string, float> GetRecursiveConstParametersDict(HashSet<ParameteredScriptableObject> visited)
@@ -135,21 +112,7 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
         return result;
     }
 
-    private void CollectCalculatedFormulas(HashSet<ParameteredScriptableObject> visited, List<NamedFormula> outFormulas)
-    {
-        if (visited.Contains(this)) return;
-        visited.Add(this);
-        for (int i = mustHaveParameters.Count - 1; i >= 0; i--)
-        {
-            var dep = mustHaveParameters[i];
-            if (dep == null || dep == this) continue;
-            dep.CollectCalculatedFormulas(visited, outFormulas);
-        }
-        foreach (var cf in calculatedParameters)
-            outFormulas.Add(cf);
-    }
-
-    private void AddParametersAsConsts(List<NamedFloat> parameters)
+    void AddParametersAsConsts(List<NamedFloat> parameters)
     {
         foreach (var parameter in parameters)
         {
@@ -158,7 +121,6 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
                 parametersDict[parameter.name] = parameter.value;
         }
     }
-
 
     public static string processParameterName(string name)
     {
@@ -174,17 +136,5 @@ public class ParameteredScriptableObject : ScriptableObject, IFormulaData
             }
         }
         return filtered.ToString();
-    }
-
-    void CheckCalculatedParameters()
-    {
-        foreach (var calculatedParameter in calculatedParameters)
-        {
-            if (calculatedParameter.IsContextSet() == false)
-            {
-                calculatedParameter.SetContext(this);
-            }
-            // Debug.Log("Calculated parameter: " + calculatedParameter.name + " is available: " + calculatedParameter.IsAvailable());
-        }
     }
 }

@@ -85,11 +85,7 @@ public class TurnManager : MonoBehaviour
     private IconButtonStyleFiller endTurnButton1;
     [Header("Initiative")]
     [SerializeField]
-    private string agilityParameterKey = "SPD";
-    [SerializeField]
-    private float initiativeRandomMax = 10f;
-    [SerializeField]
-    private float defaultAgility = 1f;
+    private float defaultDexterity = 1f;
     private readonly List<TurnSlot> roundQueue = new List<TurnSlot>();
     private int currentQueueIndex = 0;
     private bool turnInProgress = false;
@@ -239,7 +235,7 @@ public class TurnManager : MonoBehaviour
         });
         addSaveData(records.ToArray(), UNIQUE_ID);
     }
-    public void EnterTrigger(GameObject triggerObject)
+    public void EnterTrigger(GameObject triggerObject, IControlableSelectable enterer = null)
     {
         TriggerData trigger = listOfTriggers.Find(t => t.triggerObject == triggerObject);
         if (trigger == null)
@@ -259,7 +255,7 @@ public class TurnManager : MonoBehaviour
             }
         }
         IsQuarantine = false;
-        ActivateCombatForTrigger(trigger);
+        ActivateCombatForTrigger(trigger, enterer);
     }
 
     /// <summary>
@@ -277,7 +273,7 @@ public class TurnManager : MonoBehaviour
         }
         stationWarnings.Play();
         IsQuarantine = true;
-        return ActivateCombatForTrigger(delayed);
+        return ActivateCombatForTrigger(delayed, null);
     }
 
     /// <inheritdoc cref="StartDelayedEncounter(DelayedTriggerData)"/>
@@ -290,7 +286,7 @@ public class TurnManager : MonoBehaviour
         return StartDelayedEncounter(listOfDelayedTriggers[delayedTriggerIndex]);
     }
 
-    private bool ActivateCombatForTrigger(TriggerData trigger)
+    private bool ActivateCombatForTrigger(TriggerData trigger, IControlableSelectable enterer)
     {
         if (trigger == null)
         {
@@ -304,14 +300,18 @@ public class TurnManager : MonoBehaviour
         {
             return false;
         }
-        if (listOfTriggers.Find(t => t.isActive) == null)
+        bool alreadyInCombat = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f;
+        bool wasAnyActive = listOfTriggers.Find(t => t.isActive) != null
+            || listOfDelayedTriggers.Find(t => t.isActive) != null;
+        trigger.isActive = true;
+        HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 1f;
+        if (enterer != null)
+            GroupMove.RallyForCombat(enterer, CollectEnemyPositions(trigger));
+        if (!wasAnyActive)
         {
             OnTriggerZoneEnter?.Invoke();
             UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "_notpersistent_0_GameAttentionColor");
         }
-        bool alreadyInCombat = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f;
-        trigger.isActive = true;
-        HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 1f;
         SyncEndTurnButtonsWithMovement();
         if (alreadyInCombat)
         {
@@ -323,6 +323,18 @@ public class TurnManager : MonoBehaviour
             StartCoroutine(StartFirstTurn());
         }
         return true;
+    }
+
+    List<Vector3> CollectEnemyPositions(TriggerData trigger)
+    {
+        var list = new List<Vector3>();
+        if (trigger == null || trigger.enemies == null) return list;
+        for (int i = 0; i < trigger.enemies.Count; i++)
+        {
+            if (trigger.enemies[i] == null) continue;
+            list.Add(trigger.enemies[i].transform.position);
+        }
+        return list;
     }
     public bool EnterDelayedTrigger(DelayedTriggerData trigger)
     {
@@ -517,6 +529,7 @@ public class TurnManager : MonoBehaviour
     }
     public void CheckTriggers()
     {
+        bool wasInCombat = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f;
         foreach (var trigger in listOfTriggers)
         {
             CheckTrigger(trigger);
@@ -525,7 +538,9 @@ public class TurnManager : MonoBehaviour
         {
             CheckTrigger(trigger);
         }
-        if (listOfTriggers.Find(t => t.isActive) == null && listOfDelayedTriggers.Find(t => t.isActive) == null)
+        bool anyActive = listOfTriggers.Find(t => t.isActive) != null
+            || listOfDelayedTriggers.Find(t => t.isActive) != null;
+        if (wasInCombat && !anyActive)
         {
             ExitAllTriggers();
         }
@@ -553,12 +568,19 @@ public class TurnManager : MonoBehaviour
         {
             return;
         }
+        if (pawn == null || movingPawns.Contains(pawn)) return;
+        if (pawn is GameObject go)
+        {
+            var brain = go.GetComponent<PawnBrain>();
+            if (brain != null && GroupMove.IsRallying(brain)) return;
+        }
         movingPawns.Add(pawn);
         endTurnButton1.TurnOffButton();
     }
     public void UnregisterMovingPawn(UnityEngine.Object pawn)
     {
-        movingPawns.Remove(pawn);
+        if (pawn == null) return;
+        while (movingPawns.Remove(pawn)) { }
         SyncEndTurnButtonsWithMovement();
     }
 
@@ -566,7 +588,8 @@ public class TurnManager : MonoBehaviour
     {
         bool hasActiveTrigger = listOfTriggers.Find(t => t.isActive) != null;
         bool hasActiveDelayedTrigger = listOfDelayedTriggers.Find(t => t.isActive) != null;
-        if ((hasActiveTrigger || hasActiveDelayedTrigger) && IsPlayerTurn && movingPawns.Count == 0)
+        bool currentMoving = IsCurrentActorMoving();
+        if ((hasActiveTrigger || hasActiveDelayedTrigger) && IsPlayerTurn && !currentMoving)
         {
             endTurnButton1.TurnOffButton();
         }
@@ -574,6 +597,14 @@ public class TurnManager : MonoBehaviour
         {
             endTurnButton1.TurnOnButton();
         }
+    }
+
+    bool IsCurrentActorMoving()
+    {
+        if (CurrentActor == null) return movingPawns.Count > 0;
+        UnityEngine.Object go = CurrentActor.GetTransform() != null ? CurrentActor.GetTransform().gameObject : null;
+        if (go == null) return false;
+        return movingPawns.Contains(go);
     }
 
     private IEnumerator StartFirstTurn()
@@ -591,26 +622,19 @@ public class TurnManager : MonoBehaviour
 
     public float RollInitiative(IControlableSelectable pawn)
     {
-        return GetAgility(pawn) + UnityEngine.Random.Range(0f, initiativeRandomMax);
+        return DiceExpr.Roll("d20") + GetDexterity(pawn);
     }
 
-    private float GetAgility(IControlableSelectable pawn)
+    private float GetDexterity(IControlableSelectable pawn)
     {
-        if (pawn == null) return defaultAgility;
+        if (pawn == null) return defaultDexterity;
         try
         {
-            return pawn.GetDynamicParameterValue(agilityParameterKey);
+            return pawn.GetDynamicParameterValue(PawnDataController.DEXTERITY_KEY);
         }
         catch
         {
-            try
-            {
-                return pawn.GetDynamicParameterValue(PawnDataController.INITIAL_AVAILABLE_DISTANCE_KEY);
-            }
-            catch
-            {
-                return defaultAgility;
-            }
+            return defaultDexterity;
         }
     }
 
@@ -631,6 +655,7 @@ public class TurnManager : MonoBehaviour
         {
             PawnBrain brain = brains[i];
             if (!IsAliveCombatant(brain)) continue;
+            if (GroupMove.IsRallying(brain)) continue;
             roundQueue.Add(new TurnSlot
             {
                 pawn = brain,
@@ -653,6 +678,7 @@ public class TurnManager : MonoBehaviour
     public void RegisterCombatant(IControlableSelectable pawn)
     {
         if (!IsAliveCombatant(pawn)) return;
+        if (GroupMove.IsRallying(pawn)) return;
         for (int i = 0; i < roundQueue.Count; i++)
         {
             if (roundQueue[i].pawn == pawn) return;
@@ -661,6 +687,21 @@ public class TurnManager : MonoBehaviour
         {
             pawn = pawn,
             initiative = RollInitiative(pawn)
+        });
+        OnTurnQueueChanged?.Invoke();
+    }
+
+    public void RegisterCombatantAtEnd(IControlableSelectable pawn)
+    {
+        if (!IsAliveCombatant(pawn)) return;
+        for (int i = 0; i < roundQueue.Count; i++)
+        {
+            if (roundQueue[i].pawn == pawn) return;
+        }
+        roundQueue.Add(new TurnSlot
+        {
+            pawn = pawn,
+            initiative = -9999f
         });
         OnTurnQueueChanged?.Invoke();
     }
@@ -711,7 +752,7 @@ public class TurnManager : MonoBehaviour
         if (currentQueueIndex >= roundQueue.Count)
             currentQueueIndex = 0;
         CurrentActor = roundQueue[currentQueueIndex].pawn;
-        if (!IsAliveCombatant(CurrentActor))
+        if (!IsAliveCombatant(CurrentActor) || GroupMove.IsRallying(CurrentActor))
         {
             currentQueueIndex++;
             StartCurrentActorTurn(skipGuard + 1);
@@ -749,7 +790,7 @@ public class TurnManager : MonoBehaviour
     {
         if (!turnInProgress) return;
         if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f) return;
-        if (movingPawns.Count > 0) return;
+        if (IsCurrentActorMoving()) return;
         CheckTriggers();
         if (listOfTriggers.Find(t => t.isActive) == null && listOfDelayedTriggers.Find(t => t.isActive) == null)
             return;

@@ -197,11 +197,12 @@ public class GameUI : IUILayer
     public void OnChangeStats()
     {
         if (PawnController.Instance.currentSelectedPawn == null) return;
-        float curMag = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.MAG_AMOUNT_KEY);
-        float initMag = PawnController.Instance.currentSelectedPawn.GetDynamicParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
-        weaponSlider.SetBounds(0f, initMag);
-        weaponSlider.SetValue(curMag);
-        weaponSliderText.text = curMag.ToString() + "/" + initMag.ToString();
+        if (weaponSlider != null)
+        {
+            weaponSlider.gameObject.SetActive(false);
+        }
+        if (weaponSliderText != null)
+            weaponSliderText.text = "";
     }
     private void UpdateSelectedPlayer()
     {

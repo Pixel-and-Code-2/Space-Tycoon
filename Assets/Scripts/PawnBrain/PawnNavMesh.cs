@@ -15,6 +15,7 @@ public class PawnNavMesh : MonoBehaviour
     [HideInInspector]
     public Vector3 targetPosition { get; private set; } = Vector3.zero;
     private bool isMoving = false;
+    public event System.Action OnMoveStopped;
     private Vector3 cachedTargetPosition = Vector3.zero;
     private Vector3[] cachedPointsAvailable = null;
     private Vector3[] cachedPointsOutOfRange = null;
@@ -190,6 +191,11 @@ public class PawnNavMesh : MonoBehaviour
 
     public void TravelToPosition(Vector3 position)
     {
+        TravelToPosition(position, false);
+    }
+
+    public void TravelToPosition(Vector3 position, bool ignoreStamina)
+    {
         NavMeshHit navHit;
         if (!NavMesh.SamplePosition(position, out navHit, dataController.maxSampleDistance, NavMesh.AllAreas))
         {
@@ -199,6 +205,7 @@ public class PawnNavMesh : MonoBehaviour
 
         distanceTravelling = 0f;
         NavMeshPath path = new NavMeshPath();
+        float limit = ignoreStamina ? 99999f : GetAvDist();
 
         if (navMeshAgent.CalculatePath(samplePosition, path))
         {
@@ -208,16 +215,17 @@ public class PawnNavMesh : MonoBehaviour
                 Vector3 pointNext = path.corners[i + 1];
                 float dist = Vector3.Distance(pointPrev, pointNext);
 
-                if (distanceTravelling + dist > GetAvDist())
+                if (!ignoreStamina && distanceTravelling + dist > limit)
                 {
-                    float sectionDistance = (GetAvDist() - distanceTravelling) / dist;
+                    float sectionDistance = (limit - distanceTravelling) / dist;
                     Vector3 pointInTheMiddleOfTheSection = Vector3.Lerp(pointPrev, pointNext, sectionDistance);
                     distanceTravelling += sectionDistance * dist;
 
                     navMeshAgent.SetDestination(pointInTheMiddleOfTheSection);
                     targetPosition = pointInTheMiddleOfTheSection;
+                    cachedTargetPositionValid = false;
 
-                    AddWalkedDistance(GetAvDist());
+                    AddWalkedDistance(limit);
                     isMoving = true;
                     TurnManager.Instance.RegisterMovingPawn(gameObject);
                     return;
@@ -227,8 +235,17 @@ public class PawnNavMesh : MonoBehaviour
 
             navMeshAgent.SetDestination(samplePosition);
             targetPosition = samplePosition;
+            cachedTargetPositionValid = false;
 
-            AddWalkedDistance(distanceTravelling);
+            if (!ignoreStamina) AddWalkedDistance(distanceTravelling);
+            isMoving = true;
+            TurnManager.Instance.RegisterMovingPawn(gameObject);
+        }
+        else if (ignoreStamina)
+        {
+            navMeshAgent.SetDestination(samplePosition);
+            targetPosition = samplePosition;
+            cachedTargetPositionValid = false;
             isMoving = true;
             TurnManager.Instance.RegisterMovingPawn(gameObject);
         }
@@ -244,10 +261,9 @@ public class PawnNavMesh : MonoBehaviour
     }
     protected virtual void Update()
     {
-        if (UILayersController.Instance.overlayStack.Count == 0 || UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI) return;
         if (isMoving)
         {
-            if (!navMeshAgent.pathPending)
+            if (navMeshAgent != null && navMeshAgent.enabled && !navMeshAgent.pathPending)
             {
                 if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
                 {
@@ -257,7 +273,9 @@ public class PawnNavMesh : MonoBehaviour
                         SetTypeOfModifierVolumes(-1, -1);
                         navMeshAgent.ResetPath();
                         distanceTravelling = 0f;
-                        TurnManager.Instance.UnregisterMovingPawn(gameObject);
+                        if (TurnManager.Instance != null)
+                            TurnManager.Instance.UnregisterMovingPawn(gameObject);
+                        OnMoveStopped?.Invoke();
                     }
                 }
             }
@@ -334,11 +352,14 @@ public class PawnNavMesh : MonoBehaviour
         }
         distanceTravelling = 0f;
         targetPosition = Vector3.zero;
+        bool wasMoving = isMoving;
         isMoving = false;
         cachedTargetPosition = Vector3.zero;
         cachedPointsAvailable = null;
         cachedPointsOutOfRange = null;
         cachedTargetPositionValid = false;
+        if (wasMoving && TurnManager.Instance != null)
+            TurnManager.Instance.UnregisterMovingPawn(gameObject);
     }
 
     void OnDestroy()

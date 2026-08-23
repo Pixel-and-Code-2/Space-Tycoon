@@ -250,17 +250,7 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
 
         IPawnState newState = null;
         if (currentControlType == ControlType.attack)
-        {
-            (ISelectable selectable, Vector3 worldPoint, Vector2 screenPoint, ScreenCastHitResult hit) = PollForIntermidiateAiming();
-            if (selectable != null && selectable is IAttackableSelectable attackableSelectable && !meleeState.IsErrorChance(attackableSelectable))
-            {
-                newState = meleeState;
-            }
-            else
-            {
-                newState = shootState;
-            }
-        }
+            newState = shootState;
         else newState = walkState;
         if (newState != PawnController.Instance.currentState)
         {
@@ -277,6 +267,16 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
         }
         if (currentControlType == ControlType.walk && GetClickState(walkClick) || currentControlType == ControlType.attack && GetClickState(attackClick))
         {
+            if (currentControlType == ControlType.walk)
+            {
+                Vector2 mousePosition = Mouse.current.position.ReadValue();
+                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit playerHit, RAYCAST_DISTANCE, LayerMask.GetMask("Player")))
+                {
+                    SetHandleClick(walkClick, false);
+                    return (null, Vector3.zero);
+                }
+            }
             (ISelectable selectable, Vector3 worldPoint, Vector2 screenPoint, ScreenCastHitResult hit) = PollForIntermidiateAiming();
             if (hit != ScreenCastHitResult.SelectableHit)
             {

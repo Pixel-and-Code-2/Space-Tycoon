@@ -357,11 +357,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7839644155467114646}
     - target: {fileID: 7869846087712559139, guid: 504453969619fc345b6a12b64b65f670, type: 3}
+      propertyPath: combatantStats
+      value: 
+      objectReference: {fileID: 11400000, guid: c7b0caa32e060254d9368c2907336c14, type: 2}
+    - target: {fileID: 7869846087712559139, guid: 504453969619fc345b6a12b64b65f670, type: 3}
       propertyPath: initialPawnData
       value: 
       objectReference: {fileID: 11400000, guid: a1133450909f71c4a9176aeaba482733, type: 2}
     m_RemovedComponents:
-    - {fileID: -6913410222830464560}
+    - {fileID: 0}
     m_RemovedGameObjects:
     - {fileID: 2889496457845632466, guid: 504453969619fc345b6a12b64b65f670, type: 3}
     m_AddedGameObjects:

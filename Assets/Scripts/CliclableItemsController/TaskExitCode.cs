@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [System.Serializable]
-public struct ExitCode
+public struct TaskExitCode
 {
-    private static float eps = 0.001f;
+    static float eps = 0.001f;
     public string message;
     public Color color;
     public float code;

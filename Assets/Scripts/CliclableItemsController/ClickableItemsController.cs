@@ -364,6 +364,24 @@ public class ClickableItemsController : MonoBehaviour
         }
         return ClickableTaskInfo.None;
     }
+    public bool HasReadyOrProgressTask(ISelectable selectable)
+    {
+        if (selectable == null) return false;
+        foreach (TaskItem item in mainTaskScenario)
+        {
+            if (item.selectable != selectable) continue;
+            if (item.status == TaskItem.TaskItemStatus.ReadyToStart || item.status == TaskItem.TaskItemStatus.InProgress)
+                return true;
+        }
+        foreach (TaskItem item in sideTaskScenario)
+        {
+            if (item.selectable != selectable) continue;
+            if (item.status == TaskItem.TaskItemStatus.ReadyToStart || item.status == TaskItem.TaskItemStatus.InProgress)
+                return true;
+        }
+        return false;
+    }
+
     public bool OnSelect(ISelectable selectable)
     {
         bool selecting = false;

@@ -34,6 +34,10 @@ public class PawnBrain : IControlableSelectable
     SkinnedMeshRenderer skinnedMeshRenderer;
     private bool warFogEventsSubscribed;
     private static HashSet<IControlableSelectable> playersAlive = new HashSet<IControlableSelectable>();
+    public static IReadOnlyCollection<IControlableSelectable> AlivePlayers => playersAlive;
+    private bool onTask;
+    private float busyUntilTime = -9999f;
+    private Vector3 lastDrawnPathTarget = new Vector3(99999f, 99999f, 99999f);
     [Header("Sounds")]
     [SerializeField]
     private AudioClip hitSound;
@@ -63,7 +67,14 @@ public class PawnBrain : IControlableSelectable
         {
             playersAlive.Add(this);
         }
+        if (pawnNavMesh != null)
+            pawnNavMesh.OnMoveStopped += HandleMoveStopped;
         audioSource = GetComponent<AudioSource>();
+    }
+
+    void HandleMoveStopped()
+    {
+        GroupMove.OnPawnStopped(this);
     }
 
     void Start()
@@ -87,8 +98,6 @@ public class PawnBrain : IControlableSelectable
         TurnManager.Instance.OnTriggerZoneEnter += OnTriggerZoneEnter;
         TurnManager.Instance.OnTriggerZoneExit += OnTriggerZoneExit;
         pawnNavMesh.SetTypeOfModifierVolumes(dataController.selectableType == SelectableType.Player ? 1 : 0, 0, 0);
-        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.LAST_SHOT_ANGLE] = 0f;
-        HandleInittingGlobalVars.mainCalculatedFormulaData.parametersDict[PawnController.CURRENT_TARGET_ANGLE] = 0f;
         SaveHub.Instance.OnLoad += OnLoadData;
     }
 
@@ -149,25 +158,28 @@ public class PawnBrain : IControlableSelectable
             WarFog.OnWarFogEnd -= OnWarFogEnd;
             WarFog.OnWarFogStart -= OnWarFogStart;
         }
+        if (pawnNavMesh != null)
+            pawnNavMesh.OnMoveStopped -= HandleMoveStopped;
     }
 
     void Update()
     {
         if (pawnNavMesh.IsMoving())
         {
-            if (!pathDrawer.GetVisible())
+            GroupMove.TickRally(this);
+            Vector3 dest = pawnNavMesh.targetPosition;
+            bool needRedraw = !pathDrawer.GetVisible() || (dest - lastDrawnPathTarget).sqrMagnitude > 0.01f;
+            if (needRedraw)
             {
+                lastDrawnPathTarget = dest;
                 pathDrawer.SetVisible(true);
-                pathDrawer.SetPathPoints(pawnNavMesh.GetPathPointsTo(pawnNavMesh.targetPosition).pointsAvailable, null);
-            }
-            else
-            {
-                // we can update route runtime, but it's expensive
-                // pathDrawer.SetPathPoints(GetPathPointsTo(targetPosition).pointsAvailable, null);
+                var points = pawnNavMesh.GetPathPointsTo(dest);
+                pathDrawer.SetPathPoints(points.pointsAvailable, null);
             }
         }
         else
         {
+            lastDrawnPathTarget = new Vector3(99999f, 99999f, 99999f);
             if (animatorBrain?.GetCurrentAnimation(0) != (int)AnimatorBrainBase.Animations.IDLE)
             {
                 animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
@@ -229,11 +241,10 @@ public class PawnBrain : IControlableSelectable
     }
     private void OnTriggerZoneEnter()
     {
-        pawnNavMesh.ResetMovement();
         if (dataController.selectableType == SelectableType.Player)
-        {
             dataController.ResetActionPoints();
-        }
+        if (!GroupMove.IsRallying(this))
+            pawnNavMesh.ResetMovement();
     }
     private void OnTriggerZoneExit()
     {
@@ -256,7 +267,17 @@ public class PawnBrain : IControlableSelectable
 
     public override void OnMove(Vector3 position)
     {
-        pawnNavMesh.TravelToPosition(position);
+        OnMoveInternal(position, false);
+    }
+
+    public override void OnMoveFree(Vector3 position)
+    {
+        OnMoveInternal(position, true);
+    }
+
+    void OnMoveInternal(Vector3 position, bool ignoreStamina)
+    {
+        pawnNavMesh.TravelToPosition(position, ignoreStamina);
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.WALK, 0, false, false);
         audioSource.loop = true;
         audioSource.clip = walkSound;
@@ -266,6 +287,20 @@ public class PawnBrain : IControlableSelectable
     public override bool IsMoving()
     {
         return pawnNavMesh.IsMoving();
+    }
+
+    public override PawnDataController PawnData => dataController;
+    public override bool IsOnTask => onTask;
+    public override bool IsBusy => onTask || GroupMove.IsPendingSolo(this);
+    public override bool IsAutoFollowHold => Time.time < busyUntilTime;
+    public override void SetOnTask(bool value) => onTask = value;
+    public override void MarkCtrlSoloMove() { }
+    public override void MarkBusyFromNow() => busyUntilTime = Time.time + GroupMove.SoloBusySec;
+    public override void ClearMoveHold() => busyUntilTime = -9999f;
+    public override void StopMove()
+    {
+        if (pawnNavMesh != null)
+            pawnNavMesh.ResetMovement();
     }
 
     public override (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) GetPathPointsTo(Vector3 position)
@@ -292,7 +327,7 @@ public class PawnBrain : IControlableSelectable
         if (GetSelectableType() != SelectableType.Player) return;
         if (other.gameObject.layer == LayerMask.NameToLayer("Trigger"))
         {
-            TurnManager.Instance.EnterTrigger(other.gameObject);
+            TurnManager.Instance.EnterTrigger(other.gameObject, this);
         }
         if (other.gameObject.layer == LayerMask.NameToLayer("WarFog"))
         {
@@ -302,9 +337,11 @@ public class PawnBrain : IControlableSelectable
     }
     public override void OnCompleteTask()
     {
+        onTask = false;
         string[] boosts = new string[] { "+ 1 к IQ", "+ 1 к ловкости", "+ 5% к ловкости", "+ 5% к IQ" };
         int boostIndex = UnityEngine.Random.Range(0, boosts.Length);
         UI3DManager.Instance.ShowMessage(boosts[boostIndex], transform.position, new Color(0f, 1f, 0f));
+        GroupMove.OnTaskFinished(this);
     }
     public override void OnShoot(Vector3 position, bool isAlive)
     {
@@ -319,11 +356,6 @@ public class PawnBrain : IControlableSelectable
             PawnDataController.SHOOTED_AMOUNT_KEY,
             dataController.GetParameterValue(PawnDataController.SHOOTED_AMOUNT_KEY) + 1
         );
-        dataController.SetParameterValue(
-            PawnDataController.MAG_AMOUNT_KEY,
-            dataController.GetParameterValue(PawnDataController.MAG_AMOUNT_KEY) - 1
-        );
-        PawnController.Instance.UpdateStartReloadButtonColor();
         PawnController.Instance.UpdateMoveOnShootButtonColor();
         if (!isAlive && dataController.selectableType == SelectableType.Player)
         {
@@ -380,10 +412,6 @@ public class PawnBrain : IControlableSelectable
             PawnDataController.AVAILABLE_HEALTH_KEY,
             newHealth
         );
-        dataController.SetParameterValue(
-            PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY,
-            dataController.GetParameterValue(PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY) + 1
-        );
         if (audioSource != null)
         {
             if (!isAlive && deathSound != null)
@@ -404,9 +432,10 @@ public class PawnBrain : IControlableSelectable
         dataController.selectableType = SelectableType.Player;
         gameObject.layer = LayerMask.NameToLayer("Player");
         pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 0);
-        playersAlive.Add(this);
+        if (!playersAlive.Contains(this))
+            playersAlive.Add(this);
         animatorBrain?.SetLocked(false, 0);
-        animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, true);
+        animatorBrain?.InstaPlay((int)AnimatorBrainBase.Animations.IDLE, 0, false, true);
         dataController.SetParameterValue(
             PawnDataController.AVAILABLE_HEALTH_KEY,
             dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY)
@@ -415,7 +444,17 @@ public class PawnBrain : IControlableSelectable
             PawnDataController.AMOUNT_OF_HEALINGS_KEY,
             dataController.GetParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY) + 1
         );
+        // ClickableItem clickable = GetComponent<ClickableItem>();
+        // if (clickable != null)
+        // {
+        //     Collider c = clickable.GetComponent<Collider>();
+        //     if (c != null) c.enabled = true;
+        // }
         RefreshStatusVisualizers();
+        float healed = dataController.GetParameterValue(PawnDataController.INITIAL_HP_KEY);
+        UI3DManager.Instance.ShowMessage("+" + healed.ToString("F0") + " hp", transform.position, new Color(0f, 1f, 0f));
+        // if (ClickableItemsController.Instance != null)
+        //     ClickableItemsController.Instance.RefreshTasksAfterHeal();
         if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f
             && TurnManager.Instance != null)
         {
@@ -429,35 +468,10 @@ public class PawnBrain : IControlableSelectable
         hitDirection.Normalize();
         hitDirection.y = 1f;
         rb.AddForce(hitDirection * hitForce, ForceMode.Impulse);
-        dataController.SetParameterValue(
-            PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY,
-            dataController.GetParameterValue(PawnDataController.AMOUNT_OF_DEFENDED_HITS_KEY) + (isMelee ? 1 : 2)
-        );
     }
 
     public override void MakeReload()
     {
-        float currentAmmo = dataController.GetParameterValue(PawnDataController.TOTAL_AMMO_KEY);
-        float currentMag = dataController.GetParameterValue(PawnDataController.MAG_AMOUNT_KEY);
-        float initialMag = dataController.GetParameterValue(PawnDataController.INITIAL_MAG_AMOUNT_KEY);
-        if (currentMag >= initialMag) return;
-        float reloadMagWithAmount = Mathf.Min(initialMag - currentMag, currentAmmo);
-        float reloadedAmmo = currentAmmo - reloadMagWithAmount;
-        float reloadedMag = reloadMagWithAmount + currentMag;
-        dataController.SetParameterValue(PawnDataController.MAG_AMOUNT_KEY, reloadedMag);
-        dataController.SetParameterValue(PawnDataController.TOTAL_AMMO_KEY, reloadedAmmo);
-        if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f)
-        {
-            float movesToSkipForFullMag = dataController.GetParameterValue(PawnDataController.INITIAL_MOVES_TO_RELOAD_KEY);
-            float movesToSkip = Mathf.Ceil(movesToSkipForFullMag * (reloadMagWithAmount / initialMag));
-            // Debug.Log("movesToSkip: " + movesToSkip + " reloadMagWithAmount: " + reloadMagWithAmount + " initialMag: " + initialMag + " movesToSkipForFullMag: " + movesToSkipForFullMag);
-            dataController.SetParameterValue(PawnDataController.MOVES_TO_SKIP_KEY, movesToSkip);
-        }
-        if (audioSource != null && reloadSound != null)
-        {
-            audioSource.clip = reloadSound;
-            audioSource.PlayOneShot(reloadSound);
-        }
     }
     private void OnWarFogEnd()
     {
@@ -472,15 +486,6 @@ public class PawnBrain : IControlableSelectable
         {
             UI3DManager.Instance.UnregisterPawn(gameObject);
         }
-    }
-    public override IFormulaData GetFormulaData()
-    {
-        return dataController;
-    }
-
-    public override void FillFormulaData(FormulaDataMonoBase formulaData, string prefix)
-    {
-        dataController.FillFormulaData(formulaData, prefix);
     }
     public override void SetDynamicParameterValue(string parameterName, float value)
     {

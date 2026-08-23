@@ -220,7 +220,7 @@ public class SliderToPawnConnector : MonoBehaviour
         bool shooted = TryGetParam(PawnDataController.SHOOTED_AMOUNT_KEY) > 0.5f;
         bool melee = TryGetParam(PawnDataController.MELEE_AMOUNT_KEY) > 0.5f;
         bool movesToSkip = TryGetParam(PawnDataController.MOVES_TO_SKIP_KEY) > 0.5f;
-        bool isShootWalk = TryGetParam(PawnDataController.IS_SHOOT_ON_MOVE_KEY) > 0.5f;
+        bool isShootWalk = pawn != null && pawn.HasMovedThisTurn;
         float prediction = (shooted && !isShootWalk) || (melee && isShootWalk) || movesToSkip ? 0f : avDist;
         // Debug.Log("Prediction: " + pawnStamina + " AvDist: " + avDist + " shooted this round: " + shooted + " melee this round: " + melee + " moves to skip: " + movesToSkip + " isShootWalk: " + isShootWalk);
         return prediction;
@@ -230,9 +230,7 @@ public class SliderToPawnConnector : MonoBehaviour
         bool skips = TryGetParam(PawnDataController.MOVES_TO_SKIP_KEY) > 0.1f;
         float shooted = TryGetParam(PawnDataController.SHOOTED_AMOUNT_KEY);
         bool melee = TryGetParam(PawnDataController.MELEE_AMOUNT_KEY) > 0.5f;
-        float mag = TryGetParam(PawnDataController.MAG_AMOUNT_KEY);
-        bool canAttack = !skips && ((mag > 0.5f && !melee) || (shooted < 0.5f && !melee));
-        // Debug.Log("CanAttack: " + canAttack + " skips: " + skips + " shooted: " + shooted + " melee: " + melee + " mag: " + mag);
+        bool canAttack = !skips && !melee;
         return canAttack;
     }
 

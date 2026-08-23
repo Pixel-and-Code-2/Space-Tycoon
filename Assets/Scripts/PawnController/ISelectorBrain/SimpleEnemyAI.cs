@@ -241,7 +241,7 @@ public class SimpleEnemyAI : ISelectorBrain
                     return walkState;
                 case DetailedScenarioElementType.SetAttackState:
                     currentScenarioIndex++;
-                    return meleeState;
+                    return GetComponent<ShootState>();
                 default:
                     return null;
             }

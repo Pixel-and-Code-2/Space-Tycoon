@@ -10,4 +10,4 @@ public class NamedFloat
     }
     public string name;
     public float value;
-};
+}
