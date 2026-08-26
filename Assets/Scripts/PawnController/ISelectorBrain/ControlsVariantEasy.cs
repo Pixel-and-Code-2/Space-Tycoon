@@ -57,6 +57,7 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
     [SerializeField]
     private IconButtonStyleFiller attackButton;
     private IControlableSelectable forcedSelectedPlayer = null;
+    private bool forceLockCameraOnSelect = true;
     private List<InputActionReference> actions = new List<InputActionReference>();
     // here we tracking certain keys, to prevent multiple click handles on the same button press
     private Dictionary<InputControl, bool> handledControls = new Dictionary<InputControl, bool>();
@@ -171,7 +172,9 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
             IControlableSelectable pl = forcedSelectedPlayer;
             forcedSelectedPlayer = null;
             if (locked != null && pl != locked) pl = locked;
-            CameraTargetController.Instance.ForceLockTarget();
+            if (forceLockCameraOnSelect && CameraTargetController.Instance != null)
+                CameraTargetController.Instance.ForceLockTarget();
+            forceLockCameraOnSelect = true;
             return pl;
         }
         if (locked != null)
@@ -495,13 +498,14 @@ public class ControlsVariantEasy : ISelectorBrainWithUI
         UpdateControlButtons();
     }
 
-    public void SelectPlayer(IControlableSelectable pl)
+    public void SelectPlayer(IControlableSelectable pl, bool magnetizeCamera = true)
     {
         if (PawnController.Instance != null && PawnController.Instance.IsSelectionLockedToCurrentActor())
         {
             IControlableSelectable locked = PawnController.Instance.GetLockedActor();
             if (locked != null && pl != locked) return;
         }
+        forceLockCameraOnSelect = magnetizeCamera;
         forcedSelectedPlayer = pl;
     }
 

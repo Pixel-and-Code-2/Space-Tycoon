@@ -168,6 +168,17 @@ public static class GroupMove
         pawn.ClearMoveHold();
         if (PawnController.Instance != null && PawnController.Instance.IsInCombat()) return;
         if (!HasLastCommand) return;
+        if (pawn is MonoBehaviour mb)
+            mb.StartCoroutine(FollowAfterNavReady(pawn));
+        else
+            OnBusyDropped(pawn);
+    }
+
+    static IEnumerator FollowAfterNavReady(IControlableSelectable pawn)
+    {
+        yield return null;
+        yield return null;
+        if (pawn == null || !pawn.IsAlive) yield break;
         OnBusyDropped(pawn);
     }
 

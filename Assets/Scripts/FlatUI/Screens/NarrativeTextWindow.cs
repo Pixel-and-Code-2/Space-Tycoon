@@ -52,7 +52,14 @@ public class NarrativeTextWindow : IUILayer
         timeElapsed += Time.unscaledDeltaTime;
         if (timeElapsed >= duration)
         {
-            UILayersController.Instance.GoBack();
+            if (queueItems.Count > 0)
+            {
+                SetText(queueItems[0].text, queueItems[0].yLevel);
+                queueItems.RemoveAt(0);
+                timeElapsed = 0f;
+            }
+            else
+                UILayersController.Instance.GoBack();
         }
     }
     public override void OnBackgroundClick()
@@ -60,22 +67,23 @@ public class NarrativeTextWindow : IUILayer
         if (queueItems.Count > 0) {
             SetText(queueItems[0].text, queueItems[0].yLevel);
             queueItems.RemoveAt(0);
-            Debug.Log("NarrativeTextWindow: Queue item removed: " + queueItems.Count);
+            timeElapsed = 0f;
         } else {
             UILayersController.Instance.GoBack();
-            Debug.Log("NarrativeTextWindow: No queue items left, going back");
         }
     }
     public override void Initialize(string config)
     {
         (string text, int layer) = ParseConfig(config);
         SetText(text, layer);
+        timeElapsed = 0f;
     }
     private void SetText(string text, int layer) {
         textMeshProUGUI.text = text;
         var rt = (RectTransform)transform;
         var p = rt.anchoredPosition;
-        p.y = yLevels[layer];
+        int idx = Mathf.Clamp(layer, 0, yLevels.Length - 1);
+        p.y = yLevels[idx];
         rt.anchoredPosition = p;
         LayoutRebuilder.ForceRebuildLayoutImmediate(parentRect);
     }
@@ -87,9 +95,18 @@ public class NarrativeTextWindow : IUILayer
     }
     private (string, int) ParseConfig(string config)
     {
-        string[] parts = config.Split('_');
-        int parsedNumber;
-        if (parts.Length <= 1 || !int.TryParse(parts[1], out parsedNumber) || parsedNumber < 0 || parsedNumber > 2) parsedNumber = 0;
-        return (parts[0], parsedNumber);
+        if (string.IsNullOrEmpty(config)) return ("", 0);
+        int last = config.LastIndexOf('_');
+        int parsedNumber = 0;
+        string text = config;
+        if (last >= 0
+            && int.TryParse(config.Substring(last + 1), out parsedNumber)
+            && parsedNumber >= -1 && parsedNumber <= 2)
+        {
+            text = config.Substring(0, last);
+            if (parsedNumber < 0) parsedNumber = 0;
+        }
+        else parsedNumber = 0;
+        return (text, parsedNumber);
     }
 }

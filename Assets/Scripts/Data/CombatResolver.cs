@@ -125,7 +125,7 @@ public static class CombatResolver
         return ways / 400f;
     }
 
-    static bool HasWallBetween(Vector3 from, Vector3 to)
+    public static bool HasWallBetween(Vector3 from, Vector3 to)
     {
         Vector3 dir = to - from;
         float dist = dir.magnitude;

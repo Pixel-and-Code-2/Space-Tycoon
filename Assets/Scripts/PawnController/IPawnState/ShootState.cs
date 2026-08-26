@@ -45,7 +45,12 @@ public class ShootState : IPawnState
         if (r.crit)
             UI3DManager.Instance.ShowMessage("Крит!", worldPoint, Color.magenta);
         bool isAlive = attackable.OnGetHit(r.damage);
-        if (r.isMelee) controlableSelectable.OnMelee(worldPoint);
+        if (r.isMelee)
+        {
+            controlableSelectable.OnMelee(worldPoint);
+            if (!isAlive && attacker.selectableType == SelectableType.Player)
+                StatBoostService.TryGrantAfterKill(controlableSelectable);
+        }
         else controlableSelectable.OnShoot(worldPoint, isAlive);
     }
 

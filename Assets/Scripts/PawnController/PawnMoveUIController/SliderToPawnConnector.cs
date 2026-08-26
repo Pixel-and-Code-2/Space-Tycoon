@@ -138,7 +138,10 @@ public class SliderToPawnConnector : MonoBehaviour
             }
             else
             {
-                var maxHealings = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
+                float maxHealings = 0f;
+                if (HandleInittingGlobalVars.globalParameters != null
+                    && HandleInittingGlobalVars.globalParameters.parametersDict.ContainsKey(HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY))
+                    maxHealings = HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.AMOUNT_OF_HEALINGS_KEY];
                 var usedHealings = pawn.GetParameterValue(PawnDataController.AMOUNT_OF_HEALINGS_KEY);
                 var revivesLeft = maxHealings - usedHealings;
                 SetHelperTextEnabled(revivesLeft > 0.5f);
@@ -263,7 +266,7 @@ public class SliderToPawnConnector : MonoBehaviour
         if (walkIcon != null)
         {
             bool isStepByStep = TryGetParam(HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY) > 0.5f;
-            bool canWalk = !isStepByStep || (pawn != null && pawn.MaxMoveMetersFromStamina > 0.1f);
+            bool canWalk = !isStepByStep || (pawn != null && pawn.MaxMoveMetersFromStamina >= 2f - 0.001f);
             walkIcon.SetActive(canWalk);
         }
 

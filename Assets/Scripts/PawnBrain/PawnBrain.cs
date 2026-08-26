@@ -354,9 +354,6 @@ public class PawnBrain : IControlableSelectable
     public override void OnCompleteTask()
     {
         onTask = false;
-        string[] boosts = new string[] { "+ 1 к IQ", "+ 1 к ловкости", "+ 5% к ловкости", "+ 5% к IQ" };
-        int boostIndex = UnityEngine.Random.Range(0, boosts.Length);
-        UI3DManager.Instance.ShowMessage(boosts[boostIndex], transform.position, new Color(0f, 1f, 0f));
         GroupMove.OnTaskFinished(this);
     }
     public override void OnShoot(Vector3 position, bool isAlive)
@@ -374,11 +371,7 @@ public class PawnBrain : IControlableSelectable
         );
         PawnController.Instance.UpdateMoveOnShootButtonColor();
         if (!isAlive && dataController.selectableType == SelectableType.Player)
-        {
-            string[] boosts = new string[] { "+ 1 к защите", "+ 1 к силе", "", "+ 5% к силе", "+ 5% к защите" };
-            int boostIndex = UnityEngine.Random.Range(0, boosts.Length);
-            UI3DManager.Instance.ShowMessage(boosts[boostIndex], transform.position, new Color(0f, 1f, 0f));
-        }
+            StatBoostService.TryGrantAfterKill(this);
     }
     public override void OnNoAmmoShoot()
     {

@@ -54,6 +54,8 @@ public class ClickableItemsController : MonoBehaviour
         public string completeText = string.Empty;
         public Color completeTextColor = Color.yellow;
         public bool onlyShowText = false;
+        [Tooltip("Show ? marker, but one click runs StartWork as if menu button was pressed")]
+        public bool startImmediately = false;
     }
     public static ClickableItemsController Instance { get; private set; }
     public System.Action OnTaskUpdated;
@@ -259,10 +261,12 @@ public class ClickableItemsController : MonoBehaviour
     }
     private void UnregisterSelectable(ISelectable selectable)
     {
+        if (selectable == null) return;
         if (selectable.OccupiedBy != null)
         {
             selectable.OccupiedBy = null;
-            UI3DManager.Instance.UnregisterSelectable(selectable);
+            if (UI3DManager.Instance != null)
+                UI3DManager.Instance.UnregisterSelectable(selectable);
         }
     }
     private void CheckActionBox()
@@ -444,12 +448,39 @@ public class ClickableItemsController : MonoBehaviour
         if (blocked) return;
         blocked = CheckScenarioForText(sideTaskScenario, TaskItem.TextShowTime.BeforeContextMenu);
         if (blocked) return;
+        TaskItem occupied = FindReadyTask(currentSelectedItem);
+        if (occupied != null && occupied.startImmediately)
+        {
+            ISelectable selected = currentSelectedItem;
+            ClickableItem clickable = selected != null ? selected.GetClickableItem() : null;
+            if (clickable != null)
+                clickable.TryStartWorkImmediately();
+            CheckActionBox();
+            return;
+        }
         List<ContextMenuItem> items = currentSelectedItem.OnContextMenu();
         if (items != null)
         {
             UI3DManager.Instance.ShowContextMenu(currentSelectedItem.GetTransform().position, items);
         }
         UnregisterSelectable(currentSelectedItem);
+    }
+
+    TaskItem FindReadyTask(ISelectable selectable)
+    {
+        foreach (TaskItem item in mainTaskScenario)
+        {
+            if (item.selectable == selectable
+                && (item.status == TaskItem.TaskItemStatus.ReadyToStart || item.status == TaskItem.TaskItemStatus.InProgress))
+                return item;
+        }
+        foreach (TaskItem item in sideTaskScenario)
+        {
+            if (item.selectable == selectable
+                && (item.status == TaskItem.TaskItemStatus.ReadyToStart || item.status == TaskItem.TaskItemStatus.InProgress))
+                return item;
+        }
+        return null;
     }
     bool CheckScenarioForText(List<TaskItem> taskScenario, TaskItem.TextShowTime showTime, ISelectable target = null)
     {
@@ -554,7 +585,14 @@ public class ClickableItemsController : MonoBehaviour
         }
         if (updated) OnTaskUpdated?.Invoke();
         if (completedItem != null)
+        {
             ShowTaskTexts(completedItem, TaskItem.TextShowTime.AfterComplete);
+            ClickableItem clickable = selectable.GetClickableItem();
+            IControlableSelectable executor = clickable != null ? clickable.taskExecutor : null;
+            if (executor == null && PawnController.Instance != null)
+                executor = PawnController.Instance.currentSelectedPawn;
+            StatBoostService.TryGrantAfterTask(executor, completedItem);
+        }
     }
 
     private TaskItem CompleteInProgressTask(List<TaskItem> scenario, ISelectable selectable, ref bool updated)

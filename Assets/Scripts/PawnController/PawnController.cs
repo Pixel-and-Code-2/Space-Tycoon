@@ -238,7 +238,7 @@ public class PawnController : MonoBehaviour
         if (actor != null && actor.GetSelectableType() == SelectableType.Player)
         {
             if (InputScreenMouseControlActions.Instance != null)
-                InputScreenMouseControlActions.Instance.SelectPlayer(actor);
+                InputScreenMouseControlActions.Instance.SelectPlayer(actor, false);
         }
     }
 

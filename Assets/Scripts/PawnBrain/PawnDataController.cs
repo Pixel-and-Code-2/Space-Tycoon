@@ -6,6 +6,8 @@ public class PawnDataController : MonoBehaviour
 {
     [SerializeField]
     private CombatantStats combatantStats;
+    [SerializeField]
+    private EnemyAiProfile aiProfileOverride;
     [Header("Additional Developing params")]
     [SerializeField, Tooltip("Max distance from mouse to walkable area, to show path")]
     public float maxSampleDistance = 5f;
@@ -63,6 +65,7 @@ public class PawnDataController : MonoBehaviour
     public string UNIQUE_ID => "PawnData_" + gameObject.name;
 
     public CombatantStats Stats => combatantStats;
+    public EnemyAiProfile AiProfileOverride => aiProfileOverride;
     public float MaxHp => maxHp;
     public float CurrentHp => currentHp;
     public float MovePerTurn => movePerTurn;
@@ -96,6 +99,40 @@ public class PawnDataController : MonoBehaviour
         if (isMelee && HasRanged) return costs.shooterMeleeAttackCost;
         if (isMelee) return costs.meleeAttackCost;
         return costs.rangedAttackCost;
+    }
+
+    public void ApplyBoost(GlobalSettingsAssets.BoostStat stat, GlobalSettingsAssets.BoostMode mode, float value)
+    {
+        switch (stat)
+        {
+            case GlobalSettingsAssets.BoostStat.Strength:
+                strength = ApplyMode(strength, mode, value);
+                break;
+            case GlobalSettingsAssets.BoostStat.Dexterity:
+                dexterity = ApplyMode(dexterity, mode, value);
+                break;
+            case GlobalSettingsAssets.BoostStat.ArmorClass:
+                armorClass = ApplyMode(armorClass, mode, value);
+                break;
+            case GlobalSettingsAssets.BoostStat.MaxHp:
+                float oldMax = maxHp;
+                maxHp = ApplyMode(maxHp, mode, value);
+                if (maxHp > oldMax)
+                    currentHp += maxHp - oldMax;
+                break;
+        }
+        if (GameUI.Instance != null)
+        {
+            GameUI.Instance.OnChangeStats();
+            GameUI.Instance.UpdatePlayerData();
+        }
+    }
+
+    static float ApplyMode(float current, GlobalSettingsAssets.BoostMode mode, float value)
+    {
+        if (mode == GlobalSettingsAssets.BoostMode.Percent)
+            return current * (1f + value / 100f);
+        return current + value;
     }
 
     public bool CanSpendStamina(float amount) => stamina >= amount - 0.001f;
@@ -246,6 +283,18 @@ public class PawnDataController : MonoBehaviour
         walkedMeters = data.GetData("WalkedDistance", UNIQUE_ID, walkedMeters);
         hasMovedThisTurn = data.GetData("HasMovedThisTurn", UNIQUE_ID, hasMovedThisTurn ? 1f : 0f) > 0.5f;
         healingsAmount = data.GetData("HealingsAmount", UNIQUE_ID, healingsAmount);
+        maxHp = data.GetData("MaxHp", UNIQUE_ID, maxHp);
+        strength = data.GetData("Strength", UNIQUE_ID, strength);
+        dexterity = data.GetData("Dexterity", UNIQUE_ID, dexterity);
+        armorClass = data.GetData("ArmorClass", UNIQUE_ID, armorClass);
+        attackRange = data.GetData("AttackRange", UNIQUE_ID, attackRange);
+        meleeReach = data.GetData("MeleeReach", UNIQUE_ID, meleeReach);
+        staminaPerMeter = data.GetData("StaminaPerMeter", UNIQUE_ID, staminaPerMeter);
+        movePerTurn = data.GetData("MovePerTurn", UNIQUE_ID, movePerTurn);
+        maxStamina = data.GetData("MaxStamina", UNIQUE_ID, maxStamina);
+        shotAmount = data.GetData("ShotAmount", UNIQUE_ID, shotAmount);
+        meleeAmount = data.GetData("MeleeAmount", UNIQUE_ID, meleeAmount);
+        movesToSkip = data.GetData("MovesToSkip", UNIQUE_ID, movesToSkip);
         string selectableTypeKey = DataCompressor.GetRecordName("SelectableType", UNIQUE_ID);
         bool hasSelectableTypeInSave = data.intData != null && data.intData.ContainsKey(selectableTypeKey);
         selectableType = (SelectableType)data.GetData("SelectableType", UNIQUE_ID, (int)selectableType);
@@ -254,6 +303,7 @@ public class PawnDataController : MonoBehaviour
             selectableType = SelectableType.Dead;
             currentHp = 0f;
         }
+        NotifyStaminaChanged();
     }
 
     private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
@@ -264,6 +314,18 @@ public class PawnDataController : MonoBehaviour
             new SaveRecord() { recordName = "WalkedDistance", recordType = SaveRecordType.floatNumber, floatValue = walkedMeters },
             new SaveRecord() { recordName = "HasMovedThisTurn", recordType = SaveRecordType.floatNumber, floatValue = hasMovedThisTurn ? 1f : 0f },
             new SaveRecord() { recordName = "HealingsAmount", recordType = SaveRecordType.floatNumber, floatValue = healingsAmount },
+            new SaveRecord() { recordName = "MaxHp", recordType = SaveRecordType.floatNumber, floatValue = maxHp },
+            new SaveRecord() { recordName = "Strength", recordType = SaveRecordType.floatNumber, floatValue = strength },
+            new SaveRecord() { recordName = "Dexterity", recordType = SaveRecordType.floatNumber, floatValue = dexterity },
+            new SaveRecord() { recordName = "ArmorClass", recordType = SaveRecordType.floatNumber, floatValue = armorClass },
+            new SaveRecord() { recordName = "AttackRange", recordType = SaveRecordType.floatNumber, floatValue = attackRange },
+            new SaveRecord() { recordName = "MeleeReach", recordType = SaveRecordType.floatNumber, floatValue = meleeReach },
+            new SaveRecord() { recordName = "StaminaPerMeter", recordType = SaveRecordType.floatNumber, floatValue = staminaPerMeter },
+            new SaveRecord() { recordName = "MovePerTurn", recordType = SaveRecordType.floatNumber, floatValue = movePerTurn },
+            new SaveRecord() { recordName = "MaxStamina", recordType = SaveRecordType.floatNumber, floatValue = maxStamina },
+            new SaveRecord() { recordName = "ShotAmount", recordType = SaveRecordType.floatNumber, floatValue = shotAmount },
+            new SaveRecord() { recordName = "MeleeAmount", recordType = SaveRecordType.floatNumber, floatValue = meleeAmount },
+            new SaveRecord() { recordName = "MovesToSkip", recordType = SaveRecordType.floatNumber, floatValue = movesToSkip },
             new SaveRecord() { recordName = "SelectableType", recordType = SaveRecordType.integerNumber, intValue = (int)selectableType }
         }, UNIQUE_ID);
     }

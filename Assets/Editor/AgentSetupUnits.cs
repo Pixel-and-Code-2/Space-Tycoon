@@ -156,14 +156,6 @@ public static class AgentSetupUnits
             }
         }
 
-        var ai = Object.FindFirstObjectByType<SimpleEnemyAI>();
-        if (ai != null && pawnBrain != null)
-        {
-            ai.AddPawnToScenario(pawnBrain);
-            EditorUtility.SetDirty(ai);
-            sb.AppendLine("registered in SimpleEnemyAI via AddPawnToScenario");
-        }
-
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
 

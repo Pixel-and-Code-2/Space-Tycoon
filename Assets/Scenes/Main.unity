@@ -5339,7 +5339,7 @@ MonoBehaviour:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -1
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 0}
 --- !u!65 &148340770
 BoxCollider:
@@ -7922,7 +7922,7 @@ MonoBehaviour:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 0.5058824}
       code: -1
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 0}
 --- !u!65 &293719872
 BoxCollider:
@@ -11695,7 +11695,7 @@ MonoBehaviour:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 0.5058824}
       code: -1
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 0}
 --- !u!65 &675672624
 BoxCollider:
@@ -19052,7 +19052,7 @@ MonoBehaviour:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -1
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 0}
 --- !u!65 &873894166
 BoxCollider:
@@ -19844,7 +19844,7 @@ MonoBehaviour:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 0.5058824}
       code: -1
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 0}
 --- !u!65 &928134608
 BoxCollider:
@@ -21115,7 +21115,7 @@ MonoBehaviour:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 0.5058824}
       code: -1
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 0}
 --- !u!65 &1038951783
 BoxCollider:
@@ -23974,7 +23974,7 @@ MonoBehaviour:
         \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0439"
       color: {r: 1, g: 0, b: 0, a: 0.4117647}
       code: -2
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 1175933378}
 --- !u!114 &1175933378
 MonoBehaviour:
@@ -24457,7 +24457,7 @@ MonoBehaviour:
         \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0439"
       color: {r: 1, g: 0, b: 0, a: 0.4117647}
       code: -2
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 1222671062}
 --- !u!114 &1222671062
 MonoBehaviour:
@@ -24798,7 +24798,7 @@ MonoBehaviour:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -1
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 0}
 --- !u!65 &1270954054
 BoxCollider:
@@ -34240,6 +34240,7 @@ GameObject:
   - component: {fileID: 1569542984}
   - component: {fileID: 1569542983}
   - component: {fileID: 1569542985}
+  - component: {fileID: 1569542986}
   m_Layer: 0
   m_Name: MainComponent
   m_TagString: Untagged
@@ -34396,368 +34397,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SimpleEnemyAI
   meleeState: {fileID: 1569542969}
   walkState: {fileID: 1569542977}
-  scenario:
-  - controlledPawn: {fileID: 1095792892}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 826363222}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1782063241}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1649701164}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 77278530}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1796793377}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 353870553}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1287685466}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1436519535}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 890983531}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 362736804}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 189826013}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 195921477}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1457166447}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 915073821}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1371347075}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 805832898}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 617607718}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 827548412}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 675905215}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1810019914}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 862890597}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1105324285}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1622727011}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1278290143}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1535454997}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 290850250}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1603167593}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1994136340}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1630240983}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 0
-  - controlledPawn: {fileID: 1095792892}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1095792892}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 826363222}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 826363222}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1782063241}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1782063241}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1649701164}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1649701164}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 77278530}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 77278530}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1796793377}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1796793377}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 353870553}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 353870553}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1287685466}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1287685466}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1436519535}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1436519535}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 890983531}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 890983531}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 362736804}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 362736804}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 189826013}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 189826013}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 195921477}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 195921477}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1457166447}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1457166447}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 915073821}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 915073821}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1371347075}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1371347075}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 805832898}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 805832898}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 617607718}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 617607718}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 827548412}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 827548412}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 675905215}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 675905215}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1810019914}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1810019914}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 862890597}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 862890597}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1105324285}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1105324285}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1622727011}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1622727011}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1278290143}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1278290143}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1535454997}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1535454997}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 290850250}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 290850250}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1603167593}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1603167593}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1994136340}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1994136340}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  - controlledPawn: {fileID: 1630240983}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 2
-  - controlledPawn: {fileID: 1630240983}
-    targetPawn: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
-    capability: 1
-  addPawn: {fileID: 0}
+  shootState: {fileID: 0}
+  defaultProfile: {fileID: 11400000, guid: 0a7d338c0b8f7724d9bf2b04cb245a24, type: 2}
+  stageRules: []
 --- !u!114 &1569542979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34849,6 +34491,7 @@ MonoBehaviour:
     completeText: Yay!
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 4580301832448339888}
     status: 0
     readyWhen:
@@ -34877,11 +34520,20 @@ MonoBehaviour:
         authorIndex: 1
       - clip: {fileID: 8300000, guid: f4a5693460525014685fa371e783c5d9, type: 3}
         authorIndex: 2
+    - showTime: 2
+      text: "\u2014 \u0422\u043E\u0433\u0434\u0430 \u0437\u0430 \u0440\u0430\u0431\u043E\u0442\u0443!
+        \u041F\u043E\u043A\u0430 \u043D\u0435 \u0443\u043F\u0430\u043B\u0430!"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 2
+      completeSounds: []
     shortLevelName: "\u041F\u0440\u043E\u0432\u0435\u0441\u0442\u0438 \u0434\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u043A\u0443"
     completeText: "\u0414\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u043A\u0430
       \u043F\u0440\u043E\u0432\u0435\u0434\u0435\u043D\u0430"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 1878437268}
     status: 0
     readyWhen:
@@ -34892,8 +34544,8 @@ MonoBehaviour:
     doneWhen: []
     textToShow:
     - showTime: 2
-      text: "\u0427\u0451\u0440\u0442! \u0448\u043B\u044E\u0437 \u0437\u0430\u043A\u0440\u044B\u0442,
-        \u043D\u0443\u0436\u043D\u0430 \u043A\u043B\u044E\u0447 \u043A\u0430\u0440\u0442\u0430."
+      text: "\u0427\u0451\u0440\u0442! \u0428\u043B\u044E\u0437 \u0437\u0430\u043A\u0440\u044B\u0442,
+        \u043D\u0443\u0436\u043D\u0430 \u043A\u043B\u044E\u0447-\u043A\u0430\u0440\u0442\u0430."
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
@@ -34905,11 +34557,21 @@ MonoBehaviour:
         authorIndex: 1
       - clip: {fileID: 8300000, guid: 86e28a85ef608a043aa601bd9a7eab1a, type: 3}
         authorIndex: 2
+    - showTime: 2
+      text: "\u2014 \u041A\u043B\u044E\u0447-\u043A\u0430\u0440\u0442\u0430? \u0410
+        \u0435\u0441\u043B\u0438 \u043F\u0440\u0435\u0434\u044A\u044F\u0432\u0438\u0442\u044C
+        \u043F\u0430\u0440\u0442\u0431\u0438\u043B\u0435\u0442?"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 2
+      completeSounds: []
     shortLevelName: "\u041F\u043E\u043F\u0430\u0441\u0442\u044C \u0432 \u044D\u043D\u0435\u0440\u0433\u0435\u0442\u0438\u0447\u0435\u0441\u043A\u0438\u0439
       \u043C\u043E\u0434\u0443\u043B\u044C"
     completeText: "\u041D\u0443\u0436\u0435\u043D \u043A\u043B\u044E\u0447"
     completeTextColor: {r: 1, g: 0.07603065, b: 0, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 7423991045303590523}
     status: 0
     readyWhen:
@@ -34921,8 +34583,8 @@ MonoBehaviour:
     textToShow:
     - showTime: 2
       text: "\u0412\u0440\u043E\u0434\u0435 \u043D\u0443\u0436\u043D\u0430\u044F
-        \u043A\u043B\u044E\u0447 \u043A\u0430\u0440\u0442\u0430, \u0442\u043E\u043B\u044C\u043A\u043E
-        \u0431\u044B \u043F\u043E\u0434\u043E\u0448\u043B\u0430"
+        \u043A\u043B\u044E\u0447-\u043A\u0430\u0440\u0442\u0430, \u0442\u043E\u043B\u044C\u043A\u043E
+        \u0431\u044B \u043F\u043E\u0434\u043E\u0448\u043B\u0430."
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
@@ -34934,10 +34596,22 @@ MonoBehaviour:
         authorIndex: 1
       - clip: {fileID: 8300000, guid: e85a7d6fc8b74a049866cb4ce2d988af, type: 3}
         authorIndex: 2
+    - showTime: 2
+      text: "\u2014 \u041F\u043E\u0434\u043E\u0448\u043B\u0430! \u0412\u043E\u0442
+        \u0447\u0442\u043E \u0437\u043D\u0430\u0447\u0438\u0442 \u0441\u043E\u0432\u0435\u0442\u0441\u043A\u0430\u044F
+        \u0441\u0438\u0441\u0442\u0435\u043C\u0430: \u043E\u0434\u0438\u043D \u043A\u043B\u044E\u0447
+        \u2014 \u0438 \u043F\u0435\u0440\u0435\u0434 \u0442\u043E\u0431\u043E\u0439
+        \u0432\u0435\u0441\u044C \u043A\u043E\u0441\u043C\u043E\u0441"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 2
+      completeSounds: []
     shortLevelName: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447"
     completeText: "\u041A\u043B\u044E\u0447 \u043D\u0430\u0439\u0434\u0435\u043D"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 7030045181592525981}
     status: 0
     readyWhen:
@@ -34952,7 +34626,7 @@ MonoBehaviour:
       atLeast: 0
     textToShow:
     - showTime: 2
-      text: "\u041D\u0430\u0448\u0451\u043B! \u041A\u043B\u044E\u0447 \u043A\u0430\u0440\u0442\u0430
+      text: "\u041D\u0430\u0448\u0451\u043B! \u041A\u043B\u044E\u0447-\u043A\u0430\u0440\u0442\u0430
         \u0431\u044B\u043B\u0430 \u0442\u0430\u043A \u0440\u044F\u0434\u043E\u043C.
         \u0422\u043E\u043B\u044C\u043A\u043E \u043E\u043D\u0430 \u0441\u043B\u043E\u043C\u0430\u043D\u0430."
       shown: 0
@@ -34966,11 +34640,25 @@ MonoBehaviour:
         authorIndex: 1
       - clip: {fileID: 8300000, guid: 8904358aa2566774f9e24c9d02107281, type: 3}
         authorIndex: 2
+    - showTime: 2
+      text: "\u2014 \u041D\u0438\u0447\u0435\u0433\u043E, \u0442\u043E\u0432\u0430\u0440\u0438\u0449,
+        \u0438\u0449\u0435\u043C \u0437\u0430\u043F\u0430\u0441\u043D\u0443\u044E.
+        \u041D\u0430 \u0441\u0442\u0430\u043D\u0446\u0438\u0438 \u0432\u0441\u0451
+        \u043F\u043E \u0413\u041E\u0421\u0422\u0443: \u043E\u0441\u043D\u043E\u0432\u043D\u0430\u044F
+        \u043D\u0435 \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442, \u0430 \u0440\u0435\u0437\u0435\u0440\u0432\u043D\u0430\u044F,
+        \u043D\u0430\u0434\u0435\u044E\u0441\u044C, \u0435\u0449\u0451 \u043D\u0435
+        \u0441\u043F\u0438\u0441\u0430\u043D\u0430!"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 2
+      completeSounds: []
     shortLevelName: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447
       \u043A\u0430\u0440\u0442\u0443"
     completeText: "\u041A\u0430\u0440\u0442\u0430 \u0441\u043B\u043E\u043C\u0430\u043D\u0430"
     completeTextColor: {r: 1, g: 0, b: 0.024233818, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 1512402891}
     status: 0
     readyWhen:
@@ -34985,6 +34673,7 @@ MonoBehaviour:
     completeText: "\u0420\u0430\u0437\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D\u043E"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 6892028548969385538}
     status: 0
     readyWhen:
@@ -34995,7 +34684,9 @@ MonoBehaviour:
     doneWhen: []
     textToShow:
     - showTime: 2
-      text: "\u0427\u0451\u0440\u0442! \u0421\u0431\u043E\u0439 \u0432 \u043A\u0430\u043B\u0438\u0431\u0440\u0430\u0442\u043E\u0440\u0435
+      text: "\u0417\u0430\u0434\u0430\u0447\u0430 \u0440\u0430\u0437 \u043F\u043B\u044E\u043D\u0443\u0442\u044C,
+        \u0441\u0435\u0439\u0447\u0430\u0441 \u0432\u0441\u0451 \u0441\u0434\u0435\u043B\u0430\u044E.
+        \u0427\u0451\u0440\u0442! \u0421\u0431\u043E\u0439 \u0432 \u043A\u0430\u043B\u0438\u0431\u0440\u0430\u0442\u043E\u0440\u0435
         \u0441\u043E\u043B\u043D\u0435\u0447\u043D\u044B\u0445 \u043F\u0430\u043D\u0435\u043B\u0435\u0439,
         \u043D\u0443\u0436\u043D\u043E \u0441\u0440\u043E\u0447\u043D\u043E \u0435\u0433\u043E
         \u0432\u043A\u043B\u044E\u0447\u0438\u0442\u044C"
@@ -35010,11 +34701,24 @@ MonoBehaviour:
         authorIndex: 1
       - clip: {fileID: 8300000, guid: 35ed7a55d107e5944a058a47e76b53f6, type: 3}
         authorIndex: 2
+    - showTime: 2
+      text: "\u2014 \u041D\u0435 \u043F\u0430\u043D\u0438\u043A\u0443\u0439, \u0442\u043E\u0432\u0430\u0440\u0438\u0449:
+        \u0432\u043A\u043B\u044E\u0447\u0438\u043C \u0432\u0440\u0443\u0447\u043D\u0443\u044E.
+        \u0412 \u0421\u0421\u0421\u0420 \u0434\u0430\u0436\u0435 \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u043A\u0430
+        \u0440\u0430\u0431\u043E\u0442\u0430\u043B\u0430 \u043F\u043E\u0441\u043B\u0435
+        \u0443\u0431\u0435\u0434\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0439
+        \u0440\u0443\u0433\u0430\u043D\u0438."
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 2
+      completeSounds: []
     shortLevelName: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C
       \u043F\u0438\u0442\u0430\u043D\u0438\u0435"
     completeText: "\u041D\u0435 \u0441\u0440\u0430\u0431\u043E\u0442\u0430\u043B\u043E"
     completeTextColor: {r: 1, g: 0.11694209, b: 0, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 892536129}
     status: 0
     readyWhen:
@@ -35029,7 +34733,7 @@ MonoBehaviour:
         \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E. \u0422\u0435\u043F\u0435\u0440\u044C
         \u043C\u043E\u0436\u043D\u043E \u043F\u0440\u043E\u0431\u043E\u0432\u0430\u0442\u044C
         \u0437\u0430\u043F\u0443\u0441\u043A\u0430\u0442\u044C \u043F\u0438\u0442\u0430\u043D\u0438\u0435
-        \u0441\u0442\u0430\u043D\u0446\u0438\u0438"
+        \u0441\u0442\u0430\u043D\u0446\u0438\u0438."
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
@@ -35041,11 +34745,23 @@ MonoBehaviour:
         authorIndex: 1
       - clip: {fileID: 8300000, guid: 328d3b1196d5a9e49b8685bbbcfb1586, type: 3}
         authorIndex: 2
+    - showTime: 2
+      text: "\u2014 \u0415\u0441\u043B\u0438 \u043B\u0430\u043C\u043F\u043E\u0447\u043A\u0438
+        \u0437\u0430\u0433\u043E\u0440\u044F\u0442\u0441\u044F \u2014 \u044D\u0442\u043E
+        \u0443\u0441\u043F\u0435\u0445, \u0435\u0441\u043B\u0438 \u043D\u0435\u0442
+        \u2014 \u043E\u0431\u044A\u044F\u0432\u0438\u043C \u044D\u043A\u043E\u043D\u043E\u043C\u0438\u044E
+        \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u044D\u043D\u0435\u0440\u0433\u0438\u0438!"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 2
+      completeSounds: []
     shortLevelName: "\u0412\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u043A\u0430\u043B\u0438\u0431\u0440\u0430\u0442\u043E\u0440\u044B
       \u0441\u043E\u043B\u043D\u0435\u0447\u043D\u044B\u0445 \u043F\u0430\u043D\u0435\u043B\u0435\u0439"
     completeText: "\u041E\u0442\u043B\u0438\u0447\u043D\u043E"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 1306689788}
     status: 0
     readyWhen:
@@ -35062,7 +34778,7 @@ MonoBehaviour:
         \u0443\u043F\u0430\u0441\u0442\u044C. \u0422\u0435\u043F\u0435\u0440\u044C
         \u043D\u0443\u0436\u043D\u043E \u0440\u0430\u0437\u043E\u0431\u0440\u0430\u0442\u044C\u0441\u044F
         \u0441 \u0432\u043E\u0437\u0434\u0443\u0445\u043E\u043C, \u0435\u0441\u043B\u0438
-        \u043C\u044B \u0445\u043E\u0442\u0438\u043C \u0432\u044B\u0436\u0438\u0442\u044C"
+        \u043C\u044B \u0445\u043E\u0442\u0438\u043C \u0432\u044B\u0436\u0438\u0442\u044C."
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
@@ -35074,11 +34790,22 @@ MonoBehaviour:
         authorIndex: 1
       - clip: {fileID: 8300000, guid: 402906ab5fa5920488d51c30e355295a, type: 3}
         authorIndex: 2
+    - showTime: 2
+      text: "\u2014 \u0412\u0435\u0440\u043D\u043E: \u0441\u043D\u0430\u0447\u0430\u043B\u0430
+        \u0441\u043F\u0430\u0441\u0430\u0435\u043C \u0441\u0442\u0430\u043D\u0446\u0438\u044E
+        \u043E\u0442 \u043F\u0430\u0434\u0435\u043D\u0438\u044F, \u043F\u043E\u0442\u043E\u043C
+        \u0441\u0435\u0431\u044F \u043E\u0442 \u0443\u0434\u0443\u0448\u044C\u044F."
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 2
+      completeSounds: []
     shortLevelName: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C
       \u043F\u0438\u0442\u0430\u043D\u0438\u0435"
     completeText: "+ \u044D\u043D\u0435\u0440\u0433\u0438\u044F"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 779137259}
     status: 0
     readyWhen:
@@ -35092,8 +34819,8 @@ MonoBehaviour:
       text: "\u0425\u0443\u0445, \u043D\u0430\u043A\u043E\u043D\u0435\u0446 \u0434\u044B\u0448\u0438\u0442\u0441\u044F
         \u043B\u0435\u0433\u0447\u0435. \u0422\u0435\u043F\u0435\u0440\u044C \u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C
         \u043D\u0430\u0439\u0442\u0438 \u043A\u043B\u044E\u0447\u0438 \u0448\u0438\u0444\u0440\u043E\u0432\u0430\u043D\u0438\u044F
-        \u0434\u043B\u044F \u0441\u0432\u044F\u0437\u0438 \u0441 \u0437\u0435\u043C\u043B\u0451\u0439... 
-        \u041F\u043E\u0434\u043E\u0436\u0434\u0438\u0442\u0435... \u0432\u044B \u0441\u043B\u044B\u0448\u0438\u0442\u0435
+        \u0434\u043B\u044F \u0441\u0432\u044F\u0437\u0438 \u0441 \u0437\u0435\u043C\u043B\u0451\u0439.
+        \u041F\u043E\u0434\u043E\u0436\u0434\u0438\u0442\u0435, \u0432\u044B \u0441\u043B\u044B\u0448\u0438\u0442\u0435
         \u044D\u0442\u043E?"
       shown: 0
       showOnce: 1
@@ -35106,11 +34833,33 @@ MonoBehaviour:
         authorIndex: 1
       - clip: {fileID: 8300000, guid: 0c99a8c761614f84fa7c057144e71fdc, type: 3}
         authorIndex: 2
+    - showTime: 2
+      text: "\u0417\u0430\u043F\u0443\u0449\u0435\u043D \u0440\u0435\u0436\u0438\u043C
+        \u043A\u0430\u0440\u0430\u043D\u0442\u0438\u043D\u0430."
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 0
+      completeSounds: []
+    - showTime: 2
+      text: "\u2014 \u0412\u0440\u0430\u0433\u0438 \u043F\u043E\u043B\u0435\u0437\u043B\u0438?
+        \u0422\u043E\u0433\u0434\u0430 \u0434\u0435\u0440\u0436\u0438\u043C \u043E\u0431\u043E\u0440\u043E\u043D\u0443,
+        \u0442\u043E\u0432\u0430\u0440\u0438\u0449. \u041A\u043B\u044E\u0447\u0438
+        \u0441\u0432\u044F\u0437\u0438 \u043F\u043E\u0442\u043E\u043C \u043D\u0430\u0439\u0434\u0451\u043C
+        \u2014 \u0441\u0435\u0439\u0447\u0430\u0441 \u0433\u043B\u0430\u0432\u043D\u043E\u0435,
+        \u0447\u0442\u043E\u0431\u044B \u043A\u0430\u0440\u0430\u043D\u0442\u0438\u043D
+        \u043D\u0435 \u0441\u0442\u0430\u043B \u043F\u043E\u0441\u043B\u0435\u0434\u043D\u0438\u043C."
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 2
+      completeSounds: []
     shortLevelName: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C
       \u0443\u0440\u043E\u0432\u0435\u043D\u044C \u043A\u0438\u0441\u043B\u043E\u0440\u043E\u0434\u0430"
     completeText: "+ \u0432\u043E\u0437\u0434\u0443\u0445"
     completeTextColor: {r: 0, g: 1, b: 0.07667947, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 1339243697}
     status: 0
     readyWhen:
@@ -35120,6 +34869,14 @@ MonoBehaviour:
       atLeast: 0
     doneWhen: []
     textToShow:
+    - showTime: 1
+      text: "\u0417\u0430\u043F\u0443\u0449\u0435\u043D \u0440\u0435\u0436\u0438\u043C
+        \u043A\u0430\u0440\u0430\u043D\u0442\u0438\u043D\u0430."
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 0
+      completeSounds: []
     - showTime: 2
       text: "\u041A\u043B\u044E\u0447\u0438 \u0448\u0438\u0444\u0440\u043E\u0432\u0430\u043D\u0438\u044F
         \u0443 \u043C\u0435\u043D\u044F, \u043D\u0430\u043C \u043D\u0443\u0436\u0435\u043D
@@ -35139,11 +34896,23 @@ MonoBehaviour:
         authorIndex: 1
       - clip: {fileID: 8300000, guid: 76af64e6b16bccc4491f716a22cfa18b, type: 3}
         authorIndex: 2
+    - showTime: 2
+      text: "\u2014 \u0422\u0430\u043A \u0442\u043E\u0447\u043D\u043E, \u0442\u043E\u0432\u0430\u0440\u0438\u0449!
+        \u0411\u0435\u0433\u043E\u043C \u043A \u043F\u0443\u043B\u044C\u0442\u0443
+        \u0438 \u0434\u043E\u043B\u043E\u0436\u0438\u043C \u0417\u0435\u043C\u043B\u0435:
+        \u0441\u043E\u0432\u0435\u0442\u0441\u043A\u0438\u0439 \u043A\u043E\u0441\u043C\u043E\u0441
+        \u043E\u0441\u0442\u0430\u0451\u0442\u0441\u044F \u043D\u0430 \u0441\u0432\u044F\u0437\u0438!"
+      shown: 0
+      showOnce: 1
+      showOnlyOnStepByStep: 0
+      author: 2
+      completeSounds: []
     shortLevelName: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447\u0438
       \u0448\u0438\u0444\u0440\u043E\u0432\u0430\u043D\u0438\u044F"
     completeText: "\u0415\u0441\u0442\u044C!"
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 363475059}
     status: 0
     readyWhen:
@@ -35177,6 +34946,7 @@ MonoBehaviour:
     completeText: win
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   sideTaskScenario:
   - selectable: {fileID: 2053269064}
     status: 0
@@ -35209,6 +34979,7 @@ MonoBehaviour:
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 2108247185}
     status: 0
     readyWhen:
@@ -35243,6 +35014,7 @@ MonoBehaviour:
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 928134607}
     status: 0
     readyWhen:
@@ -35279,6 +35051,7 @@ MonoBehaviour:
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 1038951782}
     status: 0
     readyWhen:
@@ -35313,6 +35086,7 @@ MonoBehaviour:
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 293719871}
     status: 0
     readyWhen:
@@ -35351,6 +35125,7 @@ MonoBehaviour:
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 675672623}
     status: 0
     readyWhen:
@@ -35389,6 +35164,7 @@ MonoBehaviour:
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 2099003808}
     status: 0
     readyWhen:
@@ -35425,6 +35201,7 @@ MonoBehaviour:
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 148340769}
     status: 0
     readyWhen:
@@ -35465,6 +35242,7 @@ MonoBehaviour:
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 1270954053}
     status: 0
     readyWhen:
@@ -35501,6 +35279,7 @@ MonoBehaviour:
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 873894165}
     status: 0
     readyWhen:
@@ -35538,6 +35317,7 @@ MonoBehaviour:
     completeText: 
     completeTextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     onlyShowText: 0
+    startImmediately: 0
   - selectable: {fileID: 1175933377}
     status: 1
     readyWhen: []
@@ -35573,9 +35353,10 @@ MonoBehaviour:
       - clip: {fileID: 8300000, guid: 49c5754adaa4f1049a360c68830de8c0, type: 3}
         authorIndex: 2
     shortLevelName: "\u041F\u043E\u0447\u0438\u043D\u0438\u0442\u044C \u0434\u0440\u0443\u0433\u0430"
-    completeText: Yay!
+    completeText: 
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   - selectable: {fileID: 4580301832448339888}
     status: 0
     readyWhen:
@@ -35586,10 +35367,10 @@ MonoBehaviour:
     doneWhen: []
     textToShow: []
     shortLevelName: "\u041F\u0440\u043E\u0432\u0435\u0441\u0442\u0438 \u0434\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u043A\u0443"
-    completeText: "\u0414\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u043A\u0430
-      \u043F\u0440\u043E\u0432\u0435\u0434\u0435\u043D\u0430"
+    completeText: 
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   - selectable: {fileID: 1878437268}
     status: 0
     readyWhen:
@@ -35601,9 +35382,10 @@ MonoBehaviour:
     textToShow: []
     shortLevelName: "\u041F\u043E\u043F\u0430\u0441\u0442\u044C \u0432 \u044D\u043D\u0435\u0440\u0433\u0435\u0442\u0438\u0447\u0435\u0441\u043A\u0438\u0439
       \u043C\u043E\u0434\u0443\u043B\u044C"
-    completeText: "\u041D\u0443\u0436\u0435\u043D \u043A\u043B\u044E\u0447"
+    completeText: 
     completeTextColor: {r: 1, g: 0.07603065, b: 0, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   - selectable: {fileID: 7423991045303590523}
     status: 0
     readyWhen:
@@ -35614,9 +35396,10 @@ MonoBehaviour:
     doneWhen: []
     textToShow: []
     shortLevelName: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447"
-    completeText: "\u041A\u043B\u044E\u0447 \u043D\u0430\u0439\u0434\u0435\u043D"
+    completeText: 
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   - selectable: {fileID: 7030045181592525981}
     status: 0
     readyWhen:
@@ -35628,9 +35411,10 @@ MonoBehaviour:
     textToShow: []
     shortLevelName: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447
       \u043A\u0430\u0440\u0442\u0443"
-    completeText: "\u041A\u0430\u0440\u0442\u0430 \u0441\u043B\u043E\u043C\u0430\u043D\u0430"
+    completeText: 
     completeTextColor: {r: 1, g: 0, b: 0.024233818, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   - selectable: {fileID: 1512402891}
     status: 0
     readyWhen:
@@ -35642,9 +35426,10 @@ MonoBehaviour:
     textToShow: []
     shortLevelName: "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0434\u0432\u0435\u0440\u044C
       \u043A\u043B\u044E\u0447\u043E\u043C"
-    completeText: "\u0420\u0430\u0437\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D\u043E"
+    completeText: 
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   - selectable: {fileID: 6892028548969385538}
     status: 0
     readyWhen:
@@ -35656,7 +35441,7 @@ MonoBehaviour:
     textToShow:
     - showTime: 1
       text: "\u0417\u0430\u0434\u0430\u0447\u0430 \u0440\u0430\u0437 \u043F\u043B\u044E\u043D\u0443\u0442\u044C,
-        \u0441\u0435\u0439\u0447\u0430\u0441 \u0432\u0441\u0451 \u0441\u0434\u0435\u043B\u0430\u044E..."
+        \u0441\u0435\u0439\u0447\u0430\u0441 \u0432\u0441\u0451 \u0441\u0434\u0435\u043B\u0430\u044E."
       shown: 0
       showOnce: 1
       showOnlyOnStepByStep: 0
@@ -35670,9 +35455,10 @@ MonoBehaviour:
         authorIndex: 2
     shortLevelName: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C
       \u043F\u0438\u0442\u0430\u043D\u0438\u0435"
-    completeText: "\u041D\u0435 \u0441\u0440\u0430\u0431\u043E\u0442\u0430\u043B\u043E"
+    completeText: 
     completeTextColor: {r: 1, g: 0.11694209, b: 0, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   - selectable: {fileID: 892536129}
     status: 0
     readyWhen:
@@ -35684,9 +35470,10 @@ MonoBehaviour:
     textToShow: []
     shortLevelName: "\u0412\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u043A\u0430\u043B\u0438\u0431\u0440\u0430\u0442\u043E\u0440\u044B
       \u0441\u043E\u043B\u043D\u0435\u0447\u043D\u044B\u0445 \u043F\u0430\u043D\u0435\u043B\u0435\u0439"
-    completeText: "\u041E\u0442\u043B\u0438\u0447\u043D\u043E"
+    completeText: 
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   - selectable: {fileID: 1306689788}
     status: 0
     readyWhen:
@@ -35698,9 +35485,10 @@ MonoBehaviour:
     textToShow: []
     shortLevelName: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C
       \u043F\u0438\u0442\u0430\u043D\u0438\u0435"
-    completeText: "+ \u044D\u043D\u0435\u0440\u0433\u0438\u044F"
+    completeText: 
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   - selectable: {fileID: 779137259}
     status: 0
     readyWhen:
@@ -35712,9 +35500,10 @@ MonoBehaviour:
     textToShow: []
     shortLevelName: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C
       \u0443\u0440\u043E\u0432\u0435\u043D\u044C \u043A\u0438\u0441\u043B\u043E\u0440\u043E\u0434\u0430"
-    completeText: "+ \u0432\u043E\u0437\u0434\u0443\u0445"
+    completeText: 
     completeTextColor: {r: 0, g: 1, b: 0.07667947, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   - selectable: {fileID: 1339243697}
     status: 0
     readyWhen:
@@ -35726,9 +35515,10 @@ MonoBehaviour:
     textToShow: []
     shortLevelName: "\u0418\u0441\u043A\u0430\u0442\u044C \u043A\u043B\u044E\u0447\u0438
       \u0448\u0438\u0444\u0440\u043E\u0432\u0430\u043D\u0438\u044F"
-    completeText: "\u0415\u0441\u0442\u044C!"
+    completeText: 
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   - selectable: {fileID: 363475059}
     status: 0
     readyWhen:
@@ -35740,9 +35530,10 @@ MonoBehaviour:
     textToShow: []
     shortLevelName: "\u0421\u0432\u044F\u0437\u0430\u0442\u044C\u0441\u044F \u0441
       \u0437\u0435\u043C\u043B\u0451\u0439"
-    completeText: win
+    completeText: 
     completeTextColor: {r: 0, g: 1, b: 0, a: 1}
     onlyShowText: 1
+    startImmediately: 1
   authorsObjects:
   - {fileID: 861419552}
   - {fileID: 1222671049}
@@ -35805,11 +35596,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnDataController
   combatantStats: {fileID: 0}
+  aiProfileOverride: {fileID: 0}
   maxSampleDistance: 5
   obstaclePushForce: 10
   verticalPushOverride: 0.2
   selectableType: 0
   startDead: 0
+--- !u!114 &1569542986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569542967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31d08dfa3794d374983f7ed5334e9d64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoSave
+  intervalSeconds: 120
 --- !u!1 &1570870379 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7092391029048808588, guid: dfa92964f8ea58f4982d5566a57fb889, type: 3}
@@ -42384,7 +42189,7 @@ MonoBehaviour:
         \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0439"
       color: {r: 1, g: 0, b: 0, a: 0.4117647}
       code: -2
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 1917569762}
 --- !u!114 &1917569762
 MonoBehaviour:
@@ -44244,7 +44049,7 @@ MonoBehaviour:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 0.41960785}
       code: -1
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 0}
 --- !u!65 &2053269065
 BoxCollider:
@@ -44653,7 +44458,7 @@ MonoBehaviour:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 1}
       code: -1
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 0}
 --- !u!65 &2099003809
 BoxCollider:
@@ -45006,7 +44811,7 @@ MonoBehaviour:
     - message: "\u0421\u043B\u0438\u0448\u043A\u043E\u043C \u0434\u0430\u043B\u0435\u043A\u043E"
       color: {r: 1, g: 0, b: 0, a: 0.41960785}
       code: -1
-    progressPerRound: 10
+    progressPerRound: 50
   scriptForClickable: {fileID: 0}
 --- !u!65 &2108247186
 BoxCollider:

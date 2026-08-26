@@ -59,6 +59,7 @@ public class ClickableItem : ISelectable
     }
     void OnDestroy()
     {
+        InvalidateWork();
         if (progressBarCached != null)
         {
             UI3DManager.Instance.UnregisterSlider(transform);
@@ -113,6 +114,7 @@ public class ClickableItem : ISelectable
     }
     private void OnLoadData(LoadedData data)
     {
+        InvalidateWork();
         data.GetData("ColliderEnabled", UNIQUE_ID, true);
         col.enabled = data.GetData("ColliderEnabled", UNIQUE_ID, true);
         float progress = data.GetData("Progress", UNIQUE_ID, -1f);
@@ -149,16 +151,30 @@ public class ClickableItem : ISelectable
                 UI3DManager.Instance.UnregisterSlider(transform);
                 progressBarCached = null;
                 actionCached = null;
+                taskExecutor?.SetOnTask(false);
+                taskExecutor = null;
+                activeTaskInfo = ClickableTaskInfo.None;
             }
         }
         if ((actionCached == null || taskExecutor == null) && progressBarCached != null)
         {
             CancelAction();
         }
-        if (progressBarCached != null && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
+    }
+
+    void StopBoostRoutine()
+    {
+        if (boostRoutine != null)
         {
-            BoostProgressBar();
+            StopCoroutine(boostRoutine);
+            boostRoutine = null;
         }
+    }
+
+    void InvalidateWork()
+    {
+        workEpoch++;
+        StopBoostRoutine();
     }
 
     public override void OnSelect()
@@ -176,6 +192,8 @@ public class ClickableItem : ISelectable
     private SliderController progressBarCached = null;
     private InspectorContextMenuItem actionCached = null;
     private ClickableTaskInfo activeTaskInfo = ClickableTaskInfo.None;
+    private Coroutine boostRoutine;
+    private int workEpoch;
 
     private void ApplyTaskInfoToScript()
     {
@@ -214,8 +232,29 @@ public class ClickableItem : ISelectable
         StartWork();
         ClickableItemsController.Instance.OnDeselect();
         BoostProgressBar();
-        // UI3DManager.Instance.ShowMessage("Started", transform.position, Color.yellow);
         scriptForClickable?.OnDeselect();
+    }
+
+    bool TryGetStartBlockReason(IControlableSelectable executor, out string reason)
+    {
+        reason = null;
+        if (executor == null)
+        {
+            reason = "Нет исполнителя";
+            return true;
+        }
+        if (executor.GetSelectableType() == SelectableType.Dead)
+        {
+            reason = "Исполнитель недоступен";
+            return true;
+        }
+        float dist = Vector3.Distance(executor.GetTransform().position, transform.position);
+        if (dist > 4f)
+        {
+            reason = "Слишком далеко";
+            return true;
+        }
+        return false;
     }
 
     private void OnPlayerTurnEnd()
@@ -229,36 +268,41 @@ public class ClickableItem : ISelectable
     private IEnumerator BoostProgressBarInTime(float waitTime)
     {
         yield return null;
+        if (SaveHub.Instance != null && SaveHub.Instance.IsLoading) yield break;
         if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f)
         {
             yield return new WaitForSeconds(waitTime);
+            if (SaveHub.Instance != null && SaveHub.Instance.IsLoading) yield break;
             BoostProgressBar();
         }
+        boostRoutine = null;
     }
 
     private void BoostProgressBar()
     {
+        if (SaveHub.Instance != null && SaveHub.Instance.IsLoading) return;
         if (progressBarCached != null)
         {
-            if (taskExecutor.GetSelectableType() == SelectableType.Dead)
+            if (taskExecutor == null || taskExecutor.GetSelectableType() == SelectableType.Dead)
             {
-                CancelAction();
+                CancelAction("Исполнитель недоступен");
                 return;
             }
             float dist = Vector3.Distance(taskExecutor.GetTransform().position, transform.position);
             if (dist > 4f)
             {
-                CancelAction();
+                CancelAction("Слишком далеко");
                 return;
             }
             float progress = progressBarCached.GetValue();
             float boost = actionCached != null ? actionCached.progressPerRound : 10f;
             progress += boost;
-            StartCoroutine(BoostProgressBarInTime(1f));
+            StopBoostRoutine();
+            boostRoutine = StartCoroutine(BoostProgressBarInTime(1f));
             if (progress < -0.00001f)
             {
                 progress = 0f;
-                CancelAction();
+                CancelAction("Сбой");
                 return;
             }
             progressBarCached.SetValue(progress);
@@ -269,36 +313,41 @@ public class ClickableItem : ISelectable
             }
             if (progress >= 100f)
             {
+                StopBoostRoutine();
                 UI3DManager.Instance.UnregisterSlider(transform);
                 progressBarCached = null;
                 actionCached = null;
-                UI3DManager.Instance.ShowMessage("Завершено", transform.position, Color.black);
                 if (gameObject.layer != LayerMask.NameToLayer("DeadPawn"))
                 {
                     col.enabled = false;
                 }
                 taskExecutor?.OnCompleteTask();
                 ClickableItemsController.Instance.OnCompleteTask(this);
-                StartCoroutine(OnCompleteDelayed());
+                int epoch = workEpoch;
+                StartCoroutine(OnCompleteDelayed(epoch));
                 return;
             }
             ApplyTaskInfoToScript();
             progressBarCached.SetValue(scriptForClickable?.OnProgress(progress) ?? progress);
         }
     }
-    private IEnumerator OnCompleteDelayed()
+    private IEnumerator OnCompleteDelayed(int epoch)
     {
         yield return new WaitForSeconds(0.1f);
+        if (epoch != workEpoch) yield break;
+        if (SaveHub.Instance != null && SaveHub.Instance.IsLoading) yield break;
         ApplyTaskInfoToScript();
         scriptForClickable?.OnComplete();
         activeTaskInfo = ClickableTaskInfo.None;
     }
-    private void CancelAction()
+    private void CancelAction(string reason = null)
     {
+        InvalidateWork();
         UI3DManager.Instance.UnregisterSlider(transform);
         progressBarCached = null;
         actionCached = null;
-        UI3DManager.Instance.ShowMessage("Отменено", transform.position, Color.red);
+        if (!string.IsNullOrEmpty(reason))
+            UI3DManager.Instance.ShowMessage(reason, transform.position, Color.red);
         taskExecutor?.SetOnTask(false);
         taskExecutor = null;
         ApplyTaskInfoToScript();
@@ -316,57 +365,91 @@ public class ClickableItem : ISelectable
         List<ContextMenuItem> items = new List<ContextMenuItem>();
         foreach (InspectorContextMenuItem action in availableActions)
         {
+            InspectorContextMenuItem captured = action;
             Action actionDelegate = null;
-            switch (action.action)
+            switch (captured.action)
             {
                 case AvailableActions.StartWork:
-                    actionDelegate = () =>
-                    {
-                        UI3DManager.Instance.HideContextMenu();
-                        taskExecutor = PawnController.Instance.currentSelectedPawn;
-                        if (prey != null)
-                        {
-                            PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, prey);
-                        }
-                        else
-                        {
-                            PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, transform.position);
-                        }
-                        float chance = action.chanceToLaunch;
-                        foreach (TaskExitCode exitCode in action.exitCodes)
-                        {
-                            if (exitCode.IsEqual(chance))
-                            {
-                                UI3DManager.Instance.ShowMessage(exitCode.message, transform.position, exitCode.color);
-                            }
-                        }
-                        if (chance >= UnityEngine.Random.Range(0f, 1f))
-                        {
-                            PawnBrain deadBrain = GetComponent<PawnBrain>();
-                            if (deadBrain != null
-                                && deadBrain.GetSelectableType() == SelectableType.Dead
-                                && GetComponent<PawnHealing>() != null
-                                && !PawnHealing.CanRevive(deadBrain))
-                            {
-                                UI3DManager.Instance.ShowMessage("Нет подъёмов", transform.position, Color.red);
-                                ClickableItemsController.Instance.OnDeselect();
-                                return;
-                            }
-                            taskExecutor.SetOnTask(true);
-                            StartWorkAction(action);
-                        }
-                        else
-                        {
-                            if (chance <= 1f && chance >= 0f)
-                                UI3DManager.Instance.ShowMessage("Не начато", transform.position, Color.red);
-                        }
-                        ClickableItemsController.Instance.OnDeselect();
-                    };
+                    actionDelegate = () => TryLaunchStartWork(captured);
                     break;
             }
             items.Add(new ContextMenuItem { text = action.text, action = actionDelegate });
         }
         return items;
+    }
+
+    public void TryStartWorkImmediately()
+    {
+        if (IsWorking() || availableActions == null || availableActions.Count == 0) return;
+        for (int i = 0; i < availableActions.Count; i++)
+        {
+            if (availableActions[i].action == AvailableActions.StartWork)
+            {
+                TryLaunchStartWork(availableActions[i]);
+                return;
+            }
+        }
+        TryLaunchStartWork(availableActions[0]);
+    }
+
+    void TryLaunchStartWork(InspectorContextMenuItem action)
+    {
+        UI3DManager.Instance.HideContextMenu();
+        taskExecutor = PawnController.Instance.currentSelectedPawn;
+        if (taskExecutor == null)
+        {
+            ClickableItemsController.Instance.OnDeselect();
+            return;
+        }
+        if (prey != null)
+            PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, prey);
+        else
+            PawnController.SetCalculatableParamsForTwoPawns(taskExecutor, transform.position);
+        float chance = action.chanceToLaunch;
+        if (action.exitCodes != null)
+        {
+            foreach (TaskExitCode exitCode in action.exitCodes)
+            {
+                if (exitCode.IsEqual(chance))
+                    UI3DManager.Instance.ShowMessage(exitCode.message, transform.position, exitCode.color);
+            }
+        }
+        if (chance >= UnityEngine.Random.Range(0f, 1f))
+        {
+            PawnBrain deadBrain = GetComponent<PawnBrain>();
+            if (deadBrain != null
+                && deadBrain.GetSelectableType() == SelectableType.Dead
+                && GetComponent<PawnHealing>() != null
+                && !ClickableItemsController.Instance.IsOnlyShowTextTask(this))
+            {
+                if (!PawnHealing.CanRevive(deadBrain))
+                {
+                    UI3DManager.Instance.ShowMessage("Нет подъёмов", transform.position, Color.red);
+                    ClickableItemsController.Instance.OnDeselect();
+                    return;
+                }
+                if (!PawnHealing.TryPayRevive(taskExecutor.PawnData))
+                {
+                    UI3DManager.Instance.ShowMessage("Нет стамины", transform.position, Color.red);
+                    ClickableItemsController.Instance.OnDeselect();
+                    return;
+                }
+            }
+            if (TryGetStartBlockReason(taskExecutor, out string blockReason))
+            {
+                UI3DManager.Instance.ShowMessage(blockReason, transform.position, Color.red);
+                ClickableItemsController.Instance.OnDeselect();
+                return;
+            }
+            taskExecutor.SetOnTask(true);
+            StartWorkAction(action);
+        }
+        else
+        {
+            if (chance <= 1f && chance >= 0f)
+                UI3DManager.Instance.ShowMessage("Не начато", transform.position, Color.red);
+        }
+        ClickableItemsController.Instance.OnDeselect();
     }
 
     public override Transform GetTransform() => transform;

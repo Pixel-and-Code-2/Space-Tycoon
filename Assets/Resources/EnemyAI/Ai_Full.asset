@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e1c6c6c6c344c941ab3200976bb24ac, type: 3}
+  m_Name: Ai_Full
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAiProfile
+  role: 0
+  useStaminaGate: 1
+  minStaminaToAttack: 60
+  skipAttackOnDisadvantage: 1
+  useFinisher: 1
+  finisherHpFraction: 0.2
+  skipAttackAfterMove: 1
+  meleeCloseBandMin: 2
+  meleeCloseBandMax: 4
+  minShootDistance: 5
+  retreatDistance: 9
+  retreatMinPath: 8
+  retreatMaxPath: 10
+  zayaThreatDistance: 4
+  zayaMeleeDistance: 1.25
+  priorityPistol: 0
+  priorityMeleeAlly: 1
+  priorityRifle: 2
+  priorityRifleForShooter: 0
+  priorityPistolForShooter: 1
+  priorityMeleeAllyForShooter: 2

@@ -103,9 +103,39 @@ public class SettingApplier : MonoBehaviour
         if (slot == -1) slot = SaveHub.DEFAULT_SAVE_SLOT;
         if (slot == -1) return;
         string text = "Слот " + slot + ": ";
-        var nextTask = ClickableItemsController.Instance.mainTaskScenario.Find((item) => item.status == ClickableItemsController.TaskItem.TaskItemStatus.ReadyToStart || item.status == ClickableItemsController.TaskItem.TaskItemStatus.InProgress);
-        if (nextTask != null && nextTask.shortLevelName != "") text += nextTask.shortLevelName;
-        else text += "Конец";
+        string taskName = "Начало";
+        if (ClickableItemsController.Instance != null && ClickableItemsController.Instance.mainTaskScenario != null)
+        {
+            var main = ClickableItemsController.Instance.mainTaskScenario;
+            var active = main.Find((item) =>
+                item.status == ClickableItemsController.TaskItem.TaskItemStatus.ReadyToStart
+                || item.status == ClickableItemsController.TaskItem.TaskItemStatus.InProgress);
+            if (active != null && !string.IsNullOrEmpty(active.shortLevelName))
+                taskName = active.shortLevelName;
+            else
+            {
+                string lastDone = null;
+                for (int i = main.Count - 1; i >= 0; i--)
+                {
+                    if (main[i].status == ClickableItemsController.TaskItem.TaskItemStatus.Done
+                        && !string.IsNullOrEmpty(main[i].shortLevelName))
+                    {
+                        lastDone = main[i].shortLevelName;
+                        break;
+                    }
+                }
+                if (lastDone != null)
+                    taskName = lastDone;
+                else if (main.Count > 0 && !string.IsNullOrEmpty(main[main.Count - 1].shortLevelName))
+                {
+                    bool anyProgress = main.Exists((item) =>
+                        item.status != ClickableItemsController.TaskItem.TaskItemStatus.Unavailable);
+                    if (anyProgress)
+                        taskName = main[main.Count - 1].shortLevelName;
+                }
+            }
+        }
+        text += taskName;
         PlayerPrefs.SetString(SaveMenu.GetSlotName(slot), text);
     }
 }

@@ -53,6 +53,7 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
     private IconButtonStyleFiller attackButton;
     [SerializeField]
     private IControlableSelectable forcedSelectedPlayer = null;
+    private bool forceLockCameraOnSelect = true;
     private List<InputActionReference> actions = new List<InputActionReference>();
     private ControlType currentControlType = ControlType.walk;
     // here we tracking certain keys, to prevent multiple click handles on the same button press
@@ -167,7 +168,9 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
             IControlableSelectable pl = forcedSelectedPlayer;
             forcedSelectedPlayer = null;
             if (locked != null && pl != locked) pl = locked;
-            CameraTargetController.Instance.ForceLockTarget();
+            if (forceLockCameraOnSelect && CameraTargetController.Instance != null)
+                CameraTargetController.Instance.ForceLockTarget();
+            forceLockCameraOnSelect = true;
             return pl;
         }
         if (locked != null)
@@ -373,6 +376,8 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         {
             ToggleControlType();
         }
+        if (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame)
+            CycleAllySelection();
     }
     private void SetHandleClick(InputActionReference action, bool value)
     {
@@ -493,14 +498,35 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         UpdateControlButtons();
     }
 
-    public void SelectPlayer(IControlableSelectable pl)
+    public void SelectPlayer(IControlableSelectable pl, bool magnetizeCamera = true)
     {
         if (PawnController.Instance != null && PawnController.Instance.IsSelectionLockedToCurrentActor())
         {
             IControlableSelectable locked = PawnController.Instance.GetLockedActor();
             if (locked != null && pl != locked) return;
         }
+        forceLockCameraOnSelect = magnetizeCamera;
         forcedSelectedPlayer = pl;
+    }
+
+    void CycleAllySelection()
+    {
+        if (PawnController.Instance != null && PawnController.Instance.IsSelectionLockedToCurrentActor())
+            return;
+        List<IControlableSelectable> allies = new List<IControlableSelectable>();
+        foreach (var pawn in PawnBrain.AlivePlayers)
+        {
+            if (pawn != null && pawn.GetSelectableType() == SelectableType.Player)
+                allies.Add(pawn);
+        }
+        if (allies.Count == 0) return;
+        allies.Sort((a, b) => string.CompareOrdinal(a.gameObject.name, b.gameObject.name));
+        IControlableSelectable current = PawnController.Instance != null
+            ? PawnController.Instance.currentSelectedPawn
+            : null;
+        int idx = allies.FindIndex(p => p == current);
+        int next = idx < 0 ? 0 : (idx + 1) % allies.Count;
+        SelectPlayer(allies[next], true);
     }
 
 }

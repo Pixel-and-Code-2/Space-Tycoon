@@ -24,19 +24,24 @@ public class PawnHealing : IScriptForClickable
         return max - used > 0.5f;
     }
 
+    public static bool TryPayRevive(PawnDataController healerData)
+    {
+        if (healerData == null) return false;
+        float reviveCost = GlobalSettingsAssets.GetStaminaCosts().reviveCost;
+        return healerData.SpendStamina(reviveCost);
+    }
+
     public override void OnComplete()
     {
         base.OnComplete();
+        if (SaveHub.Instance != null && SaveHub.Instance.IsLoading) return;
         if (IsTask && IsSide) return;
         if (pawnBrain == null) pawnBrain = GetComponent<PawnBrain>();
-        if (!CanRevive(pawnBrain)) return;
-
-        ClickableItem item = GetComponent<ClickableItem>();
-        PawnDataController healerData = item?.taskExecutor?.PawnData;
-        float reviveCost = GlobalSettingsAssets.GetStaminaCosts().reviveCost;
-        if (healerData != null && !healerData.CanSpendStamina(reviveCost)) return;
-        healerData?.SpendStamina(reviveCost);
-
+        if (!CanRevive(pawnBrain))
+        {
+            UI3DManager.Instance.ShowMessage("Нет подъёмов", transform.position, Color.red);
+            return;
+        }
         pawnBrain.OnHeal();
     }
 }

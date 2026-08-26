@@ -459,7 +459,6 @@ public class TurnManager : MonoBehaviour
         if (pawnBrain != null)
         {
             trigger.enemies.Add(pawnBrain);
-            SimpleEnemyAI.Instance.AddPawnToScenario(pawnBrain);
             if (HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f)
                 RegisterCombatant(pawnBrain);
         }
@@ -514,6 +513,7 @@ public class TurnManager : MonoBehaviour
         lastActorSide = (SelectableType)(-1);
         OnTriggerZoneExit?.Invoke();
         IsQuarantine = false;
+        StatBoostService.TryGrantAfterCombat();
         UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "_notpersistent_3_GameCongratulationsColor");
         SyncEndTurnButtonsWithMovement();
     }

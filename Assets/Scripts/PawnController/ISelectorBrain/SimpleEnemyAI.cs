@@ -1,14 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-
-public enum EnemyCapabilities
-{
-    // you can use all whenever you want, if the enemy is too far you just won't shoot or attack. If you want to go further, than pawn can move, but you'll go only available part of path.
-    Move,
-    Melee,
-    WaitMovement
-}
 
 public enum DetailedScenarioElementType
 {
@@ -24,29 +15,21 @@ public enum DetailedScenarioElementType
 public class SimpleEnemyAI : ISelectorBrain
 {
     public static SimpleEnemyAI Instance { get; private set; }
-    // controlledPawn not null
-    // targetPawn null when you want to hardcoded vector instead or to find closest target
-    // position Vector3.zero when you want to use "closest target" feature instead, otherwise hardcode position
+
     [System.Serializable]
-    public class ScenarioElement
+    public class StageRule
     {
-        [SerializeField]
-        public IControlableSelectable controlledPawn;
-        [SerializeField]
-        public IControlableSelectable targetPawn;
-        [SerializeField]
-        public Vector3 position;
+        [Tooltip("While first non-Done main task index < this value, use profile")]
+        public int untilMainTaskIndex = 999;
+        public EnemyAiProfile profile;
     }
-    [System.Serializable]
-    public class EnemyScenarioElement : ScenarioElement
+
+    class DetailedScenarioElement
     {
-        [SerializeField]
-        public EnemyCapabilities capability;
-    }
-    public class DetailedScenarioElement : ScenarioElement
-    {
-        [SerializeField]
         public DetailedScenarioElementType type;
+        public IControlableSelectable controlledPawn;
+        public IControlableSelectable targetPawn;
+        public Vector3 position;
     }
 
     [SerializeField]
@@ -54,11 +37,14 @@ public class SimpleEnemyAI : ISelectorBrain
     [SerializeField]
     private IPawnState walkState;
     [SerializeField]
-    private List<EnemyScenarioElement> scenario = new List<EnemyScenarioElement>();
+    private IPawnState shootState;
+    [Header("AI profiles")]
     [SerializeField]
-    private PawnBrain addPawn;
+    private EnemyAiProfile defaultProfile;
+    [SerializeField]
+    private List<StageRule> stageRules = new List<StageRule>();
     private List<DetailedScenarioElement> detailedScenario = new List<DetailedScenarioElement>();
-    private int currentScenarioIndex = -1; // -1 means no scenario is running, if this var is bigger than completedScenarioIndex, then local methods (not polls ones) are waiting for sth, otherwise scenario is stopped to make a poll return
+    private int currentScenarioIndex = -1;
     private int completedScenarioIndex = -2;
     private int currentScenarioIndexBeforeUpdate = -1;
     public override bool SyncUI => false;
@@ -67,40 +53,41 @@ public class SimpleEnemyAI : ISelectorBrain
     void Awake()
     {
         if (Instance == null) Instance = this;
-        else
-        {
-            Debug.LogError("Constructor met second SimpleEnemyAI instance");
-        }
+        else Debug.LogError("Constructor met second SimpleEnemyAI instance");
         meleeState = GetComponent<MeleeState>();
         walkState = GetComponent<WalkState>();
+        shootState = GetComponent<ShootState>();
     }
 
     void Start()
     {
         if (TurnManager.Instance != null)
-        {
             TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
+        if (SaveHub.Instance != null)
+        {
+            SaveHub.Instance.OnSave += OnSaveData;
+            SaveHub.Instance.OnLoad += OnLoadData;
         }
-        SaveHub.Instance.OnSave += OnSaveData;
-        SaveHub.Instance.OnLoad += OnLoadData;
     }
-    void OnValidate()
-    {
-        AddPawnToScenarioIfNeeded();
-    }
+
     void OnDestroy()
     {
-        TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
+        if (TurnManager.Instance != null)
+            TurnManager.Instance.OnEnemyTurnStart -= OnEnemyTurnStart;
         if (SaveHub.Instance != null)
         {
             SaveHub.Instance.OnLoad -= OnLoadData;
             SaveHub.Instance.OnSave -= OnSaveData;
         }
     }
+
     private float timeStack = 0.0f;
     void Update()
     {
-        if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI) return;
+        if (UILayersController.Instance == null
+            || UILayersController.Instance.overlayStack.Count == 0
+            || UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI)
+            return;
         currentScenarioIndexBeforeUpdate = currentScenarioIndex;
 
         if (completedScenarioIndex == -2) return;
@@ -108,7 +95,8 @@ public class SimpleEnemyAI : ISelectorBrain
         {
             completedScenarioIndex = -2;
             currentScenarioIndex = -1;
-            TurnManager.Instance.EndEnemyTurn();
+            if (TurnManager.Instance != null)
+                TurnManager.Instance.EndEnemyTurn();
             return;
         }
         if (completedScenarioIndex + 1 == currentScenarioIndex)
@@ -117,13 +105,13 @@ public class SimpleEnemyAI : ISelectorBrain
             switch (detailedScenario[currentScenarioIndex].type)
             {
                 case DetailedScenarioElementType.MovePawn:
-                    MovePawn(detailedScenario[currentScenarioIndex]);
+                    completedScenarioIndex++;
                     break;
                 case DetailedScenarioElementType.WaitMovement:
                     WaitMovement(detailedScenario[currentScenarioIndex]);
                     break;
                 case DetailedScenarioElementType.AttackPawn:
-                    AttackPawn(detailedScenario[currentScenarioIndex]);
+                    completedScenarioIndex++;
                     break;
                 default:
                     completedScenarioIndex++;
@@ -135,25 +123,21 @@ public class SimpleEnemyAI : ISelectorBrain
             timeStack += Time.deltaTime;
             if (timeStack >= 3f)
             {
-                Debug.LogError("Time stack is greater than 3 seconds, it's " + timeStack + " seconds... Sth wrong, skipping");
+                Debug.LogError("Enemy AI step timeout, skipping");
                 currentScenarioIndex++;
             }
-        }
-        if (currentScenarioIndex != completedScenarioIndex + 1 && currentScenarioIndex != completedScenarioIndex)
-        {
-            Debug.LogError("Current scenario index is not valid, it's " + currentScenarioIndex + " when completed scenario index is " + completedScenarioIndex);
         }
     }
 
     public override IControlableSelectable PollSelectPawn(IControlableSelectable defaultPawn)
     {
-        if (currentScenarioIndex == completedScenarioIndex)
+        if (currentScenarioIndex == completedScenarioIndex && currentScenarioIndex >= 0 && currentScenarioIndex < detailedScenario.Count)
         {
             switch (detailedScenario[currentScenarioIndex].type)
             {
                 case DetailedScenarioElementType.SelectPawn:
                     currentScenarioIndex++;
-                    return detailedScenario[currentScenarioIndex].controlledPawn;
+                    return detailedScenario[currentScenarioIndex - 1].controlledPawn;
                 case DetailedScenarioElementType.DeselectPawn:
                     currentScenarioIndex++;
                     return null;
@@ -161,94 +145,53 @@ public class SimpleEnemyAI : ISelectorBrain
                     return defaultPawn;
             }
         }
-        else
-        {
-            return defaultPawn;
-        }
+        return defaultPawn;
     }
 
     public override (ISelectable selectable, Vector3 worldPoint) PollSelectPosForState()
     {
-        if (currentScenarioIndex == completedScenarioIndex)
-        {
-            var el = detailedScenario[currentScenarioIndex];
-            switch (el.type)
-            {
-                case DetailedScenarioElementType.MovePawn:
-                    currentScenarioIndex++;
-                    Vector3 answer = Vector3.zero;
-                    if (el.targetPawn == null)
-                    {
-                        if (el.position == Vector3.zero)
-                        {
-                            IControlableSelectable closestPlayer = FindClosestPlayer(out float shortestDistance);
-                            if (closestPlayer != null)
-                            {
-                                answer = closestPlayer.GetTransform().position;
-                            }
-                        }
-                        else
-                        {
-                            answer = el.position;
-                        }
-                    }
-                    else
-                    {
-                        answer = el.targetPawn.GetTransform().position;
-                    }
-                    if ((answer - PawnController.Instance.currentSelectedPawn.GetTransform().position).magnitude > HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.MELEE_ATTACK_DISTANCE_KEY])
-                    {
-                        return (null, answer);
-                    }
-                    return (null, Vector3.zero);
-                case DetailedScenarioElementType.AttackPawn:
-                    IControlableSelectable answer2;
-                    currentScenarioIndex++;
-                    if (el.targetPawn == null)
-                    {
-                        answer2 = FindClosestPlayer(out float shortestDistance);
-                    }
-                    else
-                    {
-                        answer2 = el.targetPawn;
-                    }
-                    if (answer2 != null)
-                    {
-                        return (answer2, answer2.GetTransform().position);
-                    }
-                    else
-                    {
-                        return (null, Vector3.zero);
-                    }
-                default:
-                    return (null, Vector3.zero);
-            }
-        }
-        else
-        {
+        if (currentScenarioIndex != completedScenarioIndex
+            || currentScenarioIndex < 0
+            || currentScenarioIndex >= detailedScenario.Count)
             return (null, Vector3.zero);
+
+        var el = detailedScenario[currentScenarioIndex];
+        switch (el.type)
+        {
+            case DetailedScenarioElementType.MovePawn:
+                currentScenarioIndex++;
+                if (el.position != Vector3.zero)
+                    return (null, el.position);
+                if (el.targetPawn != null)
+                    return (null, el.targetPawn.GetTransform().position);
+                return (null, Vector3.zero);
+            case DetailedScenarioElementType.AttackPawn:
+                currentScenarioIndex++;
+                if (el.targetPawn != null)
+                    return (el.targetPawn, el.targetPawn.GetTransform().position);
+                return (null, Vector3.zero);
+            default:
+                return (null, Vector3.zero);
         }
     }
 
     public override IPawnState PollChangeState()
     {
-        if (currentScenarioIndex == completedScenarioIndex)
-        {
-            switch (detailedScenario[currentScenarioIndex].type)
-            {
-                case DetailedScenarioElementType.SetMoveState:
-                    currentScenarioIndex++;
-                    return walkState;
-                case DetailedScenarioElementType.SetAttackState:
-                    currentScenarioIndex++;
-                    return GetComponent<ShootState>();
-                default:
-                    return null;
-            }
-        }
-        else
-        {
+        if (currentScenarioIndex != completedScenarioIndex
+            || currentScenarioIndex < 0
+            || currentScenarioIndex >= detailedScenario.Count)
             return null;
+
+        switch (detailedScenario[currentScenarioIndex].type)
+        {
+            case DetailedScenarioElementType.SetMoveState:
+                currentScenarioIndex++;
+                return walkState;
+            case DetailedScenarioElementType.SetAttackState:
+                currentScenarioIndex++;
+                return shootState != null ? shootState : GetComponent<ShootState>();
+            default:
+                return null;
         }
     }
 
@@ -257,18 +200,8 @@ public class SimpleEnemyAI : ISelectorBrain
         currentScenarioIndex = currentScenarioIndexBeforeUpdate;
     }
 
-    bool startingFromBeggining = true;
     void OnEnemyTurnStart()
     {
-        if (startingFromBeggining)
-        {
-            currentScenarioIndex = 0;
-            completedScenarioIndex = -1;
-        }
-        else
-        {
-            startingFromBeggining = false;
-        }
         BuildDetailedScenario();
         if (detailedScenario.Count == 0)
         {
@@ -284,152 +217,105 @@ public class SimpleEnemyAI : ISelectorBrain
     private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)
     {
         addSaveData(new SaveRecord[] {
-            new SaveRecord()
-            {
-                recordName = "CompletedScenarioIndex",
-                recordType = SaveRecordType.integerNumber,
-                intValue = completedScenarioIndex
-            },
-            new SaveRecord()
-            {
-                recordName = "CurrentScenarioIndex",
-                recordType = SaveRecordType.integerNumber,
-                intValue = currentScenarioIndex
-            }
+            new SaveRecord() { recordName = "CompletedScenarioIndex", recordType = SaveRecordType.integerNumber, intValue = completedScenarioIndex },
+            new SaveRecord() { recordName = "CurrentScenarioIndex", recordType = SaveRecordType.integerNumber, intValue = currentScenarioIndex }
         }, UNIQUE_ID);
     }
+
     private void OnLoadData(LoadedData data)
     {
         completedScenarioIndex = data.GetData("CompletedScenarioIndex", UNIQUE_ID, -2);
         currentScenarioIndex = data.GetData("CurrentScenarioIndex", UNIQUE_ID, -1);
-        if (completedScenarioIndex != -2) startingFromBeggining = false;
+    }
+
+    public EnemyAiProfile ResolveProfile(IControlableSelectable actor)
+    {
+        PawnDataController data = actor != null ? actor.GetComponent<PawnDataController>() : null;
+        if (data != null && data.AiProfileOverride != null)
+            return data.AiProfileOverride;
+
+        int frontier = GetMainTaskFrontier();
+        if (stageRules != null)
+        {
+            StageRule best = null;
+            for (int i = 0; i < stageRules.Count; i++)
+            {
+                StageRule rule = stageRules[i];
+                if (rule == null || rule.profile == null) continue;
+                if (frontier < rule.untilMainTaskIndex)
+                {
+                    if (best == null || rule.untilMainTaskIndex < best.untilMainTaskIndex)
+                        best = rule;
+                }
+            }
+            if (best != null) return best.profile;
+        }
+        return defaultProfile;
+    }
+
+    public static int GetMainTaskFrontier()
+    {
+        if (ClickableItemsController.Instance == null || ClickableItemsController.Instance.mainTaskScenario == null)
+            return 0;
+        var main = ClickableItemsController.Instance.mainTaskScenario;
+        for (int i = 0; i < main.Count; i++)
+        {
+            if (main[i].status != ClickableItemsController.TaskItem.TaskItemStatus.Done)
+                return i;
+        }
+        return main.Count;
     }
 
     private void BuildDetailedScenario()
     {
         detailedScenario.Clear();
-        IControlableSelectable currentActor = TurnManager.Instance != null ? TurnManager.Instance.CurrentActor : null;
-        foreach (var element in scenario)
-        {
-            if (element.controlledPawn == null || element.controlledPawn.GetSelectableType() != SelectableType.Enemy ||
-                !element.controlledPawn.IsInActiveTriggerZone()) continue;
-            if (currentActor != null && element.controlledPawn != currentActor) continue;
-            AddDetailedScenarioElement(DetailedScenarioElementType.SelectPawn, element);
-            switch (element.capability)
-            {
-                case EnemyCapabilities.Move:
-                    AddDetailedScenarioElement(DetailedScenarioElementType.SetMoveState, element);
-                    AddDetailedScenarioElement(DetailedScenarioElementType.MovePawn, element);
-                    break;
-                case EnemyCapabilities.Melee:
-                    AddDetailedScenarioElement(DetailedScenarioElementType.SetAttackState, element);
-                    AddDetailedScenarioElement(DetailedScenarioElementType.AttackPawn, element);
-                    break;
-                case EnemyCapabilities.WaitMovement:
-                    AddDetailedScenarioElement(DetailedScenarioElementType.WaitMovement, element);
-                    break;
-            }
-            AddDetailedScenarioElement(DetailedScenarioElementType.DeselectPawn, element);
-        }
-    }
-
-    private void AddPawnToScenarioIfNeeded()
-    {
-        if (addPawn == null)
-        {
+        IControlableSelectable actor = TurnManager.Instance != null ? TurnManager.Instance.CurrentActor : null;
+        if (actor == null || actor.GetSelectableType() != SelectableType.Enemy)
             return;
-        }
-        AddPawnToScenario(addPawn);
-        addPawn = null;
-    }
-    public void AddPawnToScenario(PawnBrain pawn)
-    {
-        if (scenario.Exists(el => el != null && el.controlledPawn == pawn))
-        {
+        if (!actor.IsInActiveTriggerZone())
             return;
-        }
-        int moveInsertIndex = scenario.FindLastIndex(el => el != null && el.capability == EnemyCapabilities.Move);
-        EnemyScenarioElement moveElement = CreateEnemyScenarioElement(pawn, EnemyCapabilities.Move);
-        if (moveInsertIndex == -1)
+
+        EnemyAiProfile profile = ResolveProfile(actor);
+        EnemyAiDecide.Decision decision = EnemyAiDecide.Decide(actor, profile);
+
+        AddStep(DetailedScenarioElementType.SelectPawn, actor, decision.target, decision.moveTo);
+        switch (decision.intent)
         {
-            scenario.Insert(0, moveElement);
+            case EnemyAiDecide.Intent.Move:
+                AddStep(DetailedScenarioElementType.SetMoveState, actor, decision.target, decision.moveTo);
+                AddStep(DetailedScenarioElementType.MovePawn, actor, decision.target, decision.moveTo);
+                AddStep(DetailedScenarioElementType.WaitMovement, actor, decision.target, decision.moveTo);
+                break;
+            case EnemyAiDecide.Intent.Attack:
+                if (decision.target != null)
+                {
+                    AddStep(DetailedScenarioElementType.SetAttackState, actor, decision.target, Vector3.zero);
+                    AddStep(DetailedScenarioElementType.AttackPawn, actor, decision.target, Vector3.zero);
+                }
+                break;
+            default:
+                break;
         }
-        else
+        AddStep(DetailedScenarioElementType.DeselectPawn, actor, null, Vector3.zero);
+    }
+
+    void AddStep(DetailedScenarioElementType type, IControlableSelectable controlled, IControlableSelectable target, Vector3 position)
+    {
+        detailedScenario.Add(new DetailedScenarioElement
         {
-            scenario.Insert(moveInsertIndex + 1, moveElement);
-        }
-
-        scenario.Add(CreateEnemyScenarioElement(pawn, EnemyCapabilities.WaitMovement));
-        scenario.Add(CreateEnemyScenarioElement(pawn, EnemyCapabilities.Melee));
+            type = type,
+            controlledPawn = controlled,
+            targetPawn = target,
+            position = position
+        });
     }
 
-    private EnemyScenarioElement CreateEnemyScenarioElement(PawnBrain pawn, EnemyCapabilities capability)
-    {
-        EnemyScenarioElement element = new EnemyScenarioElement();
-        element.controlledPawn = pawn;
-        element.targetPawn = null;
-        element.position = Vector3.zero;
-        element.capability = capability;
-        return element;
-    }
-
-    private void AddDetailedScenarioElement(DetailedScenarioElementType type, ScenarioElement element)
-    {
-        if (element.controlledPawn == null)
-        {
-            Debug.LogError("Controlled pawn is null, make sure you select one everywhere");
-            return;
-        }
-        DetailedScenarioElement detailedElement = new DetailedScenarioElement();
-        detailedElement.type = type;
-        detailedElement.controlledPawn = element.controlledPawn;
-        detailedElement.targetPawn = element.targetPawn;
-        detailedElement.position = element.position;
-        detailedScenario.Add(detailedElement);
-    }
-
-    private void MovePawn(ScenarioElement element)
-    {
-        completedScenarioIndex++;
-    }
-
-    private void WaitMovement(ScenarioElement element)
+    private void WaitMovement(DetailedScenarioElement element)
     {
         if (element.controlledPawn == null || !element.controlledPawn.IsMoving())
         {
             completedScenarioIndex++;
             currentScenarioIndex++;
         }
-    }
-
-    private void AttackPawn(ScenarioElement element)
-    {
-        completedScenarioIndex++;
-    }
-
-    private IControlableSelectable FindClosestPlayer(out float shortestDistance)
-    {
-        shortestDistance = float.MaxValue;
-
-        IControlableSelectable controlledPawn = PawnController.Instance.currentSelectedPawn;
-        if (controlledPawn == null) return null;
-
-        PawnBrain[] pawns = FindObjectsByType<PawnBrain>(FindObjectsSortMode.None);
-        PawnBrain[] players = pawns.Where(p => p.GetSelectableType() == SelectableType.Player).ToArray();
-        IControlableSelectable[] controlablePlayers = players.Select(p => p as IControlableSelectable).ToArray();
-
-        IControlableSelectable closestPlayer = null;
-        foreach (var player in controlablePlayers)
-        {
-            (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) = controlledPawn.GetPathPointsTo(player.GetTransform().position);
-            if (pointsAvailable == null && pointsOutOfRange == null) return null;
-            float distance = PawnDataController.CalculateLineStringDistance(pointsAvailable) + PawnDataController.CalculateLineStringDistance(pointsOutOfRange);
-            if (distance < shortestDistance)
-            {
-                shortestDistance = distance;
-                closestPlayer = player;
-            }
-        }
-        return closestPlayer;
     }
 }
