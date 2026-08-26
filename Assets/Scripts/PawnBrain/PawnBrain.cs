@@ -121,13 +121,13 @@ public class PawnBrain : IControlableSelectable
         dataController.selectableType = SelectableType.Dead;
         gameObject.layer = LayerMask.NameToLayer("DeadPawn");
         pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
-        animatorBrain?.InstaPlay((int)AnimatorBrainBase.Animations.DEATH, 0);
         dataController.SetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY, 0f);
         if (playersAlive.Contains(this))
         {
             playersAlive.Remove(this);
         }
         RefreshStatusVisualizers();
+        SyncLifeAnimator(true);
     }
 
     private void RefreshStatusVisualizers()
@@ -136,6 +136,26 @@ public class PawnBrain : IControlableSelectable
         for (int i = 0; i < visualizers.Length; i++)
             visualizers[i].RefreshStatusColor();
     }
+
+    void SyncLifeAnimator(bool instantDeath)
+    {
+        if (dataController == null) return;
+        bool dead = dataController.selectableType == SelectableType.Dead
+            || dataController.CurrentHp <= 0.01f;
+        if (dead)
+        {
+            if (instantDeath)
+                animatorBrain?.InstaPlay((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
+            else
+                animatorBrain?.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
+        }
+        else
+        {
+            animatorBrain?.SetLocked(false, 0);
+            animatorBrain?.InstaPlay((int)AnimatorBrainBase.Animations.IDLE, 0, false, true);
+        }
+    }
+
     private void OnLoadData(LoadedData data)
     {
         SelectableType selectableType = (SelectableType)data.GetData("SelectableType", dataController.UNIQUE_ID, (int)dataController.selectableType);
@@ -146,6 +166,7 @@ public class PawnBrain : IControlableSelectable
                 playersAlive.Add(this);
             }
             animatorBrain?.SetLocked(false, 0);
+            animatorBrain?.InstaPlay((int)AnimatorBrainBase.Animations.IDLE, 0, false, true);
         }
         else
         {
@@ -153,6 +174,7 @@ public class PawnBrain : IControlableSelectable
             {
                 playersAlive.Remove(this);
             }
+            animatorBrain?.InstaPlay((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
         }
     }
     void OnDestroy()
@@ -196,7 +218,10 @@ public class PawnBrain : IControlableSelectable
         else
         {
             lastDrawnPathTarget = new Vector3(99999f, 99999f, 99999f);
-            if (animatorBrain?.GetCurrentAnimation(0) != (int)AnimatorBrainBase.Animations.IDLE)
+            bool dead = dataController != null
+                && (dataController.selectableType == SelectableType.Dead || dataController.CurrentHp <= 0.01f);
+            if (!dead
+                && animatorBrain?.GetCurrentAnimation(0) != (int)AnimatorBrainBase.Animations.IDLE)
             {
                 animatorBrain?.Play((int)AnimatorBrainBase.Animations.IDLE, 0, false, false);
             }
@@ -293,7 +318,8 @@ public class PawnBrain : IControlableSelectable
 
     void OnMoveInternal(Vector3 position, bool ignoreStamina)
     {
-        pawnNavMesh.TravelToPosition(position, ignoreStamina);
+        if (!pawnNavMesh.TravelToPosition(position, ignoreStamina))
+            return;
         animatorBrain?.Play((int)AnimatorBrainBase.Animations.WALK, 0, false, false);
         audioSource.loop = true;
         audioSource.clip = walkSound;

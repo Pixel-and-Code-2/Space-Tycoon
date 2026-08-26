@@ -24,7 +24,7 @@ public abstract class IControlableSelectable : IAttackableSelectable
     public virtual bool HasMovedThisTurn => PawnData != null && PawnData.HasMovedThisTurn;
     public virtual float CurrentHp => PawnData != null ? PawnData.CurrentHp : 0f;
     public virtual float Stamina => PawnData != null ? PawnData.Stamina : 0f;
-    public virtual bool CanWalkNow => IsAlive && !IsMoving() && !IsBusy && (PawnData == null || PawnData.MaxMoveMetersFromStamina > 0.01f);
+    public virtual bool CanWalkNow => IsAlive && !IsMoving() && !IsBusy && (PawnData == null || PawnData.HasUsefulMoveBudget);
     public virtual void SetOnTask(bool onTask) { }
     public virtual void MarkCtrlSoloMove() { }
     public virtual void MarkBusyFromNow() { }

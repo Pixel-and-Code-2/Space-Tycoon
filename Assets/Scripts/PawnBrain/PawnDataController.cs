@@ -88,6 +88,10 @@ public class PawnDataController : MonoBehaviour
     public float MaxMoveMetersFromStamina =>
         staminaPerMeter > 0.001f ? stamina / staminaPerMeter : 0f;
 
+    public const float MinUsefulMoveMeters = 0.35f;
+
+    public bool HasUsefulMoveBudget => MaxMoveMetersFromStamina >= MinUsefulMoveMeters - 0.001f;
+
     public float MoveStaminaCost(float meters) => meters * staminaPerMeter;
 
     public float RollMeleeDamage() => combatantStats != null ? combatantStats.RollMeleeDamage() : 1f;
@@ -151,7 +155,16 @@ public class PawnDataController : MonoBehaviour
         float cost = MoveStaminaCost(meters);
         walkedMeters += meters;
         hasMovedThisTurn = true;
-        SpendStamina(cost);
+        stamina = Mathf.Max(0f, stamina - cost);
+        NotifyStaminaChanged();
+    }
+
+    public void ClearUselessMoveStamina()
+    {
+        if (HasUsefulMoveBudget) return;
+        if (stamina <= 0.001f) return;
+        stamina = 0f;
+        NotifyStaminaChanged();
     }
 
     public void RefundMoveMeters(float meters)

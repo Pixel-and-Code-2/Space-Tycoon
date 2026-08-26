@@ -164,7 +164,6 @@ public class PawnController : MonoBehaviour
     {
         if (!IsInCombat()) return false;
         if (currentSelectedPawn == null) return false;
-        if (currentSelectedPawn.IsMoving()) return false;
         return true;
     }
 

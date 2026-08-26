@@ -100,12 +100,14 @@ public class PathDrawer : MonoBehaviour
     {
         if (isOutOfRange)
         {
-            if (pathEndObjectRenderer != null) pathEndObjectRenderer.material = pathOutOfRangeMaterial;
+            if (pathEndObjectRenderer != null)
+                ApplyPathMaterial(pathEndObjectRenderer, pathOutOfRangeMaterial);
             pathLineOutOfRange.enabled = true;
         }
         else
         {
-            if (pathEndObjectRenderer != null) pathEndObjectRenderer.material = pathWalkableMaterial;
+            if (pathEndObjectRenderer != null)
+                ApplyPathMaterial(pathEndObjectRenderer, pathWalkableMaterial);
             pathLineOutOfRange.enabled = false;
         }
     }
@@ -114,14 +116,29 @@ public class PathDrawer : MonoBehaviour
     {
         if (isOutOfRange)
         {
-            if (pathStartObjectRenderer != null) pathStartObjectRenderer.material = pathOutOfRangeMaterial;
+            if (pathStartObjectRenderer != null)
+                ApplyPathMaterial(pathStartObjectRenderer, pathOutOfRangeMaterial);
             pathLineOutOfRange.enabled = true;
             pathLineWalkable.enabled = false;
         }
         else
         {
-            if (pathStartObjectRenderer != null) pathStartObjectRenderer.material = pathWalkableMaterial;
+            if (pathStartObjectRenderer != null)
+                ApplyPathMaterial(pathStartObjectRenderer, pathWalkableMaterial);
             pathLineWalkable.enabled = true;
+        }
+    }
+
+    static void ApplyPathMaterial(Renderer renderer, Material source)
+    {
+        if (renderer == null || source == null) return;
+        renderer.sharedMaterial = source;
+        Material m = renderer.material;
+        if (m.HasProperty("_BaseMap") && m.HasProperty("_MainTex"))
+        {
+            Texture main = m.GetTexture("_MainTex");
+            if (main != null && m.GetTexture("_BaseMap") == null)
+                m.SetTexture("_BaseMap", main);
         }
     }
 

@@ -72,11 +72,71 @@ public class SliderToPawnConnector : MonoBehaviour
     {
         if (pawn == null || allyStaminaSlider == null) return;
         if (pawn.selectableType != SelectableType.Player) return;
-        pawnStamina = TryGetParam(PawnDataController.STAMINA_KEY);
-        if (Mathf.Abs(pawnStamina - pawnStaminaCached) < 0.01f) return;
-        pawnStaminaCached = pawnStamina;
-        allyStaminaSlider.SetValue(pawnStamina);
-        UpdateActionIcons(pawnSelectableType != SelectableType.Dead && pawnHealth > 0.01f);
+        pawnStamina = pawn.Stamina;
+        bool staminaChanged = Mathf.Abs(pawnStamina - pawnStaminaCached) >= 0.001f;
+        if (staminaChanged)
+        {
+            pawnStaminaCached = pawnStamina;
+            allyStaminaSlider.SetValue(pawnStamina);
+        }
+        bool alive = pawnSelectableType != SelectableType.Dead && pawnHealth > 0.01f;
+        UpdateActionIcons(alive);
+    }
+
+    private float GetStamina()
+    {
+        bool isStepByStep = HandleInittingGlobalVars.globalParameters != null
+            && HandleInittingGlobalVars.globalParameters.parametersDict.ContainsKey(HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY)
+            && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f;
+        if (!isStepByStep) return 9999f;
+        return pawn != null ? pawn.Stamina : 0f;
+    }
+
+    private bool CanAttack()
+    {
+        if (pawn == null) return false;
+        if (pawn.MovesToSkip > 0.1f) return false;
+        float stamina = GetStamina();
+        float rangedCost = GlobalSettingsAssets.GetStaminaCosts().rangedAttackCost;
+        float meleeCost = pawn.HasRanged
+            ? GlobalSettingsAssets.GetStaminaCosts().shooterMeleeAttackCost
+            : GlobalSettingsAssets.GetStaminaCosts().meleeAttackCost;
+        float minCost = Mathf.Min(rangedCost, meleeCost);
+        return stamina >= minCost - 0.01f;
+    }
+
+    private void UpdateActionIcons(bool isAlive)
+    {
+        if (pawn == null || pawn.selectableType != SelectableType.Player)
+        {
+            if (walkIcon != null) walkIcon.SetActive(false);
+            if (attackIcon != null) attackIcon.SetActive(false);
+            if (reloadIcon != null) reloadIcon.SetActive(false);
+            return;
+        }
+        if (!isAlive)
+        {
+            if (walkIcon != null) walkIcon.SetActive(false);
+            if (attackIcon != null) attackIcon.SetActive(false);
+            if (reloadIcon != null) reloadIcon.SetActive(false);
+            return;
+        }
+
+        bool isStepByStep = HandleInittingGlobalVars.globalParameters != null
+            && HandleInittingGlobalVars.globalParameters.parametersDict.ContainsKey(HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY)
+            && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] > 0.5f;
+
+        if (walkIcon != null)
+        {
+            bool canWalk = !isStepByStep || pawn.HasUsefulMoveBudget;
+            walkIcon.SetActive(canWalk);
+        }
+
+        if (reloadIcon != null)
+            reloadIcon.SetActive(pawn.MovesToSkip > 0.1f);
+
+        if (attackIcon != null)
+            attackIcon.SetActive(CanAttack());
     }
 
     private void SetHelperTextEnabled(bool enabled)
@@ -226,63 +286,6 @@ public class SliderToPawnConnector : MonoBehaviour
             }
         }
     }
-    private float GetStamina()
-    {
-        bool isStepByStep = TryGetParam(HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY) > 0.5f;
-        if (!isStepByStep) return 9999f;
-        return TryGetParam(PawnDataController.STAMINA_KEY);
-    }
-
-    private bool CanAttack()
-    {
-        bool skips = TryGetParam(PawnDataController.MOVES_TO_SKIP_KEY) > 0.1f;
-        if (skips || pawn == null) return false;
-        float stamina = GetStamina();
-        float rangedCost = GlobalSettingsAssets.GetStaminaCosts().rangedAttackCost;
-        float meleeCost = pawn.HasRanged
-            ? GlobalSettingsAssets.GetStaminaCosts().shooterMeleeAttackCost
-            : GlobalSettingsAssets.GetStaminaCosts().meleeAttackCost;
-        float minCost = Mathf.Min(rangedCost, meleeCost);
-        return stamina >= minCost - 0.01f;
-    }
-
-    private void UpdateActionIcons(bool isAlive)
-    {
-        if (pawn.selectableType != SelectableType.Player)
-        {
-            walkIcon.SetActive(false);
-            attackIcon.SetActive(false);
-            reloadIcon.SetActive(false);
-            return;
-        }
-        if (pawn == null || !isAlive)
-        {
-            if (walkIcon != null) walkIcon.SetActive(false);
-            if (attackIcon != null) attackIcon.SetActive(false);
-            if (reloadIcon != null) reloadIcon.SetActive(false);
-            return;
-        }
-
-        if (walkIcon != null)
-        {
-            bool isStepByStep = TryGetParam(HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY) > 0.5f;
-            bool canWalk = !isStepByStep || (pawn != null && pawn.MaxMoveMetersFromStamina >= 2f - 0.001f);
-            walkIcon.SetActive(canWalk);
-        }
-
-        if (reloadIcon != null)
-        {
-            bool isReloading = TryGetParam(PawnDataController.MOVES_TO_SKIP_KEY) > 0.1f;
-            reloadIcon.SetActive(isReloading);
-        }
-
-        if (attackIcon != null)
-        {
-            bool canAttack = CanAttack();
-            attackIcon.SetActive(canAttack);
-        }
-    }
-
     void OnValidate()
     {
         if (pawn != null && pawn != pawnCached)

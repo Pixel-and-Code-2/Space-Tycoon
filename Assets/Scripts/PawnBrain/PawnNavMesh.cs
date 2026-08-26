@@ -14,10 +14,13 @@ public class PawnNavMesh : MonoBehaviour
     private float pendingPathMeters = 0f;
     private Vector3 moveStartPos;
     private bool trackStaminaSpend = false;
+    private Vector3 lastStaminaPos;
     [HideInInspector]
     public Vector3 targetPosition { get; private set; } = Vector3.zero;
     private bool isMoving = false;
+    private bool softStopping = false;
     public event System.Action OnMoveStopped;
+    public const float ArriveStoppingDistance = 0.08f;
     private Vector3 cachedTargetPosition = Vector3.zero;
     private Vector3[] cachedPointsAvailable = null;
     private Vector3[] cachedPointsOutOfRange = null;
@@ -108,7 +111,8 @@ public class PawnNavMesh : MonoBehaviour
 
     void Start()
     {
-        navMeshAgent.stoppingDistance = 1.05f;
+        navMeshAgent.stoppingDistance = ArriveStoppingDistance;
+        navMeshAgent.autoBraking = true;
         SaveHub.Instance.OnSave += OnSaveData;
         SaveHub.Instance.OnLoad += OnLoadData;
     }
@@ -188,12 +192,12 @@ public class PawnNavMesh : MonoBehaviour
         return ignoreStamina ? 99999f : dataController.MaxMoveMetersFromStamina;
     }
 
-    public void TravelToPosition(Vector3 position)
+    public bool TravelToPosition(Vector3 position)
     {
-        TravelToPosition(position, false);
+        return TravelToPosition(position, false);
     }
 
-    public void TravelToPosition(Vector3 position, bool ignoreStamina)
+    public bool TravelToPosition(Vector3 position, bool ignoreStamina)
     {
         NavMeshPathCost.PathPlan plan = NavMeshPathCost.Plan(navMeshAgent, position, dataController.maxSampleDistance);
         if (!plan.valid)
@@ -204,17 +208,28 @@ public class PawnNavMesh : MonoBehaviour
                 targetPosition = sampled;
                 cachedTargetPositionValid = false;
                 isMoving = true;
+                trackStaminaSpend = false;
                 TurnManager.Instance.RegisterMovingPawn(gameObject);
+                return true;
             }
-            return;
+            return false;
         }
 
-        pendingPathMeters = 0f;
-        plan = NavMeshPathCost.ClampMeters(plan, GetMaxMoveMeters(ignoreStamina));
-        if (!plan.valid || plan.pathMeters <= 0.001f) return;
+        if (!ignoreStamina && !dataController.HasUsefulMoveBudget)
+        {
+            dataController.ClearUselessMoveStamina();
+            return false;
+        }
 
+        plan = NavMeshPathCost.ClampMeters(plan, GetMaxMoveMeters(ignoreStamina));
+        float minMove = ignoreStamina ? 0.001f : PawnDataController.MinUsefulMoveMeters;
+        if (!plan.valid || plan.pathMeters < minMove - 0.001f) return false;
+
+        if (!isMoving)
+            lastStaminaPos = transform.position;
         moveStartPos = transform.position;
         trackStaminaSpend = !ignoreStamina;
+        softStopping = false;
 
         navMeshAgent.SetDestination(plan.destination);
         targetPosition = plan.destination;
@@ -223,29 +238,62 @@ public class PawnNavMesh : MonoBehaviour
 
         isMoving = true;
         TurnManager.Instance.RegisterMovingPawn(gameObject);
+        return true;
     }
 
-    void ChargeMoveStamina()
+    public void StopIfNoMoveBudget()
     {
-        if (!trackStaminaSpend) return;
+        if (!isMoving || softStopping || !trackStaminaSpend || dataController == null) return;
+        if (dataController.Stamina <= 0.001f)
+            BeginSoftStop();
+    }
+
+    void BeginSoftStop()
+    {
         trackStaminaSpend = false;
+        softStopping = true;
+        if (navMeshAgent != null && navMeshAgent.enabled && navMeshAgent.isOnNavMesh)
+            navMeshAgent.SetDestination(transform.position);
+    }
 
-        float straight = HorizontalDistance(moveStartPos, transform.position);
-        float agentPath = NavMeshPathCost.AgentPathMeters(navMeshAgent);
-        float chargeMeters = Mathf.Max(straight, agentPath);
-        if (chargeMeters < 0.15f) chargeMeters = straight;
-
-        dataController.SpendMoveMeters(chargeMeters);
-        pendingPathMeters = 0f;
+    void TickMoveStamina()
+    {
+        if (!trackStaminaSpend || dataController == null) return;
+        float delta = 0f;
+        if (navMeshAgent != null && navMeshAgent.enabled)
+        {
+            Vector3 v = navMeshAgent.velocity;
+            v.y = 0f;
+            delta = v.magnitude * Time.deltaTime;
+        }
+        if (delta < 0.0005f)
+            delta = HorizontalDistance(lastStaminaPos, transform.position);
+        float budget = dataController.MaxMoveMetersFromStamina;
+        if (delta > budget) delta = budget;
+        if (delta > 0.0005f)
+        {
+            dataController.SpendMoveMeters(delta);
+            lastStaminaPos = transform.position;
+        }
+        else
+            lastStaminaPos = transform.position;
+        StopIfNoMoveBudget();
     }
 
     void FinishMove()
     {
-        ChargeMoveStamina();
+        trackStaminaSpend = false;
+        softStopping = false;
         isMoving = false;
         SetTypeOfModifierVolumes(-1, -1);
-        navMeshAgent.ResetPath();
+        if (navMeshAgent != null && navMeshAgent.enabled)
+        {
+            navMeshAgent.ResetPath();
+            navMeshAgent.velocity = Vector3.zero;
+        }
         pendingPathMeters = 0f;
+        if (dataController != null)
+            dataController.ClearUselessMoveStamina();
         if (TurnManager.Instance != null)
             TurnManager.Instance.UnregisterMovingPawn(gameObject);
         OnMoveStopped?.Invoke();
@@ -260,17 +308,16 @@ public class PawnNavMesh : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (isMoving)
+        if (!isMoving) return;
+        TickMoveStamina();
+        if (!isMoving) return;
+        if (navMeshAgent != null && navMeshAgent.enabled && !navMeshAgent.pathPending)
         {
-            if (navMeshAgent != null && navMeshAgent.enabled && !navMeshAgent.pathPending)
+            float stopDist = softStopping ? ArriveStoppingDistance : navMeshAgent.stoppingDistance;
+            if (navMeshAgent.remainingDistance <= stopDist)
             {
-                if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-                {
-                    if (!navMeshAgent.hasPath || navMeshAgent.velocity.sqrMagnitude == 0f)
-                    {
-                        FinishMove();
-                    }
-                }
+                if (!navMeshAgent.hasPath || navMeshAgent.velocity.sqrMagnitude < 0.05f)
+                    FinishMove();
             }
         }
     }
@@ -332,8 +379,15 @@ public class PawnNavMesh : MonoBehaviour
 
     public void ResetMovement()
     {
-        if (trackStaminaSpend)
-            ChargeMoveStamina();
+        if (trackStaminaSpend && dataController != null)
+        {
+            float delta = HorizontalDistance(lastStaminaPos, transform.position);
+            if (delta > 0.0005f)
+                dataController.SpendMoveMeters(delta);
+            lastStaminaPos = transform.position;
+        }
+        trackStaminaSpend = false;
+        softStopping = false;
         if (navMeshAgent.enabled)
         {
             navMeshAgent.ResetPath();
@@ -342,6 +396,8 @@ public class PawnNavMesh : MonoBehaviour
         targetPosition = Vector3.zero;
         bool wasMoving = isMoving;
         isMoving = false;
+        if (dataController != null)
+            dataController.ClearUselessMoveStamina();
         cachedTargetPosition = Vector3.zero;
         cachedPointsAvailable = null;
         cachedPointsOutOfRange = null;

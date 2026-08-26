@@ -8,7 +8,9 @@ public class ShootState : IPawnState
 
     void OnDisable()
     {
-        pathDrawer.SetVisible(false);
+        IControlableSelectable pawn = controlableSelectable;
+        if (pawn == null || !pawn.IsMoving())
+            pathDrawer.SetVisible(false);
     }
 
     PawnDataController AttackerData =>
@@ -33,6 +35,9 @@ public class ShootState : IPawnState
                 UI3DManager.Instance.ShowMessage(r.blockMessage, worldPoint, Color.red);
             return;
         }
+
+        PawnNavMesh nav = controlableSelectable.GetComponent<PawnNavMesh>();
+        nav?.StopIfNoMoveBudget();
 
         if (!r.hit)
         {

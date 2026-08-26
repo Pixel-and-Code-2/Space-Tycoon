@@ -12,7 +12,9 @@ public class WalkState : IPawnState
     void OnDisable()
     {
         SliderToPawnConnector.HelperTag = "[ЛКМ]";
-        pathDrawer.SetVisible(false);
+        IControlableSelectable pawn = controlableSelectable;
+        if (pawn == null || !pawn.IsMoving())
+            pathDrawer.SetVisible(false);
     }
 
     PawnDataController Data =>
@@ -26,7 +28,7 @@ public class WalkState : IPawnState
             return 9999f;
         if (data.MovesToSkip > 0f)
             return -1f;
-        if (data.Stamina <= 0.001f)
+        if (!data.HasUsefulMoveBudget)
             return 0f;
         return data.MaxMoveMetersFromStamina;
     }
@@ -36,8 +38,7 @@ public class WalkState : IPawnState
         if (worldPoint == Vector3.zero) return;
         if (controlableSelectable.IsMoving() && GroupMove.IsCtrlHeld()) return;
         float budgetMeters = GetWalkBudgetMeters(worldPoint);
-        if (budgetMeters <= 0.0001f) return;
-        if (Data != null) Data.SetHasMovedThisTurn(true);
+        if (budgetMeters < PawnDataController.MinUsefulMoveMeters - 0.001f) return;
         PawnController.Instance.UpdateMoveOnShootButtonColor();
         GroupMove.Command(controlableSelectable, worldPoint);
         pathDrawer.SetVisible(false);
