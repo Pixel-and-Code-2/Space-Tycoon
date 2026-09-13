@@ -12,7 +12,7 @@ public static class AgentBakeDefaultSave
     const string WallObjectName = "WallWithWires_LVL0_CLICKABLE";
     const string SaveHubPath = "MainComponent";
 
-    [MenuItem("Space Tycoon/Bake Default Save (Play Mode) %&b")]
+    [MenuItem("Space-Tycoon/Bake Default Save (Play Mode) %&b")]
     public static void RunFromMenu()
     {
         string result = Run();

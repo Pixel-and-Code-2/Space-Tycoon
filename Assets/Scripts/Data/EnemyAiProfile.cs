@@ -7,7 +7,7 @@ public enum EnemyAiRole
     Tank
 }
 
-[CreateAssetMenu(fileName = "EnemyAiProfile", menuName = "SpaceTycoon/Enemy AI Profile", order = 2)]
+[CreateAssetMenu(fileName = "EnemyAiProfile", menuName = "Space-Tycoon/Enemy AI Profile", order = 2)]
 public class EnemyAiProfile : ScriptableObject
 {
     public EnemyAiRole role = EnemyAiRole.Melee;

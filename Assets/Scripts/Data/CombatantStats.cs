@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CombatantStats", menuName = "SpaceTycoon/Combatant Stats", order = 1)]
+[CreateAssetMenu(fileName = "CombatantStats", menuName = "Space-Tycoon/Combatant Stats", order = 1)]
 public class CombatantStats : ScriptableObject
 {
     public string displayName;

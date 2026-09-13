@@ -597,15 +597,6 @@ public static class AgentSetupUnits
         return sb.ToString();
     }
 
-    [MenuItem("Space-Tycoon/Fix Tank Walk Loop")]
-    public static void MenuFixTankWalkLoop()
-    {
-        var sb = new StringBuilder();
-        FixLoopingClips("Assets/Art_update/UPDATE_AUGUST/ENEMY_TANK_ANIM.fbx", sb);
-        FixTankWalkLoop(sb);
-        Debug.Log(sb.ToString());
-    }
-
     public static string FixTankWalkLoopOnly()
     {
         var sb = new StringBuilder();
