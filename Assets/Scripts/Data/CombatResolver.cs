@@ -21,6 +21,7 @@ public static class CombatResolver
         public float damage;
         public float hitChance;
         public string blockMessage;
+        public bool waitPhysicalDice;
     }
 
     public static Preview GetPreview(PawnDataController attacker, PawnDataController target, Vector3 attackerPos, Vector3 targetPos)
@@ -69,60 +70,105 @@ public static class CombatResolver
         return p;
     }
 
-    public static Result Resolve(PawnDataController attacker, PawnDataController target, Vector3 attackerPos, Vector3 targetPos)
+    public static Result Resolve(
+        PawnDataController attacker,
+        PawnDataController target,
+        Vector3 attackerPos,
+        Vector3 targetPos,
+        bool forceDisadvantage = false)
     {
         Preview p = GetPreview(attacker, target, attackerPos, targetPos);
+        if (forceDisadvantage)
+            p.disadvantage = true;
+        if (!p.canAttack)
+        {
+            Result blocked = new Result();
+            blocked.canAttack = false;
+            blocked.isMelee = p.isMelee;
+            blocked.hitChance = p.hitChance;
+            blocked.blockMessage = p.blockMessage;
+            return blocked;
+        }
+        int roll = RollAttackDie(p.disadvantage, out bool naturalCrit, out bool naturalFail);
+        bool wantDice = CombatAttackRunner.NeedsPhysicalDice();
+        Result r = FinalizeAttack(attacker, target, p, roll, naturalCrit, naturalFail, rollDamage: !wantDice);
+        r.waitPhysicalDice = wantDice && r.hit;
+        Debug.Log(
+            "[DiceGate] Resolve hit=" + r.hit
+            + " crit=" + r.crit
+            + " wantDice=" + wantDice
+            + " waitPhysicalDice=" + r.waitPhysicalDice
+            + " rollDmgNow=" + !wantDice
+            + " dmg=" + r.damage
+            + " roll=" + roll
+            + " melee=" + r.isMelee
+            + " atk=" + (attacker != null ? attacker.name : "null"));
+        return r;
+    }
+
+    public static Result FinalizeAttack(
+        PawnDataController attacker,
+        PawnDataController target,
+        Preview p,
+        int roll,
+        bool naturalCrit,
+        bool naturalFail,
+        bool rollDamage = true)
+    {
         Result r = new Result();
         r.canAttack = p.canAttack;
         r.isMelee = p.isMelee;
         r.hitChance = p.hitChance;
         r.blockMessage = p.blockMessage;
-        if (!r.canAttack) return r;
+        if (!r.canAttack || attacker == null || target == null) return r;
 
         attacker.SpendStamina(attacker.GetAttackStaminaCost(p.isMelee));
 
         int mod = p.isMelee ? Mathf.RoundToInt(attacker.Strength) : Mathf.RoundToInt(attacker.Dexterity);
         int ac = Mathf.RoundToInt(target.ArmorClass);
-        int d20a = Random.Range(1, 21);
-        int d20b = p.disadvantage ? Random.Range(1, 21) : d20a;
-        int roll = p.disadvantage ? Mathf.Min(d20a, d20b) : d20a;
-        if (roll == 1)
+        if (naturalFail)
         {
             r.hit = false;
             return r;
         }
-        r.crit = roll == 20;
+        r.crit = naturalCrit;
         r.hit = r.crit || roll + mod >= ac;
         if (!r.hit) return r;
-        float dmg = p.isMelee ? attacker.RollMeleeDamage() : attacker.RollRangedDamage();
-        if (r.crit) dmg *= 2f;
-        r.damage = dmg;
+        if (rollDamage)
+        {
+            float dmg = p.isMelee ? attacker.RollMeleeDamage() : attacker.RollRangedDamage();
+            if (r.crit) dmg *= 2f;
+            r.damage = dmg;
+        }
         return r;
+    }
+
+    public static int RollAttackDie(bool disadvantage, out bool naturalCrit, out bool naturalFail)
+    {
+        int a = RollOneAttackDie();
+        int b = disadvantage ? RollOneAttackDie() : a;
+        int roll = disadvantage ? Mathf.Min(a, b) : a;
+        naturalFail = roll <= 1;
+        naturalCrit = roll >= 20;
+        return roll;
+    }
+
+    static int RollOneAttackDie()
+    {
+        var settings = HandleInittingGlobalVars.globalSettingsAssets;
+        bool d10x2 = settings == null || settings.useD10Times2InsteadOfD20;
+        if (d10x2)
+            return Random.Range(1, 11) + Random.Range(1, 11);
+        return Random.Range(1, 21);
     }
 
     static float HitChance(int mod, int ac, bool disadvantage)
     {
-        if (!disadvantage)
-        {
-            int hits = 0;
-            for (int a = 1; a <= 20; a++)
-            {
-                if (a == 1) continue;
-                if (a == 20 || a + mod >= ac) hits++;
-            }
-            return hits / 20f;
-        }
-        int ways = 0;
-        for (int a = 1; a <= 20; a++)
-        {
-            for (int b = 1; b <= 20; b++)
-            {
-                int roll = Mathf.Min(a, b);
-                if (roll == 1) continue;
-                if (roll == 20 || roll + mod >= ac) ways++;
-            }
-        }
-        return ways / 400f;
+        float minRoll = ac - mod;
+        float p = 21f - minRoll / 20f;
+        if (disadvantage)
+            p *= p;
+        return Mathf.Clamp01(p);
     }
 
     public static bool HasWallBetween(Vector3 from, Vector3 to)

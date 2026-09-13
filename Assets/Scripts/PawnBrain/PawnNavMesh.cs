@@ -14,6 +14,7 @@ public class PawnNavMesh : MonoBehaviour
     private float pendingPathMeters = 0f;
     private Vector3 moveStartPos;
     private bool trackStaminaSpend = false;
+    private bool ignoreStaminaMove = false;
     private Vector3 lastStaminaPos;
     [HideInInspector]
     public Vector3 targetPosition { get; private set; } = Vector3.zero;
@@ -208,6 +209,7 @@ public class PawnNavMesh : MonoBehaviour
                 targetPosition = sampled;
                 cachedTargetPositionValid = false;
                 isMoving = true;
+                ignoreStaminaMove = true;
                 trackStaminaSpend = false;
                 TurnManager.Instance.RegisterMovingPawn(gameObject);
                 return true;
@@ -228,9 +230,12 @@ public class PawnNavMesh : MonoBehaviour
         if (!isMoving)
             lastStaminaPos = transform.position;
         moveStartPos = transform.position;
+        ignoreStaminaMove = ignoreStamina;
         trackStaminaSpend = !ignoreStamina;
         softStopping = false;
 
+        if (navMeshAgent != null && navMeshAgent.enabled)
+            navMeshAgent.isStopped = false;
         navMeshAgent.SetDestination(plan.destination);
         targetPosition = plan.destination;
         cachedTargetPositionValid = false;
@@ -293,7 +298,13 @@ public class PawnNavMesh : MonoBehaviour
         }
         pendingPathMeters = 0f;
         if (dataController != null)
-            dataController.ClearUselessMoveStamina();
+        {
+            if (ignoreStaminaMove)
+                dataController.SetHasMovedThisTurn(true);
+            else
+                dataController.ClearUselessMoveStamina();
+        }
+        ignoreStaminaMove = false;
         if (TurnManager.Instance != null)
             TurnManager.Instance.UnregisterMovingPawn(gameObject);
         OnMoveStopped?.Invoke();
@@ -313,6 +324,7 @@ public class PawnNavMesh : MonoBehaviour
         if (!isMoving) return;
         if (navMeshAgent != null && navMeshAgent.enabled && !navMeshAgent.pathPending)
         {
+            if (navMeshAgent.isStopped) return;
             float stopDist = softStopping ? ArriveStoppingDistance : navMeshAgent.stoppingDistance;
             if (navMeshAgent.remainingDistance <= stopDist)
             {

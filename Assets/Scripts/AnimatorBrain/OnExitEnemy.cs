@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class OnExitEnemy : StateMachineBehaviour
@@ -14,17 +13,19 @@ public class OnExitEnemy : StateMachineBehaviour
     {
         this.layerIndex = layerIndex;
         cancel = false;
-        PawnController.Instance.StartCoroutine(Wait());
+        if (PawnController.Instance == null) return;
+        PawnController.Instance.StartCoroutine(Wait(animator, stateInfo, layerIndex));
+    }
 
-        IEnumerator Wait()
-        {
-            yield return new WaitForSeconds(stateInfo.length - crossfade);
+    IEnumerator Wait(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        float wait = Mathf.Max(0.05f, stateInfo.length - crossfade);
+        yield return new WaitForSeconds(wait);
+        if (cancel || animator == null) yield break;
 
-            if (cancel) yield break;
-
-            AnimatorBrainEnemy target = animator.GetComponent<AnimatorBrainEnemy>();
-            target.SetLocked(false, layerIndex);
-            target.Play(animation, layerIndex, lockLayer, false, crossfade);
-        }
+        AnimatorBrainEnemy target = animator.GetComponent<AnimatorBrainEnemy>();
+        if (target == null) yield break;
+        target.SetLocked(false, layerIndex);
+        target.ForcePlay(animation, layerIndex, lockLayer, crossfade);
     }
 }

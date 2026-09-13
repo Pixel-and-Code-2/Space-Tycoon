@@ -72,8 +72,11 @@ public class PawnController : MonoBehaviour
 
     void Start()
     {
-        if (shootOnMoveButton != null)
-            shootOnMoveButton.gameObject.SetActive(false);
+        if (GetComponent<ShootOnMoveController>() == null)
+            gameObject.AddComponent<ShootOnMoveController>();
+        if (GetComponent<CombatAttackRunner>() == null)
+            gameObject.AddComponent<CombatAttackRunner>();
+        UpdateMoveOnShootButtonColor();
         if (startReloadButton != null)
             startReloadButton.gameObject.SetActive(false);
         if (TurnManager.Instance != null)
@@ -84,10 +87,39 @@ public class PawnController : MonoBehaviour
         }
         SelectableToBoxConnector.HelperTag = currentSelectedPawn == null ? "[персонаж]->[ЛКМ]" : "[ЛКМ]";
         SliderToPawnConnector.HelperTag = currentSelectedPawn == null ? "[персонаж]->[ЛКМ]" : "[ЛКМ]";
+        EnableShootOnMoveAction(true);
     }
+
+    void OnEnable()
+    {
+        EnableShootOnMoveAction(true);
+    }
+
+    void OnDisable()
+    {
+        EnableShootOnMoveAction(false);
+    }
+
+    void EnableShootOnMoveAction(bool on)
+    {
+        if (toggleShootOnMoveAction == null || toggleShootOnMoveAction.action == null) return;
+        if (on)
+        {
+            if (!toggleShootOnMoveAction.action.enabled)
+                toggleShootOnMoveAction.action.Enable();
+        }
+        else if (toggleShootOnMoveAction.action.enabled)
+            toggleShootOnMoveAction.action.Disable();
+    }
+
     void Update()
     {
+        if (UILayersController.Instance == null || UILayersController.Instance.overlayStack.Count == 0) return;
         if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI) return;
+        if (toggleShootOnMoveAction != null
+            && toggleShootOnMoveAction.action != null
+            && toggleShootOnMoveAction.action.WasPressedThisFrame())
+            ToggleShootOnMove();
         // Polling selector brain and addressing logic to the current state
         if (currentSelector == null)
         {
@@ -150,6 +182,10 @@ public class PawnController : MonoBehaviour
                 (ISelectable selectable3, Vector3 worldPoint2, Vector2 screenPoint, ScreenCastHitResult hit) = currentSelectorWithUICached.PollForIntermidiateAiming();
                 currentState.HandleUIDrawing(selectable3, worldPoint2, screenPoint, hit);
             }
+            else if (pathDrawer != null && pathDrawer.GetVisible())
+            {
+                pathDrawer.SetVisible(false);
+            }
         }
         isValidStage1 = false;
         isValidStage2 = false;
@@ -169,11 +205,35 @@ public class PawnController : MonoBehaviour
 
     public void ToggleShootOnMove()
     {
+        if (ShootOnMoveController.Instance == null)
+        {
+            gameObject.AddComponent<ShootOnMoveController>();
+        }
+        ShootOnMoveController.Instance.Toggle();
     }
     public void UpdateMoveOnShootButtonColor()
     {
-        if (shootOnMoveButton != null && shootOnMoveButton.gameObject.activeSelf)
-            shootOnMoveButton.gameObject.SetActive(false);
+        bool inCombat = IsInCombat();
+        bool canUse = inCombat
+            && currentSelectedPawn != null
+            && currentSelectedPawn.PawnData != null
+            && currentSelectedPawn.PawnData.HasRanged
+            && currentSelectedPawn.GetSelectableType() == SelectableType.Player;
+        if (shootOnMoveButton == null) return;
+        CanvasGroup cg = shootOnMoveButton.GetComponent<CanvasGroup>();
+        if (cg == null) cg = shootOnMoveButton.gameObject.AddComponent<CanvasGroup>();
+        if (!shootOnMoveButton.gameObject.activeSelf)
+            shootOnMoveButton.gameObject.SetActive(true);
+        cg.alpha = inCombat ? 1f : 0f;
+        cg.blocksRaycasts = canUse;
+        cg.interactable = canUse;
+        if (inCombat)
+        {
+            if (canUse && ShootOnMoveController.Instance != null && ShootOnMoveController.Instance.IsActive)
+                shootOnMoveButton.TurnOnButton();
+            else
+                shootOnMoveButton.TurnOffButton();
+        }
     }
     public void StartReload()
     {
@@ -239,11 +299,19 @@ public class PawnController : MonoBehaviour
             if (InputScreenMouseControlActions.Instance != null)
                 InputScreenMouseControlActions.Instance.SelectPlayer(actor, false);
         }
+        if (ShootOnMoveController.Instance != null && ShootOnMoveController.Instance.IsActive)
+            ShootOnMoveController.Instance.Exit();
+        UpdateMoveOnShootButtonColor();
     }
 
     void OnEnemyTurn()
     {
         ChangeSelectorBrain(enemySelectorBrain);
+        if (ShootOnMoveController.Instance != null && ShootOnMoveController.Instance.IsActive)
+            ShootOnMoveController.Instance.Exit();
+        if (pathDrawer != null)
+            pathDrawer.SetVisible(false);
+        UpdateMoveOnShootButtonColor();
     }
 
     public bool IsSelectionLockedToCurrentActor()

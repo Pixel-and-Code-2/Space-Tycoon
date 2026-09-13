@@ -74,6 +74,15 @@ public class GlobalSettingsAssets : ScriptableObject
     [Header("Stat boosts (empty pool = no grant / no UI)")]
     public BoostPoolSettings boostPools = new BoostPoolSettings();
 
+    [Header("Help slides (fullscreen; assign in inspector)")]
+    public List<Sprite> helpSlidesStart = new List<Sprite>();
+    public List<Sprite> helpSlidesFirstCombat = new List<Sprite>();
+
+    [Header("Dice")]
+    public bool usePhysicalDice = false;
+    public bool useD10Times2InsteadOfD20 = true;
+    public float diceFloorY = 0f;
+
     [System.Serializable]
     public class StaminaCostSettings
     {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PawnStatusVisualizer : MonoBehaviour
@@ -16,7 +17,15 @@ public class PawnStatusVisualizer : MonoBehaviour
     private Color lastAppliedColor;
     private IControlableSelectable lastSelected;
     private SelectableType lastSelectableType;
+    private int lastSomShots = -1;
     private bool hasAppliedOnce;
+
+    static Dictionary<IControlableSelectable, int> somShots;
+
+    public static void SetShootOnMoveCounts(Dictionary<IControlableSelectable, int> counts)
+    {
+        somShots = counts;
+    }
 
     void Awake()
     {
@@ -61,12 +70,16 @@ public class PawnStatusVisualizer : MonoBehaviour
             return;
 
         SelectableType type = pawnBrain.GetSelectableType();
-        if (!force && hasAppliedOnce && current == lastSelected && type == lastSelectableType)
+        int som = 0;
+        if (somShots != null && pawnBrain is IControlableSelectable sel)
+            somShots.TryGetValue(sel, out som);
+        if (!force && hasAppliedOnce && current == lastSelected && type == lastSelectableType && som == lastSomShots)
             return;
 
-        Color targetColor = ResolveTargetColor(current);
+        Color targetColor = ResolveTargetColor(current, som);
         lastSelected = current;
         lastSelectableType = type;
+        lastSomShots = som;
         hasAppliedOnce = true;
         if (targetColor == lastAppliedColor)
             return;
@@ -76,6 +89,16 @@ public class PawnStatusVisualizer : MonoBehaviour
 
     private Color ResolveTargetColor(IControlableSelectable current)
     {
+        return ResolveTargetColor(current, 0);
+    }
+
+    private Color ResolveTargetColor(IControlableSelectable current, int somShotsOnThis)
+    {
+        if (somShotsOnThis > 0)
+        {
+            float t = Mathf.Clamp01((somShotsOnThis - 1) / 3f);
+            return Color.Lerp(new Color(1f, 0.92f, 0.2f), new Color(1f, 0.35f, 0.05f), t);
+        }
         SelectableType type = pawnBrain.GetSelectableType();
         if (type == SelectableType.Enemy)
             return settings.GetColorLink(current == pawnBrain ? settings.selectedColorEnemy : settings.enemyColor).color;

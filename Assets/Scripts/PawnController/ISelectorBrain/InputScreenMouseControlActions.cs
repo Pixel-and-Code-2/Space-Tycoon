@@ -311,11 +311,15 @@ public class InputScreenMouseControlActions : ISelectorBrainWithUI
         mousePositionCached = mousePosition;
 
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        bool aimHitables = currentControlType == ControlType.attack
+            || (ShootOnMoveController.Instance != null && ShootOnMoveController.Instance.IsActive);
         if (
-            (currentControlType == ControlType.attack) &&
+            aimHitables &&
             Physics.Raycast(ray, out raycastHitCached, RAYCAST_DISTANCE, LayerMask.GetMask("Hitable")))
         {
             selectableCached = raycastHitCached.collider.GetComponent<ISelectable>();
+            if (selectableCached == null)
+                selectableCached = raycastHitCached.collider.GetComponentInParent<ISelectable>();
             worldPointCached = raycastHitCached.point;
             hitCached = ScreenCastHitResult.SelectableHit;
         }

@@ -57,12 +57,6 @@ public static class NavMeshPathCost
             plan.destination = sampled;
             plan.corners = new[] { agentPos, sampled };
         }
-        else if (polylineMeters > directToSample * 2f && directToSample < 5f)
-        {
-            plan.pathMeters = directToSample + 0.1f;
-            plan.destination = sampled;
-            plan.corners = new[] { agentPos, sampled };
-        }
         else
         {
             ClosestOnPolyline(corners, desiredFinish, out Vector3 closestOnPath, out float metersToClosest);

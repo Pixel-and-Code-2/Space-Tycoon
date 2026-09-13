@@ -15,11 +15,11 @@ public class AnimatorBrainEnemy : AnimatorBrainBase
     {
         animations = new int[] {
             0,
-            Animator.StringToHash("root|UFO_Idle"),
-            Animator.StringToHash("root|UFO_Walk"),
-            Animator.StringToHash("root|UFO_Ataka"),
-            Animator.StringToHash("root|UFO_Death"),
-            Animator.StringToHash("root|UFO_Rage"),
+            Animator.StringToHash("4_IDLE"),
+            Animator.StringToHash("1_MOVE"),
+            Animator.StringToHash("2_ATTACK"),
+            Animator.StringToHash("3_DEATH"),
+            Animator.StringToHash("5_HIT"),
         };
         isSubEnables = false;
     }

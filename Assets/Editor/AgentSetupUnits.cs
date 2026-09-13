@@ -210,6 +210,8 @@ public static class AgentSetupUnits
             "Assets/Resources/AnimatorOverrides/EnemyShooterAnimator.overrideController",
             "Assets/Scripts/AnimatorBrain/PlayerController.controller", sb);
         RegisterWarFogForStartingEnemies("EnemyShooter_Test", "Enemy1.2", sb);
+        RegisterWarFogForStartingEnemies("EnemyTank_Test", "Enemy1.2", sb);
+        FixModelRotation("EnemyTank_Test", sb);
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         AssetDatabase.SaveAssets();
         return sb.ToString();
@@ -414,8 +416,11 @@ public static class AgentSetupUnits
         foreach (Transform child in pawn.transform)
         {
             if (child.GetComponentInChildren<SkinnedMeshRenderer>() == null) continue;
-            child.localRotation = Quaternion.identity;
-            sb.AppendLine("rotation " + pawnName + "/" + child.name);
+            if (pawnName.Contains("Shooter") || pawnName.Contains("EnemyShooter"))
+                child.localRotation = Quaternion.Euler(0f, 180f, 0f);
+            else
+                child.localRotation = Quaternion.identity;
+            sb.AppendLine("rotation " + pawnName + "/" + child.name + " " + child.localEulerAngles);
         }
     }
 
@@ -425,7 +430,7 @@ public static class AgentSetupUnits
         foreach (Transform child in root.transform)
         {
             if (child.GetComponentInChildren<SkinnedMeshRenderer>() == null) continue;
-            child.localRotation = Quaternion.identity;
+            child.localRotation = Quaternion.Euler(0f, 180f, 0f);
         }
         PrefabUtility.SaveAsPrefabAsset(root, EnemyPrefabPath);
         PrefabUtility.UnloadPrefabContents(root);
@@ -451,20 +456,38 @@ public static class AgentSetupUnits
     {
         var enemy = GameObject.Find(enemyName);
         var reference = GameObject.Find(referenceEnemyName);
-        if (enemy == null || reference == null) return;
+        if (enemy == null) return;
         foreach (var wf in Object.FindObjectsByType<WarFog>(FindObjectsSortMode.None))
         {
+            var box = wf.GetComponent<BoxCollider>();
+            bool inside = box != null && box.bounds.Contains(enemy.transform.position);
+            bool hasRef = false;
+            if (reference != null)
+            {
+                var soCheck = new SerializedObject(wf);
+                var listCheck = soCheck.FindProperty("othersToInclude");
+                for (int i = 0; i < listCheck.arraySize; i++)
+                {
+                    var go = listCheck.GetArrayElementAtIndex(i).objectReferenceValue as GameObject;
+                    if (go == reference) hasRef = true;
+                }
+            }
+            if (!inside && !hasRef) continue;
+            if (!inside && hasRef)
+            {
+                // only share fog with reference when enemy is also inside that fog bounds
+                if (box == null || !box.bounds.Contains(enemy.transform.position))
+                    continue;
+            }
             var so = new SerializedObject(wf);
             var list = so.FindProperty("othersToInclude");
-            bool hasRef = false;
             bool hasEnemy = false;
             for (int i = 0; i < list.arraySize; i++)
             {
                 var go = list.GetArrayElementAtIndex(i).objectReferenceValue as GameObject;
-                if (go == reference) hasRef = true;
                 if (go == enemy) hasEnemy = true;
             }
-            if (!hasRef || hasEnemy) continue;
+            if (hasEnemy) continue;
             list.InsertArrayElementAtIndex(list.arraySize);
             list.GetArrayElementAtIndex(list.arraySize - 1).objectReferenceValue = enemy;
             so.ApplyModifiedPropertiesWithoutUndo();
@@ -506,7 +529,14 @@ public static class AgentSetupUnits
         animator.runtimeAnimatorController = controller;
         animator.applyRootMotion = false;
 
-        if (model.GetComponent<AnimatorBrainPlayer>() == null)
+        if (isEnemy)
+        {
+            if (model.GetComponent<AnimatorBrainEnemy>() == null)
+                model.AddComponent<AnimatorBrainEnemy>();
+            var playerBrain = model.GetComponent<AnimatorBrainPlayer>();
+            if (playerBrain != null) Object.DestroyImmediate(playerBrain);
+        }
+        else if (model.GetComponent<AnimatorBrainPlayer>() == null)
             model.AddComponent<AnimatorBrainPlayer>();
 
         var smr = model.GetComponentInChildren<SkinnedMeshRenderer>();
@@ -517,8 +547,106 @@ public static class AgentSetupUnits
             so.FindProperty("skinnedMeshRenderer").objectReferenceValue = smr;
             if (defaultMat != null) so.FindProperty("defaultMaterial").objectReferenceValue = defaultMat;
             if (selectedMat != null) so.FindProperty("selectedMaterial").objectReferenceValue = selectedMat;
+            so.FindProperty("animatorBrain").objectReferenceValue = isEnemy
+                ? (AnimatorBrainBase)model.GetComponent<AnimatorBrainEnemy>()
+                : model.GetComponent<AnimatorBrainPlayer>();
             so.ApplyModifiedPropertiesWithoutUndo();
         }
+    }
+
+    public static string SetupTankTest()
+    {
+        var sb = new StringBuilder();
+        var tank = GameObject.Find("EnemyTank_Test");
+        if (tank == null)
+        {
+            sb.AppendLine("EnemyTank_Test missing");
+            return sb.ToString();
+        }
+        var ctrl = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/Scripts/AnimatorBrain/EnemyContoller.controller");
+        var matGuids = AssetDatabase.FindAssets("ENEMY_TANK t:Material");
+        Material mat = null;
+        foreach (var g in matGuids)
+        {
+            var p = AssetDatabase.GUIDToAssetPath(g);
+            mat = AssetDatabase.LoadAssetAtPath<Material>(p);
+            if (mat != null) break;
+        }
+        ReplaceModelOnPawn(tank, "Assets/Art_update/UPDATE_AUGUST/ENEMY_TANK_ANIM.fbx", ctrl, mat, mat, false);
+        // remove mistaken enemy brain if any, keep player brain hashes (1_MOVE/4_IDLE...)
+        var model = tank.GetComponentInChildren<Animator>();
+        if (model != null)
+        {
+            var eb = model.GetComponent<AnimatorBrainEnemy>();
+            if (eb != null) Object.DestroyImmediate(eb);
+            if (model.GetComponent<AnimatorBrainPlayer>() == null)
+                model.gameObject.AddComponent<AnimatorBrainPlayer>();
+        }
+        sb.AppendLine("tank model replaced mat=" + (mat != null ? mat.name : "null"));
+        FixLoopingClips("Assets/Art_update/UPDATE_AUGUST/ENEMY_TANK_ANIM.fbx", sb);
+        FixTankWalkLoop(sb);
+        // animator override like shooter
+        FixAnimatorOverrides(
+            "EnemyTank_Test",
+            "Assets/Art_update/UPDATE_AUGUST/ENEMY_TANK_ANIM.fbx",
+            "Assets/Resources/AnimatorOverrides/EnemyTankAnimator.overrideController",
+            "Assets/Scripts/AnimatorBrain/EnemyContoller.controller",
+            sb);
+        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        AssetDatabase.SaveAssets();
+        return sb.ToString();
+    }
+
+    [MenuItem("Space-Tycoon/Fix Tank Walk Loop")]
+    public static void MenuFixTankWalkLoop()
+    {
+        var sb = new StringBuilder();
+        FixLoopingClips("Assets/Art_update/UPDATE_AUGUST/ENEMY_TANK_ANIM.fbx", sb);
+        FixTankWalkLoop(sb);
+        Debug.Log(sb.ToString());
+    }
+
+    public static string FixTankWalkLoopOnly()
+    {
+        var sb = new StringBuilder();
+        FixLoopingClips("Assets/Art_update/UPDATE_AUGUST/ENEMY_TANK_ANIM.fbx", sb);
+        FixTankWalkLoop(sb);
+        if (sb.Length == 0) sb.AppendLine("tank loop already ok or no clips");
+        return sb.ToString();
+    }
+
+    static void FixTankWalkLoop(StringBuilder sb)
+    {
+        const string path = "Assets/Art_update/UPDATE_AUGUST/ENEMY_TANK_ANIM.fbx";
+        var importer = AssetImporter.GetAtPath(path) as ModelImporter;
+        if (importer == null)
+        {
+            sb.AppendLine("tank fbx importer missing");
+            return;
+        }
+        ModelImporterClipAnimation[] source = importer.clipAnimations;
+        if (source == null || source.Length == 0)
+            source = importer.defaultClipAnimations;
+        if (source == null || source.Length == 0)
+        {
+            sb.AppendLine("tank clips empty");
+            return;
+        }
+        var clips = new ModelImporterClipAnimation[source.Length];
+        for (int i = 0; i < source.Length; i++)
+        {
+            clips[i] = source[i];
+            string n = clips[i].name ?? "";
+            if (n.Contains("1_MOVE") || n.Contains("4_IDLE") || n.EndsWith("|1_MOVE") || n.EndsWith("|4_IDLE"))
+            {
+                clips[i].loopTime = true;
+                clips[i].loop = true;
+            }
+        }
+        importer.clipAnimations = clips;
+        EditorUtility.SetDirty(importer);
+        importer.SaveAndReimport();
+        sb.AppendLine("tank walk/idle loopTime=1");
     }
 
     static void SetLayerRecursively(GameObject go, int layer)
@@ -530,7 +658,7 @@ public static class AgentSetupUnits
 
     static void CleanupRootModels(StringBuilder sb)
     {
-        foreach (var n in new[] { "ENEMY_SHOOTER_ANIM", "ENGINEER_PISTOL_ANIM", "ENGINEER_SNIPER_ANIM", "ENGINEER_1_RELEASE_FIX", "ENGINEER_2_RELEASE_FIX" })
+        foreach (var n in new[] { "ENEMY_SHOOTER_ANIM", "ENGINEER_PISTOL_ANIM", "ENGINEER_SNIPER_ANIM", "ENGINEER_1_RELEASE_FIX", "ENGINEER_2_RELEASE_FIX", "ENEMY_TANK_ANIM" })
         {
             var go = GameObject.Find(n);
             if (go != null && go.transform.parent == null)

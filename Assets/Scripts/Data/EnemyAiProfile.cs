@@ -19,6 +19,10 @@ public class EnemyAiProfile : ScriptableObject
     public bool useFinisher = true;
     public float finisherHpFraction = 0.2f;
     public bool skipAttackAfterMove = true;
+    public bool allowDoubleAttack = true;
+    public bool isQuarantine = false;
+    [Range(0f, 1f)]
+    public float attackAfterMoveChance = 0.45f;
 
     [Header("Melee")]
     public float meleeCloseBandMin = 2f;

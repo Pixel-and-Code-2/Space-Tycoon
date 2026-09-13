@@ -267,6 +267,8 @@ MonoBehaviour:
   walkSound: {fileID: 8300000, guid: 6822af76fb63c674da7361ae19bc8449, type: 3}
   noAmmoSound: {fileID: 8300000, guid: eed328ac6c3d9db4cae24853dc789adb, type: 3}
   reloadSound: {fileID: 8300000, guid: 26c95c07510bec149b50caec42112650, type: 3}
+  rangedHitDelay: 0.45
+  meleeHitDelay: 0.35
 --- !u!114 &8515852256048443046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6119232c3cb8a0e459d4cf820a038e5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PawnDataController
-  initialPawnData: {fileID: 0}
+  combatantStats: {fileID: 0}
+  aiProfileOverride: {fileID: 0}
   maxSampleDistance: 5
   obstaclePushForce: 2
   verticalPushOverride: 1.19
@@ -751,7 +754,7 @@ PrefabInstance:
     - target: {fileID: 2630249666952744007, guid: 98ef8ca0af8ff3d4785c1bb417cf99ec, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: bb7ce58fab2d3f54884790bc0f9f959d, type: 2}
+      objectReference: {fileID: 2100000, guid: 82bf1a0fbc5d02c429bf16be866a3a3b, type: 2}
     - target: {fileID: 3043551442767273107, guid: 98ef8ca0af8ff3d4785c1bb417cf99ec, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -795,7 +798,7 @@ PrefabInstance:
     - target: {fileID: 5279178248902009775, guid: 98ef8ca0af8ff3d4785c1bb417cf99ec, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 724dc666ba8b552479ca60db1e13e5ea, type: 2}
+      objectReference: {fileID: 2100000, guid: 82bf1a0fbc5d02c429bf16be866a3a3b, type: 2}
     - target: {fileID: 7079182323191280426, guid: 98ef8ca0af8ff3d4785c1bb417cf99ec, type: 3}
       propertyPath: m_Parameters.colorGradient.atime0
       value: 0

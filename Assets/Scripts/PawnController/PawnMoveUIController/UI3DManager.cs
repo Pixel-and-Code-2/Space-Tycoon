@@ -349,8 +349,27 @@ public class UI3DManager : MonoBehaviour
         return selectableToBoxConnector;
     }
 
-    public void ShowMessage(string message, Vector3 position, Color color)
+    public void ShowMessage(string message, Vector3 position, Color color, bool randomOffset = false)
     {
+        if (randomOffset)
+        {
+            position += new Vector3(
+                UnityEngine.Random.Range(-0.45f, 0.45f),
+                UnityEngine.Random.Range(0f, 0.35f),
+                UnityEngine.Random.Range(-0.45f, 0.45f));
+        }
         messageItems.Enqueue(new MessageItem { message = message, position = position, color = color });
+    }
+
+    public void ShowMessageAtScreen(string message, Vector2 screenPoint, Color color)
+    {
+        if (canvas == null || canvas.worldCamera == null)
+        {
+            ShowMessage(message, Vector3.zero, color);
+            return;
+        }
+        Ray ray = canvas.worldCamera.ScreenPointToRay(screenPoint);
+        Vector3 world = ray.origin + ray.direction * 4f;
+        messageItems.Enqueue(new MessageItem { message = message, position = world, color = color });
     }
 }

@@ -15,12 +15,12 @@ MonoBehaviour:
   displayName: Gusev
   weaponName: Vintovka
   movePerTurn: 9
-  staminaPerMeter: 11
+  staminaPerMeter: 11.11
   maxHp: 34
-  strength: 4
-  dexterity: 9
+  strength: 2
+  dexterity: 5
   armorClass: 13
-  meleeDamage: 3d8
-  rangedDamage: 3d10+12
+  meleeDamage: d6
+  rangedDamage: d8+3
   attackRange: 10
   meleeReach: 2

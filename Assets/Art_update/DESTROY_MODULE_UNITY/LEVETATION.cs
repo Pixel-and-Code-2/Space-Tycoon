@@ -2,38 +2,38 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Плавно вращает дочерние объекты по всем осям с плавно меняющейся случайной угловой скоростью.
+/// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 /// </summary>
 public class RandomRotation : MonoBehaviour
 {
-    [Header("Настройки вращения")]
-    [Tooltip("Максимальная угловая скорость (градусов в секунду) по каждой оси")]
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+    [Tooltip("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ")]
     public float maxAngularSpeed = 90f;
 
-    [Tooltip("Интервал (в секундах) между сменой целевой скорости")]
+    [Tooltip("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
     public float changeInterval = 3f;
 
-    [Tooltip("Время плавного перехода к новой скорости (чем больше, тем плавнее)")]
+    [Tooltip("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)")]
     public float smoothTime = 1f;
 
-    // Данные для каждого дочернего объекта
+    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     private List<ChildData> children = new List<ChildData>();
 
     private void Start()
     {
-        // Собираем все прямые дочерние трансформы
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         foreach (Transform child in transform)
         {
             var data = new ChildData
             {
                 transform = child,
-                // начальная случайная скорость
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 currentVelocity = Random.insideUnitSphere * maxAngularSpeed,
                 targetVelocity = Vector3.zero,
                 velocityRef = Vector3.zero,
-                timer = Random.Range(0f, changeInterval) // случайное смещение, чтобы не синхронизироваться
+                timer = Random.Range(0f, changeInterval) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             };
-            data.targetVelocity = data.currentVelocity; // сразу задаём цель
+            data.targetVelocity = data.currentVelocity; // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
             children.Add(data);
         }
     }
@@ -42,18 +42,18 @@ public class RandomRotation : MonoBehaviour
     {
         foreach (var data in children)
         {
-            if (data.transform == null) continue; // защита от удаления
+            if (data.transform == null) continue; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-            // Обновляем таймер и при необходимости меняем цель
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
             data.timer += Time.deltaTime;
             if (data.timer >= changeInterval)
             {
                 data.timer = 0f;
-                // Новая случайная скорость в пределах сферы радиуса maxAngularSpeed
+                // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ maxAngularSpeed
                 data.targetVelocity = Random.insideUnitSphere * maxAngularSpeed;
             }
 
-            // Плавно подводим текущую скорость к целевой по каждой оси
+            // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
             data.currentVelocity.x = Mathf.SmoothDamp(
                 data.currentVelocity.x,
                 data.targetVelocity.x,
@@ -73,21 +73,29 @@ public class RandomRotation : MonoBehaviour
                 smoothTime
             );
 
-            // Поворачиваем объект вокруг его локальных осей
-            data.transform.Rotate(data.currentVelocity * Time.deltaTime, Space.Self);
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+            Vector3 delta = data.currentVelocity * Time.deltaTime;
+            if (float.IsNaN(delta.x) || float.IsNaN(delta.y) || float.IsNaN(delta.z)
+                || float.IsInfinity(delta.x) || float.IsInfinity(delta.y) || float.IsInfinity(delta.z))
+            {
+                data.currentVelocity = Vector3.zero;
+                data.velocityRef = Vector3.zero;
+                continue;
+            }
+            data.transform.Rotate(delta, Space.Self);
         }
     }
 
     /// <summary>
-    /// Вспомогательный класс для хранения состояния каждого ребёнка.
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
     /// </summary>
     [System.Serializable]
     private class ChildData
     {
         public Transform transform;
-        public Vector3 currentVelocity; // текущая угловая скорость
-        public Vector3 targetVelocity;  // целевая скорость (к которой стремимся)
-        public Vector3 velocityRef;     // вспомогательная переменная для SmoothDamp
-        public float timer;             // таймер до следующей смены цели
+        public Vector3 currentVelocity; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        public Vector3 targetVelocity;  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
+        public Vector3 velocityRef;     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ SmoothDamp
+        public float timer;             // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
     }
 }

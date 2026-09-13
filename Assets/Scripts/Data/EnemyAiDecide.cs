@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public static class EnemyAiDecide
 {
@@ -22,6 +23,7 @@ public static class EnemyAiDecide
         public Intent intent;
         public IControlableSelectable target;
         public Vector3 moveTo;
+        public int attackCount;
     }
 
     public static AllyKind GetAllyKind(PawnDataController data)
@@ -79,6 +81,31 @@ public static class EnemyAiDecide
                 list.Add(pawn);
         }
         return list;
+    }
+
+    static int ResolveAttackCount(PawnDataController selfData, EnemyAiProfile profile, bool forceDouble)
+    {
+        if (selfData == null || profile == null || !profile.allowDoubleAttack) return 1;
+        if (selfData.HasMovedThisTurn && !forceDouble) return 1;
+        float cost = selfData.GetAttackStaminaCost(!selfData.HasRanged);
+        if (selfData.Stamina < cost * 2f - 0.001f) return 1;
+        return 2;
+    }
+
+    public static IControlableSelectable PickAlternateAttackTarget(
+        IControlableSelectable self,
+        IControlableSelectable exclude,
+        EnemyAiProfile profile)
+    {
+        if (self == null) return null;
+        PawnDataController selfData = self.GetComponent<PawnDataController>();
+        List<IControlableSelectable> allies = CollectAliveAllies();
+        if (exclude != null) allies.Remove(exclude);
+        if (allies.Count == 0) return null;
+        EnemyAiRole role = InferRole(selfData, profile);
+        if (role == EnemyAiRole.Shooter)
+            return PickShooterTarget(self, selfData, allies, profile, true);
+        return PickMeleeTarget(self, allies, profile);
     }
 
     static float PathDistance(IControlableSelectable from, Vector3 to)
@@ -182,6 +209,7 @@ public static class EnemyAiDecide
         if (preview.canAttack && finisher)
         {
             d.intent = Intent.Attack;
+            d.attackCount = ResolveAttackCount(selfData, profile, true);
             return d;
         }
 
@@ -189,16 +217,23 @@ public static class EnemyAiDecide
         if (lowStamina && !finisher)
         {
             d.intent = Intent.Move;
-            d.moveTo = ClosePoint(selfPos, targetPos, Mathf.Max(0.5f, reach * 0.5f));
+            d.moveTo = ClosePoint(self, targetPos, 0.05f);
             return d;
         }
 
         if (profile.skipAttackAfterMove && selfData.HasMovedThisTurn && !finisher)
         {
+            float chance = profile.isQuarantine ? Mathf.Max(profile.attackAfterMoveChance, 0.6f) : profile.attackAfterMoveChance;
+            if (Random.value <= chance && preview.canAttack)
+            {
+                d.intent = Intent.Attack;
+                d.attackCount = 1;
+                return d;
+            }
             if (dist > reach + 0.05f)
             {
                 d.intent = Intent.Move;
-                d.moveTo = ClosePoint(selfPos, targetPos, 0.75f);
+                d.moveTo = ClosePoint(self, targetPos, 0.05f);
             }
             else d.intent = Intent.Wait;
             return d;
@@ -207,11 +242,12 @@ public static class EnemyAiDecide
         if (preview.canAttack && (!preview.disadvantage || !profile.skipAttackOnDisadvantage || finisher))
         {
             d.intent = Intent.Attack;
+            d.attackCount = ResolveAttackCount(selfData, profile, false);
             return d;
         }
 
         d.intent = Intent.Move;
-        d.moveTo = ClosePoint(selfPos, targetPos, Mathf.Max(0.5f, reach * 0.5f));
+        d.moveTo = ClosePoint(self, targetPos, 0.05f);
         return d;
     }
 
@@ -260,6 +296,13 @@ public static class EnemyAiDecide
 
         if (profile.skipAttackAfterMove && selfData.HasMovedThisTurn && !finisher)
         {
+            float chance = profile.isQuarantine ? Mathf.Max(profile.attackAfterMoveChance, 0.55f) : profile.attackAfterMoveChance;
+            if (preview.canAttack && Random.value <= chance)
+            {
+                d.intent = Intent.Attack;
+                d.attackCount = 1;
+                return d;
+            }
             d.intent = Intent.Wait;
             return d;
         }
@@ -267,6 +310,7 @@ public static class EnemyAiDecide
         if (preview.canAttack && (!preview.disadvantage || !profile.skipAttackOnDisadvantage || finisher))
         {
             d.intent = Intent.Attack;
+            d.attackCount = ResolveAttackCount(selfData, profile, finisher);
             return d;
         }
 
@@ -283,7 +327,7 @@ public static class EnemyAiDecide
 
     static Decision DecideTank(IControlableSelectable self, PawnDataController selfData, List<IControlableSelectable> allies, EnemyAiProfile profile)
     {
-        Decision d = new Decision { intent = Intent.Wait };
+        Decision d = new Decision { intent = Intent.Wait, attackCount = 1 };
         IControlableSelectable best = null;
         float bestDist = float.MaxValue;
         foreach (var ally in allies)
@@ -299,20 +343,46 @@ public static class EnemyAiDecide
         d.target = best;
         Vector3 selfPos = self.GetTransform().position;
         Vector3 targetPos = best.GetTransform().position;
+        float reach = Mathf.Max(0.75f, selfData.MeleeReach);
+        float meleeDist = Vector3.Distance(selfPos, targetPos);
         CombatResolver.Preview preview = Preview(selfData, best.GetComponent<PawnDataController>(), selfPos, targetPos);
-        if (preview.canAttack)
+        if (preview.canAttack || meleeDist <= reach + 0.05f)
         {
             d.intent = Intent.Attack;
+            d.attackCount = ResolveAttackCount(selfData, profile, true);
             return d;
         }
         d.intent = Intent.Move;
-        d.moveTo = ClosePoint(selfPos, targetPos, 0.75f);
+        d.moveTo = ClosePoint(self, targetPos, 0.05f);
         return d;
     }
 
-    static Vector3 ClosePoint(Vector3 from, Vector3 to, float stopDistance)
+    static Vector3 ClosePoint(IControlableSelectable self, Vector3 targetPos, float stopDistance)
     {
-        Vector3 dir = to - from;
+        Vector3 from = self != null ? self.GetTransform().position : targetPos;
+        PawnNavMesh nav = self != null ? self.GetComponent<PawnNavMesh>() : null;
+        NavMeshAgent agent = nav != null ? nav.navMeshAgent : null;
+        float sample = 5f;
+        if (self != null && self.PawnData != null)
+            sample = Mathf.Max(1f, self.PawnData.maxSampleDistance);
+
+        if (agent != null && agent.isOnNavMesh)
+        {
+            if (NavMesh.SamplePosition(targetPos, out NavMeshHit hit, sample, NavMesh.AllAreas))
+            {
+                NavMeshPath path = new NavMeshPath();
+                if (agent.CalculatePath(hit.position, path)
+                    && path.corners != null
+                    && path.corners.Length >= 2)
+                {
+                    float full = PawnDataController.CalculateLineStringDistance(path.corners);
+                    float go = Mathf.Max(0f, full - stopDistance);
+                    return NavMeshPathCost.PointAtDistance(path.corners, go, out _);
+                }
+            }
+        }
+
+        Vector3 dir = targetPos - from;
         dir.y = 0f;
         float mag = dir.magnitude;
         if (mag < 0.05f) return from;

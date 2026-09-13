@@ -55,6 +55,17 @@ MonoBehaviour:
     - stat: 3
       mode: 0
       value: 2
+  helpSlidesStart:
+  - {fileID: 21300000, guid: d67d1c60fdbbfbb4fac050433ef4c73b, type: 3}
+  - {fileID: 21300000, guid: 219bba759622c7741a949a2e5de5a892, type: 3}
+  - {fileID: 21300000, guid: 1a23be2ef15cfc64ba6c616a5c0fa002, type: 3}
+  - {fileID: 21300000, guid: 450ca2857cb0b3d4ea5213bdde573be3, type: 3}
+  helpSlidesFirstCombat:
+  - {fileID: 21300000, guid: 9f89c8d652278ad4ab867cae9972fc3a, type: 3}
+  - {fileID: 21300000, guid: 66e0bd697b228174a93b57ba3ef267fb, type: 3}
+  usePhysicalDice: 0
+  useD10Times2InsteadOfD20: 1
+  diceFloorY: -1.0641153
   sliderClassColors:
   - selectableType: 0
     colorFront: PlayerDefaultColor

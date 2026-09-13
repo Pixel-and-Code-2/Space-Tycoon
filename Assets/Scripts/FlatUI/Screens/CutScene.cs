@@ -28,6 +28,8 @@ public class CutScene : IUILayer
     [SerializeField, Range(0f, 20f)]
     private float timeBeforeRevealingObj = 3f;
 
+    public GameObject RevealingObj => revealingObj;
+
     bool ShouldSkipVideo => Application.isEditor ? skipVideoInEditor : skipVideoInPlayer;
 
     void OnEnable()
@@ -132,8 +134,10 @@ public class CutScene : IUILayer
         StopVideoSafe();
         if (configCache == "start")
         {
-            UILayersController.Instance.SetLayerKeepingGameUI(UILayersController.UILayer.Help);
+            if (!HelpSlideService.TryShowSet(HelpSlideService.SlideSet.Start, true, asOverlay: false))
+                UILayersController.Instance.SetLayerKeepingGameUI(UILayersController.UILayer.Help);
             AudioController.Instance.Play(AudioController.Instance.gameAmbient, true);
+            return;
         }
         if (configCache == "win")
         {

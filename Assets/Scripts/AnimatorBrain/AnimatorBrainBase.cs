@@ -72,6 +72,21 @@ public class AnimatorBrainBase : MonoBehaviour
         }
     }
 
+    public void ForcePlay(int animation, int layer, bool lockLayer, float crossfade = 0.2f)
+    {
+        if (animation <= 0 || animator == null) return;
+        HandleBypassLock(layer);
+        layerLocked[layer] = lockLayer;
+        if (currentAnimation[layer] == animation) return;
+        currentAnimation[layer] = animation;
+        animator.CrossFade(animations[animation], crossfade, layer, 0f);
+        if (isSubEnables && layer == 0)
+        {
+            currentAnimation[layer + 1] = animation;
+            animator.CrossFade(subAnimations[animation], crossfade, layer + 1, 0f);
+        }
+    }
+
     public void InstaPlay(int animation, int layer, bool lockLayer = true, bool bypassLock = true)
     {
         if (animation == 0)

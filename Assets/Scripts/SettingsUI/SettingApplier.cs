@@ -36,6 +36,7 @@ public class SettingApplier : MonoBehaviour
         {
             SelectBrain2();
         }
+        SettingsMenu.ApplyPhysicalDiceFromPrefs();
     }
 
     void OnEnable()

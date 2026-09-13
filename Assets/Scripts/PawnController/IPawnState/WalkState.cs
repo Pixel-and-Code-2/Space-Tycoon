@@ -7,11 +7,12 @@ public class WalkState : IPawnState
 
     void OnEnable()
     {
-        SliderToPawnConnector.HelperTag = "[1]->[ЛКМ]";
+        ShootOnMoveController.RefreshHelperTag();
     }
     void OnDisable()
     {
-        SliderToPawnConnector.HelperTag = "[ЛКМ]";
+        if (ShootOnMoveController.Instance == null || !ShootOnMoveController.Instance.IsActive)
+            SliderToPawnConnector.HelperTag = "[ЛКМ]";
         IControlableSelectable pawn = controlableSelectable;
         if (pawn == null || !pawn.IsMoving())
             pathDrawer.SetVisible(false);
@@ -36,6 +37,20 @@ public class WalkState : IPawnState
     public override void HandleDoingSth(Vector3 worldPoint, ISelectable selectable)
     {
         if (worldPoint == Vector3.zero) return;
+        if (ShootOnMoveController.Instance != null && ShootOnMoveController.Instance.IsActive)
+        {
+            IControlableSelectable enemy = selectable as IControlableSelectable;
+            if (enemy != null && enemy.GetSelectableType() == SelectableType.Enemy)
+            {
+                ShootOnMoveController.Instance.TryClickEnemy(enemy);
+                return;
+            }
+            if (ShootOnMoveController.Instance.TryConfirmWalk(worldPoint))
+            {
+                pathDrawer.SetVisible(false);
+                return;
+            }
+        }
         if (controlableSelectable.IsMoving() && GroupMove.IsCtrlHeld()) return;
         float budgetMeters = GetWalkBudgetMeters(worldPoint);
         if (budgetMeters < PawnDataController.MinUsefulMoveMeters - 0.001f) return;
@@ -52,6 +67,35 @@ public class WalkState : IPawnState
             pathDrawer.SetVisible(false);
             return;
         }
+        if (ShootOnMoveController.Instance != null && ShootOnMoveController.Instance.IsActive
+            && hit == ScreenCastHitResult.SelectableHit
+            && selectable is IControlableSelectable enemy
+            && enemy.GetSelectableType() == SelectableType.Enemy)
+        {
+            ShootOnMoveController.Instance.RecomputePlannedEnemyHover(controlableSelectable);
+            int n = ShootOnMoveController.Instance.GetShotCount(enemy);
+            float shotCost = controlableSelectable.PawnData != null
+                ? controlableSelectable.PawnData.GetAttackStaminaCost(false)
+                : 50f;
+            float left = controlableSelectable.PawnData != null
+                ? controlableSelectable.PawnData.Stamina - ShootOnMoveController.Instance.TotalShotCost(controlableSelectable)
+                : 0f;
+            bool canAdd = left >= shotCost - 0.001f;
+            if (canAdd)
+            {
+                pathDrawer.SetTextColor(n > 0 ? new Color(1f, 0.55f, 0f) : Color.yellow);
+                pathDrawer.SetText("Планировать выстрел ×" + (n + 1), screenPoint);
+            }
+            else
+            {
+                pathDrawer.SetTextColor(new Color(1f, 0.45f, 0.35f));
+                pathDrawer.SetText(n > 0 ? "Снять выстрелы" : "Не хватает стамины", screenPoint);
+            }
+            Vector3[] line = new Vector3[] { controlableSelectable.GetTransform().position, enemy.GetTransform().position };
+            pathDrawer.SetPathPoints(line, null);
+            pathDrawer.SetVisible(true);
+            return;
+        }
         if (hit != ScreenCastHitResult.NoHit)
         {
             (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) = controlableSelectable.GetPathPointsTo(worldPoint);
@@ -59,6 +103,8 @@ public class WalkState : IPawnState
             {
                 float totalMeters = PawnDataController.CalculateLineStringDistance(pointsAvailable)
                     + PawnDataController.CalculateLineStringDistance(pointsOutOfRange);
+                if (ShootOnMoveController.Instance != null && ShootOnMoveController.Instance.IsActive)
+                    ShootOnMoveController.Instance.RecomputePlanned(controlableSelectable, totalMeters);
                 pathDrawer.SetText(totalMeters.ToString("F1") + "m", screenPoint);
                 pathDrawer.SetPathPoints(pointsAvailable, pointsOutOfRange);
                 pathDrawer.SetTextColor(pointsOutOfRange != null ? Color.red : Color.green);

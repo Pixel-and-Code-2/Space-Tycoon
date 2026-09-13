@@ -19,6 +19,9 @@ MonoBehaviour:
   useFinisher: 0
   finisherHpFraction: 0.2
   skipAttackAfterMove: 0
+  allowDoubleAttack: 1
+  isQuarantine: 0
+  attackAfterMoveChance: 0.45
   meleeCloseBandMin: 2
   meleeCloseBandMax: 4
   minShootDistance: 5

@@ -581,7 +581,7 @@ public class ClickableItemsController : MonoBehaviour
             completedItem = CompleteInProgressTask(sideTaskScenario, selectable, ref updated);
         if (completedItem != null && !string.IsNullOrEmpty(completedItem.completeText))
         {
-            UI3DManager.Instance.ShowMessage(completedItem.completeText, selectable.GetTransform().position, completedItem.completeTextColor);
+            UI3DManager.Instance.ShowMessage(completedItem.completeText, selectable.GetTransform().position, completedItem.completeTextColor, true);
         }
         if (updated) OnTaskUpdated?.Invoke();
         if (completedItem != null)

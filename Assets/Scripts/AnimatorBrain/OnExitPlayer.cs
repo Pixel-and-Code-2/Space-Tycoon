@@ -13,17 +13,19 @@ public class OnExitPlayer : StateMachineBehaviour
     {
         this.layerIndex = layerIndex;
         cancel = false;
-        PawnController.Instance.StartCoroutine(Wait());
+        if (PawnController.Instance == null) return;
+        PawnController.Instance.StartCoroutine(Wait(animator, stateInfo, layerIndex));
+    }
 
-        IEnumerator Wait()
-        {
-            yield return new WaitForSeconds(stateInfo.length - crossfade);
+    IEnumerator Wait(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        float wait = Mathf.Max(0.05f, stateInfo.length - crossfade);
+        yield return new WaitForSeconds(wait);
+        if (cancel || animator == null) yield break;
 
-            if (cancel) yield break;
-
-            AnimatorBrainPlayer target = animator.GetComponent<AnimatorBrainPlayer>();
-            target.SetLocked(false, layerIndex);
-            target.Play(animation, layerIndex, lockLayer, false, crossfade);
-        }
+        AnimatorBrainPlayer target = animator.GetComponent<AnimatorBrainPlayer>();
+        if (target == null) yield break;
+        target.SetLocked(false, layerIndex);
+        target.ForcePlay(animation, layerIndex, lockLayer, crossfade);
     }
 }

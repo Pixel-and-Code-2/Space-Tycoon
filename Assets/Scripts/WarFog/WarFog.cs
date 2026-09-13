@@ -172,6 +172,15 @@ public class WarFog : MonoBehaviour
             ApplyVisibleVisuals();
             isHidden = false;
             OnWarFogEnd?.Invoke();
+            if (othersToInclude != null && UI3DManager.Instance != null)
+            {
+                foreach (GameObject other in othersToInclude)
+                {
+                    if (other == null || IsExcludedLayer(other)) continue;
+                    if (other.layer != LayerMask.NameToLayer("WarFog"))
+                        UI3DManager.Instance.RegisterPawn(other);
+                }
+            }
         }
     }
 

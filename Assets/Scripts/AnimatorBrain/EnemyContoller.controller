@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb2434a9c77e54d4aa87bde6cfa1f666, type: 3}
+  m_Script: {fileID: 11500000, guid: 64e72f6cf39752843b3f3646d370dae3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OnExitPlayer
+  m_EditorClassIdentifier: Assembly-CSharp::OnExitEnemy
   animation: 1
   lockLayer: 0
   crossfade: 0.2
@@ -31,7 +31,7 @@ AnimatorStateMachine:
     m_Position: {x: 427.6316, y: 151.3158, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6049882653574593682}
-    m_Position: {x: 590, y: 270, z: 0}
+    m_Position: {x: 660, y: 280, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 164281343885142858}
     m_Position: {x: 390, y: 310, z: 0}
@@ -135,9 +135,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb2434a9c77e54d4aa87bde6cfa1f666, type: 3}
+  m_Script: {fileID: 11500000, guid: 64e72f6cf39752843b3f3646d370dae3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OnExitPlayer
+  m_EditorClassIdentifier: Assembly-CSharp::OnExitEnemy
   animation: 1
   lockLayer: 0
   crossfade: 0.2
@@ -180,8 +180,7 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours:
-  - {fileID: 8082085866692681412}
+  m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -223,20 +222,3 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!114 &8082085866692681412
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb2434a9c77e54d4aa87bde6cfa1f666, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OnExitPlayer
-  animation: 2
-  lockLayer: 0
-  crossfade: 0.2
-  cancel: 0
-  layerIndex: -1

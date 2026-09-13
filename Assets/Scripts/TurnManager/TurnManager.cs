@@ -307,11 +307,9 @@ public class TurnManager : MonoBehaviour
         HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 1f;
         if (enterer != null)
             GroupMove.RallyForCombat(enterer, CollectEnemyPositions(trigger));
-        if (!wasAnyActive)
-        {
+        bool showInvasion = !wasAnyActive;
+        if (showInvasion)
             OnTriggerZoneEnter?.Invoke();
-            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "_notpersistent_0_GameAttentionColor");
-        }
         SyncEndTurnButtonsWithMovement();
         if (alreadyInCombat)
         {
@@ -320,9 +318,38 @@ public class TurnManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(StartFirstTurn());
+            StartCoroutine(StartCombatAfterHelp(showInvasion));
         }
         return true;
+    }
+
+    private IEnumerator StartCombatAfterHelp(bool showInvasion)
+    {
+        if (!HelpSlideService.IsUnlocked(HelpSlideService.SlideSet.Combat))
+        {
+            if (HelpSlideService.TryShowSet(HelpSlideService.SlideSet.Combat, unlock: false))
+            {
+                yield return null;
+                yield return null;
+                while (IsHelpOnOverlayStack())
+                    yield return null;
+                HelpSlideService.ConsumePendingUnlock();
+            }
+        }
+        if (showInvasion)
+            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "_notpersistent_0_GameAttentionColor");
+        yield return StartFirstTurn();
+    }
+
+    static bool IsHelpOnOverlayStack()
+    {
+        if (UILayersController.Instance == null) return false;
+        foreach (var layer in UILayersController.Instance.overlayStack)
+        {
+            if (layer == UILayersController.UILayer.Help)
+                return true;
+        }
+        return false;
     }
 
     List<Vector3> CollectEnemyPositions(TriggerData trigger)

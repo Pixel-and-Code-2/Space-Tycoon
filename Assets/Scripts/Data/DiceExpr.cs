@@ -1,7 +1,15 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public static class DiceExpr
 {
+    public struct DieTerm
+    {
+        public int sign;
+        public int count;
+        public int sides;
+    }
+
     public static float Roll(string expr)
     {
         if (string.IsNullOrWhiteSpace(expr)) return 0f;
@@ -23,6 +31,39 @@ public static class DiceExpr
     public static float ResolveOnce(string expr)
     {
         return Roll(expr);
+    }
+
+    public static void ParsePhysical(string expr, out List<DieTerm> dice, out float flat)
+    {
+        dice = new List<DieTerm>();
+        flat = 0f;
+        if (string.IsNullOrWhiteSpace(expr)) return;
+        string s = expr.Replace(" ", "").ToLowerInvariant();
+        int i = 0;
+        int sign = 1;
+        while (i < s.Length)
+        {
+            if (s[i] == '+') { sign = 1; i++; continue; }
+            if (s[i] == '-') { sign = -1; i++; continue; }
+            int start = i;
+            while (i < s.Length && s[i] != '+' && s[i] != '-') i++;
+            string term = s.Substring(start, i - start);
+            int d = term.IndexOf('d');
+            if (d < 0)
+            {
+                float n;
+                if (float.TryParse(term, System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture, out n))
+                    flat += sign * n;
+                continue;
+            }
+            int count = 1;
+            if (d > 0 && !int.TryParse(term.Substring(0, d), out count)) count = 1;
+            if (count < 1) count = 1;
+            int sides;
+            if (!int.TryParse(term.Substring(d + 1), out sides) || sides < 1) continue;
+            dice.Add(new DieTerm { sign = sign, count = count, sides = sides });
+        }
     }
 
     static float ParseTerm(string s, ref int i)

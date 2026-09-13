@@ -73,6 +73,8 @@ public class SliderToPawnConnector : MonoBehaviour
         if (pawn == null || allyStaminaSlider == null) return;
         if (pawn.selectableType != SelectableType.Player) return;
         pawnStamina = pawn.Stamina;
+        if (ShootOnMoveController.Instance != null && ShootOnMoveController.Instance.IsActive)
+            pawnStamina = Mathf.Max(0f, pawnStamina - ShootOnMoveController.PlannedStaminaSpend);
         bool staminaChanged = Mathf.Abs(pawnStamina - pawnStaminaCached) >= 0.001f;
         if (staminaChanged)
         {

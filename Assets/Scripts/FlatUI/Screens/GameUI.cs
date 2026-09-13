@@ -32,6 +32,8 @@ public class GameUI : IUILayer
     [SerializeField]
     private GameObject battleBackgroundObject;
     [SerializeField]
+    private GameObject controlBarObject;
+    [SerializeField]
     private TextMeshProUGUI weaponNameText;
     [SerializeField]
     private string shootingWeaponName = "ТКБ-К";
@@ -81,22 +83,62 @@ public class GameUI : IUILayer
     {
         if (togglePause != null && togglePause.action != null)
             togglePause.action.Enable();
-        string key = HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY;
-        if (HandleInittingGlobalVars.globalParameters.parametersDict.TryGetValue(key, out float value))
-        {
-            if (value > 0.5f)
-            {
-                battleBackgroundObject.SetActive(true);
-            }
-            else
-            {
-                battleBackgroundObject.SetActive(false);
-            }
-        }
+        ApplyStepByStepUi(IsStepByStepNow());
     }
     private void OnLoadData(LoadedData data)
     {
-        battleBackgroundObject.SetActive(data.GetData("IsStepByStep", HandleInittingGlobalVars.UNIQUE_ID, false));
+        HelpSlideService.ResetSession();
+        bool step = data.GetData("IsStepByStep", HandleInittingGlobalVars.UNIQUE_ID, false);
+        ApplyStepByStepUi(step);
+    }
+
+    static bool IsStepByStepNow()
+    {
+        string key = HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY;
+        return HandleInittingGlobalVars.globalParameters != null
+            && HandleInittingGlobalVars.globalParameters.parametersDict.TryGetValue(key, out float value)
+            && value > 0.5f;
+    }
+
+    void ApplyStepByStepUi(bool stepByStep)
+    {
+        if (battleBackgroundObject != null)
+            battleBackgroundObject.SetActive(stepByStep);
+        if (controlBarObject != null)
+            controlBarObject.SetActive(stepByStep);
+    }
+
+    public PlayerIconController FindPlayerIcon(IControlableSelectable pawn)
+    {
+        if (pawn == null || playerGroups == null) return null;
+        for (int i = 0; i < playerGroups.Count; i++)
+        {
+            if (playerGroups[i].playerObject == pawn)
+                return playerGroups[i].playerIcon;
+        }
+        return null;
+    }
+
+    public int GetSelectedPlayerIndex()
+    {
+        if (playerGroups == null || PawnController.Instance == null) return -1;
+        IControlableSelectable sel = PawnController.Instance.currentSelectedPawn;
+        if (sel == null) return -1;
+        for (int i = 0; i < playerGroups.Count; i++)
+        {
+            if (playerGroups[i].playerObject == sel)
+                return i;
+        }
+        return -1;
+    }
+
+    public void ShowPlayerIconMessage(IControlableSelectable pawn, string message, Color color)
+    {
+        PlayerIconController icon = FindPlayerIcon(pawn);
+        if (icon != null)
+            icon.ShowPopup(message, color);
+        else if (UI3DManager.Instance != null && pawn != null)
+            UI3DManager.Instance.ShowMessage(message, pawn.GetTransform().position, color, true);
     }
     void OnEnable()
     {
@@ -132,7 +174,8 @@ public class GameUI : IUILayer
     }
     public void OnHelp()
     {
-        UILayersController.Instance.ShowOverlay(UILayersController.UILayer.Help);
+        if (!HelpSlideService.TryShowUnlockedUnion())
+            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.Help);
     }
     private System.Collections.IEnumerator OnTaskUpdatedDelayed()
     {

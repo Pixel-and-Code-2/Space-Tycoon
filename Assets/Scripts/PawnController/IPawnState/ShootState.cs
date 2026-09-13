@@ -20,6 +20,9 @@ public class ShootState : IPawnState
     {
         if (!(selectable is IAttackableSelectable attackable)) return;
         if (worldPoint == Vector3.zero || selectable == null) return;
+        if (CombatAttackRunner.Instance != null && CombatAttackRunner.Instance.IsBusy) return;
+        if (PhysicalDiceRoller.IsBusy) return;
+
         PawnDataController attacker = AttackerData;
         PawnDataController target = attackable.GetComponent<PawnDataController>();
         if (attacker == null || target == null) return;
@@ -39,24 +42,7 @@ public class ShootState : IPawnState
         PawnNavMesh nav = controlableSelectable.GetComponent<PawnNavMesh>();
         nav?.StopIfNoMoveBudget();
 
-        if (!r.hit)
-        {
-            UI3DManager.Instance.ShowMessage("Промах", worldPoint, Color.yellow);
-            if (r.isMelee) controlableSelectable.OnMelee(worldPoint);
-            else controlableSelectable.OnShoot(worldPoint, true);
-            return;
-        }
-
-        if (r.crit)
-            UI3DManager.Instance.ShowMessage("Крит!", worldPoint, Color.magenta);
-        bool isAlive = attackable.OnGetHit(r.damage);
-        if (r.isMelee)
-        {
-            controlableSelectable.OnMelee(worldPoint);
-            if (!isAlive && attacker.selectableType == SelectableType.Player)
-                StatBoostService.TryGrantAfterKill(controlableSelectable);
-        }
-        else controlableSelectable.OnShoot(worldPoint, isAlive);
+        CombatAttackRunner.Ensure().ApplyResolved(controlableSelectable, attackable, r, worldPoint);
     }
 
     public override void HandleUIDrawing(ISelectable selectable, Vector3 worldPoint, Vector2 screenPoint, ScreenCastHitResult hit)

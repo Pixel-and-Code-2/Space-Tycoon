@@ -36,12 +36,16 @@ public static class StatBoostService
         }
     }
 
-    public static void ApplyToPawn(PawnDataController data, GlobalSettingsAssets.BoostEntry entry, Vector3 messagePos)
+    public static void ApplyToPawn(PawnDataController data, GlobalSettingsAssets.BoostEntry entry, IControlableSelectable pawn)
     {
         if (data == null) return;
         data.ApplyBoost(entry.stat, entry.mode, entry.value);
-        if (UI3DManager.Instance != null)
-            UI3DManager.Instance.ShowMessage(FormatMessage(entry), messagePos, new Color(0f, 1f, 0f));
+        string msg = FormatMessage(entry);
+        Color color = new Color(0f, 1f, 0f);
+        if (GameUI.Instance != null && pawn != null)
+            GameUI.Instance.ShowPlayerIconMessage(pawn, msg, color);
+        else if (UI3DManager.Instance != null && pawn != null)
+            UI3DManager.Instance.ShowMessage(msg, pawn.GetTransform().position, color, true);
     }
 
     public static void TryGrantAfterKill(IControlableSelectable killer)
@@ -51,7 +55,7 @@ public static class StatBoostService
         if (!TryRoll(pool, out var entry)) return;
         var data = killer.GetComponent<PawnDataController>();
         if (data == null || data.selectableType != SelectableType.Player) return;
-        ApplyToPawn(data, entry, killer.GetTransform().position);
+        ApplyToPawn(data, entry, killer);
     }
 
     public static void TryGrantAfterCombat()
@@ -64,7 +68,7 @@ public static class StatBoostService
             if (!TryRoll(pool, out var entry)) continue;
             var data = pawn.GetComponent<PawnDataController>();
             if (data == null) continue;
-            ApplyToPawn(data, entry, pawn.GetTransform().position);
+            ApplyToPawn(data, entry, pawn);
         }
     }
 
@@ -77,6 +81,6 @@ public static class StatBoostService
         if (!TryRoll(pool, out var entry)) return;
         var data = executor.GetComponent<PawnDataController>();
         if (data == null) return;
-        ApplyToPawn(data, entry, executor.GetTransform().position);
+        ApplyToPawn(data, entry, executor);
     }
 }

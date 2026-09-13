@@ -68,6 +68,16 @@ public class PawnBrain : IControlableSelectable
     private AudioClip noAmmoSound;
     [SerializeField]
     private AudioClip reloadSound;
+    [Header("Attack timing")]
+    [SerializeField]
+    private float rangedHitDelay = 0.45f;
+    [SerializeField]
+    private float meleeHitDelay = 0.35f;
+
+    public float GetHitDelay(bool isMelee)
+    {
+        return isMelee ? meleeHitDelay : rangedHitDelay;
+    }
     void Awake()
     {
         pathDrawer = GetComponent<PathDrawer>();
@@ -102,12 +112,9 @@ public class PawnBrain : IControlableSelectable
         {
             UI3DManager.Instance.RegisterPawn(gameObject);
         }
-        else
-        {
-            WarFog.OnWarFogEnd += OnWarFogEnd;
-            WarFog.OnWarFogStart += OnWarFogStart;
-            warFogEventsSubscribed = true;
-        }
+        WarFog.OnWarFogEnd += OnWarFogEnd;
+        WarFog.OnWarFogStart += OnWarFogStart;
+        warFogEventsSubscribed = true;
         TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
         TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
         TurnManager.Instance.OnTriggerZoneEnter += OnTriggerZoneEnter;
@@ -261,7 +268,7 @@ public class PawnBrain : IControlableSelectable
     {
         pawnNavMesh.SetTypeOfModifierVolumes(-1, 1);
         TurnManager.Instance.UpdateNavMesh();
-        if (skinnedMeshRenderer != null)
+        if (skinnedMeshRenderer != null && gameObject.layer != LayerMask.NameToLayer("WarFog"))
             skinnedMeshRenderer.material = selectedMaterial;
     }
 
@@ -269,7 +276,7 @@ public class PawnBrain : IControlableSelectable
     {
         pawnNavMesh.SetTypeOfModifierVolumes(-1, 0);
         TurnManager.Instance.UpdateNavMesh();
-        if (skinnedMeshRenderer != null)
+        if (skinnedMeshRenderer != null && gameObject.layer != LayerMask.NameToLayer("WarFog"))
             skinnedMeshRenderer.material = defaultMaterial;
     }
     private void OnPlayerTurnStart()
@@ -354,6 +361,9 @@ public class PawnBrain : IControlableSelectable
     void OnCollisionEnter(Collision other)
     {
         if (!other.rigidbody) return;
+        if (other.rigidbody.GetComponent<DiceFaceMap>() != null
+            || other.rigidbody.GetComponentInParent<DiceFaceMap>() != null)
+            return;
         Vector3 dir = -transform.position + other.transform.position;
         if (dataController.verticalPushOverride != -1f) dir.y = dataController.verticalPushOverride;
         float pushForce = dataController.obstaclePushForce;
@@ -425,10 +435,10 @@ public class PawnBrain : IControlableSelectable
     {
         bool isAlive = true;
         float newHealth = dataController.GetParameterValue(PawnDataController.AVAILABLE_HEALTH_KEY) - damage;
-        UI3DManager.Instance.ShowMessage("-" + damage.ToString("F1"), transform.position, Color.red);
+        UI3DManager.Instance.ShowMessage("-" + damage.ToString("F1"), transform.position, Color.red, true);
         if (newHealth <= 0f)
         {
-            UI3DManager.Instance.ShowMessage("Kill", transform.position + transform.up * 0.5f, Color.red);
+            UI3DManager.Instance.ShowMessage("Kill", transform.position + transform.up * 0.5f, Color.red, true);
             dataController.selectableType = SelectableType.Dead;
             TurnManager.Instance.CheckTriggers();
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
@@ -459,6 +469,11 @@ public class PawnBrain : IControlableSelectable
                 audioSource.clip = hitSound;
                 audioSource.PlayOneShot(hitSound);
             }
+        }
+        if (isAlive)
+        {
+            animatorBrain?.SetLocked(false, 0);
+            animatorBrain?.ForcePlay((int)AnimatorBrainBase.Animations.DAMAGE, 0, false, 0.1f);
         }
         return isAlive;
     }
@@ -513,6 +528,8 @@ public class PawnBrain : IControlableSelectable
     {
         if (gameObject.layer != LayerMask.NameToLayer("WarFog"))
         {
+            if (skinnedMeshRenderer != null && defaultMaterial != null)
+                skinnedMeshRenderer.sharedMaterial = defaultMaterial;
             UI3DManager.Instance.RegisterPawn(gameObject);
         }
     }

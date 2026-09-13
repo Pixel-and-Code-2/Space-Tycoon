@@ -14,13 +14,18 @@ public class SpriteProvider : MonoBehaviour
     private string colorLinkName;
     void Start()
     {
-
         UpdateImage();
     }
     void OnValidate()
     {
         UpdateImage();
     }
+    public void Refresh()
+    {
+        UpdateImage();
+    }
+    public string GetSpriteLinkName() => spriteLinkName;
+    public string GetColorLinkName() => colorLinkName;
     public void SetLinks(string spriteName, string colorName = null)
     {
         spriteLinkName = spriteName;

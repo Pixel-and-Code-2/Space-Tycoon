@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatantStats
   displayName: EnemyShooter
   weaponName: Vintovka
-  movePerTurn: 9
-  staminaPerMeter: 11
+  movePerTurn: 8
+  staminaPerMeter: 12.5
   maxHp: 36
-  strength: 3
-  dexterity: 8
-  armorClass: 13
-  meleeDamage: 1d3+1
-  rangedDamage: 1d4+1
+  strength: 0
+  dexterity: 4
+  armorClass: 12
+  meleeDamage: d6
+  rangedDamage: d8+3
   attackRange: 10
   meleeReach: 1

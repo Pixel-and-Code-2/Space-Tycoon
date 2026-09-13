@@ -82,6 +82,11 @@ public class SimpleEnemyAI : ISelectorBrain
     }
 
     private float timeStack = 0.0f;
+    private bool attackStepSawBusy;
+    private float attackStepElapsed;
+    private float moveWaitElapsed;
+    [SerializeField]
+    private float moveWaitTimeout = 8f;
     void Update()
     {
         if (UILayersController.Instance == null
@@ -101,16 +106,31 @@ public class SimpleEnemyAI : ISelectorBrain
         }
         if (completedScenarioIndex + 1 == currentScenarioIndex)
         {
-            timeStack = 0.0f;
+            if (detailedScenario[currentScenarioIndex].type != DetailedScenarioElementType.WaitMovement)
+                timeStack = 0.0f;
             switch (detailedScenario[currentScenarioIndex].type)
             {
                 case DetailedScenarioElementType.MovePawn:
                     completedScenarioIndex++;
+                    moveWaitElapsed = 0f;
                     break;
                 case DetailedScenarioElementType.WaitMovement:
                     WaitMovement(detailedScenario[currentScenarioIndex]);
                     break;
                 case DetailedScenarioElementType.AttackPawn:
+                    bool busy = PhysicalDiceRoller.IsBusy
+                        || (CombatAttackRunner.Instance != null && CombatAttackRunner.Instance.IsBusy);
+                    if (busy)
+                    {
+                        attackStepSawBusy = true;
+                        attackStepElapsed = 0f;
+                        break;
+                    }
+                    attackStepElapsed += Time.deltaTime;
+                    if (!attackStepSawBusy && attackStepElapsed < 0.2f)
+                        break;
+                    attackStepSawBusy = false;
+                    attackStepElapsed = 0f;
                     completedScenarioIndex++;
                     break;
                 default:
@@ -167,8 +187,14 @@ public class SimpleEnemyAI : ISelectorBrain
                 return (null, Vector3.zero);
             case DetailedScenarioElementType.AttackPawn:
                 currentScenarioIndex++;
-                if (el.targetPawn != null)
-                    return (el.targetPawn, el.targetPawn.GetTransform().position);
+                IControlableSelectable target = el.targetPawn;
+                if (target == null || !target.IsAlive)
+                {
+                    EnemyAiProfile profile = ResolveProfile(el.controlledPawn);
+                    target = EnemyAiDecide.PickAlternateAttackTarget(el.controlledPawn, el.targetPawn, profile);
+                }
+                if (target != null && target.IsAlive)
+                    return (target, target.GetTransform().position);
                 return (null, Vector3.zero);
             default:
                 return (null, Vector3.zero);
@@ -203,6 +229,9 @@ public class SimpleEnemyAI : ISelectorBrain
     void OnEnemyTurnStart()
     {
         BuildDetailedScenario();
+        attackStepSawBusy = false;
+        attackStepElapsed = 0f;
+        moveWaitElapsed = 0f;
         if (detailedScenario.Count == 0)
         {
             completedScenarioIndex = -2;
@@ -289,8 +318,10 @@ public class SimpleEnemyAI : ISelectorBrain
             case EnemyAiDecide.Intent.Attack:
                 if (decision.target != null)
                 {
+                    int attacks = Mathf.Max(1, decision.attackCount);
                     AddStep(DetailedScenarioElementType.SetAttackState, actor, decision.target, Vector3.zero);
-                    AddStep(DetailedScenarioElementType.AttackPawn, actor, decision.target, Vector3.zero);
+                    for (int i = 0; i < attacks; i++)
+                        AddStep(DetailedScenarioElementType.AttackPawn, actor, decision.target, Vector3.zero);
                 }
                 break;
             default:
@@ -312,8 +343,48 @@ public class SimpleEnemyAI : ISelectorBrain
 
     private void WaitMovement(DetailedScenarioElement element)
     {
-        if (element.controlledPawn == null || !element.controlledPawn.IsMoving())
+        if (element.controlledPawn == null)
         {
+            moveWaitElapsed = 0f;
+            completedScenarioIndex++;
+            currentScenarioIndex++;
+            return;
+        }
+
+        moveWaitElapsed += Time.deltaTime;
+
+        if (element.controlledPawn.IsMoving()
+            && element.targetPawn != null
+            && element.targetPawn.IsAlive)
+        {
+            PawnDataController data = element.controlledPawn.PawnData;
+            if (data != null)
+            {
+                float reach = data.MeleeReach;
+                float stopAt = Mathf.Max(0.4f, reach * 0.5f);
+                float dist = Vector3.Distance(
+                    element.controlledPawn.GetTransform().position,
+                    element.targetPawn.GetTransform().position);
+                if (dist <= stopAt + 0.05f)
+                    element.controlledPawn.StopMove();
+            }
+        }
+
+        bool done = !element.controlledPawn.IsMoving();
+        if (!done && moveWaitElapsed >= moveWaitTimeout)
+        {
+            Debug.LogWarning(
+                "[EnemyAI] move timeout "
+                + moveWaitElapsed.ToString("F1")
+                + "s, force stop "
+                + element.controlledPawn.name);
+            element.controlledPawn.StopMove();
+            done = true;
+        }
+
+        if (done)
+        {
+            moveWaitElapsed = 0f;
             completedScenarioIndex++;
             currentScenarioIndex++;
         }
