@@ -12,58 +12,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5c68781f5909747879a61fa3091ead, type: 3}
   m_Name: DiceShapeConfig_D10
   m_EditorClassIdentifier: Assembly-CSharp::DiceShapeConfig
+  sides: 10
   diePrefab: {fileID: 7816047841579953699, guid: b4b5ee49ab7b95a46a3f54af5c06fcbb, type: 3}
-  globalNormalsEuler: {x: 0, y: 0, z: 0}
   stickLength: 1.31
-  labelScale: 0.08
+  labelScale: 1.18
   sticks:
-  - localNormal: {x: 9.08, y: 23.6, z: -161.31}
-    localEulerExtra: {x: 83.17, y: 0, z: 0}
+  - eulerAngles: {x: 0, y: 0, z: 0}
     displayValue: 1
     draw: 1
     color: {r: 1, g: 0.19999999, b: 0.19999999, a: 1}
-  - localNormal: {x: -1.55, y: -1.21, z: 0.809017}
-    localEulerExtra: {x: 0, y: 0, z: 0}
+    aimAtCamera: 0
+  - eulerAngles: {x: 8.8, y: 26, z: 124}
     displayValue: 2
     draw: 1
     color: {r: 1, g: 0.68, b: 0.19999999, a: 1}
-  - localNormal: {x: -18.66, y: -0.84, z: 29.26}
-    localEulerExtra: {x: 167.69, y: 0, z: 0}
+    aimAtCamera: 0
+  - eulerAngles: {x: 302.70618, y: 287.17224, z: 106.95413}
     displayValue: 3
     draw: 1
     color: {r: 0.84, g: 1, b: 0.19999999, a: 1}
-  - localNormal: {x: 11.87, y: -6.46, z: 3.2}
-    localEulerExtra: {x: 0, y: 0, z: 0}
+    aimAtCamera: 0
+  - eulerAngles: {x: 4.5, y: 333.43823, z: 235.79565}
     displayValue: 4
     draw: 1
     color: {r: 0.35999992, g: 1, b: 0.19999999, a: 1}
-  - localNormal: {x: -0.9, y: 0.62, z: -0.46}
-    localEulerExtra: {x: 0, y: 0, z: 0}
+    aimAtCamera: 0
+  - eulerAngles: {x: 339.0451, y: 349.39066, z: 53.320023}
     displayValue: 5
     draw: 1
     color: {r: 0.19999999, g: 1, b: 0.52000004, a: 1}
-  - localNormal: {x: 0.32, y: 0.07, z: 0.63}
-    localEulerExtra: {x: 0, y: 0, z: 0}
+    aimAtCamera: 0
+  - eulerAngles: {x: 70.9, y: 315.6, z: 287.3}
     displayValue: 6
     draw: 1
     color: {r: 0.19999999, g: 1, b: 1, a: 1}
-  - localNormal: {x: 1.78, y: 0.87, z: -0.58}
-    localEulerExtra: {x: 0, y: 0, z: 0}
+    aimAtCamera: 0
+  - eulerAngles: {x: 344.55713, y: 8.791682, z: 300.89645}
     displayValue: 7
     draw: 1
     color: {r: 0.19999999, g: 0.51999986, b: 1, a: 1}
-  - localNormal: {x: -0.09, y: -10.05, z: 0.43}
-    localEulerExtra: {x: 0, y: 0, z: 0}
+    aimAtCamera: 0
+  - eulerAngles: {x: 360, y: 270, z: 180}
     displayValue: 8
     draw: 1
     color: {r: 0.35999984, g: 0.19999999, b: 1, a: 1}
-  - localNormal: {x: 0.15, y: 0, z: 0.28}
-    localEulerExtra: {x: 166.7, y: -0.54, z: 2.7}
+    aimAtCamera: 0
+  - eulerAngles: {x: 313.7, y: 71.3, z: 255.29637}
     displayValue: 9
     draw: 1
     color: {r: 0.84000015, g: 0.19999999, b: 1, a: 1}
-  - localNormal: {x: -0.5877853, y: 0, z: 0.80901694}
-    localEulerExtra: {x: 0, y: 0, z: 0}
+    aimAtCamera: 0
+  - eulerAngles: {x: 65, y: 35.587097, z: 63.554657}
     displayValue: 0
     draw: 1
     color: {r: 1, g: 0.19999999, b: 0.6800003, a: 1}
+    aimAtCamera: 0

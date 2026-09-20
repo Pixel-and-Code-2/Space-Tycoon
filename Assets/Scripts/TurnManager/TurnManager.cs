@@ -27,6 +27,7 @@ public class DelayedTriggerData : TriggerData
     {
         public GameObject enemy;
         public Transform where;
+        public EnemyAiProfile aiOverwrite;
     }
     public List<SpawnableInstance> enemySpawnPoints = new List<SpawnableInstance>();
     [SerializeField, HideInInspector]
@@ -141,8 +142,11 @@ public class TurnManager : MonoBehaviour
             UpdateNavMesh();
             StartCoroutine(DelayFrame(() =>
             {
-                RebuildRoundQueue();
-                currentQueueIndex = 0;
+                if (!TryRestoreRoundQueue(data))
+                {
+                    RebuildRoundQueue();
+                    currentQueueIndex = 0;
+                }
                 StartCurrentActorTurn();
             }));
         }
@@ -233,7 +237,79 @@ public class TurnManager : MonoBehaviour
             recordType = SaveRecordType.boolean,
             boolValue = IsQuarantine
         });
+        records.Add(new SaveRecord
+        {
+            recordName = "RoundQueueCount",
+            recordType = SaveRecordType.integerNumber,
+            intValue = roundQueue.Count
+        });
+        records.Add(new SaveRecord
+        {
+            recordName = "CurrentQueueIndex",
+            recordType = SaveRecordType.integerNumber,
+            intValue = currentQueueIndex
+        });
+        for (int i = 0; i < roundQueue.Count; i++)
+        {
+            string pawnName = roundQueue[i].pawn != null && roundQueue[i].pawn.gameObject != null
+                ? roundQueue[i].pawn.gameObject.name
+                : string.Empty;
+            records.Add(new SaveRecord
+            {
+                recordName = "RoundQueuePawn_" + i,
+                recordType = SaveRecordType.stringValue,
+                stringValue = pawnName
+            });
+            records.Add(new SaveRecord
+            {
+                recordName = "RoundQueueInit_" + i,
+                recordType = SaveRecordType.floatNumber,
+                floatValue = roundQueue[i].initiative
+            });
+        }
         addSaveData(records.ToArray(), UNIQUE_ID);
+    }
+
+    bool TryRestoreRoundQueue(LoadedData data)
+    {
+        int savedCount = data.GetData("RoundQueueCount", UNIQUE_ID, -1);
+        if (savedCount < 0)
+            return false;
+
+        ClearTurnQueue();
+        for (int i = 0; i < savedCount; i++)
+        {
+            string pawnName = data.GetData("RoundQueuePawn_" + i, UNIQUE_ID, string.Empty);
+            float initiative = data.GetData("RoundQueueInit_" + i, UNIQUE_ID, 0f);
+            IControlableSelectable pawn = FindCombatantByName(pawnName);
+            if (pawn == null || !IsAliveCombatant(pawn))
+                continue;
+            roundQueue.Add(new TurnSlot
+            {
+                pawn = pawn,
+                initiative = initiative
+            });
+        }
+        if (roundQueue.Count == 0)
+            return false;
+
+        currentQueueIndex = data.GetData("CurrentQueueIndex", UNIQUE_ID, 0);
+        if (currentQueueIndex < 0) currentQueueIndex = 0;
+        if (currentQueueIndex >= roundQueue.Count) currentQueueIndex = 0;
+        OnTurnQueueChanged?.Invoke();
+        return true;
+    }
+
+    static IControlableSelectable FindCombatantByName(string pawnName)
+    {
+        if (string.IsNullOrEmpty(pawnName)) return null;
+        PawnBrain[] brains = FindObjectsByType<PawnBrain>(FindObjectsSortMode.None);
+        for (int i = 0; i < brains.Length; i++)
+        {
+            if (brains[i] != null && brains[i].gameObject.name == pawnName)
+                return brains[i];
+        }
+        return null;
     }
     public void EnterTrigger(GameObject triggerObject, IControlableSelectable enterer = null)
     {
@@ -482,6 +558,13 @@ public class TurnManager : MonoBehaviour
         GameObject enemy = Instantiate(spawnPoint.enemy, entry.position, entry.rotation);
         enemy.name = DYNAMIC_ENEMY_NAME_PREFIX + entry.registryIndex;
         spawnedDynamicEnemies.Add(enemy);
+        if (spawnPoint.aiOverwrite != null)
+        {
+            PawnDataController data = enemy.GetComponent<PawnDataController>();
+            if (data == null) data = enemy.GetComponentInChildren<PawnDataController>(true);
+            if (data != null)
+                data.SetAiProfileOverride(spawnPoint.aiOverwrite);
+        }
         PawnBrain pawnBrain = enemy.GetComponent<PawnBrain>();
         if (pawnBrain != null)
         {
@@ -540,7 +623,6 @@ public class TurnManager : MonoBehaviour
         lastActorSide = (SelectableType)(-1);
         OnTriggerZoneExit?.Invoke();
         IsQuarantine = false;
-        StatBoostService.TryGrantAfterCombat();
         UILayersController.Instance.ShowOverlay(UILayersController.UILayer.AttentionText, "_notpersistent_3_GameCongratulationsColor");
         SyncEndTurnButtonsWithMovement();
     }

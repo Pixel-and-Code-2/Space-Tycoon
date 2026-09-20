@@ -14,15 +14,16 @@ public class EnemyAiProfile : ScriptableObject
 
     [Header("Shared")]
     public bool useStaminaGate = true;
-    public float minStaminaToAttack = 60f;
+    public float minStaminaToAttack = 50f;
     public bool skipAttackOnDisadvantage = true;
     public bool useFinisher = true;
-    public float finisherHpFraction = 0.2f;
+    public float finisherHpFraction = 0.5f;
     public bool skipAttackAfterMove = true;
     public bool allowDoubleAttack = true;
-    public bool isQuarantine = false;
     [Range(0f, 1f)]
     public float attackAfterMoveChance = 0.45f;
+    [Range(0f, 1f)]
+    public float disadvantageAttackChance = 0.45f;
 
     [Header("Melee")]
     public float meleeCloseBandMin = 2f;
@@ -35,12 +36,13 @@ public class EnemyAiProfile : ScriptableObject
     public float retreatMaxPath = 10f;
     public float zayaThreatDistance = 4f;
     public float zayaMeleeDistance = 1.25f;
+    public float maxShootWithoutDisadvantage = 10f;
 
-    [Header("Target priority weights (lower = higher priority)")]
-    public int priorityPistol = 0;
-    public int priorityMeleeAlly = 1;
-    public int priorityRifle = 2;
-    public int priorityRifleForShooter = 0;
-    public int priorityPistolForShooter = 1;
-    public int priorityMeleeAllyForShooter = 2;
+    [Header("Target pick weights (GDD %)")]
+    public float weightPistol = 30f;
+    public float weightMeleeAlly = 50f;
+    public float weightRifle = 20f;
+    public float weightRifleForShooter = 40f;
+    public float weightPistolForShooter = 40f;
+    public float weightMeleeAllyForShooter = 20f;
 }

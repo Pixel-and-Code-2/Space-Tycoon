@@ -177,6 +177,7 @@ public class WarFog : MonoBehaviour
                 foreach (GameObject other in othersToInclude)
                 {
                     if (other == null || IsExcludedLayer(other)) continue;
+                    if (other.GetComponent<PawnDataController>() == null) continue;
                     if (other.layer != LayerMask.NameToLayer("WarFog"))
                         UI3DManager.Instance.RegisterPawn(other);
                 }

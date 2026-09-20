@@ -17,11 +17,11 @@ MonoBehaviour:
   minStaminaToAttack: 60
   skipAttackOnDisadvantage: 0
   useFinisher: 0
-  finisherHpFraction: 0.2
+  finisherHpFraction: 0.5
   skipAttackAfterMove: 0
-  allowDoubleAttack: 1
-  isQuarantine: 0
+  allowDoubleAttack: 0
   attackAfterMoveChance: 0.45
+  disadvantageAttackChance: 0.45
   meleeCloseBandMin: 2
   meleeCloseBandMax: 4
   minShootDistance: 5
@@ -30,9 +30,10 @@ MonoBehaviour:
   retreatMaxPath: 10
   zayaThreatDistance: 4
   zayaMeleeDistance: 1.25
-  priorityPistol: 0
-  priorityMeleeAlly: 1
-  priorityRifle: 2
-  priorityRifleForShooter: 0
-  priorityPistolForShooter: 1
-  priorityMeleeAllyForShooter: 2
+  maxShootWithoutDisadvantage: 10
+  weightPistol: 30
+  weightMeleeAlly: 50
+  weightRifle: 20
+  weightRifleForShooter: 40
+  weightPistolForShooter: 40
+  weightMeleeAllyForShooter: 20

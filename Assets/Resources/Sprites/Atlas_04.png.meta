@@ -2450,6 +2450,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: VoiceIcon
+      rect:
+        serializedVersion: 2
+        x: 1942
+        y: 8
+        width: 96
+        height: 112
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0ffee12abad4142b00b5e7f1ce00101
+      internalID: 1847293847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -2570,6 +2592,7 @@ TextureImporter:
       TopIconZaya: 2146112256
       TopIconZeleniy: -1613648418
       VerticalLine: 1101495467
+      VoiceIcon: 1847293847
       WalkAvailableIcon: 805777335
       c: 1957354138
   mipmapLimitGroupName: 

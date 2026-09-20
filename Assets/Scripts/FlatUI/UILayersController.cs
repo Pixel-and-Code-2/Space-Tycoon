@@ -20,7 +20,9 @@ public class UILayersController : MonoBehaviour
         AttentionText = 6,
         SlideShow = 7,
         Help = 8,
-        CutScene = 9
+        CutScene = 9,
+        CharacterSheet = 10,
+        ConfirmDialog = 11
     }
     [System.Serializable]
     private class UILayerEntry
@@ -169,12 +171,45 @@ public class UILayersController : MonoBehaviour
     }
     private void StopGame()
     {
+        if (Time.timeScale != 0f)
+            Debug.Log("[UILayers] StopGame timeScale 1→0 stack=" + DumpStack());
         Time.timeScale = 0f;
     }
     private void ResumeGame()
     {
+        if (Time.timeScale != 1f)
+            Debug.Log("[UILayers] ResumeGame timeScale " + Time.timeScale + "→1 stack=" + DumpStack());
         Time.timeScale = 1f;
         OnGameResumed?.Invoke();
+    }
+
+    public string DumpStack()
+    {
+        if (overlayStack == null || overlayStack.Count == 0) return "(empty)";
+        return string.Join(" > ", overlayStack.Reverse());
+    }
+
+    [ContextMenu("Dump Click Blockers")]
+    public void DumpClickBlockers()
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine("[ClickDebug] timeScale=" + Time.timeScale);
+        sb.AppendLine("[ClickDebug] overlayStack=" + DumpStack());
+        for (int i = 0; i < backgroundObjects.Count; i++)
+        {
+            var bg = backgroundObjects[i];
+            if (bg == null) continue;
+            bool dim = bg.dimScreenObject != null && bg.dimScreenObject.activeInHierarchy;
+            bool click = bg.backgoundClickableObject != null && bg.backgoundClickableObject.activeInHierarchy;
+            sb.AppendLine("[ClickDebug] bg[" + i + "] dim=" + dim + " clickCatcher=" + click);
+        }
+        foreach (var layer in layers)
+        {
+            if (layer == null || layer.uiLayer == null) continue;
+            sb.AppendLine("[ClickDebug] layer " + layer.layer + " active=" + layer.uiLayer.gameObject.activeInHierarchy
+                + " stopping=" + layer.uiLayer.isStoppingGame);
+        }
+        Debug.Log(sb.ToString());
     }
     public IUILayer GetLayer(UILayer layer)
     {

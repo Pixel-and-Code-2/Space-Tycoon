@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using TMPro;
@@ -43,6 +44,15 @@ public class GameUI : IUILayer
     private GameObject shootingObject;
     [SerializeField]
     private GameObject meleeObject;
+    [Header("Progression")]
+    [SerializeField]
+    private SliderController xpBar;
+    [SerializeField]
+    private TextMeshProUGUI xpBarText;
+    [SerializeField]
+    private Button newLevelButton;
+    [SerializeField]
+    private CharacterSheetUI characterSheet;
 
     private SpriteProvider shootOutlineProvider;
     private SpriteProvider shootMaskProvider;
@@ -55,6 +65,14 @@ public class GameUI : IUILayer
             Debug.LogError("Constructor met second GameUI instance");
         }
         CacheWeaponProviders();
+        WireNewLevelButton();
+    }
+
+    void WireNewLevelButton()
+    {
+        if (newLevelButton == null) return;
+        newLevelButton.onClick.RemoveAllListeners();
+        newLevelButton.onClick.AddListener(OnNewLevelClicked);
     }
 
     void CacheWeaponProviders()
@@ -72,12 +90,18 @@ public class GameUI : IUILayer
         ClickableItemsController.Instance.OnTaskUpdated += OnTaskUpdated;
         UILayersController.Instance.OnGameResumed += OnGameResumed;
         SaveHub.Instance.OnLoad += OnLoadData;
+        if (PartyProgress.Instance != null)
+            PartyProgress.Instance.OnProgressChanged += RefreshXpUi;
+        WireNewLevelButton();
+        RefreshXpUi();
     }
     void OnDestroy()
     {
         ClickableItemsController.Instance.OnTaskUpdated -= OnTaskUpdated;
         if (UILayersController.Instance != null)
             UILayersController.Instance.OnGameResumed -= OnGameResumed;
+        if (PartyProgress.Instance != null)
+            PartyProgress.Instance.OnProgressChanged -= RefreshXpUi;
     }
     void OnGameResumed()
     {
@@ -119,6 +143,24 @@ public class GameUI : IUILayer
         return null;
     }
 
+    public void ForEachPartyPawn(System.Action<PawnDataController> action)
+    {
+        if (action == null || playerGroups == null) return;
+        for (int i = 0; i < playerGroups.Count; i++)
+        {
+            if (playerGroups[i].playerObject == null) continue;
+            PawnDataController data = playerGroups[i].playerObject.GetComponent<PawnDataController>();
+            if (data != null) action(data);
+        }
+    }
+
+    public bool AnyPartyUnspentSkillPoints()
+    {
+        bool any = false;
+        ForEachPartyPawn(d => { if (d.UnspentSkillPoints > 0) any = true; });
+        return any;
+    }
+
     public int GetSelectedPlayerIndex()
     {
         if (playerGroups == null || PawnController.Instance == null) return -1;
@@ -140,6 +182,71 @@ public class GameUI : IUILayer
         else if (UI3DManager.Instance != null && pawn != null)
             UI3DManager.Instance.ShowMessage(message, pawn.GetTransform().position, color, true);
     }
+
+    public void ShowXpPopup(string message, Color color, IControlableSelectable pawn = null)
+    {
+        if (pawn != null)
+        {
+            ShowPlayerIconMessage(pawn, message, color);
+            return;
+        }
+        if (selectedPlayer != null)
+        {
+            ShowPlayerIconMessage(selectedPlayer, message, color);
+            return;
+        }
+        if (playerGroups != null)
+        {
+            for (int i = 0; i < playerGroups.Count; i++)
+            {
+                if (playerGroups[i].playerObject == null) continue;
+                if (playerGroups[i].playerObject.GetSelectableType() != SelectableType.Player) continue;
+                ShowPlayerIconMessage(playerGroups[i].playerObject, message, color);
+                return;
+            }
+        }
+        if (UI3DManager.Instance != null)
+            UI3DManager.Instance.ShowMessage(message, Vector3.zero, color);
+    }
+
+    public void RefreshXpUi()
+    {
+        PartyProgress pp = PartyProgress.Instance;
+        if (pp == null) return;
+        if (xpBar != null)
+        {
+            xpBar.SetBounds(0f, 1f);
+            xpBar.SetValue(pp.LevelProgress01());
+        }
+        if (xpBarText != null)
+        {
+            if (pp.Level >= pp.MaxLevel)
+                xpBarText.text = "Ур. " + pp.Level + " MAX";
+            else
+                xpBarText.text = "Ур. " + pp.Level + "  " + pp.TotalXp + "/" + pp.XpForNextLevel();
+        }
+        if (newLevelButton != null)
+            newLevelButton.gameObject.SetActive(pp.HasPendingLevelUpNotify || AnyPartyUnspentSkillPoints());
+    }
+
+    public void OnNewLevelClicked()
+    {
+        if (PartyProgress.Instance != null)
+            PartyProgress.Instance.ClearLevelUpNotify();
+        OpenCharacterSheet();
+    }
+
+    public void OpenCharacterSheet(int page = -1)
+    {
+        if (characterSheet == null)
+        {
+            characterSheet = Object.FindFirstObjectByType<CharacterSheetUI>(FindObjectsInactive.Include);
+        }
+        if (characterSheet == null) return;
+        if (page < 0)
+            page = Mathf.Max(0, GetSelectedPlayerIndex());
+        characterSheet.OpenAt(page);
+    }
     void OnEnable()
     {
         if (togglePause != null && togglePause.action != null)
@@ -159,6 +266,15 @@ public class GameUI : IUILayer
             selectedPlayer = PawnController.Instance.currentSelectedPawn;
             UpdateSelectedPlayer();
             OnChangeStats();
+        }
+        if (UILayersController.Instance != null
+            && UILayersController.Instance.overlayStack.Count > 0
+            && UILayersController.Instance.overlayStack.Peek() == UILayersController.UILayer.GameUI
+            && Keyboard.current != null
+            && Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            OpenCharacterSheet();
+            return;
         }
         if (togglePause == null || togglePause.action == null || !togglePause.action.triggered)
             return;

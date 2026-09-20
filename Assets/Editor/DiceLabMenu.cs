@@ -23,12 +23,15 @@ public static class DiceLabMenu
                     float yaw = i * 36f;
                     config.sticks.Add(new DiceShapeConfig.StickEntry
                     {
-                        localNormal = Quaternion.Euler(0f, yaw, 0f) * Vector3.forward,
+                        eulerAngles = Quaternion.FromToRotation(
+                            Vector3.up,
+                            Quaternion.Euler(0f, yaw, 0f) * Vector3.forward).eulerAngles,
                         displayValue = i == 9 ? 0 : i + 1,
                         color = Color.HSVToRGB(i / 10f, 0.8f, 1f)
                     });
                 }
             }
+            config.sides = 10;
             DiceFaceMap prefab = AssetDatabase.LoadAssetAtPath<DiceFaceMap>("Assets/Prefabs/DiceD10_Test.prefab");
             if (prefab != null) config.diePrefab = prefab;
             AssetDatabase.CreateAsset(config, ConfigPath);

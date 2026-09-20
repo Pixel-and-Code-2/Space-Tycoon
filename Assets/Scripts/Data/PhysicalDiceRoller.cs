@@ -16,6 +16,8 @@ public class PhysicalDiceRoller : MonoBehaviour
     [SerializeField]
     private DiceShapeConfig shapeConfig;
     [SerializeField]
+    private List<DiceShapeConfig> diceCatalog = new List<DiceShapeConfig>();
+    [SerializeField]
     private Material diceMaterial;
     [SerializeField]
     private float settleTimeout = 8f;
@@ -90,28 +92,80 @@ public class PhysicalDiceRoller : MonoBehaviour
     {
         var s = HandleInittingGlobalVars.globalSettingsAssets;
         EnsurePrefab();
-        bool ok = s != null && s.usePhysicalDice && diePrefab != null;
+        bool hasAnyDie = diePrefab != null || FindShapeForSides(10) != null || FindShapeForSides(6) != null;
+        if (!hasAnyDie && diceCatalog != null)
+        {
+            for (int i = 0; i < diceCatalog.Count; i++)
+            {
+                if (diceCatalog[i] != null && diceCatalog[i].diePrefab != null)
+                {
+                    hasAnyDie = true;
+                    break;
+                }
+            }
+        }
+        bool ok = s != null && s.usePhysicalDice && hasAnyDie;
         if (!ok)
             Debug.Log(
                 "[DiceGate] PhysicalDiceRoller.IsEnabled=false"
                 + " settings=" + (s != null)
                 + " usePhysicalDice=" + (s != null && s.usePhysicalDice)
                 + " diePrefab=" + (diePrefab != null)
-                + " shapeConfig=" + (shapeConfig != null));
+                + " catalog=" + (diceCatalog != null ? diceCatalog.Count : 0));
         return ok;
     }
 
     void EnsurePrefab()
     {
+        if (diceCatalog == null)
+            diceCatalog = new List<DiceShapeConfig>();
+        if (diceCatalog.Count == 0)
+        {
+            DiceShapeConfig[] all = Resources.LoadAll<DiceShapeConfig>("");
+            for (int i = 0; i < all.Length; i++)
+            {
+                if (all[i] != null && !diceCatalog.Contains(all[i]))
+                    diceCatalog.Add(all[i]);
+            }
+        }
         if (shapeConfig == null)
             shapeConfig = Resources.Load<DiceShapeConfig>(DefaultShapeResource);
         if (diePrefab == null && shapeConfig != null)
             diePrefab = shapeConfig.diePrefab;
     }
 
+    public DiceShapeConfig FindShapeForSides(int sides)
+    {
+        EnsurePrefab();
+        if (diceCatalog != null)
+        {
+            for (int i = 0; i < diceCatalog.Count; i++)
+            {
+                DiceShapeConfig c = diceCatalog[i];
+                if (c == null || c.diePrefab == null) continue;
+                if (c.sides == sides) return c;
+            }
+        }
+        if (shapeConfig != null && shapeConfig.diePrefab != null && shapeConfig.sides == sides)
+            return shapeConfig;
+        return null;
+    }
+
+    public bool HasShapeForExpr(string damageExpr)
+    {
+        DiceExpr.ParsePhysical(damageExpr, out List<DiceExpr.DieTerm> terms, out _);
+        if (terms == null || terms.Count == 0) return false;
+        for (int i = 0; i < terms.Count; i++)
+        {
+            if (FindShapeForSides(terms[i].sides) == null)
+                return false;
+        }
+        return true;
+    }
+
     public void RollDamage(string damageExpr, Vector3 nearWorld, System.Action<float> done, bool throwFromCamera = false)
     {
-        if (!IsEnabled())
+        if (!IsEnabled() || !HasShapeForExpr(damageExpr))
         {
             done?.Invoke(DiceExpr.Roll(damageExpr));
             return;
@@ -137,27 +191,30 @@ public class PhysicalDiceRoller : MonoBehaviour
         try
         {
             DiceExpr.ParsePhysical(damageExpr, out List<DiceExpr.DieTerm> terms, out float flat);
-            int dieCount = 0;
+            List<DiceShapeConfig> perDie = new List<DiceShapeConfig>();
             for (int i = 0; i < terms.Count; i++)
-                dieCount += terms[i].count;
-            bool visualOnly = dieCount <= 0;
-            if (visualOnly)
             {
-                terms.Add(new DiceExpr.DieTerm { sign = 1, count = 1, sides = 10 });
-                dieCount = 1;
+                DiceExpr.DieTerm term = terms[i];
+                DiceShapeConfig cfg = FindShapeForSides(term.sides);
+                if (cfg == null || cfg.diePrefab == null)
+                {
+                    done?.Invoke(DiceExpr.Roll(damageExpr));
+                    yield break;
+                }
+                for (int c = 0; c < term.count; c++)
+                    perDie.Add(cfg);
             }
-
-            List<DiceFaceMap.ReadResult> results = null;
-            yield return RollMany(nearWorld, dieCount, throwFromCamera, r => results = r);
-            if (results == null || results.Count == 0)
+            if (perDie.Count == 0)
             {
-                done?.Invoke(DiceExpr.Roll(damageExpr));
+                done?.Invoke(flat);
                 yield break;
             }
 
-            if (visualOnly)
+            List<DiceFaceMap.ReadResult> results = null;
+            yield return RollMany(nearWorld, perDie, throwFromCamera, r => results = r);
+            if (results == null || results.Count == 0)
             {
-                done?.Invoke(flat);
+                done?.Invoke(DiceExpr.Roll(damageExpr));
                 yield break;
             }
 
@@ -168,7 +225,7 @@ public class PhysicalDiceRoller : MonoBehaviour
                 DiceExpr.DieTerm term = terms[t];
                 for (int c = 0; c < term.count; c++)
                 {
-                    int face = ri < results.Count ? results[ri].value : Random.Range(0, 10);
+                    int face = ri < results.Count ? results[ri].value : Random.Range(1, term.sides + 1);
                     ri++;
                     sum += term.sign * MapFaceToSides(face, term.sides);
                 }
@@ -189,7 +246,7 @@ public class PhysicalDiceRoller : MonoBehaviour
         return ((v - 1) % sides) + 1;
     }
 
-    IEnumerator RollMany(Vector3 nearWorld, int count, bool throwFromCamera, System.Action<List<DiceFaceMap.ReadResult>> done)
+    IEnumerator RollMany(Vector3 nearWorld, List<DiceShapeConfig> perDie, bool throwFromCamera, System.Action<List<DiceFaceMap.ReadResult>> done)
     {
         skipRequested = false;
 
@@ -198,6 +255,7 @@ public class PhysicalDiceRoller : MonoBehaviour
         ClearDice();
         EnsurePrefab();
 
+        int count = perDie != null ? perDie.Count : 0;
         Camera cam = Camera.main;
         Vector3 camRight = cam != null ? cam.transform.right : Vector3.right;
         Vector3 camFwd = cam != null ? Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up).normalized : Vector3.forward;
@@ -224,6 +282,10 @@ public class PhysicalDiceRoller : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
+            DiceShapeConfig cfg = perDie[i];
+            DiceFaceMap prefab = cfg != null ? cfg.diePrefab : diePrefab;
+            if (prefab == null) continue;
+
             float lane = count <= 1 ? 0f : (i - (count - 1) * 0.5f);
             Vector3 spawn;
             if (throwFromCamera && cam != null)
@@ -231,15 +293,15 @@ public class PhysicalDiceRoller : MonoBehaviour
             else
                 spawn = spawnBase + camRight * (lane * spawnSide * 0.35f) - camFwd * 0.5f;
 
-            DiceFaceMap die = Instantiate(diePrefab, spawn, Random.rotation);
-            if (shapeConfig != null)
-                shapeConfig.ApplyTo(die);
+            DiceFaceMap die = Instantiate(prefab, spawn, Random.rotationUniform);
+            if (cfg != null)
+                cfg.ApplyTo(die);
             ApplySoftPhysics(die);
             Rigidbody rb = die.GetComponent<Rigidbody>();
             Vector3 aim = target + camRight * (lane * 0.25f);
             Vector3 toTarget = (aim - spawn).normalized;
-            rb.linearVelocity = toTarget * throwSpeed + Vector3.down * 4.5f;
-            rb.angularVelocity = Random.insideUnitSphere * 8f;
+            rb.linearVelocity = toTarget * throwSpeed + Vector3.down * 4.5f + Random.onUnitSphere * (throwSpeed * 0.45f);
+            rb.angularVelocity = Random.insideUnitSphere * 14f;
             activeDice.Add(die);
         }
 
@@ -310,7 +372,6 @@ public class PhysicalDiceRoller : MonoBehaviour
             yield return null;
         }
 
-
         List<DiceFaceMap.ReadResult> results = new List<DiceFaceMap.ReadResult>();
         foreach (var die in activeDice)
         {
@@ -323,8 +384,6 @@ public class PhysicalDiceRoller : MonoBehaviour
             if (UI3DManager.Instance != null)
                 UI3DManager.Instance.ShowMessage(result.value.ToString(), die.transform.position, c, true);
         }
-        if (results.Count == 0)
-            results.Add(new DiceFaceMap.ReadResult { value = Random.Range(0, 10), kind = DiceFaceMap.ReadKind.Normal });
 
         done?.Invoke(results);
         yield return new WaitForSecondsRealtime(0.55f);

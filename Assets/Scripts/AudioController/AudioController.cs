@@ -99,6 +99,8 @@ public class AudioController : MonoBehaviour
     {
         Play(combatAmbient, true);
     }
+    readonly System.Collections.Generic.List<Coroutine> voiceCueRoutines = new System.Collections.Generic.List<Coroutine>();
+
     public void Play(AudioClip clip, bool isMusic = false, float offset = 0f)
     {
         // Debug.Log("Playing " + clip.name + " as " + (isMusic ? "music" : "sound"));
@@ -115,6 +117,35 @@ public class AudioController : MonoBehaviour
                 soundSource.Play();
             }
         }
+    }
+
+    public void PlayOneShot(AudioClip clip)
+    {
+        if (clip != null && soundSource != null)
+            soundSource.PlayOneShot(clip);
+    }
+
+    public void ClearVoiceCues()
+    {
+        for (int i = 0; i < voiceCueRoutines.Count; i++)
+        {
+            if (voiceCueRoutines[i] != null)
+                StopCoroutine(voiceCueRoutines[i]);
+        }
+        voiceCueRoutines.Clear();
+    }
+
+    public void ScheduleVoiceCue(AudioClip clip, float atSeconds)
+    {
+        if (clip == null) return;
+        voiceCueRoutines.Add(StartCoroutine(VoiceCueRoutine(clip, Mathf.Max(0f, atSeconds))));
+    }
+
+    IEnumerator VoiceCueRoutine(AudioClip clip, float delay)
+    {
+        if (delay > 0f)
+            yield return new WaitForSecondsRealtime(delay);
+        PlayOneShot(clip);
     }
     private float timeSpent = 0f;
     private bool isChanging = false;

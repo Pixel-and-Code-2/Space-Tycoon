@@ -45,7 +45,8 @@ public class ClickableItem : ISelectable
         }
         OnValidate();
         ChangeScenarioStatus(ClickableItemsController.TaskItem.TaskItemStatus.Unavailable);
-        this.gameObject.layer = LayerMask.NameToLayer("ClickableItem");
+        if (GetComponent<IControlableSelectable>() == null)
+            gameObject.layer = LayerMask.NameToLayer("ClickableItem");
         SaveHub.Instance.OnLoad += OnLoadData;
         SaveHub.Instance.OnSave += OnSaveData;
     }
@@ -314,28 +315,44 @@ public class ClickableItem : ISelectable
             if (progress >= 100f)
             {
                 StopBoostRoutine();
-                UI3DManager.Instance.UnregisterSlider(transform);
-                progressBarCached = null;
-                actionCached = null;
-                if (gameObject.layer != LayerMask.NameToLayer("DeadPawn"))
-                {
-                    col.enabled = false;
-                }
-                taskExecutor?.OnCompleteTask();
-                ClickableItemsController.Instance.OnCompleteTask(this);
-                int epoch = workEpoch;
-                StartCoroutine(OnCompleteDelayed(epoch));
+                StartCoroutine(CompleteTaskWithLights());
                 return;
             }
             ApplyTaskInfoToScript();
             progressBarCached.SetValue(scriptForClickable?.OnProgress(progress) ?? progress);
         }
     }
-    private IEnumerator OnCompleteDelayed(int epoch)
+
+    private IEnumerator CompleteTaskWithLights()
     {
-        yield return new WaitForSeconds(0.1f);
+        int epoch = workEpoch;
+        if (LightsController.Instance != null)
+            LightsController.Instance.SetBlackout(true);
+
+        UI3DManager.Instance.UnregisterSlider(transform);
+        progressBarCached = null;
+        actionCached = null;
+        if (GetComponent<IControlableSelectable>() == null
+            && gameObject.layer != LayerMask.NameToLayer("DeadPawn"))
+        {
+            col.enabled = false;
+        }
+        taskExecutor?.OnCompleteTask();
+        ClickableItemsController.TaskItem completedItem = ClickableItemsController.Instance.FinishTaskStatus(this);
+
+        yield return new WaitForSeconds(0.35f);
         if (epoch != workEpoch) yield break;
         if (SaveHub.Instance != null && SaveHub.Instance.IsLoading) yield break;
+
+        if (LightsController.Instance != null)
+            yield return LightsController.Instance.RestoreLights(0.6f);
+        else
+            yield return new WaitForSeconds(0.1f);
+
+        if (epoch != workEpoch) yield break;
+        if (SaveHub.Instance != null && SaveHub.Instance.IsLoading) yield break;
+
+        ClickableItemsController.Instance.PresentTaskComplete(this, completedItem);
         ApplyTaskInfoToScript();
         scriptForClickable?.OnComplete();
         activeTaskInfo = ClickableTaskInfo.None;
@@ -467,6 +484,8 @@ public class ClickableItem : ISelectable
                 break;
             case ClickableItemsController.TaskItem.TaskItemStatus.Done:
             case ClickableItemsController.TaskItem.TaskItemStatus.Unavailable:
+                if (GetComponent<IControlableSelectable>() != null)
+                    break;
                 if (((1 << gameObject.layer) & LayerMask.GetMask("ClickableItem", "Default")) != 0
                     && !ClickableItemsController.Instance.HasReadyOrProgressTask(this))
                 {

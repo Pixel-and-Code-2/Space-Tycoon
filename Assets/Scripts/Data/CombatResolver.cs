@@ -165,7 +165,7 @@ public static class CombatResolver
     static float HitChance(int mod, int ac, bool disadvantage)
     {
         float minRoll = ac - mod;
-        float p = 21f - minRoll / 20f;
+        float p = (21f - minRoll) / 20f;
         if (disadvantage)
             p *= p;
         return Mathf.Clamp01(p);

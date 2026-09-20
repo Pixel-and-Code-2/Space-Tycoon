@@ -21,6 +21,11 @@ public class CombatantStats : ScriptableObject
     [Tooltip("Distance at which attack becomes melee (also max melee reach)")]
     public string meleeReach = "3";
 
+    [Header("Attack stamina (0 = use GlobalSettings)")]
+    public float rangedAttackStaminaCost = 0f;
+    public float meleeAttackStaminaCost = 0f;
+    public float shooterMeleeAttackStaminaCost = 0f;
+
     public float RollMove() => DiceExpr.Roll(movePerTurn);
     public float RollStaminaPerMeter() => DiceExpr.Roll(staminaPerMeter);
     public float RollMaxHp() => DiceExpr.Roll(maxHp);

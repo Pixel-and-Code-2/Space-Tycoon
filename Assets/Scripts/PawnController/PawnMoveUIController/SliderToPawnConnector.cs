@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -5,6 +7,10 @@ using TMPro;
 [RequireComponent(typeof(RectTransform))]
 public class SliderToPawnConnector : MonoBehaviour
 {
+    static readonly List<SliderToPawnConnector> All = new List<SliderToPawnConnector>();
+    static Coroutine hideRoutine;
+    static MonoBehaviour hideHost;
+
     public static string HelperTag = "[ЛКМ]";
     private string helperTagCached = string.Empty;
     [SerializeField]
@@ -32,16 +38,107 @@ public class SliderToPawnConnector : MonoBehaviour
     [SerializeField] private GameObject walkIcon;
     [SerializeField] private GameObject attackIcon;
     [SerializeField] private GameObject reloadIcon;
+    [SerializeField] private GameObject voiceIcon;
 
     void Awake()
     {
         _rectTransform = GetComponent<RectTransform>();
+        if (voiceIcon != null) voiceIcon.SetActive(false);
+    }
+
+    void OnEnable()
+    {
+        if (!All.Contains(this)) All.Add(this);
+    }
+
+    void OnDisable()
+    {
+        All.Remove(this);
+    }
+
+    public static void ShowVoiceFor(GameObject speaker, AudioClip clip)
+    {
+        ClearVoiceIcons();
+        if (speaker == null) return;
+        bool any = false;
+        for (int i = 0; i < All.Count; i++)
+        {
+            SliderToPawnConnector c = All[i];
+            if (c == null || c.voiceIcon == null || c.pawn == null) continue;
+            if (c.pawn.gameObject != speaker) continue;
+            c.voiceIcon.SetActive(true);
+            RebuildVoiceLayout(c);
+            any = true;
+            Debug.Log("[VoiceIcon] ON pawn=" + c.pawn.name + " speaker=" + speaker.name
+                + " clip=" + (clip != null ? clip.name : "null"), c);
+        }
+        if (!any)
+            Debug.LogWarning("[VoiceIcon] no slider for speaker=" + speaker.name);
+        if (clip == null || AudioController.Instance == null) return;
+        hideHost = AudioController.Instance;
+        hideRoutine = hideHost.StartCoroutine(HideVoiceAfter(clip.length));
+    }
+
+    public static void ClearVoiceIcons()
+    {
+        if (hideHost != null && hideRoutine != null)
+        {
+            hideHost.StopCoroutine(hideRoutine);
+            hideRoutine = null;
+        }
+        for (int i = 0; i < All.Count; i++)
+        {
+            SliderToPawnConnector c = All[i];
+            if (c == null || c.voiceIcon == null) continue;
+            if (!c.voiceIcon.activeSelf) continue;
+            c.voiceIcon.SetActive(false);
+            RebuildVoiceLayout(c);
+            Debug.Log("[VoiceIcon] OFF pawn=" + (c.pawn != null ? c.pawn.name : c.name), c);
+        }
+    }
+
+    static void RebuildVoiceLayout(SliderToPawnConnector c)
+    {
+        if (c == null) return;
+        RectTransform root = c.rectTransform;
+        if (root != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(root);
+        if (c.voiceIcon != null)
+        {
+            RectTransform voiceRt = c.voiceIcon.transform as RectTransform;
+            if (voiceRt != null)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(voiceRt);
+            RectTransform parent = c.voiceIcon.transform.parent as RectTransform;
+            if (parent != null)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(parent);
+        }
+        Canvas.ForceUpdateCanvases();
+    }
+
+    static IEnumerator HideVoiceAfter(float seconds)
+    {
+        float t = 0f;
+        while (t < seconds)
+        {
+            t += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        hideRoutine = null;
+        ClearVoiceIcons();
     }
 
     void Start()
     {
-        if (pawn == null) Debug.LogWarning("SliderToPawnConnector: pawn not found");
-        else otherSelectable = pawn.gameObject.GetComponent<ClickableItem>();
+        if (pawn == null)
+        {
+            Debug.LogWarning("SliderToPawnConnector: pawn not found, hiding UI", this);
+            if (allyHpSlider != null) allyHpSlider.gameObject.SetActive(false);
+            if (enemyHpSlider != null) enemyHpSlider.gameObject.SetActive(false);
+            if (allyStaminaSlider != null) allyStaminaSlider.gameObject.SetActive(false);
+            UpdateActionIcons(false);
+            return;
+        }
+        otherSelectable = pawn.gameObject.GetComponent<ClickableItem>();
         ColorTheSlider();
         PawnDataController.OnStaminaChanged += OnStaminaChanged;
         if (TurnManager.Instance != null)
@@ -99,10 +196,8 @@ public class SliderToPawnConnector : MonoBehaviour
         if (pawn == null) return false;
         if (pawn.MovesToSkip > 0.1f) return false;
         float stamina = GetStamina();
-        float rangedCost = GlobalSettingsAssets.GetStaminaCosts().rangedAttackCost;
-        float meleeCost = pawn.HasRanged
-            ? GlobalSettingsAssets.GetStaminaCosts().shooterMeleeAttackCost
-            : GlobalSettingsAssets.GetStaminaCosts().meleeAttackCost;
+        float rangedCost = pawn.GetAttackStaminaCost(false);
+        float meleeCost = pawn.GetAttackStaminaCost(true);
         float minCost = Mathf.Min(rangedCost, meleeCost);
         return stamina >= minCost - 0.01f;
     }

@@ -266,6 +266,11 @@ public class UI3DManager : MonoBehaviour
     public void RegisterPawn(GameObject pawnObject)
     {
         if (pawnObject == null) throw new System.Exception("RegisterPawn: pawnObject is null");
+        if (pawnObject.GetComponent<PawnDataController>() == null)
+        {
+            Debug.LogWarning("RegisterPawn skipped (no PawnDataController): " + pawnObject.name, pawnObject);
+            return;
+        }
         if (pawnsInScene.ContainsKey(pawnObject)) return;
         pawnsInScene.Add(pawnObject, CreateSliderForPawn(pawnObject));
     }
@@ -327,9 +332,12 @@ public class UI3DManager : MonoBehaviour
 
     private SliderToPawnConnector CreateSliderForPawn(GameObject pawnObject)
     {
+        PawnDataController data = pawnObject != null ? pawnObject.GetComponent<PawnDataController>() : null;
+        if (data == null)
+            throw new System.Exception("CreateSliderForPawn: no PawnDataController on " + (pawnObject != null ? pawnObject.name : "null"));
         GameObject sliderObject = Instantiate(sliderPrefab, sliderParent);
         SliderToPawnConnector sliderToPawnConnector = sliderObject.GetComponent<SliderToPawnConnector>();
-        sliderToPawnConnector.pawn = pawnObject.GetComponent<PawnDataController>();
+        sliderToPawnConnector.pawn = data;
         return sliderToPawnConnector;
     }
 

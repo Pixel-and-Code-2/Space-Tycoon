@@ -64,6 +64,8 @@ public class NarrativeTextWindow : IUILayer
     void OnDisable()
     {
         gameObject.SetActive(false);
+        if (ClickableItemsController.Instance != null)
+            ClickableItemsController.Instance.ClearNarrativeVoiceQueue();
     }
 
 #if UNITY_EDITOR
@@ -171,6 +173,10 @@ public class NarrativeTextWindow : IUILayer
         ApplyOffset(GetOffset(authorIndex, sel));
         if (parentRect != null)
             LayoutRebuilder.ForceRebuildLayoutImmediate(parentRect);
+        string who = authorIndex >= 0 ? ("author=" + authorIndex) : "author=?";
+        Debug.Log("[NarrativeUI] show line near " + who + " text='" + (text != null && text.Length > 48 ? text.Substring(0, 48) + "..." : text) + "'");
+        if (ClickableItemsController.Instance != null)
+            ClickableItemsController.Instance.PlayNextNarrativeVoice();
     }
 
     Vector2 GetOffset(int authorIndex, int selectedIndex)

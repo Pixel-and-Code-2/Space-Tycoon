@@ -2,41 +2,39 @@
 
 ## Быстрый старт (обычный враг на карте)
 
-1. Пустой объект в нужном месте
-  или **Space-Tycoon → Unit Spot → Create Binder At Selection**.
-2. `UnitSpotBinder`:
-  - **Mode** = `SceneEnemy`
-  - **Enemy Prefab** = `EnemyShooter` / `EnemyNormal` / …
-  - **Combatant Stats** (опционально) = ассет из `Resources/Combatants/`
-3. **Bind / Refresh Now** (или OnValidate после сохранения).
+1. Поставь префаб врага в `Enemies_lvlN` (или `Room*`) в нужной позиции.
+2. **Space-Tycoon → Unit Spot → Bind All In Scene** — по позиции:
+   - зарегистрирует в ближайший `listOfTriggers`
+   - добавит в покрывающий `WarFog.othersToInclude` (проверка по XZ, Y тумана игнорируется)
+3. Объект `UnitSpotBinder` **не обязателен** и в сцене сохранять не нужно.
 
-## Карантин (отложенный спавн)
+Опционально (если нужны combatantStats / aiOverwrite при спавне из биндера):
 
-1. Точка + `UnitSpotBinder`, **Mode** = `Quarantine`.
-2. **Enemy Prefab** = префаб на старт карантина.
-3. Bind: точка уезжает под нужный `DTrigN` как `PosN`, Y = 0.
-4. В сцене префаб **не** инстанцируется.
-5. В `TurnManager → listOfDelayedTriggers → enemySpawnPoints`: `enemy` + `where` = эта точка.
+1. **Create Binder At Selection** → Mode=`SceneEnemy`, prefab, stats, **Ai Overwrite**.
+2. **Bind / Refresh Now** — создаст/подвинет инстанс и пропишет поля; биндер потом можно удалить и снова сделать Bind All.
 
+## Карантин / delayed (отложенный спавн)
 
+1. Точка под `DelayedTriggers/lvlN/DTrigN` как `PosM`, **или** биндер Mode=`Quarantine`.
+2. В `TurnManager → listOfDelayedTriggers → enemySpawnPoints`: `enemy` + `where` (+ опционально `aiOverwrite`).
+3. Сцена: префаб **не** лежит как враг — только `Pos`.
+
+Конвертация уже стоящего врага:
+
+**Space-Tycoon → Unit Spot → Convert Selected To Delayed Pose**  
+(инстанс → `Pos` под ближайший DTrig, запись в spawnPoints, инстанс удаляется)
 
 ## Убрать выделенных
 
-**Space-Tycoon → Unit Spot → Remove Selected**
-
-- Выделяем персонажа или его часть
-- Нажимаем кнопку в меню
-- Он стирается и дерегистрируется ото всего
-- Все персонажи лежат отсортированные в MainComponent > Enemies_lvl объектах
-- Все подготовленные к карантину персонажи лежат в виде MainComponent > DelayedTriggers > lvlN > DTrig1 > PosM. Нажав на PosM объект, а затем кнопку F можно легко увидеть где заспавнится враг. Убирание работает на этом объекте.
+**Space-Tycoon → Unit Spot → Remove Selected** — стирает объект и снимает из triggers / delayed / WarFog.
 
 ## Кнопки меню
 
-- **Create Binder At Selection**
-- **Bind All In Scene**
+- **Create Binder At Selection** — опциональный авторский helper
+- **Bind All In Scene** — биндеры (если есть) + все враги в `Enemies_lvl*` по позиции
+- **Convert Selected To Delayed Pose**
 - **Remove Selected**
 
 ## Окончание работы
 
-После того, как всё передвинуто и расставлено нужно сделать сохранение по умолчанию: **Space-Tycoon → Bake Default Save (Play Mode)** - редактор сам сделает итерацию сохранения.
-
+**Space-Tycoon → Bake Default Save (Play Mode)** — и сохрани сцену.

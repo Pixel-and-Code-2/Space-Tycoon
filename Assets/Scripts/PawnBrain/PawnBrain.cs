@@ -406,8 +406,6 @@ public class PawnBrain : IControlableSelectable
             dataController.GetParameterValue(PawnDataController.SHOOTED_AMOUNT_KEY) + 1
         );
         PawnController.Instance.UpdateMoveOnShootButtonColor();
-        if (!isAlive && dataController.selectableType == SelectableType.Player)
-            StatBoostService.TryGrantAfterKill(this);
     }
     public override void OnNoAmmoShoot()
     {
@@ -447,8 +445,20 @@ public class PawnBrain : IControlableSelectable
             animatorBrain?.Play((int)AnimatorBrainBase.Animations.DEATH, 0, true, true);
             newHealth = 0f;
             isAlive = false;
+            bool wasPlayer = playersAlive.Contains(this);
             playersAlive.Remove(this);
-            if (playersAlive.Count == 0)
+            if (!wasPlayer)
+            {
+                bool dynamic = gameObject.name.StartsWith("EnemySpawned");
+                CorpseFadeDespawn.BeginOn(gameObject, destroyWhenDone: dynamic);
+            }
+            else
+            {
+                CorpseFadeDespawn existing = GetComponent<CorpseFadeDespawn>();
+                if (existing != null)
+                    Destroy(existing);
+            }
+            if (wasPlayer && playersAlive.Count == 0)
             {
                 UILayersController.Instance.SetLayer(UILayersController.UILayer.CutScene, "lose");
             }

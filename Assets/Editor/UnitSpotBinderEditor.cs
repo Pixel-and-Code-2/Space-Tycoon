@@ -13,6 +13,7 @@ public class UnitSpotBinderEditor : Editor
     static readonly Regex DTrigRx = new Regex(@"^DTrig\d+$", RegexOptions.Compiled);
     static readonly Regex PosRx = new Regex(@"^Pos(\d+)$", RegexOptions.Compiled);
     static readonly Regex LvlInPathRx = new Regex(@"Lvl(\d+)", RegexOptions.Compiled);
+    static readonly Regex DelayedLvlRx = new Regex(@"[/\\]lvl(\d+)[/\\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     public override void OnInspectorGUI()
     {
@@ -103,6 +104,63 @@ public class UnitSpotBinderEditor : Editor
         EditorSceneManager.MarkSceneDirty(binder.gameObject.scene);
     }
 
+    public static int BindAllSceneEnemiesByPosition()
+    {
+        if (Application.isPlaying) return 0;
+        TurnManager turnManager = Object.FindFirstObjectByType<TurnManager>();
+        if (turnManager == null)
+        {
+            Debug.LogWarning("[UnitSpotBinder] TurnManager not found");
+            return 0;
+        }
+
+        int bound = 0;
+        foreach (PawnBrain brain in Object.FindObjectsByType<PawnBrain>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (brain == null) continue;
+            if (!IsUnderEnemiesFolder(brain.transform)) continue;
+            if (IsPlayerPawn(brain)) continue;
+            if (BindExistingSceneEnemy(brain.gameObject, turnManager, null, null))
+                bound++;
+        }
+
+        EditorUtility.SetDirty(turnManager);
+        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        return bound;
+    }
+
+    public static bool BindExistingSceneEnemy(
+        GameObject instance,
+        TurnManager turnManager,
+        WarFog warFogOverride,
+        GameObject triggerObjectOverride)
+    {
+        if (instance == null || turnManager == null) return false;
+
+        Vector3 pos = instance.transform.position;
+        if (!Mathf.Approximately(pos.y, 0f))
+        {
+            Undo.RecordObject(instance.transform, "Snap enemy height to 0");
+            instance.transform.position = new Vector3(pos.x, 0f, pos.z);
+            pos = instance.transform.position;
+        }
+
+        TriggerData trigger = FindTriggerContaining(turnManager, pos, triggerObjectOverride);
+        if (trigger == null)
+            Debug.LogWarning("[UnitSpotBinder] no TriggerData covers " + instance.name);
+        else
+            RegisterInTrigger(trigger, instance, turnManager);
+
+        WarFog fog = warFogOverride != null ? warFogOverride : FindWarFogContaining(pos);
+        if (fog == null)
+            Debug.LogWarning("[UnitSpotBinder] no WarFog covers " + instance.name + " @ " + pos);
+        else
+            RegisterInWarFog(fog, instance);
+
+        EditorUtility.SetDirty(instance);
+        return trigger != null || fog != null;
+    }
+
     public static void RemoveSelected()
     {
         if (Application.isPlaying) return;
@@ -188,6 +246,26 @@ public class UnitSpotBinderEditor : Editor
     static bool IsManagedContainer(string name)
     {
         return EnemiesLvlRx.IsMatch(name) || RoomRx.IsMatch(name) || DTrigRx.IsMatch(name);
+    }
+
+    static bool IsUnderEnemiesFolder(Transform t)
+    {
+        while (t != null)
+        {
+            if (EnemiesLvlRx.IsMatch(t.name) || RoomRx.IsMatch(t.name))
+                return true;
+            t = t.parent;
+        }
+        return false;
+    }
+
+    public static bool IsPlayerPawn(PawnBrain brain)
+    {
+        if (brain == null) return true;
+        SelectableType st = brain.GetSelectableType();
+        if (st == SelectableType.Player) return true;
+        string n = brain.gameObject.name;
+        return n == "Zaya" || n == "Gusev" || n == "Zeleniy" || n == "Max" || n == "GAAD";
     }
 
     static void UnregisterDependencies(GameObject root, TurnManager turnManager)
@@ -302,7 +380,7 @@ public class UnitSpotBinderEditor : Editor
 
     static void BindSceneEnemy(UnitSpotBinder binder, TurnManager turnManager)
     {
-        TriggerData trigger = FindTriggerContaining(turnManager, binder.Anchor.position, binder.TriggerObjectOverride, quarantine: false);
+        TriggerData trigger = FindTriggerContaining(turnManager, binder.Anchor.position, binder.TriggerObjectOverride);
         Transform folder = ResolveSceneEnemyParent(turnManager, trigger);
 
         if (folder != null && binder.transform.parent != folder)
@@ -323,19 +401,8 @@ public class UnitSpotBinderEditor : Editor
         instance.transform.SetPositionAndRotation(new Vector3(p.x, 0f, p.z), binder.Anchor.rotation);
 
         ApplyCombatantStats(instance, binder.CombatantStats);
-
-        if (trigger == null)
-            Debug.LogWarning("[UnitSpotBinder] no TriggerData covers " + binder.name + " — register manually");
-        else
-            RegisterInTrigger(trigger, instance, turnManager);
-
-        WarFog fog = binder.WarFogOverride != null
-            ? binder.WarFogOverride
-            : FindWarFogContaining(binder.Anchor.position);
-        if (fog == null)
-            Debug.LogWarning("[UnitSpotBinder] no WarFog covers " + binder.name);
-        else
-            RegisterInWarFog(fog, instance);
+        ApplyAiOverwrite(instance, binder.AiOverwrite);
+        BindExistingSceneEnemy(instance, turnManager, binder.WarFogOverride, binder.TriggerObjectOverride);
 
         binder.EditorSetBound(instance, true);
         EditorUtility.SetDirty(instance);
@@ -389,6 +456,8 @@ public class UnitSpotBinderEditor : Editor
     {
         DelayedTriggerData delayed = FindDelayedTriggerContaining(turnManager, binder.Anchor.position, binder.TriggerObjectOverride);
         if (delayed == null)
+            delayed = FindDelayedTriggerByHierarchy(turnManager, binder.Anchor);
+        if (delayed == null)
         {
             Debug.LogWarning("[UnitSpotBinder] no DelayedTriggerData covers " + binder.name);
             return;
@@ -413,6 +482,17 @@ public class UnitSpotBinderEditor : Editor
             binder.transform.position = new Vector3(p.x, 0f, p.z);
         }
 
+        UpsertDelayedSpawnPoint(turnManager, delayed, binder.Anchor, binder.EnemyPrefab, binder.AiOverwrite);
+        binder.EditorSetBound(null, true);
+    }
+
+    public static void UpsertDelayedSpawnPoint(
+        TurnManager turnManager,
+        DelayedTriggerData delayed,
+        Transform where,
+        GameObject prefab,
+        EnemyAiProfile aiOverwrite)
+    {
         SerializedObject so = new SerializedObject(turnManager);
         SerializedProperty list = so.FindProperty("listOfDelayedTriggers");
         int delayedIndex = IndexOfDelayed(turnManager, delayed);
@@ -420,7 +500,7 @@ public class UnitSpotBinderEditor : Editor
         SerializedProperty entry = list.GetArrayElementAtIndex(delayedIndex);
         SerializedProperty points = entry.FindPropertyRelative("enemySpawnPoints");
 
-        int existing = FindSpawnPointIndex(points, binder.Anchor, binder.EnemyPrefab);
+        int existing = FindSpawnPointIndex(points, where);
         SerializedProperty spot;
         if (existing >= 0)
             spot = points.GetArrayElementAtIndex(existing);
@@ -429,11 +509,42 @@ public class UnitSpotBinderEditor : Editor
             points.InsertArrayElementAtIndex(points.arraySize);
             spot = points.GetArrayElementAtIndex(points.arraySize - 1);
         }
-        spot.FindPropertyRelative("enemy").objectReferenceValue = binder.EnemyPrefab;
-        spot.FindPropertyRelative("where").objectReferenceValue = binder.Anchor;
+        spot.FindPropertyRelative("enemy").objectReferenceValue = prefab;
+        spot.FindPropertyRelative("where").objectReferenceValue = where;
+        SerializedProperty aiProp = spot.FindPropertyRelative("aiOverwrite");
+        if (aiProp != null)
+            aiProp.objectReferenceValue = aiOverwrite;
         so.ApplyModifiedPropertiesWithoutUndo();
+        EditorUtility.SetDirty(turnManager);
+    }
 
-        binder.EditorSetBound(null, true);
+    public static GameObject ConvertSceneEnemyToDelayedPose(
+        GameObject instance,
+        TurnManager turnManager,
+        DelayedTriggerData delayed,
+        EnemyAiProfile aiOverwrite)
+    {
+        if (instance == null || turnManager == null || delayed == null || delayed.triggerObject == null)
+            return null;
+
+        GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(instance);
+        if (prefab == null)
+        {
+            Debug.LogWarning("[UnitSpotBinder] no prefab source for " + instance.name);
+            return null;
+        }
+
+        Transform dtrig = delayed.triggerObject.transform;
+        GameObject posGo = new GameObject(NextPosName(dtrig));
+        Undo.RegisterCreatedObjectUndo(posGo, "Create delayed Pos");
+        Undo.SetTransformParent(posGo.transform, dtrig, "Parent delayed Pos");
+        Vector3 p = instance.transform.position;
+        posGo.transform.SetPositionAndRotation(new Vector3(p.x, 0f, p.z), instance.transform.rotation);
+
+        UpsertDelayedSpawnPoint(turnManager, delayed, posGo.transform, prefab, aiOverwrite);
+        UnregisterDependencies(instance, turnManager);
+        Undo.DestroyObjectImmediate(instance);
+        return posGo;
     }
 
     static string NextPosName(Transform dtrig)
@@ -463,14 +574,13 @@ public class UnitSpotBinderEditor : Editor
         return -1;
     }
 
-    static int FindSpawnPointIndex(SerializedProperty points, Transform where, GameObject prefab)
+    static int FindSpawnPointIndex(SerializedProperty points, Transform where)
     {
         for (int i = 0; i < points.arraySize; i++)
         {
             var spot = points.GetArrayElementAtIndex(i);
             var w = spot.FindPropertyRelative("where").objectReferenceValue as Transform;
-            var e = spot.FindPropertyRelative("enemy").objectReferenceValue as GameObject;
-            if (w == where && e == prefab) return i;
+            if (w == where) return i;
         }
         return -1;
     }
@@ -486,6 +596,17 @@ public class UnitSpotBinderEditor : Editor
         if (prop == null) return;
         prop.objectReferenceValue = stats;
         so.ApplyModifiedPropertiesWithoutUndo();
+        EditorUtility.SetDirty(data);
+    }
+
+    static void ApplyAiOverwrite(GameObject instance, EnemyAiProfile profile)
+    {
+        if (profile == null || instance == null) return;
+        PawnDataController data = instance.GetComponent<PawnDataController>();
+        if (data == null) data = instance.GetComponentInChildren<PawnDataController>(true);
+        if (data == null) return;
+        Undo.RecordObject(data, "Apply AI overwrite");
+        data.SetAiProfileOverride(profile);
         EditorUtility.SetDirty(data);
     }
 
@@ -530,7 +651,7 @@ public class UnitSpotBinderEditor : Editor
         EditorUtility.SetDirty(fog);
     }
 
-    static TriggerData FindTriggerContaining(TurnManager tm, Vector3 pos, GameObject overrideTrigger, bool quarantine)
+    static TriggerData FindTriggerContaining(TurnManager tm, Vector3 pos, GameObject overrideTrigger)
     {
         if (overrideTrigger != null)
         {
@@ -541,19 +662,31 @@ public class UnitSpotBinderEditor : Editor
                 var entry = list.GetArrayElementAtIndex(i);
                 var triggerObj = entry.FindPropertyRelative("triggerObject").objectReferenceValue as GameObject;
                 if (triggerObj == overrideTrigger)
-                    return GetTriggerAt(tm, i, false);
+                    return GetTriggerAt(tm, i);
             }
         }
 
         var soAll = new SerializedObject(tm);
         var triggers = soAll.FindProperty("listOfTriggers");
+        TriggerData best = null;
+        float bestDist = float.MaxValue;
         for (int i = 0; i < triggers.arraySize; i++)
         {
             var entry = triggers.GetArrayElementAtIndex(i);
             var triggerObj = entry.FindPropertyRelative("triggerObject").objectReferenceValue as GameObject;
-            if (ContainsPoint(triggerObj, pos))
-                return GetTriggerAt(tm, i, false);
+            if (ContainsPointXZ(triggerObj, pos))
+                return GetTriggerAt(tm, i);
+            Collider col = triggerObj != null ? triggerObj.GetComponent<Collider>() : null;
+            if (col == null) continue;
+            float dist = HorizontalDistance(col.bounds.center, pos);
+            if (dist < bestDist)
+            {
+                bestDist = dist;
+                best = GetTriggerAt(tm, i);
+            }
         }
+        if (best != null && bestDist <= 12f)
+            return best;
         return null;
     }
 
@@ -571,13 +704,69 @@ public class UnitSpotBinderEditor : Editor
                     return GetDelayedAt(tm, i);
                 continue;
             }
-            if (ContainsPoint(triggerObj, pos))
+            if (ContainsPointXZ(triggerObj, pos))
                 return GetDelayedAt(tm, i);
+        }
+        return FindClosestDelayedByPosChildren(tm, pos);
+    }
+
+    static DelayedTriggerData FindDelayedTriggerByHierarchy(TurnManager tm, Transform t)
+    {
+        while (t != null)
+        {
+            if (DTrigRx.IsMatch(t.name))
+            {
+                var so = new SerializedObject(tm);
+                var list = so.FindProperty("listOfDelayedTriggers");
+                for (int i = 0; i < list.arraySize; i++)
+                {
+                    var triggerObj = list.GetArrayElementAtIndex(i).FindPropertyRelative("triggerObject").objectReferenceValue as GameObject;
+                    if (triggerObj == t.gameObject)
+                        return GetDelayedAt(tm, i);
+                }
+            }
+            t = t.parent;
         }
         return null;
     }
 
-    static TriggerData GetTriggerAt(TurnManager tm, int index, bool delayed)
+    static DelayedTriggerData FindClosestDelayedByPosChildren(TurnManager tm, Vector3 pos)
+    {
+        DelayedTriggerData best = null;
+        float bestDist = float.MaxValue;
+        var field = typeof(TurnManager).GetField("listOfDelayedTriggers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var list = field.GetValue(tm) as List<DelayedTriggerData>;
+        if (list == null) return null;
+        for (int i = 0; i < list.Count; i++)
+        {
+            DelayedTriggerData delayed = list[i];
+            if (delayed == null || delayed.triggerObject == null) continue;
+            Transform dtrig = delayed.triggerObject.transform;
+            if (dtrig.childCount == 0) continue;
+            Vector3 sum = Vector3.zero;
+            int n = 0;
+            for (int c = 0; c < dtrig.childCount; c++)
+            {
+                Transform child = dtrig.GetChild(c);
+                if (!PosRx.IsMatch(child.name)) continue;
+                sum += child.position;
+                n++;
+            }
+            if (n == 0) continue;
+            Vector3 center = sum / n;
+            float dist = HorizontalDistance(center, pos);
+            if (dist < bestDist)
+            {
+                bestDist = dist;
+                best = delayed;
+            }
+        }
+        if (best != null && bestDist <= 25f)
+            return best;
+        return null;
+    }
+
+    static TriggerData GetTriggerAt(TurnManager tm, int index)
     {
         var field = typeof(TurnManager).GetField("listOfTriggers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         var list = field.GetValue(tm) as List<TriggerData>;
@@ -593,22 +782,46 @@ public class UnitSpotBinderEditor : Editor
         return list[index];
     }
 
-    static bool ContainsPoint(GameObject triggerObject, Vector3 pos)
+    public static DelayedTriggerData GetDelayedTrigger(TurnManager tm, int index) => GetDelayedAt(tm, index);
+
+    static bool ContainsPointXZ(GameObject triggerObject, Vector3 pos)
     {
         if (triggerObject == null) return false;
         Collider col = triggerObject.GetComponent<Collider>();
-        if (col != null) return col.bounds.Contains(pos);
-        return false;
+        if (col == null) col = triggerObject.GetComponentInChildren<Collider>(true);
+        if (col == null) return false;
+        Bounds b = col.bounds;
+        return pos.x >= b.min.x && pos.x <= b.max.x && pos.z >= b.min.z && pos.z <= b.max.z;
+    }
+
+    static float HorizontalDistance(Vector3 a, Vector3 b)
+    {
+        float dx = a.x - b.x;
+        float dz = a.z - b.z;
+        return Mathf.Sqrt(dx * dx + dz * dz);
     }
 
     static WarFog FindWarFogContaining(Vector3 pos)
     {
+        WarFog best = null;
+        float bestDist = float.MaxValue;
         foreach (var fog in Object.FindObjectsByType<WarFog>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
             Collider col = fog.GetComponent<Collider>();
-            if (col != null && col.bounds.Contains(pos))
+            if (col == null) continue;
+            Bounds b = col.bounds;
+            bool inside = pos.x >= b.min.x && pos.x <= b.max.x && pos.z >= b.min.z && pos.z <= b.max.z;
+            float dist = HorizontalDistance(b.center, pos);
+            if (inside)
                 return fog;
+            if (dist < bestDist)
+            {
+                bestDist = dist;
+                best = fog;
+            }
         }
+        if (best != null && bestDist <= 8f)
+            return best;
         return null;
     }
 }
@@ -633,14 +846,79 @@ public static class UnitSpotBinderMenu
     [MenuItem("Space-Tycoon/Unit Spot/Bind All In Scene")]
     public static void BindAll()
     {
+        int binders = 0;
         foreach (var binder in Object.FindObjectsByType<UnitSpotBinder>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
             UnitSpotBinderEditor.Bind(binder, force: true);
-        Debug.Log("[UnitSpotBinder] Bind All done");
+            binders++;
+        }
+        int enemies = UnitSpotBinderEditor.BindAllSceneEnemiesByPosition();
+        Debug.Log("[UnitSpotBinder] Bind All done: binders=" + binders + " sceneEnemies=" + enemies);
     }
 
     [MenuItem("Space-Tycoon/Unit Spot/Remove Selected")]
     public static void RemoveSelected()
     {
         UnitSpotBinderEditor.RemoveSelected();
+    }
+
+    [MenuItem("Space-Tycoon/Unit Spot/Convert Selected To Delayed Pose")]
+    public static void ConvertSelectedToDelayed()
+    {
+        if (Application.isPlaying) return;
+        TurnManager tm = Object.FindFirstObjectByType<TurnManager>();
+        if (tm == null)
+        {
+            Debug.LogWarning("[UnitSpotBinder] TurnManager not found");
+            return;
+        }
+
+        int converted = 0;
+        foreach (GameObject go in Selection.gameObjects)
+        {
+            PawnBrain brain = go.GetComponentInParent<PawnBrain>();
+            if (brain == null || UnitSpotBinderEditor.IsPlayerPawn(brain)) continue;
+            DelayedTriggerData delayed = UnitSpotBinderEditor.GetDelayedTrigger(tm, GuessDelayedIndex(brain.transform.position, tm));
+            if (delayed == null)
+            {
+                Debug.LogWarning("[UnitSpotBinder] no delayed trigger for " + brain.name);
+                continue;
+            }
+            if (UnitSpotBinderEditor.ConvertSceneEnemyToDelayedPose(brain.gameObject, tm, delayed, null) != null)
+                converted++;
+        }
+        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        Debug.Log("[UnitSpotBinder] converted to delayed: " + converted);
+    }
+
+    static int GuessDelayedIndex(Vector3 pos, TurnManager tm)
+    {
+        DelayedTriggerData best = null;
+        int bestIndex = -1;
+        float bestDist = float.MaxValue;
+        var field = typeof(TurnManager).GetField("listOfDelayedTriggers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var list = field.GetValue(tm) as List<DelayedTriggerData>;
+        if (list == null) return -1;
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i] == null || list[i].triggerObject == null) continue;
+            Transform dtrig = list[i].triggerObject.transform;
+            Vector3 sum = Vector3.zero;
+            int n = 0;
+            for (int c = 0; c < dtrig.childCount; c++)
+            {
+                sum += dtrig.GetChild(c).position;
+                n++;
+            }
+            if (n == 0) continue;
+            float dist = Vector3.Distance(new Vector3(sum.x / n, 0f, sum.z / n), new Vector3(pos.x, 0f, pos.z));
+            if (dist < bestDist)
+            {
+                bestDist = dist;
+                best = list[i];
+                bestIndex = i;
+            }
+        }
+        return bestIndex;
     }
 }

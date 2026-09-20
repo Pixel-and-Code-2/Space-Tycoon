@@ -19,9 +19,11 @@ public class SimpleEnemyAI : ISelectorBrain
     [System.Serializable]
     public class StageRule
     {
-        [Tooltip("While first non-Done main task index < this value, use profile")]
+        [Tooltip("While first non-Done main task index < this value, use these profiles")]
         public int untilMainTaskIndex = 999;
-        public EnemyAiProfile profile;
+        public EnemyAiProfile meleeProfile;
+        public EnemyAiProfile shooterProfile;
+        public EnemyAiProfile tankProfile;
     }
 
     class DetailedScenarioElement
@@ -180,13 +182,17 @@ public class SimpleEnemyAI : ISelectorBrain
         {
             case DetailedScenarioElementType.MovePawn:
                 currentScenarioIndex++;
+                if (el.controlledPawn == null || !el.controlledPawn.IsAlive)
+                    return (null, Vector3.zero);
                 if (el.position != Vector3.zero)
                     return (null, el.position);
-                if (el.targetPawn != null)
+                if (el.targetPawn != null && el.targetPawn.IsAlive)
                     return (null, el.targetPawn.GetTransform().position);
                 return (null, Vector3.zero);
             case DetailedScenarioElementType.AttackPawn:
                 currentScenarioIndex++;
+                if (el.controlledPawn == null || !el.controlledPawn.IsAlive)
+                    return (null, Vector3.zero);
                 IControlableSelectable target = el.targetPawn;
                 if (target == null || !target.IsAlive)
                 {
@@ -263,6 +269,7 @@ public class SimpleEnemyAI : ISelectorBrain
         if (data != null && data.AiProfileOverride != null)
             return data.AiProfileOverride;
 
+        EnemyAiRole role = EnemyAiDecide.InferRole(data, defaultProfile);
         int frontier = GetMainTaskFrontier();
         if (stageRules != null)
         {
@@ -270,16 +277,30 @@ public class SimpleEnemyAI : ISelectorBrain
             for (int i = 0; i < stageRules.Count; i++)
             {
                 StageRule rule = stageRules[i];
-                if (rule == null || rule.profile == null) continue;
+                if (rule == null) continue;
                 if (frontier < rule.untilMainTaskIndex)
                 {
                     if (best == null || rule.untilMainTaskIndex < best.untilMainTaskIndex)
                         best = rule;
                 }
             }
-            if (best != null) return best.profile;
+            if (best != null)
+            {
+                EnemyAiProfile picked = PickStageProfile(best, role);
+                if (picked != null) return picked;
+            }
         }
         return defaultProfile;
+    }
+
+    static EnemyAiProfile PickStageProfile(StageRule rule, EnemyAiRole role)
+    {
+        if (role == EnemyAiRole.Tank && rule.tankProfile != null) return rule.tankProfile;
+        if (role == EnemyAiRole.Shooter && rule.shooterProfile != null) return rule.shooterProfile;
+        if (role == EnemyAiRole.Melee && rule.meleeProfile != null) return rule.meleeProfile;
+        if (rule.meleeProfile != null) return rule.meleeProfile;
+        if (rule.shooterProfile != null) return rule.shooterProfile;
+        return rule.tankProfile;
     }
 
     public static int GetMainTaskFrontier()
@@ -322,6 +343,12 @@ public class SimpleEnemyAI : ISelectorBrain
                     AddStep(DetailedScenarioElementType.SetAttackState, actor, decision.target, Vector3.zero);
                     for (int i = 0; i < attacks; i++)
                         AddStep(DetailedScenarioElementType.AttackPawn, actor, decision.target, Vector3.zero);
+                    if (decision.retreatAfterAttack && decision.retreatTo != Vector3.zero)
+                    {
+                        AddStep(DetailedScenarioElementType.SetMoveState, actor, decision.target, decision.retreatTo);
+                        AddStep(DetailedScenarioElementType.MovePawn, actor, decision.target, decision.retreatTo);
+                        AddStep(DetailedScenarioElementType.WaitMovement, actor, decision.target, decision.retreatTo);
+                    }
                 }
                 break;
             default:

@@ -171,14 +171,11 @@ public class CombatAttackRunner : MonoBehaviour
     {
         bool isAlive = target.OnGetHit(damage);
         if (isMelee)
-        {
             attacker.OnMelee(worldPoint);
-            PawnDataController atk = attacker.GetComponent<PawnDataController>();
-            if (!isAlive && atk != null && atk.selectableType == SelectableType.Player)
-                StatBoostService.TryGrantAfterKill(attacker);
-        }
         else
             attacker.OnShoot(worldPoint, isAlive);
+        if (!isAlive)
+            PartyProgress.GrantKillXp(attacker, target);
     }
 
     public static bool NeedsPhysicalDice()

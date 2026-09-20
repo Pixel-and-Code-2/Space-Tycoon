@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class DiceFaceDebugLab : MonoBehaviour
 {
@@ -38,16 +41,59 @@ public class DiceFaceDebugLab : MonoBehaviour
         SyncLabels();
     }
 
+#if UNITY_EDITOR
+    void OnValidate()
+    {
+        if (config == null || config.sticks == null) return;
+        Camera cam = null;
+        SceneView sv = SceneView.lastActiveSceneView;
+        if (sv != null) cam = sv.camera;
+        if (cam == null) cam = Camera.main;
+        if (cam == null) return;
+        // Face the view direction (viewer), not the elevated SceneView lens position.
+        Vector3 toViewer = -cam.transform.forward;
+        if (toViewer.sqrMagnitude < 0.0001f) return;
+        toViewer.Normalize();
+        bool dirty = false;
+        for (int i = 0; i < config.sticks.Count; i++)
+        {
+            DiceShapeConfig.StickEntry s = config.sticks[i];
+            if (s == null || !s.aimAtCamera) continue;
+            s.eulerAngles = Quaternion.FromToRotation(Vector3.up, toViewer).eulerAngles;
+            s.aimAtCamera = false;
+            dirty = true;
+        }
+        if (dirty)
+        {
+            EditorUtility.SetDirty(config);
+            ApplyConfig();
+        }
+    }
+#endif
+
     void OnDrawGizmos()
     {
-        if (!drawAlways || config == null) return;
+        if (!drawAlways) return;
+        if (config == null)
+        {
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f, "DiceFaceDebugLab: config not assigned");
+#endif
+            return;
+        }
         Transform t = liveDie != null ? liveDie.transform : transform;
         DrawSticks(t, true);
     }
 
     void OnDrawGizmosSelected()
     {
-        if (config == null) return;
+        if (config == null)
+        {
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f, "DiceFaceDebugLab: config not assigned");
+#endif
+            return;
+        }
         Transform t = liveDie != null ? liveDie.transform : transform;
         DrawSticks(t, true);
     }

@@ -26,6 +26,16 @@ public class PawnDataController : MonoBehaviour
     float attackRange;
     float meleeReach;
 
+    float baseMaxHp;
+    float baseStrength;
+    float baseDexterity;
+    int skillHp;
+    int skillStr;
+    int skillDex;
+    int skillMeleeBonus;
+    int skillRangedBonus;
+    int unspentSkillPoints;
+
     float currentHp;
     float stamina;
     float walkedMeters;
@@ -66,6 +76,11 @@ public class PawnDataController : MonoBehaviour
 
     public CombatantStats Stats => combatantStats;
     public EnemyAiProfile AiProfileOverride => aiProfileOverride;
+
+    public void SetAiProfileOverride(EnemyAiProfile profile)
+    {
+        aiProfileOverride = profile;
+    }
     public float MaxHp => maxHp;
     public float CurrentHp => currentHp;
     public float MovePerTurn => movePerTurn;
@@ -85,6 +100,18 @@ public class PawnDataController : MonoBehaviour
     public float MovesToSkip => movesToSkip;
     public float HealingsAmount => healingsAmount;
 
+    public int SkillHp => skillHp;
+    public int SkillStr => skillStr;
+    public int SkillDex => skillDex;
+    public int SkillMeleeBonus => skillMeleeBonus;
+    public int SkillRangedBonus => skillRangedBonus;
+    public int UnspentSkillPoints => unspentSkillPoints;
+    public float BaseMaxHp => baseMaxHp;
+    public float BaseStrength => baseStrength;
+    public float BaseDexterity => baseDexterity;
+    public string BaseMeleeDamageExpr => combatantStats != null ? combatantStats.meleeDamage : "1d6";
+    public string BaseRangedDamageExpr => combatantStats != null ? combatantStats.rangedDamage : "";
+
     public float MaxMoveMetersFromStamina =>
         staminaPerMeter > 0.001f ? stamina / staminaPerMeter : 0f;
 
@@ -94,14 +121,73 @@ public class PawnDataController : MonoBehaviour
 
     public float MoveStaminaCost(float meters) => meters * staminaPerMeter;
 
-    public float RollMeleeDamage() => combatantStats != null ? combatantStats.RollMeleeDamage() : 1f;
-    public float RollRangedDamage() => combatantStats != null ? combatantStats.RollRangedDamage() : 1f;
+    public float RollMeleeDamage()
+    {
+        float dmg = combatantStats != null ? combatantStats.RollMeleeDamage() : 1f;
+        return dmg + skillMeleeBonus;
+    }
+
+    public float RollRangedDamage()
+    {
+        float dmg = combatantStats != null ? combatantStats.RollRangedDamage() : 1f;
+        return dmg + skillRangedBonus;
+    }
+
+    public void ApplySkillAllocations(int hp, int str, int dex, int melee, int ranged)
+    {
+        float oldMax = maxHp;
+        skillHp = Mathf.Max(0, hp);
+        skillStr = Mathf.Max(0, str);
+        skillDex = Mathf.Max(0, dex);
+        skillMeleeBonus = Mathf.Max(0, melee);
+        skillRangedBonus = Mathf.Max(0, ranged);
+        RecomputeFromSkills();
+        if (maxHp > oldMax)
+            currentHp += maxHp - oldMax;
+        else if (currentHp > maxHp)
+            currentHp = maxHp;
+        if (GameUI.Instance != null)
+        {
+            GameUI.Instance.OnChangeStats();
+            GameUI.Instance.UpdatePlayerData();
+        }
+    }
+
+    public void SetUnspentSkillPoints(int points)
+    {
+        unspentSkillPoints = Mathf.Max(0, points);
+    }
+
+    public void AddSkillPoints(int points)
+    {
+        if (points <= 0) return;
+        unspentSkillPoints += points;
+    }
+
+    void RecomputeFromSkills()
+    {
+        maxHp = baseMaxHp + skillHp;
+        strength = baseStrength + skillStr;
+        dexterity = baseDexterity + skillDex;
+    }
 
     public float GetAttackStaminaCost(bool isMelee)
     {
         GlobalSettingsAssets.StaminaCostSettings costs = GlobalSettingsAssets.GetStaminaCosts();
-        if (isMelee && HasRanged) return costs.shooterMeleeAttackCost;
-        if (isMelee) return costs.meleeAttackCost;
+        if (isMelee && HasRanged)
+        {
+            if (combatantStats != null && combatantStats.shooterMeleeAttackStaminaCost > 0.001f)
+                return combatantStats.shooterMeleeAttackStaminaCost;
+            return costs.shooterMeleeAttackCost;
+        }
+        if (isMelee)
+        {
+            if (combatantStats != null && combatantStats.meleeAttackStaminaCost > 0.001f)
+                return combatantStats.meleeAttackStaminaCost;
+            return costs.meleeAttackCost;
+        }
+        if (combatantStats != null && combatantStats.rangedAttackStaminaCost > 0.001f)
+            return combatantStats.rangedAttackStaminaCost;
         return costs.rangedAttackCost;
     }
 
@@ -110,21 +196,23 @@ public class PawnDataController : MonoBehaviour
         switch (stat)
         {
             case GlobalSettingsAssets.BoostStat.Strength:
-                strength = ApplyMode(strength, mode, value);
+                baseStrength = ApplyMode(baseStrength, mode, value);
                 break;
             case GlobalSettingsAssets.BoostStat.Dexterity:
-                dexterity = ApplyMode(dexterity, mode, value);
+                baseDexterity = ApplyMode(baseDexterity, mode, value);
                 break;
             case GlobalSettingsAssets.BoostStat.ArmorClass:
                 armorClass = ApplyMode(armorClass, mode, value);
                 break;
             case GlobalSettingsAssets.BoostStat.MaxHp:
                 float oldMax = maxHp;
-                maxHp = ApplyMode(maxHp, mode, value);
+                baseMaxHp = ApplyMode(baseMaxHp, mode, value);
+                RecomputeFromSkills();
                 if (maxHp > oldMax)
                     currentHp += maxHp - oldMax;
                 break;
         }
+        RecomputeFromSkills();
         if (GameUI.Instance != null)
         {
             GameUI.Instance.OnChangeStats();
@@ -206,15 +294,16 @@ public class PawnDataController : MonoBehaviour
     void ApplyStatsFromAsset(bool resetRuntime)
     {
         if (combatantStats == null) return;
-        maxHp = combatantStats.RollMaxHp();
+        baseMaxHp = combatantStats.RollMaxHp();
         staminaPerMeter = combatantStats.RollStaminaPerMeter();
         maxStamina = GlobalSettingsAssets.GetStaminaCosts().maxStamina;
         movePerTurn = staminaPerMeter > 0.001f ? maxStamina / staminaPerMeter : combatantStats.RollMove();
-        strength = combatantStats.RollStrength();
-        dexterity = combatantStats.RollDexterity();
+        baseStrength = combatantStats.RollStrength();
+        baseDexterity = combatantStats.RollDexterity();
         armorClass = combatantStats.RollArmorClass();
         attackRange = combatantStats.RollAttackRange();
         meleeReach = combatantStats.RollMeleeReach();
+        RecomputeFromSkills();
         if (resetRuntime)
             ResetRuntimeFromStats();
     }
@@ -308,6 +397,16 @@ public class PawnDataController : MonoBehaviour
         shotAmount = data.GetData("ShotAmount", UNIQUE_ID, shotAmount);
         meleeAmount = data.GetData("MeleeAmount", UNIQUE_ID, meleeAmount);
         movesToSkip = data.GetData("MovesToSkip", UNIQUE_ID, movesToSkip);
+        skillHp = data.GetData("SkillHp", UNIQUE_ID, skillHp);
+        skillStr = data.GetData("SkillStr", UNIQUE_ID, skillStr);
+        skillDex = data.GetData("SkillDex", UNIQUE_ID, skillDex);
+        skillMeleeBonus = data.GetData("SkillMelee", UNIQUE_ID, skillMeleeBonus);
+        skillRangedBonus = data.GetData("SkillRanged", UNIQUE_ID, skillRangedBonus);
+        unspentSkillPoints = data.GetData("SkillPoints", UNIQUE_ID, unspentSkillPoints);
+        baseMaxHp = data.GetData("BaseMaxHp", UNIQUE_ID, maxHp - skillHp);
+        baseStrength = data.GetData("BaseStrength", UNIQUE_ID, strength - skillStr);
+        baseDexterity = data.GetData("BaseDexterity", UNIQUE_ID, dexterity - skillDex);
+        RecomputeFromSkills();
         string selectableTypeKey = DataCompressor.GetRecordName("SelectableType", UNIQUE_ID);
         bool hasSelectableTypeInSave = data.intData != null && data.intData.ContainsKey(selectableTypeKey);
         selectableType = (SelectableType)data.GetData("SelectableType", UNIQUE_ID, (int)selectableType);
@@ -315,6 +414,23 @@ public class PawnDataController : MonoBehaviour
         {
             selectableType = SelectableType.Dead;
             currentHp = 0f;
+        }
+        if (selectableType == SelectableType.Dead)
+        {
+            if (!CorpseFadeDespawn.IsEnemyCorpse(gameObject))
+            {
+                CorpseFadeDespawn existing = GetComponent<CorpseFadeDespawn>();
+                if (existing != null)
+                    Destroy(existing);
+                NotifyStaminaChanged();
+                return;
+            }
+            if (!gameObject.activeSelf)
+                gameObject.SetActive(true);
+            gameObject.layer = LayerMask.NameToLayer("DeadPawn");
+            CorpseFadeDespawn corpse = GetComponent<CorpseFadeDespawn>();
+            if (corpse != null) corpse.OnRestoredFromSave();
+            else CorpseFadeDespawn.BeginOn(gameObject, destroyWhenDone: gameObject.name.StartsWith("EnemySpawned"));
         }
         NotifyStaminaChanged();
     }
@@ -339,7 +455,16 @@ public class PawnDataController : MonoBehaviour
             new SaveRecord() { recordName = "ShotAmount", recordType = SaveRecordType.floatNumber, floatValue = shotAmount },
             new SaveRecord() { recordName = "MeleeAmount", recordType = SaveRecordType.floatNumber, floatValue = meleeAmount },
             new SaveRecord() { recordName = "MovesToSkip", recordType = SaveRecordType.floatNumber, floatValue = movesToSkip },
-            new SaveRecord() { recordName = "SelectableType", recordType = SaveRecordType.integerNumber, intValue = (int)selectableType }
+            new SaveRecord() { recordName = "SelectableType", recordType = SaveRecordType.integerNumber, intValue = (int)selectableType },
+            new SaveRecord() { recordName = "SkillHp", recordType = SaveRecordType.integerNumber, intValue = skillHp },
+            new SaveRecord() { recordName = "SkillStr", recordType = SaveRecordType.integerNumber, intValue = skillStr },
+            new SaveRecord() { recordName = "SkillDex", recordType = SaveRecordType.integerNumber, intValue = skillDex },
+            new SaveRecord() { recordName = "SkillMelee", recordType = SaveRecordType.integerNumber, intValue = skillMeleeBonus },
+            new SaveRecord() { recordName = "SkillRanged", recordType = SaveRecordType.integerNumber, intValue = skillRangedBonus },
+            new SaveRecord() { recordName = "SkillPoints", recordType = SaveRecordType.integerNumber, intValue = unspentSkillPoints },
+            new SaveRecord() { recordName = "BaseMaxHp", recordType = SaveRecordType.floatNumber, floatValue = baseMaxHp },
+            new SaveRecord() { recordName = "BaseStrength", recordType = SaveRecordType.floatNumber, floatValue = baseStrength },
+            new SaveRecord() { recordName = "BaseDexterity", recordType = SaveRecordType.floatNumber, floatValue = baseDexterity }
         }, UNIQUE_ID);
     }
 

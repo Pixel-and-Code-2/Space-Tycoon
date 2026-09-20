@@ -23,10 +23,17 @@ public class ClickableItemsController : MonoBehaviour
         public class TextToShow
         {
             [System.Serializable]
+            public class TimedSfx
+            {
+                public AudioClip clip;
+                public float atSeconds;
+            }
+            [System.Serializable]
             public class CompleteSound
             {
                 public AudioClip clip;
                 public int authorIndex;
+                public List<TimedSfx> timedSfx = new List<TimedSfx>();
             }
             public TextShowTime showTime;
             public string text;
@@ -68,6 +75,17 @@ public class ClickableItemsController : MonoBehaviour
     private const string UNIQUE_ID = "ClickableItemsController";
     [SerializeField]
     private GameObject[] authorsObjects;
+
+    struct NarrativeVoiceEntry
+    {
+        public int authorIndex;
+        public AudioClip clip;
+        public string textPreview;
+        public List<TaskItem.TextToShow.TimedSfx> timedSfx;
+    }
+
+    readonly Queue<NarrativeVoiceEntry> narrativeVoiceQueue = new Queue<NarrativeVoiceEntry>();
+    int lastQuestionAuthorIndex = -1;
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -498,46 +516,155 @@ public class ClickableItemsController : MonoBehaviour
     {
         bool res = false;
         ISelectable target = item.selectable;
+        int askerForThisBatch = -1;
         foreach (TaskItem.TextToShow text in item.textToShow)
         {
             if (text.showOnlyOnStepByStep && HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] < 0.5f) continue;
             if (onlyShowTime.HasValue && text.showTime != onlyShowTime.Value) continue;
             if (text.shown) continue;
             text.shown = true;
-            int authorIndex = -1;
-            AudioClip clip = null;
-            if (text.author != -1)
+
+            int authorIndex = ResolveAuthorIndex(text, target, ref askerForThisBatch);
+            if (askerForThisBatch >= 0)
+                lastQuestionAuthorIndex = askerForThisBatch;
+
+            TaskItem.TextToShow.CompleteSound sound = FindSoundForAuthor(text, authorIndex);
+            AudioClip clip = sound != null ? sound.clip : null;
+            string preview = text.text != null && text.text.Length > 40 ? text.text.Substring(0, 40) + "..." : text.text;
+            narrativeVoiceQueue.Enqueue(new NarrativeVoiceEntry
             {
-                authorIndex = text.author;
-            }
-            else if (target != null && target.GetClickableItem() != null)
-            {
-                var clickable = target.GetClickableItem();
-                var checker = clickable.taskExecutor == null
-                    ? PawnController.Instance.currentSelectedPawn.gameObject
-                    : clickable.taskExecutor.gameObject;
-                for (int i = 0; i < authorsObjects.Length; i++)
-                {
-                    if (authorsObjects[i] == checker)
-                    {
-                        authorIndex = i;
-                        break;
-                    }
-                }
-            }
-            foreach (var sound in text.completeSounds)
-            {
-                if (sound.authorIndex == authorIndex)
-                {
-                    clip = sound.clip;
-                    break;
-                }
-            }
-            AudioController.Instance.Play(clip);
+                authorIndex = authorIndex,
+                clip = clip,
+                textPreview = preview,
+                timedSfx = sound != null ? sound.timedSfx : null
+            });
+            Debug.Log("[NarrativeQueue] enqueue author=" + authorIndex
+                + " (" + AuthorName(authorIndex) + ") clip=" + (clip != null ? clip.name : "NULL")
+                + " text='" + preview + "'");
+
             UILayersController.Instance.ShowOverlay(UILayersController.UILayer.NarrativeText, text.text + "_" + authorIndex);
             res = true;
         }
         return res;
+    }
+
+    int ResolveAuthorIndex(TaskItem.TextToShow text, ISelectable target, ref int askerInBatch)
+    {
+        // author == -1 → кто активировал (вопрос)
+        if (text.author == -1)
+        {
+            int asker = ResolveActivatorAuthor(target);
+            askerInBatch = asker;
+            return asker;
+        }
+
+        // author == 0 → фиксированно Заяц (механические реплики и т.п.)
+        if (text.author == 0)
+            return 0;
+
+        // author == 1 → фиксированный «первый» слот (часто Гусев в старых диалогах);
+        // если это первая реплика батча — считаем спрашивающим.
+        if (text.author == 1)
+        {
+            if (askerInBatch < 0)
+                askerInBatch = 1;
+            return 1;
+        }
+
+        // author == 2 → шаблон ответа: другой человек (не тот, кто спросил)
+        int askerId = askerInBatch >= 0 ? askerInBatch : lastQuestionAuthorIndex;
+        if (askerId < 0)
+            return 2;
+        if (askerId == 0)
+        {
+            int pick = Random.Range(1, 3);
+            Debug.Log("[Narrative] Zaya asked → random answerer=" + pick + " (" + AuthorName(pick) + ")");
+            return pick;
+        }
+        int other = askerId == 1 ? 2 : 1;
+        Debug.Log("[Narrative] asker=" + askerId + " (" + AuthorName(askerId) + ") → answerer=" + other + " (" + AuthorName(other) + ")");
+        return other;
+    }
+
+    int ResolveActivatorAuthor(ISelectable target)
+    {
+        GameObject checker = null;
+        if (target != null && target.GetClickableItem() != null)
+        {
+            var clickable = target.GetClickableItem();
+            checker = clickable.taskExecutor == null
+                ? (PawnController.Instance != null && PawnController.Instance.currentSelectedPawn != null
+                    ? PawnController.Instance.currentSelectedPawn.gameObject
+                    : null)
+                : clickable.taskExecutor.gameObject;
+        }
+        if (checker == null && PawnController.Instance != null && PawnController.Instance.currentSelectedPawn != null)
+            checker = PawnController.Instance.currentSelectedPawn.gameObject;
+        if (checker == null || authorsObjects == null) return -1;
+        for (int i = 0; i < authorsObjects.Length; i++)
+        {
+            if (authorsObjects[i] == checker)
+                return i;
+        }
+        return -1;
+    }
+
+    static TaskItem.TextToShow.CompleteSound FindSoundForAuthor(TaskItem.TextToShow text, int authorIndex)
+    {
+        if (text.completeSounds == null) return null;
+        foreach (var sound in text.completeSounds)
+        {
+            if (sound.authorIndex == authorIndex)
+                return sound;
+        }
+        return null;
+    }
+
+    string AuthorName(int index)
+    {
+        if (authorsObjects == null || index < 0 || index >= authorsObjects.Length || authorsObjects[index] == null)
+            return "?";
+        return authorsObjects[index].name;
+    }
+
+    public void PlayNextNarrativeVoice()
+    {
+        if (narrativeVoiceQueue.Count == 0)
+        {
+            Debug.Log("[NarrativeVoice] queue empty");
+            return;
+        }
+        NarrativeVoiceEntry entry = narrativeVoiceQueue.Dequeue();
+        string who = AuthorName(entry.authorIndex);
+        Debug.Log("[NarrativeVoice] PLAY author=" + entry.authorIndex + " (" + who + ") clip="
+            + (entry.clip != null ? entry.clip.name : "NULL") + " text='" + entry.textPreview + "'");
+        if (AudioController.Instance != null)
+        {
+            AudioController.Instance.ClearVoiceCues();
+            if (entry.clip != null)
+                AudioController.Instance.Play(entry.clip);
+            if (entry.timedSfx != null)
+            {
+                for (int i = 0; i < entry.timedSfx.Count; i++)
+                {
+                    TaskItem.TextToShow.TimedSfx cue = entry.timedSfx[i];
+                    if (cue == null || cue.clip == null) continue;
+                    AudioController.Instance.ScheduleVoiceCue(cue.clip, cue.atSeconds);
+                }
+            }
+        }
+        GameObject speaker = null;
+        if (authorsObjects != null && entry.authorIndex >= 0 && entry.authorIndex < authorsObjects.Length)
+            speaker = authorsObjects[entry.authorIndex];
+        SliderToPawnConnector.ShowVoiceFor(speaker, entry.clip);
+    }
+
+    public void ClearNarrativeVoiceQueue()
+    {
+        narrativeVoiceQueue.Clear();
+        if (AudioController.Instance != null)
+            AudioController.Instance.ClearVoiceCues();
+        SliderToPawnConnector.ClearVoiceIcons();
     }
 
     private void OnGameResumed()
@@ -574,9 +701,15 @@ public class ClickableItemsController : MonoBehaviour
 
     public void OnCompleteTask(ISelectable selectable)
     {
+        TaskItem completedItem = FinishTaskStatus(selectable);
+        if (completedItem != null)
+            PresentTaskComplete(selectable, completedItem);
+    }
+
+    public TaskItem FinishTaskStatus(ISelectable selectable)
+    {
         bool updated = false;
-        TaskItem completedItem = null;
-        completedItem = CompleteInProgressTask(mainTaskScenario, selectable, ref updated);
+        TaskItem completedItem = CompleteInProgressTask(mainTaskScenario, selectable, ref updated);
         if (completedItem == null)
             completedItem = CompleteInProgressTask(sideTaskScenario, selectable, ref updated);
         if (completedItem != null && !string.IsNullOrEmpty(completedItem.completeText))
@@ -586,13 +719,19 @@ public class ClickableItemsController : MonoBehaviour
         if (updated) OnTaskUpdated?.Invoke();
         if (completedItem != null)
         {
-            ShowTaskTexts(completedItem, TaskItem.TextShowTime.AfterComplete);
             ClickableItem clickable = selectable.GetClickableItem();
             IControlableSelectable executor = clickable != null ? clickable.taskExecutor : null;
             if (executor == null && PawnController.Instance != null)
                 executor = PawnController.Instance.currentSelectedPawn;
             StatBoostService.TryGrantAfterTask(executor, completedItem);
         }
+        return completedItem;
+    }
+
+    public void PresentTaskComplete(ISelectable selectable, TaskItem completedItem)
+    {
+        if (completedItem == null) return;
+        ShowTaskTexts(completedItem, TaskItem.TextShowTime.AfterComplete);
     }
 
     private TaskItem CompleteInProgressTask(List<TaskItem> scenario, ISelectable selectable, ref bool updated)

@@ -24,6 +24,8 @@ public static class EnemyAiDecide
         public IControlableSelectable target;
         public Vector3 moveTo;
         public int attackCount;
+        public bool retreatAfterAttack;
+        public Vector3 retreatTo;
     }
 
     public static AllyKind GetAllyKind(PawnDataController data)
@@ -131,33 +133,48 @@ public static class EnemyAiDecide
 
     static IControlableSelectable PickMeleeTarget(IControlableSelectable self, List<IControlableSelectable> allies, EnemyAiProfile profile)
     {
-        IControlableSelectable best = null;
-        int bestPri = int.MaxValue;
-        float bestDist = float.MaxValue;
+        var bag = new List<IControlableSelectable>();
+        var weights = new List<float>();
         foreach (var ally in allies)
         {
+            if (ally == null || !ally.IsAlive) continue;
             PawnDataController data = ally.GetComponent<PawnDataController>();
             AllyKind kind = GetAllyKind(data);
-            int pri = kind == AllyKind.Pistol ? profile.priorityPistol
-                : kind == AllyKind.Melee ? profile.priorityMeleeAlly
-                : profile.priorityRifle;
-            float dist = PathDistance(self, ally.GetTransform().position);
-            if (pri < bestPri || (pri == bestPri && dist < bestDist))
-            {
-                bestPri = pri;
-                bestDist = dist;
-                best = ally;
-            }
+            float w = kind == AllyKind.Pistol ? profile.weightPistol
+                : kind == AllyKind.Melee ? profile.weightMeleeAlly
+                : profile.weightRifle;
+            if (w <= 0.001f) continue;
+            bag.Add(ally);
+            weights.Add(w);
         }
-        return best;
+        return PickWeighted(bag, weights);
+    }
+
+    static List<IControlableSelectable> CollectInMeleeReach(
+        IControlableSelectable self,
+        PawnDataController selfData,
+        List<IControlableSelectable> allies)
+    {
+        var list = new List<IControlableSelectable>();
+        if (self == null || selfData == null || allies == null) return list;
+        Vector3 selfPos = self.GetTransform().position;
+        float reach = Mathf.Max(0.5f, selfData.MeleeReach);
+        for (int i = 0; i < allies.Count; i++)
+        {
+            IControlableSelectable ally = allies[i];
+            if (ally == null || !ally.IsAlive) continue;
+            float dist = Vector3.Distance(selfPos, ally.GetTransform().position);
+            if (dist <= reach + 0.05f)
+                list.Add(ally);
+        }
+        return list;
     }
 
     static IControlableSelectable PickShooterTarget(IControlableSelectable self, PawnDataController selfData, List<IControlableSelectable> allies, EnemyAiProfile profile, bool allowCloseZaya)
     {
-        IControlableSelectable best = null;
-        int bestPri = int.MaxValue;
-        float bestDist = float.MaxValue;
         Vector3 selfPos = self.GetTransform().position;
+        var bag = new List<IControlableSelectable>();
+        var weights = new List<float>();
         foreach (var ally in allies)
         {
             PawnDataController data = ally.GetComponent<PawnDataController>();
@@ -167,35 +184,52 @@ public static class EnemyAiDecide
                 continue;
             if (kind == AllyKind.Rifle && CombatResolver.HasWallBetween(selfPos, ally.GetTransform().position))
                 continue;
-            int pri = kind == AllyKind.Rifle ? profile.priorityRifleForShooter
-                : kind == AllyKind.Pistol ? profile.priorityPistolForShooter
-                : profile.priorityMeleeAllyForShooter;
-            if (pri < bestPri || (pri == bestPri && dist < bestDist))
+            float w = kind == AllyKind.Rifle ? profile.weightRifleForShooter
+                : kind == AllyKind.Pistol ? profile.weightPistolForShooter
+                : profile.weightMeleeAllyForShooter;
+            if (w <= 0.001f) continue;
+            bag.Add(ally);
+            weights.Add(w);
+        }
+        IControlableSelectable picked = PickWeighted(bag, weights);
+        if (picked != null) return picked;
+        IControlableSelectable best = null;
+        float bestDist = float.MaxValue;
+        foreach (var ally in allies)
+        {
+            float dist = Vector3.Distance(selfPos, ally.GetTransform().position);
+            if (dist < bestDist)
             {
-                bestPri = pri;
                 bestDist = dist;
                 best = ally;
-            }
-        }
-        if (best == null)
-        {
-            foreach (var ally in allies)
-            {
-                float dist = Vector3.Distance(selfPos, ally.GetTransform().position);
-                if (dist < bestDist)
-                {
-                    bestDist = dist;
-                    best = ally;
-                }
             }
         }
         return best;
     }
 
+    static IControlableSelectable PickWeighted(List<IControlableSelectable> bag, List<float> weights)
+    {
+        if (bag == null || bag.Count == 0) return null;
+        float sum = 0f;
+        for (int i = 0; i < weights.Count; i++) sum += weights[i];
+        if (sum <= 0.001f) return bag[0];
+        float r = Random.value * sum;
+        for (int i = 0; i < bag.Count; i++)
+        {
+            r -= weights[i];
+            if (r <= 0f) return bag[i];
+        }
+        return bag[bag.Count - 1];
+    }
+
     static Decision DecideMelee(IControlableSelectable self, PawnDataController selfData, List<IControlableSelectable> allies, EnemyAiProfile profile)
     {
         Decision d = new Decision { intent = Intent.Wait };
-        IControlableSelectable target = PickMeleeTarget(self, allies, profile);
+        List<IControlableSelectable> inReach = CollectInMeleeReach(self, selfData, allies);
+        bool sticky = inReach.Count > 0;
+        IControlableSelectable target = sticky
+            ? PickMeleeTarget(self, inReach, profile)
+            : PickMeleeTarget(self, allies, profile);
         if (target == null) return d;
         d.target = target;
         PawnDataController targetData = target.GetComponent<PawnDataController>();
@@ -216,6 +250,16 @@ public static class EnemyAiDecide
         bool lowStamina = profile.useStaminaGate && selfData.Stamina < profile.minStaminaToAttack - 0.001f;
         if (lowStamina && !finisher)
         {
+            if (sticky)
+            {
+                if (preview.canAttack)
+                {
+                    d.intent = Intent.Attack;
+                    d.attackCount = 1;
+                }
+                else d.intent = Intent.Wait;
+                return d;
+            }
             d.intent = Intent.Move;
             d.moveTo = ClosePoint(self, targetPos, 0.05f);
             return d;
@@ -223,26 +267,43 @@ public static class EnemyAiDecide
 
         if (profile.skipAttackAfterMove && selfData.HasMovedThisTurn && !finisher)
         {
-            float chance = profile.isQuarantine ? Mathf.Max(profile.attackAfterMoveChance, 0.6f) : profile.attackAfterMoveChance;
+            float chance = profile.attackAfterMoveChance;
             if (Random.value <= chance && preview.canAttack)
             {
                 d.intent = Intent.Attack;
                 d.attackCount = 1;
                 return d;
             }
-            if (dist > reach + 0.05f)
+            if (sticky || dist <= reach + 0.05f)
             {
-                d.intent = Intent.Move;
-                d.moveTo = ClosePoint(self, targetPos, 0.05f);
+                d.intent = preview.canAttack ? Intent.Attack : Intent.Wait;
+                if (d.intent == Intent.Attack) d.attackCount = 1;
+                return d;
             }
-            else d.intent = Intent.Wait;
+            d.intent = Intent.Move;
+            d.moveTo = ClosePoint(self, targetPos, 0.05f);
             return d;
         }
 
-        if (preview.canAttack && (!preview.disadvantage || !profile.skipAttackOnDisadvantage || finisher))
+        if (preview.canAttack)
         {
+            if (preview.disadvantage && !finisher && !sticky)
+            {
+                if (profile.skipAttackOnDisadvantage && Random.value > profile.disadvantageAttackChance)
+                {
+                    d.intent = Intent.Move;
+                    d.moveTo = ClosePoint(self, targetPos, 0.05f);
+                    return d;
+                }
+            }
             d.intent = Intent.Attack;
             d.attackCount = ResolveAttackCount(selfData, profile, false);
+            return d;
+        }
+
+        if (sticky)
+        {
+            d.intent = Intent.Wait;
             return d;
         }
 
@@ -260,6 +321,7 @@ public static class EnemyAiDecide
         float closestDist = float.MaxValue;
         foreach (var ally in allies)
         {
+            if (ally == null || !ally.IsAlive) continue;
             float dist = Vector3.Distance(selfPos, ally.GetTransform().position);
             if (dist < closestDist)
             {
@@ -268,17 +330,18 @@ public static class EnemyAiDecide
             }
         }
 
+        // GDD: 1–4 м — не стрелять, только отход / смена цели / милиш в упор
         if (closestThreat != null && closestDist < profile.minShootDistance - 0.05f)
         {
-            if (TryFindRetreat(self, allies, closestThreat.GetTransform().position, profile, out Vector3 retreat))
+            if (TryFindRetreat(self, allies, closestThreat.GetTransform().position, profile, out Vector3 retreatClose))
             {
                 d.intent = Intent.Move;
-                d.moveTo = retreat;
+                d.moveTo = retreatClose;
                 d.target = closestThreat;
                 return d;
             }
 
-            if (TryForcedCloseAttack(self, selfData, allies, closestThreat, profile, out Decision forced))
+            if (TryForcedCloseAttack(self, selfData, allies, profile, out Decision forced))
                 return forced;
 
             d.intent = Intent.Wait;
@@ -293,11 +356,30 @@ public static class EnemyAiDecide
         Vector3 targetPos = target.GetTransform().position;
         CombatResolver.Preview preview = Preview(selfData, targetData, selfPos, targetPos);
         bool finisher = IsFinisher(targetData, profile);
+        float targetDist = Vector3.Distance(selfPos, targetPos);
+
+        // GDD: ~5 м — 1 выстрел и отойти
+        if (closestThreat != null
+            && closestDist <= profile.minShootDistance + 0.75f
+            && preview.canAttack
+            && !preview.isMelee
+            && targetDist >= profile.minShootDistance - 0.05f
+            && !selfData.HasMovedThisTurn)
+        {
+            d.intent = Intent.Attack;
+            d.attackCount = 1;
+            if (TryFindRetreat(self, allies, closestThreat.GetTransform().position, profile, out Vector3 retreatAfter))
+            {
+                d.retreatAfterAttack = true;
+                d.retreatTo = retreatAfter;
+            }
+            return d;
+        }
 
         if (profile.skipAttackAfterMove && selfData.HasMovedThisTurn && !finisher)
         {
-            float chance = profile.isQuarantine ? Mathf.Max(profile.attackAfterMoveChance, 0.55f) : profile.attackAfterMoveChance;
-            if (preview.canAttack && Random.value <= chance)
+            if (preview.canAttack && !preview.isMelee && targetDist >= profile.minShootDistance - 0.05f
+                && Random.value <= profile.attackAfterMoveChance)
             {
                 d.intent = Intent.Attack;
                 d.attackCount = 1;
@@ -307,8 +389,42 @@ public static class EnemyAiDecide
             return d;
         }
 
-        if (preview.canAttack && (!preview.disadvantage || !profile.skipAttackOnDisadvantage || finisher))
+        if (preview.canAttack)
         {
+            if (preview.isMelee || targetDist < profile.minShootDistance - 0.05f)
+            {
+                if (preview.isMelee)
+                {
+                    d.intent = Intent.Attack;
+                    d.attackCount = 1;
+                    return d;
+                }
+                if (TryFindRetreat(self, allies, targetPos, profile, out Vector3 retreatNow))
+                {
+                    d.intent = Intent.Move;
+                    d.moveTo = retreatNow;
+                    return d;
+                }
+                d.intent = Intent.Wait;
+                return d;
+            }
+            if (preview.disadvantage && !finisher)
+            {
+                if (profile.skipAttackOnDisadvantage && Random.value > profile.disadvantageAttackChance)
+                {
+                    if (TryFindFireSpot(self, selfData, allies, target, profile, out Vector3 prepSpot))
+                    {
+                        d.intent = Intent.Move;
+                        d.moveTo = prepSpot;
+                        return d;
+                    }
+                    d.intent = Intent.Wait;
+                    return d;
+                }
+                d.intent = Intent.Attack;
+                d.attackCount = selfData.HasMovedThisTurn ? 1 : ResolveAttackCount(selfData, profile, false);
+                return d;
+            }
             d.intent = Intent.Attack;
             d.attackCount = ResolveAttackCount(selfData, profile, finisher);
             return d;
@@ -395,6 +511,7 @@ public static class EnemyAiDecide
         float min = float.MaxValue;
         for (int i = 0; i < allies.Count; i++)
         {
+            if (allies[i] == null || !allies[i].IsAlive) continue;
             float d = Vector3.Distance(pos, allies[i].GetTransform().position);
             if (d < min) min = d;
         }
@@ -405,7 +522,6 @@ public static class EnemyAiDecide
         IControlableSelectable self,
         PawnDataController selfData,
         List<IControlableSelectable> allies,
-        IControlableSelectable closestThreat,
         EnemyAiProfile profile,
         out Decision d)
     {
@@ -416,6 +532,7 @@ public static class EnemyAiDecide
         float bestMeleeDist = float.MaxValue;
         foreach (var ally in allies)
         {
+            if (ally == null || !ally.IsAlive) continue;
             PawnDataController data = ally.GetComponent<PawnDataController>();
             CombatResolver.Preview p = Preview(selfData, data, selfPos, ally.GetTransform().position);
             if (!p.canAttack || !p.isMelee) continue;
@@ -429,6 +546,7 @@ public static class EnemyAiDecide
         {
             d.intent = Intent.Attack;
             d.target = bestMelee;
+            d.attackCount = 1;
             return true;
         }
 
@@ -436,6 +554,7 @@ public static class EnemyAiDecide
         float farDist = -1f;
         foreach (var ally in allies)
         {
+            if (ally == null || !ally.IsAlive) continue;
             float dist = Vector3.Distance(selfPos, ally.GetTransform().position);
             if (dist >= profile.minShootDistance - 0.05f && dist > farDist)
             {
@@ -448,39 +567,12 @@ public static class EnemyAiDecide
             PawnDataController farData = far.GetComponent<PawnDataController>();
             CombatResolver.Preview farPreview = Preview(selfData, farData, selfPos, far.GetTransform().position);
             bool finisher = IsFinisher(farData, profile);
-            if (farPreview.canAttack && (!farPreview.disadvantage || !profile.skipAttackOnDisadvantage || finisher))
+            if (farPreview.canAttack && !farPreview.isMelee
+                && (!farPreview.disadvantage || !profile.skipAttackOnDisadvantage || finisher))
             {
                 d.intent = Intent.Attack;
                 d.target = far;
-                return true;
-            }
-        }
-
-        IControlableSelectable trappedTarget = PickShooterTarget(self, selfData, allies, profile, true);
-        if (trappedTarget == null) trappedTarget = closestThreat;
-        if (trappedTarget != null)
-        {
-            PawnDataController trappedData = trappedTarget.GetComponent<PawnDataController>();
-            CombatResolver.Preview trappedPreview = Preview(selfData, trappedData, selfPos, trappedTarget.GetTransform().position);
-            if (trappedPreview.canAttack)
-            {
-                d.intent = Intent.Attack;
-                d.target = trappedTarget;
-                return true;
-            }
-        }
-
-        if (closestThreat != null)
-        {
-            CombatResolver.Preview closestPreview = Preview(
-                selfData,
-                closestThreat.GetComponent<PawnDataController>(),
-                selfPos,
-                closestThreat.GetTransform().position);
-            if (closestPreview.canAttack)
-            {
-                d.intent = Intent.Attack;
-                d.target = closestThreat;
+                d.attackCount = 1;
                 return true;
             }
         }
@@ -501,10 +593,9 @@ public static class EnemyAiDecide
         PawnNavMesh nav = self.GetComponent<PawnNavMesh>();
         if (nav == null || nav.navMeshAgent == null) return false;
 
-        float minAlly = Mathf.Max(profile.minShootDistance, selfData.AttackRange * 0.55f);
+        float minAlly = profile.minShootDistance;
         float confident = Mathf.Max(profile.minShootDistance + 0.5f, selfData.AttackRange * 0.9f);
         float maxMove = selfData.MaxMoveMetersFromStamina;
-        Vector3 selfPos = self.GetTransform().position;
         Vector3 focusPos = focus.GetTransform().position;
         float sample = selfData.maxSampleDistance;
 
@@ -560,9 +651,9 @@ public static class EnemyAiDecide
         if (nav == null || nav.navMeshAgent == null) return false;
         PawnDataController data = self.GetComponent<PawnDataController>();
         float maxMove = data != null ? data.MaxMoveMetersFromStamina : profile.retreatMaxPath;
-        float attackRange = data != null ? data.AttackRange : profile.retreatDistance;
-        float ideal = attackRange * 0.9f;
-        if (ideal < 0.5f) return false;
+        float minSafe = profile.minShootDistance;
+        float ideal = profile.retreatDistance > 0.5f ? profile.retreatDistance : minSafe + 3f;
+        if (ideal < minSafe) ideal = minSafe + 1f;
         Vector3 selfPos = self.GetTransform().position;
         Vector3 away = selfPos - threatPos;
         away.y = 0f;
@@ -585,9 +676,9 @@ public static class EnemyAiDecide
                 if (!plan.valid) continue;
             }
             float distThreat = Vector3.Distance(plan.destination, threatPos);
-            if (distThreat < ideal - 0.05f) continue;
+            if (distThreat < minSafe - 0.05f) continue;
             float minAll = MinDistToAllies(plan.destination, allies);
-            if (minAll < ideal - 0.05f) continue;
+            if (minAll < minSafe - 0.05f) continue;
             float score = minAll * 2f - Mathf.Abs(distThreat - ideal) - plan.pathMeters * 0.05f + Random.Range(0f, 0.5f);
             if (score > bestScore)
             {

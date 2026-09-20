@@ -24,3 +24,6 @@ MonoBehaviour:
   rangedDamage: 
   attackRange: 1
   meleeReach: 3
+  rangedAttackStaminaCost: 0
+  meleeAttackStaminaCost: 45
+  shooterMeleeAttackStaminaCost: 0

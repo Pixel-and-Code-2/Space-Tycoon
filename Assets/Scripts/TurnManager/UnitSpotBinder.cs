@@ -16,6 +16,8 @@ public class UnitSpotBinder : MonoBehaviour
     GameObject enemyPrefab;
     [SerializeField]
     CombatantStats combatantStats;
+    [SerializeField]
+    EnemyAiProfile aiOverwrite;
     [Tooltip("Set Y=0 (NavMesh height on this map)")]
     [SerializeField]
     bool snapHeightToNavMesh = true;
@@ -33,6 +35,7 @@ public class UnitSpotBinder : MonoBehaviour
     public Mode SpotMode => mode;
     public GameObject EnemyPrefab => enemyPrefab;
     public CombatantStats CombatantStats => combatantStats;
+    public EnemyAiProfile AiOverwrite => aiOverwrite;
     public bool SnapHeightToNavMesh => snapHeightToNavMesh;
     public float NavMeshSampleDistance => navMeshSampleDistance;
     public WarFog WarFogOverride => warFogOverride;
