@@ -56,6 +56,10 @@ public class PathDrawer : MonoBehaviour
                 }
             }
         }
+        else if (pathLineWalkable != null)
+        {
+            pathLineWalkable.positionCount = 0;
+        }
 
         if (pointsOutOfRange != null)
         {
@@ -68,6 +72,10 @@ public class PathDrawer : MonoBehaviour
                     availableDistance += Vector3.Distance(pointsOutOfRange[i], pointsOutOfRange[i + 1]);
                 }
             }
+        }
+        else if (pathLineOutOfRange != null)
+        {
+            pathLineOutOfRange.positionCount = 0;
         }
     }
 

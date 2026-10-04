@@ -113,13 +113,31 @@ public class PawnDataController : MonoBehaviour
     public string BaseRangedDamageExpr => combatantStats != null ? combatantStats.rangedDamage : "";
 
     public float MaxMoveMetersFromStamina =>
-        staminaPerMeter > 0.001f ? stamina / staminaPerMeter : 0f;
+        MaxMoveMetersFromStaminaAfter(0f);
+
+    public float MaxMoveMetersFromStaminaAfter(float reservedStamina)
+    {
+        if (staminaPerMeter <= 0.001f) return 0f;
+        float left = Mathf.Max(0f, stamina - Mathf.Max(0f, reservedStamina));
+        return left / staminaPerMeter;
+    }
 
     public const float MinUsefulMoveMeters = 0.35f;
 
     public bool HasUsefulMoveBudget => MaxMoveMetersFromStamina >= MinUsefulMoveMeters - 0.001f;
 
     public float MoveStaminaCost(float meters) => meters * staminaPerMeter;
+
+    public string GetUiName()
+    {
+        EnemyAiRole role = EnemyAiDecide.InferRole(this, aiProfileOverride);
+        switch (role)
+        {
+            case EnemyAiRole.Shooter: return "Shooter";
+            case EnemyAiRole.Tank: return "Tank";
+            default: return "Melee";
+        }
+    }
 
     public float RollMeleeDamage()
     {
@@ -136,11 +154,11 @@ public class PawnDataController : MonoBehaviour
     public void ApplySkillAllocations(int hp, int str, int dex, int melee, int ranged)
     {
         float oldMax = maxHp;
-        skillHp = Mathf.Max(0, hp);
-        skillStr = Mathf.Max(0, str);
-        skillDex = Mathf.Max(0, dex);
-        skillMeleeBonus = Mathf.Max(0, melee);
-        skillRangedBonus = Mathf.Max(0, ranged);
+        skillHp = ClampSkill("hp", hp);
+        skillStr = ClampSkill("str", str);
+        skillDex = ClampSkill("dex", dex);
+        skillMeleeBonus = ClampSkill("melee", melee);
+        skillRangedBonus = ClampSkill("ranged", ranged);
         RecomputeFromSkills();
         if (maxHp > oldMax)
             currentHp += maxHp - oldMax;
@@ -162,6 +180,19 @@ public class PawnDataController : MonoBehaviour
     {
         if (points <= 0) return;
         unspentSkillPoints += points;
+    }
+
+    public int GetSkillCap(string statId)
+    {
+        return GlobalSettingsAssets.GetSkillCap(statId, combatantStats);
+    }
+
+    int ClampSkill(string statId, int value)
+    {
+        int v = Mathf.Max(0, value);
+        int cap = GetSkillCap(statId);
+        if (cap >= 0) v = Mathf.Min(v, cap);
+        return v;
     }
 
     void RecomputeFromSkills()
@@ -432,7 +463,23 @@ public class PawnDataController : MonoBehaviour
             if (corpse != null) corpse.OnRestoredFromSave();
             else CorpseFadeDespawn.BeginOn(gameObject, destroyWhenDone: gameObject.name.StartsWith("EnemySpawned"));
         }
+        else
+        {
+            RestoreLivingAfterLoad();
+        }
         NotifyStaminaChanged();
+    }
+
+    void RestoreLivingAfterLoad()
+    {
+        CorpseFadeDespawn corpse = GetComponent<CorpseFadeDespawn>();
+        if (corpse != null)
+        {
+            corpse.CancelRestore();
+            Destroy(corpse);
+        }
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
     }
 
     private void OnSaveData(System.Action<SaveRecord[], string> addSaveData)

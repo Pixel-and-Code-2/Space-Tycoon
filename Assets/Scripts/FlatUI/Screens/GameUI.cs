@@ -71,7 +71,9 @@ public class GameUI : IUILayer
     void WireNewLevelButton()
     {
         if (newLevelButton == null) return;
-        newLevelButton.onClick.RemoveAllListeners();
+        // Persistent inspector calls survive RemoveAllListeners and were aborting combat
+        // (ExitConfirmation.OnExitWithSave was wired on this button by mistake).
+        newLevelButton.onClick = new Button.ButtonClickedEvent();
         newLevelButton.onClick.AddListener(OnNewLevelClicked);
     }
 
@@ -280,7 +282,7 @@ public class GameUI : IUILayer
             return;
         if (UILayersController.Instance.overlayStack.Peek() != UILayersController.UILayer.GameUI)
             return;
-        if (PawnController.Instance != null && PawnController.Instance.currentSelectedPawn != null)
+        if (PhysicalDiceRoller.IsBusy)
             return;
         OnPause();
     }

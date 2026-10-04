@@ -475,7 +475,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 4
-        y: 268
+        y: 269
         width: 118
         height: 118
       alignment: 0
@@ -496,7 +496,7 @@ TextureImporter:
       name: TextButtonPressed
       rect:
         serializedVersion: 2
-        x: 4
+        x: 5
         y: 393
         width: 118
         height: 118

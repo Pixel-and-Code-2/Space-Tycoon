@@ -26,7 +26,6 @@ README.md                                   # вы находитесь здес
 ```
 - Unity 6.2
     - C#
-    - DynamicExpresso
 ```
 
 ## SpaceTycoon

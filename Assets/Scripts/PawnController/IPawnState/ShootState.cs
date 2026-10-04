@@ -11,6 +11,7 @@ public class ShootState : IPawnState
         IControlableSelectable pawn = controlableSelectable;
         if (pawn == null || !pawn.IsMoving())
             pathDrawer.SetVisible(false);
+        EnemyInfoPanel.HideEnemy();
     }
 
     PawnDataController AttackerData =>
@@ -61,6 +62,10 @@ public class ShootState : IPawnState
         {
             PawnDataController attacker = AttackerData;
             PawnDataController target = attackable.GetComponent<PawnDataController>();
+            if (target != null && target.selectableType == SelectableType.Enemy)
+                EnemyInfoPanel.ShowEnemy(target);
+            else
+                EnemyInfoPanel.HideEnemy();
             CombatResolver.Preview p = CombatResolver.GetPreview(attacker, target, originPoint, attackable.GetTransform().position);
             Vector3[] line = new Vector3[] { originPoint, attackable.GetTransform().position };
             if (!p.canAttack)
@@ -83,12 +88,14 @@ public class ShootState : IPawnState
         }
         else if (hit == ScreenCastHitResult.FloorHit)
         {
+            EnemyInfoPanel.HideEnemy();
             pathDrawer.SetTextColor(Color.red);
             pathDrawer.SetText(dist.ToString("F1") + "m", screenPoint);
             pathDrawer.SetPathPoints(null, new Vector3[] { originPoint, worldPoint });
         }
         else
         {
+            EnemyInfoPanel.HideEnemy();
             pathDrawer.SetVisible(false);
             return;
         }

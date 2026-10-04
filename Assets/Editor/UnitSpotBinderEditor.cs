@@ -114,6 +114,7 @@ public class UnitSpotBinderEditor : Editor
             return 0;
         }
 
+        int renamed = EnsureUniqueEnemyNamesInScene();
         int bound = 0;
         foreach (PawnBrain brain in Object.FindObjectsByType<PawnBrain>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
@@ -126,7 +127,55 @@ public class UnitSpotBinderEditor : Editor
 
         EditorUtility.SetDirty(turnManager);
         EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        if (renamed > 0)
+            Debug.Log("[UnitSpotBinder] renamed duplicates=" + renamed);
         return bound;
+    }
+
+    public static int EnsureUniqueEnemyNamesInScene()
+    {
+        var groups = new Dictionary<string, List<GameObject>>();
+        foreach (PawnBrain brain in Object.FindObjectsByType<PawnBrain>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (brain == null || IsPlayerPawn(brain)) continue;
+            string n = brain.gameObject.name;
+            if (!groups.TryGetValue(n, out List<GameObject> list))
+            {
+                list = new List<GameObject>();
+                groups[n] = list;
+            }
+            list.Add(brain.gameObject);
+        }
+        int renamed = 0;
+        foreach (var kv in groups)
+        {
+            if (kv.Value.Count <= 1) continue;
+            for (int i = 1; i < kv.Value.Count; i++)
+            {
+                GameObject go = kv.Value[i];
+                string unique = MakeUniqueEnemyName(kv.Key);
+                if (unique == go.name) continue;
+                Undo.RecordObject(go, "Unique enemy save name");
+                go.name = unique;
+                EditorUtility.SetDirty(go);
+                renamed++;
+            }
+        }
+        return renamed;
+    }
+
+    public static string MakeUniqueEnemyName(string baseName)
+    {
+        if (string.IsNullOrEmpty(baseName)) baseName = "Enemy";
+        var used = new HashSet<string>();
+        foreach (PawnBrain brain in Object.FindObjectsByType<PawnBrain>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (brain != null) used.Add(brain.gameObject.name);
+        }
+        if (!used.Contains(baseName)) return baseName;
+        int n = 2;
+        while (used.Contains(baseName + "_" + n)) n++;
+        return baseName + "_" + n;
     }
 
     public static bool BindExistingSceneEnemy(
@@ -391,7 +440,7 @@ public class UnitSpotBinderEditor : Editor
         {
             instance = (GameObject)PrefabUtility.InstantiatePrefab(binder.EnemyPrefab);
             Undo.RegisterCreatedObjectUndo(instance, "Spawn UnitSpot enemy");
-            instance.name = binder.EnemyPrefab.name + "_" + binder.name;
+            instance.name = MakeUniqueEnemyName(binder.EnemyPrefab.name + "_" + binder.name);
         }
 
         Undo.RecordObject(instance.transform, "Place UnitSpot enemy");

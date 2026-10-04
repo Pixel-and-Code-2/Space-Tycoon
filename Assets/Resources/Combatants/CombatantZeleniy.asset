@@ -27,3 +27,9 @@ MonoBehaviour:
   rangedAttackStaminaCost: 25
   meleeAttackStaminaCost: 33
   shooterMeleeAttackStaminaCost: 0
+  skillAllocationCaps:
+    maxHp: -1
+    maxStr: -1
+    maxDex: -1
+    maxMelee: -1
+    maxRanged: -1

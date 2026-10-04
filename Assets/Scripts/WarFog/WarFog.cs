@@ -33,6 +33,9 @@ public class WarFog : MonoBehaviour
     {
         SaveHub.Instance.OnSave += OnSave;
         SaveHub.Instance.OnLoad += OnLoad;
+        // Late subscribers (PawnBrain) miss Awake HideEverything — re-notify.
+        if (isHidden)
+            OnWarFogStart?.Invoke();
     }
 
     private bool IsExcludedLayer(GameObject go)
@@ -135,12 +138,34 @@ public class WarFog : MonoBehaviour
         }
         SetExcludedActive(false);
         int warFogLayer = LayerMask.NameToLayer("WarFog");
-        if (othersToInclude == null) return;
-        foreach (GameObject other in othersToInclude)
+        if (othersToInclude != null)
         {
-            if (other == null || IsExcludedLayer(other)) continue;
-            other.layer = warFogLayer;
+            foreach (GameObject other in othersToInclude)
+            {
+                if (other == null || IsExcludedLayer(other)) continue;
+                SetFogLayer(other, warFogLayer);
+                PawnDataController[] nested = other.GetComponentsInChildren<PawnDataController>(true);
+                for (int i = 0; i < nested.Length; i++)
+                {
+                    if (nested[i] != null)
+                        SetFogLayer(nested[i].gameObject, warFogLayer);
+                }
+            }
         }
+        PawnDataController[] underFog = GetComponentsInChildren<PawnDataController>(true);
+        for (int i = 0; i < underFog.Length; i++)
+        {
+            if (underFog[i] != null)
+                SetFogLayer(underFog[i].gameObject, warFogLayer);
+        }
+    }
+
+    void SetFogLayer(GameObject go, int warFogLayer)
+    {
+        if (go == null) return;
+        if (!objectOriginalLayers.ContainsKey(go))
+            objectOriginalLayers[go] = go.layer;
+        go.layer = warFogLayer;
     }
 
     private void ApplyVisibleVisuals()
@@ -174,12 +199,17 @@ public class WarFog : MonoBehaviour
             OnWarFogEnd?.Invoke();
             if (othersToInclude != null && UI3DManager.Instance != null)
             {
+                int warFogLayer = LayerMask.NameToLayer("WarFog");
                 foreach (GameObject other in othersToInclude)
                 {
                     if (other == null || IsExcludedLayer(other)) continue;
-                    if (other.GetComponent<PawnDataController>() == null) continue;
-                    if (other.layer != LayerMask.NameToLayer("WarFog"))
-                        UI3DManager.Instance.RegisterPawn(other);
+                    PawnDataController[] pawns = other.GetComponentsInChildren<PawnDataController>(true);
+                    for (int i = 0; i < pawns.Length; i++)
+                    {
+                        if (pawns[i] == null) continue;
+                        if (pawns[i].gameObject.layer == warFogLayer) continue;
+                        UI3DManager.Instance.RegisterPawn(pawns[i].gameObject);
+                    }
                 }
             }
         }

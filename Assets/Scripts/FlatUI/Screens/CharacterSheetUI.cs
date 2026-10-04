@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,8 +25,11 @@ public class CharacterSheetUI : IUILayer
     {
         public IControlableSelectable pawn;
         public string displayName;
+        public Sprite portraitSprite;
         public IconButtonStyleFiller pageIndicator;
     }
+
+    const string ConfirmApplyMessage = "Применить на всегда?";
 
     [Header("Shared layout (one source)")]
     [SerializeField]
@@ -72,6 +76,15 @@ public class CharacterSheetUI : IUILayer
         BeginSession();
         WirePageIndicators();
         ShowPage(currentPage);
+        StartCoroutine(RefreshAfterChildrenEnable());
+    }
+
+    IEnumerator RefreshAfterChildrenEnable()
+    {
+        yield return null;
+        RefreshPage(currentPage);
+        yield return new WaitForEndOfFrame();
+        RefreshPage(currentPage);
     }
 
     void RebuildLayoutNow()
@@ -128,7 +141,14 @@ public class CharacterSheetUI : IUILayer
     {
         currentPage = Mathf.Clamp(pageIndex, 0, Mathf.Max(0, pages.Count - 1));
         if (UILayersController.Instance == null) return;
-        // Always base on GameUI so we never open on top of MainMenu.
+        // Overlay on current stack so combat (step-by-step / turn queue) is not wiped.
+        if (UILayersController.Instance.overlayStack != null
+            && UILayersController.Instance.overlayStack.Count > 0
+            && UILayersController.Instance.overlayStack.Contains(UILayersController.UILayer.GameUI))
+        {
+            UILayersController.Instance.ShowOverlay(UILayersController.UILayer.CharacterSheet);
+            return;
+        }
         UILayersController.Instance.SetLayerKeepingGameUI(UILayersController.UILayer.CharacterSheet);
     }
 
@@ -187,6 +207,7 @@ public class CharacterSheetUI : IUILayer
         if (delta > 0)
         {
             if (draftPoints[page] <= 0) return;
+            if (!CanRaiseStat(data, id, value)) return;
             value++;
             draftPoints[page]--;
             dirty = true;
@@ -250,7 +271,7 @@ public class CharacterSheetUI : IUILayer
             ShowPage(currentPage);
             return;
         }
-        ConfirmDialog.Show("Вы уверены?", () =>
+        ConfirmDialog.Show(ConfirmApplyMessage, () =>
         {
             CommitAll();
             BeginSession();
@@ -266,7 +287,7 @@ public class CharacterSheetUI : IUILayer
             leave?.Invoke();
             return;
         }
-        ConfirmDialog.Show("Вы уверены?", () =>
+        ConfirmDialog.Show(ConfirmApplyMessage, () =>
         {
             CommitAll();
             leave?.Invoke();
@@ -307,10 +328,19 @@ public class CharacterSheetUI : IUILayer
             else if (page.pawn != null)
                 nameText.text = page.pawn.name;
         }
+        EnsureSinglePortraitImage();
+        if (portrait != null)
+        {
+            portrait.sprite = page.portraitSprite;
+            portrait.enabled = page.portraitSprite != null;
+            portrait.color = Color.white;
+            portrait.gameObject.SetActive(true);
+        }
         if (pointsText != null)
             pointsText.text = "Доступные очки: " + (draftPoints != null && index < draftPoints.Length ? draftPoints[index] : 0);
 
         bool hasRanged = data != null && data.HasRanged;
+        int pointsLeft = draftPoints != null && index < draftPoints.Length ? draftPoints[index] : 0;
         for (int r = 0; r < rows.Count; r++)
         {
             StatRow row = rows[r];
@@ -326,6 +356,72 @@ public class CharacterSheetUI : IUILayer
             if (row.valueText != null)
                 row.valueText.text = FormatStat(index, data, row.id);
             WireRow(index, row);
+            if (row.editable)
+                ApplyRowButtonState(index, data, row, pointsLeft);
+        }
+    }
+
+    void ApplyRowButtonState(int page, PawnDataController data, StatRow row, int pointsLeft)
+    {
+        int value;
+        int committed;
+        if (!TryGetDraft(page, data, row.id, out value, out committed)) return;
+        SetRowButtonInteractable(row.plusButton, pointsLeft > 0 && CanRaiseStat(data, row.id, value));
+        SetRowButtonInteractable(row.minusButton, value > committed);
+    }
+
+    static bool CanRaiseStat(PawnDataController data, string id, int currentValue)
+    {
+        int cap = data != null ? data.GetSkillCap(id) : GlobalSettingsAssets.GetSkillCap(id);
+        if (cap < 0) return true;
+        return currentValue < cap;
+    }
+
+    void EnsureSinglePortraitImage()
+    {
+        Transform left = leftRoot != null ? leftRoot.transform : transform.Find("Body/LeftPage");
+        if (left == null) return;
+        Image keep = portrait;
+        for (int i = left.childCount - 1; i >= 0; i--)
+        {
+            Transform ch = left.GetChild(i);
+            if (ch.name != "Portrait") continue;
+            Image img = ch.GetComponent<Image>();
+            if (img == null) continue;
+            if (keep == null)
+            {
+                keep = img;
+                continue;
+            }
+            if (img == keep) continue;
+            ch.gameObject.SetActive(false);
+        }
+        if (portrait == null && keep != null)
+            portrait = keep;
+    }
+
+    static void SetRowButtonInteractable(Button button, bool on)
+    {
+        if (button == null) return;
+        button.interactable = on;
+        IconButtonStyleFiller filler = button.GetComponent<IconButtonStyleFiller>();
+        if (filler != null)
+            filler.SetInteractable(on);
+    }
+
+    bool TryGetDraft(int page, PawnDataController data, string id, out int value, out int committed)
+    {
+        value = 0;
+        committed = 0;
+        if (data == null) return false;
+        switch (id)
+        {
+            case "hp": value = draftHp[page]; committed = data.SkillHp; return true;
+            case "str": value = draftStr[page]; committed = data.SkillStr; return true;
+            case "dex": value = draftDex[page]; committed = data.SkillDex; return true;
+            case "melee": value = draftMelee[page]; committed = data.SkillMeleeBonus; return true;
+            case "ranged": value = draftRanged[page]; committed = data.SkillRangedBonus; return true;
+            default: return false;
         }
     }
 

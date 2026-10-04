@@ -144,6 +144,8 @@ public class CorpseFadeDespawn : MonoBehaviour
 
     void Finish()
     {
+        if (UI3DManager.Instance != null)
+            UI3DManager.Instance.UnregisterPawn(gameObject);
         if (destroyWhenDone)
         {
             Destroy(gameObject);
@@ -156,5 +158,13 @@ public class CorpseFadeDespawn : MonoBehaviour
     public void OnRestoredFromSave()
     {
         Restart();
+    }
+
+    public void CancelRestore()
+    {
+        done = true;
+        fading = false;
+        enabled = false;
+        ApplyAlpha(1f);
     }
 }

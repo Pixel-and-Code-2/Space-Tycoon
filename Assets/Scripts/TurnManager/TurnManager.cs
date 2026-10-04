@@ -112,6 +112,7 @@ public class TurnManager : MonoBehaviour
             Destroy(gameObject);
         }
         stationWarnings = GetComponent<AudioSource>();
+        EnsureUniqueEnemyNamesRuntime();
     }
 
     private void Start()
@@ -119,6 +120,36 @@ public class TurnManager : MonoBehaviour
         SaveHub.Instance.OnLoad += OnLoadData;
         SaveHub.Instance.OnSave += OnSaveData;
         StartCoroutine(DelayFrame(() => SyncEndTurnButtonsWithMovement()));
+    }
+
+    static void EnsureUniqueEnemyNamesRuntime()
+    {
+        var groups = new Dictionary<string, List<GameObject>>();
+        PawnBrain[] brains = FindObjectsByType<PawnBrain>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < brains.Length; i++)
+        {
+            PawnBrain brain = brains[i];
+            if (brain == null) continue;
+            if (brain.GetSelectableType() == SelectableType.Player) continue;
+            string n = brain.gameObject.name;
+            if (!groups.TryGetValue(n, out List<GameObject> list))
+            {
+                list = new List<GameObject>();
+                groups[n] = list;
+            }
+            list.Add(brain.gameObject);
+        }
+        foreach (var kv in groups)
+        {
+            if (kv.Value.Count <= 1) continue;
+            int next = 2;
+            for (int i = 1; i < kv.Value.Count; i++)
+            {
+                while (GameObject.Find(kv.Key + "_" + next) != null) next++;
+                kv.Value[i].name = kv.Key + "_" + next;
+                next++;
+            }
+        }
     }
     private void OnLoadData(LoadedData data)
     {
@@ -834,6 +865,10 @@ public class TurnManager : MonoBehaviour
                 hadCombat = true;
             HandleInittingGlobalVars.globalParameters.parametersDict[HandleInittingGlobalVars.IS_STEP_BY_STEP_KEY] = 0f;
         }
+        for (int i = 0; i < listOfTriggers.Count; i++)
+            listOfTriggers[i].isActive = false;
+        for (int i = 0; i < listOfDelayedTriggers.Count; i++)
+            listOfDelayedTriggers[i].isActive = false;
         ClearTurnQueue();
         CurrentActor = null;
         turnInProgress = false;
@@ -841,6 +876,11 @@ public class TurnManager : MonoBehaviour
         if (hadCombat)
             OnTriggerZoneExit?.Invoke();
         SyncEndTurnButtonsWithMovement();
+    }
+
+    public void NotifyCombatantDied(IControlableSelectable pawn)
+    {
+        PruneDeadFromQueue();
     }
 
     private void PruneDeadFromQueue()

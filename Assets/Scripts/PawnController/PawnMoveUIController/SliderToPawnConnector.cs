@@ -33,6 +33,8 @@ public class SliderToPawnConnector : MonoBehaviour
     [SerializeField] private SliderController allyHpSlider;
     [SerializeField] private SliderController enemyHpSlider;
     [SerializeField] private SliderController allyStaminaSlider;
+    [Tooltip("RTL red overlay (spent + planned). Usually sibling 'Stamina Cost preview'.")]
+    [SerializeField] private SliderController allyStaminaPreviewSlider;
 
     [Header("Action Icons")]
     [SerializeField] private GameObject walkIcon;
@@ -170,16 +172,43 @@ public class SliderToPawnConnector : MonoBehaviour
         if (pawn == null || allyStaminaSlider == null) return;
         if (pawn.selectableType != SelectableType.Player) return;
         pawnStamina = pawn.Stamina;
-        if (ShootOnMoveController.Instance != null && ShootOnMoveController.Instance.IsActive)
-            pawnStamina = Mathf.Max(0f, pawnStamina - ShootOnMoveController.PlannedStaminaSpend);
-        bool staminaChanged = Mathf.Abs(pawnStamina - pawnStaminaCached) >= 0.001f;
+        float maxStamina = Mathf.Max(0.001f, pawn.MaxStamina);
+        IControlableSelectable owner = pawn != null ? pawn.GetComponent<IControlableSelectable>() : null;
+        bool previewActive = ShootOnMoveController.IsStaminaPreviewActiveFor(owner);
+        float plannedSpend = ShootOnMoveController.GetStaminaPreviewSpendFor(owner);
+        float spent = Mathf.Max(0f, maxStamina - pawnStamina);
+        float redSpend = previewActive ? Mathf.Min(maxStamina, spent + plannedSpend) : 0f;
+        bool staminaChanged = Mathf.Abs(pawnStamina - pawnStaminaCached) >= 0.001f
+            || Mathf.Abs(redSpend - previewSpendCached) >= 0.001f
+            || previewActive != previewActiveCached;
         if (staminaChanged)
         {
             pawnStaminaCached = pawnStamina;
+            previewSpendCached = redSpend;
+            previewActiveCached = previewActive;
             allyStaminaSlider.SetValue(pawnStamina);
+            ApplyStaminaPreview(redSpend, maxStamina, previewActive);
         }
         bool alive = pawnSelectableType != SelectableType.Dead && pawnHealth > 0.01f;
         UpdateActionIcons(alive);
+    }
+
+    void ApplyStaminaPreview(float redSpend, float maxStamina, bool previewActive)
+    {
+        if (allyStaminaPreviewSlider != null)
+        {
+            if (!previewActive)
+            {
+                allyStaminaPreviewSlider.gameObject.SetActive(false);
+                return;
+            }
+            if (!allyStaminaPreviewSlider.gameObject.activeSelf)
+                allyStaminaPreviewSlider.gameObject.SetActive(true);
+            allyStaminaPreviewSlider.SetRange(0f, maxStamina);
+            allyStaminaPreviewSlider.ForceSetValue(redSpend);
+            return;
+        }
+        allyStaminaSlider.SetPreviewSpend(redSpend, maxStamina, previewActive);
     }
 
     private float GetStamina()
@@ -269,6 +298,8 @@ public class SliderToPawnConnector : MonoBehaviour
     private float pawnHealthCached;
     private float pawnHealth;
     private float pawnStaminaCached;
+    private float previewSpendCached;
+    private bool previewActiveCached;
     private float pawnStamina;
     private SelectableType pawnSelectableTypeCached;
     private SelectableType pawnSelectableType;
@@ -357,6 +388,8 @@ public class SliderToPawnConnector : MonoBehaviour
             {
                 allyStaminaSlider.gameObject.SetActive(isAlive);
             }
+            if (!isAlive && allyStaminaPreviewSlider != null)
+                allyStaminaPreviewSlider.gameObject.SetActive(false);
 
             UpdateActionIcons(isAlive);
         }
@@ -422,7 +455,25 @@ public class SliderToPawnConnector : MonoBehaviour
                 allyStaminaSlider.SetBounds(0f, maxStamina);
                 pawnStamina = TryGetParam(PawnDataController.STAMINA_KEY);
                 pawnStaminaCached = pawnStamina;
+                previewSpendCached = 0f;
+                previewActiveCached = false;
                 allyStaminaSlider.SetValue(pawnStamina);
+                if (allyStaminaPreviewSlider != null)
+                {
+                    allyStaminaPreviewSlider.SetRange(0f, maxStamina);
+                    allyStaminaPreviewSlider.ForceSetValue(0f);
+                    allyStaminaPreviewSlider.gameObject.SetActive(false);
+                    Slider previewSlider = allyStaminaPreviewSlider.GetComponent<Slider>();
+                    if (previewSlider != null)
+                    {
+                        previewSlider.interactable = false;
+                        previewSlider.direction = Slider.Direction.RightToLeft;
+                    }
+                }
+                else
+                {
+                    allyStaminaSlider.SetPreviewSpend(0f, maxStamina);
+                }
             }
             UpdateActionIcons(isAlive);
         }
@@ -442,6 +493,8 @@ public class SliderToPawnConnector : MonoBehaviour
             {
                 allyStaminaSlider.gameObject.SetActive(false);
             }
+            if (allyStaminaPreviewSlider != null)
+                allyStaminaPreviewSlider.gameObject.SetActive(false);
             UpdateActionIcons(false);
         }
         else
@@ -453,6 +506,8 @@ public class SliderToPawnConnector : MonoBehaviour
             }
             if (allyHpSlider != null) allyHpSlider.gameObject.SetActive(false);
             if (allyStaminaSlider != null) allyStaminaSlider.gameObject.SetActive(false);
+            if (allyStaminaPreviewSlider != null)
+                allyStaminaPreviewSlider.gameObject.SetActive(false);
             UpdateActionIcons(false);
         }
         ForceLayoutRebuild();

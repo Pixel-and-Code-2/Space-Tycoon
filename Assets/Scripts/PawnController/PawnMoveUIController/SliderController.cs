@@ -11,6 +11,9 @@ public class SliderController : MonoBehaviour
     private Image fillImage;
     [SerializeField]
     private Image backgroundImage;
+    [Tooltip("Optional red preview fill (right→left). Assign Rect/Image slot in prefab.")]
+    [SerializeField]
+    private Image previewFillImage;
 
     [Header("Slider values")]
     [SerializeField]
@@ -68,15 +71,34 @@ public class SliderController : MonoBehaviour
     private float cachedValue = 0f;
     public void SetValue(float value)
     {
+        if (slider == null) slider = GetComponent<Slider>();
         if (slider == null) return;
         if (value == cachedValue) return;
         cachedValue = value;
-        slider.value = value;
+        slider.SetValueWithoutNotify(value);
+    }
+
+    public void ForceSetValue(float value)
+    {
+        if (slider == null) slider = GetComponent<Slider>();
+        if (slider == null) return;
+        cachedValue = value;
+        slider.SetValueWithoutNotify(value);
     }
 
     public float GetValue()
     {
         return cachedValue;
+    }
+
+    public void SetRange(float min, float max)
+    {
+        if (slider == null) slider = GetComponent<Slider>();
+        if (slider == null) return;
+        minValue = min;
+        maxValue = max;
+        slider.minValue = min;
+        slider.maxValue = max;
     }
 
     public void SetClass(SelectableType selectableType)
@@ -102,5 +124,20 @@ public class SliderController : MonoBehaviour
         slider.minValue = minValue;
         slider.maxValue = maxValue;
         SetValue(maxValue);
+    }
+
+    public void SetPreviewSpend(float spend, float max, bool forceShow = false)
+    {
+        if (previewFillImage == null) return;
+        if (max <= 0.001f || (!forceShow && spend <= 0.001f))
+        {
+            previewFillImage.gameObject.SetActive(false);
+            return;
+        }
+        previewFillImage.gameObject.SetActive(true);
+        previewFillImage.type = Image.Type.Filled;
+        previewFillImage.fillMethod = Image.FillMethod.Horizontal;
+        previewFillImage.fillOrigin = (int)Image.OriginHorizontal.Right;
+        previewFillImage.fillAmount = Mathf.Clamp01(spend / max);
     }
 }

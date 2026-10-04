@@ -48,13 +48,13 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
     private OnToggleInteractableBehaviour onToggleInteractableBehaviour = OnToggleInteractableBehaviour.TurnOnInteractableFirst;
     void Awake()
     {
-        selectable = GetComponent<Selectable>();
+        EnsureSelectable();
     }
 
     void Start()
     {
         if (defaultOnEnable)
-            OnValidate();
+            ApplyDefaultOrDisabledVisual();
     }
     void OnValidate()
     {
@@ -63,7 +63,26 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
     void OnEnable()
     {
         if (defaultOnEnable)
-            ActivateState(defaultState);
+            ApplyDefaultOrDisabledVisual();
+    }
+
+    void EnsureSelectable()
+    {
+        if (selectable == null)
+            selectable = GetComponent<Selectable>();
+    }
+
+    void ApplyDefaultOrDisabledVisual()
+    {
+        EnsureSelectable();
+        isOnCache = defaultState == TriggerType.On;
+        if (selectable != null && !selectable.interactable)
+        {
+            ActivateState(TriggerType.Disabled);
+            isInteractableCache = false;
+            return;
+        }
+        ActivateState(defaultState);
     }
     void OnDisable()
     {
@@ -91,9 +110,91 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
     }
     public void SetInteractable(bool interactable)
     {
-        selectable.interactable = interactable;
-        ActivateState(interactable ? TriggerType.Enabled : TriggerType.Disabled);
+        EnsureSelectable();
+        if (selectable != null)
+            selectable.interactable = interactable;
         isInteractableCache = interactable;
+        if (!interactable)
+        {
+            SyncOnCacheFromVisual();
+            SetLayerActive("highlighter", false);
+            SetLayerActive("bgActive", false);
+            SetLayerActive("mgActive", false);
+            SetLayerActive("fgActive", false);
+            SetLayerActive("bgPressed", false);
+            SetLayerActive("mgPressed", false);
+            SetLayerActive("fgPressed", false);
+            SetLayerActive("bg", false);
+            SetLayerActive("mg", false);
+            SetLayerActive("fg", false);
+            EnsureDisabledLayerSprites();
+            ActivateState(TriggerType.Disabled);
+            SetLayerActive("bgDisabled", true);
+            SetLayerActive("mgDisabled", true);
+            SetLayerActive("fgDisabled", true);
+            return;
+        }
+        ActivateState(TriggerType.Enabled);
+        SetLayerActive("bgDisabled", false);
+        SetLayerActive("mgDisabled", false);
+        SetLayerActive("fgDisabled", false);
+        if (isOnCache)
+            ActivateState(TriggerType.On);
+        else
+        {
+            ActivateState(TriggerType.Off);
+            SetLayerActive("bg", true);
+            SetLayerActive("mg", true);
+            SetLayerActive("fg", true);
+        }
+    }
+
+    void SyncOnCacheFromVisual()
+    {
+        Transform mgActive = transform.Find("mgActive");
+        if (mgActive != null && mgActive.gameObject.activeSelf)
+        {
+            isOnCache = true;
+            return;
+        }
+        Transform mg = transform.Find("mg");
+        if (mg != null && mg.gameObject.activeSelf)
+        {
+            isOnCache = false;
+            return;
+        }
+        isOnCache = defaultState == TriggerType.On;
+    }
+
+    void SetLayerActive(string childName, bool active)
+    {
+        Transform t = transform.Find(childName);
+        if (t != null)
+            t.gameObject.SetActive(active);
+    }
+
+    void EnsureDisabledLayerSprites()
+    {
+        CopyVisualToDisabled("bg", "bgDisabled");
+        CopyVisualToDisabled("mg", "mgDisabled");
+        CopyVisualToDisabled("fg", "fgDisabled");
+    }
+
+    void CopyVisualToDisabled(string fromName, string toName)
+    {
+        Transform from = transform.Find(fromName);
+        Transform to = transform.Find(toName);
+        if (from == null || to == null) return;
+        Image src = from.GetComponent<Image>();
+        Image dst = to.GetComponent<Image>();
+        if (src == null || dst == null) return;
+        if (dst.sprite == null && src.sprite != null)
+            dst.sprite = src.sprite;
+        if (src.sprite != null)
+        {
+            Color c = src.color;
+            dst.color = new Color(c.r * 0.45f, c.g * 0.45f, c.b * 0.45f, c.a * 0.55f);
+        }
     }
     public void TurnOffButton()
     {
@@ -127,7 +228,7 @@ public class IconButtonStyleFiller : MonoBehaviour, IPointerEnterHandler, IPoint
         ActivateState(TriggerType.PointerUp);
         isPressedCache = false;
     }
-    bool isOnCache = true;
+    bool isOnCache = false;
     bool isHighlightedCache = false;
     bool isInteractableCache = true;
     bool isPressedCache = false;

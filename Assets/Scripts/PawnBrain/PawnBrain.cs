@@ -108,13 +108,13 @@ public class PawnBrain : IControlableSelectable
         {
             ApplyDeadStateAtStart();
         }
-        if (gameObject.layer != LayerMask.NameToLayer("WarFog"))
-        {
-            UI3DManager.Instance.RegisterPawn(gameObject);
-        }
         WarFog.OnWarFogEnd += OnWarFogEnd;
         WarFog.OnWarFogStart += OnWarFogStart;
         warFogEventsSubscribed = true;
+        if (gameObject.layer != LayerMask.NameToLayer("WarFog"))
+            TryRegisterPawnUi();
+        else if (UI3DManager.Instance != null)
+            UI3DManager.Instance.UnregisterPawn(gameObject);
         TurnManager.Instance.OnPlayerTurnStart += OnPlayerTurnStart;
         TurnManager.Instance.OnEnemyTurnStart += OnEnemyTurnStart;
         TurnManager.Instance.OnTriggerZoneEnter += OnTriggerZoneEnter;
@@ -168,10 +168,27 @@ public class PawnBrain : IControlableSelectable
         SelectableType selectableType = (SelectableType)data.GetData("SelectableType", dataController.UNIQUE_ID, (int)dataController.selectableType);
         if (selectableType != SelectableType.Dead)
         {
+            if (!gameObject.activeSelf)
+                gameObject.SetActive(true);
             if (!playersAlive.Contains(this) && selectableType == SelectableType.Player)
             {
                 playersAlive.Add(this);
             }
+            int warFogLayer = LayerMask.NameToLayer("WarFog");
+            if (gameObject.layer != warFogLayer)
+            {
+                gameObject.layer = selectableType == SelectableType.Player
+                    ? LayerMask.NameToLayer("Player")
+                    : LayerMask.NameToLayer("Hitable");
+                TryRegisterPawnUi();
+            }
+            else if (UI3DManager.Instance != null)
+            {
+                UI3DManager.Instance.UnregisterPawn(gameObject);
+            }
+            if (pawnNavMesh != null)
+                pawnNavMesh.SetTypeOfModifierVolumes(selectableType == SelectableType.Player ? 1 : 0, 0, 0);
+            RefreshStatusVisualizers();
             animatorBrain?.SetLocked(false, 0);
             animatorBrain?.InstaPlay((int)AnimatorBrainBase.Animations.IDLE, 0, false, true);
         }
@@ -438,7 +455,6 @@ public class PawnBrain : IControlableSelectable
         {
             UI3DManager.Instance.ShowMessage("Kill", transform.position + transform.up * 0.5f, Color.red, true);
             dataController.selectableType = SelectableType.Dead;
-            TurnManager.Instance.CheckTriggers();
             gameObject.layer = LayerMask.NameToLayer("DeadPawn");
             pawnNavMesh.SetTypeOfModifierVolumes(-1, -1, 1);
             RefreshStatusVisualizers();
@@ -457,6 +473,11 @@ public class PawnBrain : IControlableSelectable
                 CorpseFadeDespawn existing = GetComponent<CorpseFadeDespawn>();
                 if (existing != null)
                     Destroy(existing);
+            }
+            if (TurnManager.Instance != null)
+            {
+                TurnManager.Instance.NotifyCombatantDied(this);
+                TurnManager.Instance.CheckTriggers();
             }
             if (wasPlayer && playersAlive.Count == 0)
             {
@@ -540,15 +561,20 @@ public class PawnBrain : IControlableSelectable
         {
             if (skinnedMeshRenderer != null && defaultMaterial != null)
                 skinnedMeshRenderer.sharedMaterial = defaultMaterial;
-            UI3DManager.Instance.RegisterPawn(gameObject);
+            TryRegisterPawnUi();
         }
     }
     private void OnWarFogStart()
     {
-        if (gameObject.layer == LayerMask.NameToLayer("WarFog"))
-        {
+        if (gameObject.layer == LayerMask.NameToLayer("WarFog") && UI3DManager.Instance != null)
             UI3DManager.Instance.UnregisterPawn(gameObject);
-        }
+    }
+
+    void TryRegisterPawnUi()
+    {
+        if (UI3DManager.Instance == null) return;
+        if (gameObject.layer == LayerMask.NameToLayer("WarFog")) return;
+        UI3DManager.Instance.RegisterPawn(gameObject);
     }
     public override void SetDynamicParameterValue(string parameterName, float value)
     {

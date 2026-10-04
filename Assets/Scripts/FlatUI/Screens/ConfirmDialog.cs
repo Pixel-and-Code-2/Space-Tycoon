@@ -22,8 +22,7 @@ public class ConfirmDialog : IUILayer
     void Awake()
     {
         Instance = this;
-        if (yesButton != null) yesButton.onClick.AddListener(OnYes);
-        if (noButton != null) noButton.onClick.AddListener(OnNo);
+        EnsureWired();
     }
 
     void OnDestroy()
@@ -33,9 +32,18 @@ public class ConfirmDialog : IUILayer
 
     public static void Show(string message, Action yes, Action no = null)
     {
+        if (Instance == null)
+        {
+            ConfirmDialog found = UnityEngine.Object.FindFirstObjectByType<ConfirmDialog>(FindObjectsInactive.Include);
+            if (found != null)
+            {
+                Instance = found;
+                found.EnsureWired();
+            }
+        }
         if (Instance == null || UILayersController.Instance == null)
         {
-            yes?.Invoke();
+            Debug.LogWarning("[ConfirmDialog] missing instance/UILayers — cannot show confirm");
             return;
         }
         Instance.onYes = yes;
@@ -45,11 +53,26 @@ public class ConfirmDialog : IUILayer
         UILayersController.Instance.ShowOverlay(UILayersController.UILayer.ConfirmDialog);
     }
 
+    void EnsureWired()
+    {
+        if (yesButton != null)
+        {
+            yesButton.onClick.RemoveAllListeners();
+            yesButton.onClick.AddListener(OnYes);
+        }
+        if (noButton != null)
+        {
+            noButton.onClick.RemoveAllListeners();
+            noButton.onClick.AddListener(OnNo);
+        }
+    }
+
     public void OnYes()
     {
         Action a = onYes;
         Clear();
-        UILayersController.Instance.GoBack();
+        if (UILayersController.Instance != null)
+            UILayersController.Instance.GoBack();
         a?.Invoke();
     }
 
@@ -57,7 +80,8 @@ public class ConfirmDialog : IUILayer
     {
         Action a = onNo;
         Clear();
-        UILayersController.Instance.GoBack();
+        if (UILayersController.Instance != null)
+            UILayersController.Instance.GoBack();
         a?.Invoke();
     }
 

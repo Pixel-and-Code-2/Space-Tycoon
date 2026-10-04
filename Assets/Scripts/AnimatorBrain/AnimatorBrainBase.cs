@@ -61,29 +61,39 @@ public class AnimatorBrainBase : MonoBehaviour
         if (bypassLock)
             HandleBypassLock(layer);
 
-        if (currentAnimation[layer] == animation) return;
-
+        bool same = currentAnimation[layer] == animation;
         currentAnimation[layer] = animation;
-        animator.CrossFade(animations[(int)currentAnimation[layer]], crossfade, layer);
+        if (same)
+            animator.CrossFade(animations[(int)currentAnimation[layer]], crossfade, layer, 0f);
+        else
+            animator.CrossFade(animations[(int)currentAnimation[layer]], crossfade, layer);
         if (isSubEnables && layer == 0)
         {
             currentAnimation[layer + 1] = animation;
-            animator.CrossFade(subAnimations[currentAnimation[layer + 1]], crossfade, layer + 1);
+            if (same)
+                animator.CrossFade(subAnimations[currentAnimation[layer + 1]], crossfade, layer + 1, 0f);
+            else
+                animator.CrossFade(subAnimations[currentAnimation[layer + 1]], crossfade, layer + 1);
         }
     }
 
     public void ForcePlay(int animation, int layer, bool lockLayer, float crossfade = 0.2f)
     {
-        if (animation <= 0 || animator == null) return;
+        if (animator == null || animations == null) return;
+        if (animation <= 0 || animation >= animations.Length) return;
+        if (layer < 0 || layerLocked == null || layer >= layerLocked.Length) return;
         HandleBypassLock(layer);
         layerLocked[layer] = lockLayer;
-        if (currentAnimation[layer] == animation) return;
         currentAnimation[layer] = animation;
-        animator.CrossFade(animations[animation], crossfade, layer, 0f);
-        if (isSubEnables && layer == 0)
+        int state = animations[animation];
+        if (state == 0) return;
+        animator.CrossFade(state, crossfade, layer, 0f);
+        if (isSubEnables && layer == 0 && subAnimations != null && animation < subAnimations.Length)
         {
             currentAnimation[layer + 1] = animation;
-            animator.CrossFade(subAnimations[animation], crossfade, layer + 1, 0f);
+            int sub = subAnimations[animation];
+            if (sub != 0)
+                animator.CrossFade(sub, crossfade, layer + 1, 0f);
         }
     }
 

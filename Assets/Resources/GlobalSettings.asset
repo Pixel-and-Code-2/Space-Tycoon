@@ -66,6 +66,21 @@ MonoBehaviour:
   usePhysicalDice: 0
   useD10Times2InsteadOfD20: 1
   diceFloorY: -1.0641153
+  enemyInfoTitlePattern: '// ${name} ${role} = Shooter|Tank|Melee
+
+    ${name}'
+  enemyInfoStatsPattern: "// vars: ${name} ${role} ${hp} ${maxHp} ${ac} ${str} ${dex}
+    ${ranged} ${melee}\nHP ${hp}/${maxHp}\n\u041A\u0414 ${ac}\n\u0421\u0418\u041B
+    ${str}  \u041B\u041E\u0412 ${dex}\n\u0414\u0430\u043B. ${ranged}\u043C  \u0411\u043B.
+    ${melee}\u043C"
+  multiAttackGapSeconds: 0.85
+  somShotPathDelaySeconds: 1
+  skillAllocationCaps:
+    maxHp: 2
+    maxStr: 8
+    maxDex: 8
+    maxMelee: 8
+    maxRanged: 8
   sliderClassColors:
   - selectableType: 0
     colorFront: PlayerDefaultColor

@@ -72,6 +72,8 @@ public class WalkState : IPawnState
             && selectable is IControlableSelectable enemy
             && enemy.GetSelectableType() == SelectableType.Enemy)
         {
+            if (enemy.PawnData != null)
+                EnemyInfoPanel.ShowEnemy(enemy.PawnData);
             ShootOnMoveController.Instance.RecomputePlannedEnemyHover(controlableSelectable);
             int n = ShootOnMoveController.Instance.GetShotCount(enemy);
             float shotCost = controlableSelectable.PawnData != null
@@ -96,6 +98,7 @@ public class WalkState : IPawnState
             pathDrawer.SetVisible(true);
             return;
         }
+        EnemyInfoPanel.HideEnemy();
         if (hit != ScreenCastHitResult.NoHit)
         {
             (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) = controlableSelectable.GetPathPointsTo(worldPoint);

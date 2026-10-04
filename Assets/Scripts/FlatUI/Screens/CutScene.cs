@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -32,21 +33,76 @@ public class CutScene : IUILayer
 
     bool ShouldSkipVideo => Application.isEditor ? skipVideoInEditor : skipVideoInPlayer;
 
+    bool advancing;
+    bool teardownQueued;
+    Coroutine teardownRoutine;
+
     void OnEnable()
     {
-        revealingObj.gameObject.SetActive(false);
+        advancing = false;
+        teardownQueued = false;
+        if (revealingObj != null)
+            revealingObj.SetActive(false);
     }
+
     void OnDisable()
     {
+        advancing = false;
         StopVideoSafe();
+    }
+
+    void UnhookVideoEvents()
+    {
+        if (videoPlayer == null) return;
+        videoPlayer.loopPointReached -= OnVideoEnd;
+        videoPlayer.prepareCompleted -= OnPreparedPlay;
+        videoPlayer.errorReceived -= OnVideoError;
     }
 
     void StopVideoSafe()
     {
         if (videoPlayer == null) return;
-        videoPlayer.loopPointReached -= OnVideoEnd;
-        if (videoPlayer.isPlaying) videoPlayer.Stop();
-        videoPlayer.clip = null;
+        UnhookVideoEvents();
+        try { videoPlayer.Stop(); }
+        catch (System.Exception e) { Debug.LogWarning("[CutScene] Stop: " + e.Message); }
+        QueueTeardown();
+    }
+
+    void QueueTeardown()
+    {
+        if (videoPlayer == null || teardownQueued) return;
+        teardownQueued = true;
+        if (teardownRoutine != null)
+            StopCoroutine(teardownRoutine);
+        if (isActiveAndEnabled)
+            teardownRoutine = StartCoroutine(TeardownVideoDeferred());
+        else
+            TeardownVideoImmediate();
+    }
+
+    IEnumerator TeardownVideoDeferred()
+    {
+        yield return null;
+        yield return new WaitForEndOfFrame();
+        TeardownVideoImmediate();
+        teardownRoutine = null;
+    }
+
+    void TeardownVideoImmediate()
+    {
+        teardownQueued = false;
+        if (videoPlayer == null) return;
+        UnhookVideoEvents();
+        try
+        {
+            if (videoPlayer.targetTexture != null)
+                videoPlayer.targetTexture = null;
+            videoPlayer.clip = null;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning("[CutScene] teardown: " + e.Message);
+        }
         videoPlayer.enabled = false;
     }
 
@@ -54,6 +110,7 @@ public class CutScene : IUILayer
     public override void Initialize(string config)
     {
         configCache = config;
+        advancing = false;
         AudioController.Instance.Stop(true, true);
         if (ShouldSkipVideo)
         {
@@ -71,6 +128,13 @@ public class CutScene : IUILayer
             OnClickNext();
             return;
         }
+        UnhookVideoEvents();
+        if (teardownRoutine != null)
+        {
+            StopCoroutine(teardownRoutine);
+            teardownRoutine = null;
+        }
+        teardownQueued = false;
         videoPlayer.enabled = true;
         videoPlayer.playOnAwake = false;
         videoPlayer.clip = begginingVideo;
@@ -108,28 +172,42 @@ public class CutScene : IUILayer
             OnClickNext();
             return;
         }
-        videoPlayer.Prepare();
-        videoPlayer.prepareCompleted -= OnPreparedPlay;
+        videoPlayer.errorReceived += OnVideoError;
         videoPlayer.prepareCompleted += OnPreparedPlay;
+        videoPlayer.Prepare();
         timeOnSlide = 0f;
+    }
+
+    void OnVideoError(VideoPlayer source, string message)
+    {
+        Debug.LogWarning("[CutScene] VideoPlayer error: " + message);
+        UnhookVideoEvents();
+        StopVideoSafe();
+        OnClickNext();
     }
 
     void OnPreparedPlay(VideoPlayer source)
     {
         source.prepareCompleted -= OnPreparedPlay;
+        if (advancing || source == null || !source.enabled)
+            return;
         source.loopPointReached -= OnVideoEnd;
         source.loopPointReached += OnVideoEnd;
         source.Play();
     }
 
-    private void OnVideoEnd(VideoPlayer videoPlayer)
+    private void OnVideoEnd(VideoPlayer source)
     {
-        videoPlayer.loopPointReached -= OnVideoEnd;
+        if (source != null)
+            source.loopPointReached -= OnVideoEnd;
         StopVideoSafe();
         OnClickNext();
     }
+
     public void OnClickNext()
     {
+        if (advancing) return;
+        advancing = true;
         timeOnSlide = 0f;
         StopVideoSafe();
         if (configCache == "start")
@@ -147,35 +225,34 @@ public class CutScene : IUILayer
                 UILayersController.Instance.SetLayer(UILayersController.UILayer.CutScene, "titles");
                 return;
             }
-            else
-            {
-                UILayersController.Instance.SetLayerKeepingGameUI(UILayersController.UILayer.AttentionText, "Победа_persistent_1_GameCongratulationsColor");
-                AudioController.Instance.Play(AudioController.Instance.victoryAmbient, true);
-            }
+            UILayersController.Instance.SetLayerKeepingGameUI(UILayersController.UILayer.AttentionText, "Победа_persistent_1_GameCongratulationsColor");
+            AudioController.Instance.Play(AudioController.Instance.victoryAmbient, true);
+            return;
         }
         if (configCache == "lose")
         {
             UILayersController.Instance.SetLayerKeepingGameUI(UILayersController.UILayer.AttentionText, "Поражение_persistent_2_GameAttentionColor");
             AudioController.Instance.Play(AudioController.Instance.defeatAmbient, true);
+            return;
         }
         if (configCache == "titles")
         {
             UILayersController.Instance.SetLayerKeepingGameUI(UILayersController.UILayer.AttentionText, "Победа_persistent_1_GameCongratulationsColor");
             AudioController.Instance.Play(AudioController.Instance.victoryAmbient, true);
+            return;
         }
         if (configCache == "titles_menu")
         {
             UILayersController.Instance.SetLayerKeepingGameUI(UILayersController.UILayer.MainMenu);
         }
     }
+
     private float timeOnSlide = 0f;
     private void Update()
     {
         if (ShouldSkipVideo) return;
         timeOnSlide += Time.unscaledDeltaTime;
-        if (timeOnSlide >= timeBeforeRevealingObj)
-        {
-            revealingObj.gameObject.SetActive(true);
-        }
+        if (timeOnSlide >= timeBeforeRevealingObj && revealingObj != null)
+            revealingObj.SetActive(true);
     }
 }

@@ -26,6 +26,9 @@ public class CombatantStats : ScriptableObject
     public float meleeAttackStaminaCost = 0f;
     public float shooterMeleeAttackStaminaCost = 0f;
 
+    [Header("Skill allocation caps (-1 = use GlobalSettings default)")]
+    public GlobalSettingsAssets.SkillAllocationCaps skillAllocationCaps = new GlobalSettingsAssets.SkillAllocationCaps();
+
     public float RollMove() => DiceExpr.Roll(movePerTurn);
     public float RollStaminaPerMeter() => DiceExpr.Roll(staminaPerMeter);
     public float RollMaxHp() => DiceExpr.Roll(maxHp);

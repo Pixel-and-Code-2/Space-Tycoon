@@ -83,6 +83,98 @@ public class GlobalSettingsAssets : ScriptableObject
     public bool useD10Times2InsteadOfD20 = true;
     public float diceFloorY = 0f;
 
+    [Header("Enemy info panel")]
+    [Tooltip("Title pattern. Lines starting with // are comments. Vars: ${name} ${role}.")]
+    [TextArea(2, 6)]
+    public string enemyInfoTitlePattern =
+        "// ${name} ${role} — Shooter|Tank|Melee\n${name}";
+    [TextArea(6, 16)]
+    [Tooltip("Stats pattern. // comments stripped. Vars: ${name} ${role} ${hp} ${maxHp} ${ac} ${str} ${dex} ${ranged} ${melee}")]
+    public string enemyInfoStatsPattern =
+        "// vars: ${name} ${role} ${hp} ${maxHp} ${ac} ${str} ${dex} ${ranged} ${melee}\n"
+        + "HP ${hp}/${maxHp}\nКД ${ac}\nСИЛ ${str}  ЛОВ ${dex}\nДал. ${ranged}м  Бл. ${melee}м";
+
+    [Header("Combat pacing")]
+    [Tooltip("Gap between multi-attacks (enemy AI double shot / SoM burst).")]
+    public float multiAttackGapSeconds = 0.85f;
+    [Tooltip("SoM: min seconds before firing target index t is (t+1) * this value.")]
+    public float somShotPathDelaySeconds = 1f;
+
+    [System.Serializable]
+    public class SkillAllocationCaps
+    {
+        [Tooltip("-1 = no cap")]
+        public int maxHp = -1;
+        [Tooltip("-1 = no cap")]
+        public int maxStr = -1;
+        [Tooltip("-1 = no cap")]
+        public int maxDex = -1;
+        [Tooltip("-1 = no cap")]
+        public int maxMelee = -1;
+        [Tooltip("-1 = no cap")]
+        public int maxRanged = -1;
+    }
+
+    [Header("Default skill caps (fallback when CombatantStats uses -1)")]
+    public SkillAllocationCaps skillAllocationCaps = new SkillAllocationCaps
+    {
+        maxHp = 10,
+        maxStr = 8,
+        maxDex = 8,
+        maxMelee = 8,
+        maxRanged = 8
+    };
+
+    public static float GetMultiAttackGapSeconds()
+    {
+        if (HandleInittingGlobalVars.globalSettingsAssets != null)
+            return Mathf.Max(0f, HandleInittingGlobalVars.globalSettingsAssets.multiAttackGapSeconds);
+        return 0.85f;
+    }
+
+    public static float GetSomShotPathDelaySeconds()
+    {
+        if (HandleInittingGlobalVars.globalSettingsAssets != null)
+            return Mathf.Max(0f, HandleInittingGlobalVars.globalSettingsAssets.somShotPathDelaySeconds);
+        return 1f;
+    }
+
+    public static SkillAllocationCaps GetSkillAllocationCaps()
+    {
+        if (HandleInittingGlobalVars.globalSettingsAssets != null
+            && HandleInittingGlobalVars.globalSettingsAssets.skillAllocationCaps != null)
+            return HandleInittingGlobalVars.globalSettingsAssets.skillAllocationCaps;
+        return new SkillAllocationCaps
+        {
+            maxHp = 10,
+            maxStr = 8,
+            maxDex = 8,
+            maxMelee = 8,
+            maxRanged = 8
+        };
+    }
+
+    public static int GetSkillCap(string statId, CombatantStats stats = null)
+    {
+        int fromStats = ReadCap(stats != null ? stats.skillAllocationCaps : null, statId);
+        if (fromStats >= 0) return fromStats;
+        return ReadCap(GetSkillAllocationCaps(), statId);
+    }
+
+    static int ReadCap(SkillAllocationCaps caps, string statId)
+    {
+        if (caps == null) return -1;
+        switch (statId)
+        {
+            case "hp": return caps.maxHp;
+            case "str": return caps.maxStr;
+            case "dex": return caps.maxDex;
+            case "melee": return caps.maxMelee;
+            case "ranged": return caps.maxRanged;
+            default: return -1;
+        }
+    }
+
     [System.Serializable]
     public class StaminaCostSettings
     {

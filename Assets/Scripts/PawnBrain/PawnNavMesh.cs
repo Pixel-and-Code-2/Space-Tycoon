@@ -26,6 +26,7 @@ public class PawnNavMesh : MonoBehaviour
     private Vector3[] cachedPointsAvailable = null;
     private Vector3[] cachedPointsOutOfRange = null;
     private bool cachedTargetPositionValid = false;
+    private float cachedBudgetMeters = -1f;
     private string UNIQUE_ID => "PawnNavMesh_" + gameObject.name;
     [System.Serializable]
     private class ScriptEnabler
@@ -336,7 +337,12 @@ public class PawnNavMesh : MonoBehaviour
 
     public (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) GetPathPointsTo(Vector3 position)
     {
-        if (cachedTargetPositionValid && cachedTargetPosition == position)
+        float budgetMeters = UsesStaminaBudget()
+            ? dataController.MaxMoveMetersFromStaminaAfter(GetSomReservedShotStamina())
+            : 99999f;
+        if (cachedTargetPositionValid
+            && cachedTargetPosition == position
+            && Mathf.Abs(cachedBudgetMeters - budgetMeters) < 0.001f)
         {
             return (cachedPointsAvailable, cachedPointsOutOfRange);
         }
@@ -346,13 +352,18 @@ public class PawnNavMesh : MonoBehaviour
         if (!plan.valid)
             return (null, null);
 
-        float budgetMeters = UsesStaminaBudget()
-            ? dataController.MaxMoveMetersFromStamina
-            : 99999f;
         (cachedPointsAvailable, cachedPointsOutOfRange) = DividePath(plan.corners, plan.pathMeters, budgetMeters);
         cachedTargetPosition = position;
+        cachedBudgetMeters = budgetMeters;
         cachedTargetPositionValid = true;
         return (cachedPointsAvailable, cachedPointsOutOfRange);
+    }
+
+    float GetSomReservedShotStamina()
+    {
+        if (dataController == null) return 0f;
+        IControlableSelectable owner = dataController.GetComponent<IControlableSelectable>();
+        return ShootOnMoveController.GetReservedShotStaminaFor(owner);
     }
 
     (Vector3[] pointsAvailable, Vector3[] pointsOutOfRange) DividePath(Vector3[] corners, float fullMeters, float budgetMeters)
@@ -414,6 +425,7 @@ public class PawnNavMesh : MonoBehaviour
         cachedPointsAvailable = null;
         cachedPointsOutOfRange = null;
         cachedTargetPositionValid = false;
+        cachedBudgetMeters = -1f;
         if (wasMoving && TurnManager.Instance != null)
             TurnManager.Instance.UnregisterMovingPawn(gameObject);
     }

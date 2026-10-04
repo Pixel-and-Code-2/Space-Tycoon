@@ -60,34 +60,32 @@ public static class DataCompressor
             stringData = new Dictionary<string, string>()
         };
         for (int i = 0; i < data.floatRecordNames.Count; i++)
-        {
-            res.floatData.Add(data.floatRecordNames[i], data.floatRecords[i]);
-        }
+            Put(res.floatData, data.floatRecordNames[i], data.floatRecords[i]);
         for (int i = 0; i < data.dictRecordNames.Count; i++)
-        {
-            res.dictData.Add(data.dictRecordNames[i], DecompressDict(data.dictRecords[i]));
-        }
+            Put(res.dictData, data.dictRecordNames[i], DecompressDict(data.dictRecords[i]));
         for (int i = 0; i < data.vecRecordNames.Count; i++)
-        {
-            res.vecData.Add(data.vecRecordNames[i], DecompressVec(data.vecRecords[i]));
-        }
+            Put(res.vecData, data.vecRecordNames[i], DecompressVec(data.vecRecords[i]));
         for (int i = 0; i < data.quatRecordNames.Count; i++)
-        {
-            res.quatData.Add(data.quatRecordNames[i], DecompressQuaternion(data.quatRecords[i]));
-        }
+            Put(res.quatData, data.quatRecordNames[i], DecompressQuaternion(data.quatRecords[i]));
         for (int i = 0; i < data.boolRecordNames.Count; i++)
-        {
-            res.boolData.Add(data.boolRecordNames[i], DecompressBool(data.boolRecords[i]));
-        }
+            Put(res.boolData, data.boolRecordNames[i], DecompressBool(data.boolRecords[i]));
         for (int i = 0; i < data.intRecordNames.Count; i++)
-        {
-            res.intData.Add(data.intRecordNames[i], DecompressInt(data.intRecords[i]));
-        }
+            Put(res.intData, data.intRecordNames[i], DecompressInt(data.intRecords[i]));
         for (int i = 0; i < data.stringRecordNames.Count; i++)
-        {
-            res.stringData.Add(data.stringRecordNames[i], data.stringRecords[i]);
-        }
+            Put(res.stringData, data.stringRecordNames[i], data.stringRecords[i]);
         return res;
+    }
+
+    static void Put<T>(Dictionary<string, T> dict, string key, T value)
+    {
+        if (string.IsNullOrEmpty(key)) return;
+        if (dict.ContainsKey(key))
+        {
+            Debug.LogWarning("[Save] duplicate key, last wins: " + key);
+            dict[key] = value;
+            return;
+        }
+        dict.Add(key, value);
     }
 
     private static SaveRecordDict CompressDict(Dictionary<string, float> dict)

@@ -84,7 +84,6 @@ public class SimpleEnemyAI : ISelectorBrain
     }
 
     private float timeStack = 0.0f;
-    private bool attackStepSawBusy;
     private float attackStepElapsed;
     private float moveWaitElapsed;
     [SerializeField]
@@ -124,14 +123,13 @@ public class SimpleEnemyAI : ISelectorBrain
                         || (CombatAttackRunner.Instance != null && CombatAttackRunner.Instance.IsBusy);
                     if (busy)
                     {
-                        attackStepSawBusy = true;
                         attackStepElapsed = 0f;
                         break;
                     }
                     attackStepElapsed += Time.deltaTime;
-                    if (!attackStepSawBusy && attackStepElapsed < 0.2f)
+                    float attackGap = GlobalSettingsAssets.GetMultiAttackGapSeconds();
+                    if (attackStepElapsed < attackGap)
                         break;
-                    attackStepSawBusy = false;
                     attackStepElapsed = 0f;
                     completedScenarioIndex++;
                     break;
@@ -235,7 +233,6 @@ public class SimpleEnemyAI : ISelectorBrain
     void OnEnemyTurnStart()
     {
         BuildDetailedScenario();
-        attackStepSawBusy = false;
         attackStepElapsed = 0f;
         moveWaitElapsed = 0f;
         if (detailedScenario.Count == 0)
