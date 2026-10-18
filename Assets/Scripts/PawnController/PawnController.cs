@@ -1,21 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 [RequireComponent(typeof(ISelectorBrain))]
 [RequireComponent(typeof(ClickableItemsController))]
 public class PawnController : MonoBehaviour
 {
     public static PawnController Instance { get; private set; }
     public ClickableItemsController clickableItemsController { get; private set; }
-    PawnController()
-    {
-        if (Instance == null) Instance = this;
-        else
-        {
-            Debug.LogError("Constructor met second PawnController instance");
-        }
-    }
 
     [SerializeField]
     public ISelectorBrain playerSelectorBrain;
@@ -63,8 +54,17 @@ public class PawnController : MonoBehaviour
     public const string LAST_SHOT_ANGLE = "lastShotAngle";
     public static string[] ALL_KEYS = new string[] { IS_WALLS_BETWEEN_KEY, PAWN_DISTANCE_LABEL, CURRENT_TARGET_ANGLE, LAST_SHOT_ANGLE };
 
+    // ЕДИНСТВЕННЫЙ МЕТОД AWAKE
     void Awake()
     {
+        // Проверка на дубликат (если на сцене случайно оказалось два PawnController)
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning("На сцене найден второй PawnController. Удаляем дубликат.");
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
         SetSelectorBrain(GetComponent<ISelectorBrain>());
         clickableItemsController = GetComponent<ClickableItemsController>();
