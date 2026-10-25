@@ -54,17 +54,12 @@ public class PawnController : MonoBehaviour
     public const string LAST_SHOT_ANGLE = "lastShotAngle";
     public static string[] ALL_KEYS = new string[] { IS_WALLS_BETWEEN_KEY, PAWN_DISTANCE_LABEL, CURRENT_TARGET_ANGLE, LAST_SHOT_ANGLE };
 
-    // ЕДИНСТВЕННЫЙ МЕТОД AWAKE
     void Awake()
     {
-        // Проверка на дубликат (если на сцене случайно оказалось два PawnController)
-        if (Instance != null && Instance != this)
-        {
-            Debug.LogWarning("На сцене найден второй PawnController. Удаляем дубликат.");
-            Destroy(gameObject);
-            return;
-        }
-
+        // Always claim Instance. Do not Destroy on "duplicate": OnValidate / disabled
+        // domain reload can leave a stale static pointing at a prefab or prior play instance,
+        // and Destroy would strip the only live controller (and previously Destroy(gameObject)
+        // deleted MainComponent + Camera).
         Instance = this;
         SetSelectorBrain(GetComponent<ISelectorBrain>());
         clickableItemsController = GetComponent<ClickableItemsController>();
@@ -250,8 +245,6 @@ public class PawnController : MonoBehaviour
 
     void OnValidate()
     {
-        if (Instance == null) Instance = this;
-        if (Instance != this) Debug.LogWarning("Two instances of PawnController found " + gameObject.name);
         if (playerSelectorBrain == null)
         {
             ISelectorBrain[] selectorBrains = GetComponents<ISelectorBrain>();

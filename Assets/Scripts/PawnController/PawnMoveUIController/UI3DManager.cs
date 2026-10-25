@@ -64,6 +64,13 @@ public class UI3DManager : MonoBehaviour
         if (contextMenuController == null) contextMenuController = GetComponentInChildren<ContextMenuController>();
         contextMenuController.gameObject.SetActive(false);
         canvasRectTransformCached = canvas.GetComponent<RectTransform>();
+        BindWorldCamera();
+    }
+
+    void BindWorldCamera()
+    {
+        if (canvas != null && canvas.worldCamera == null && Camera.main != null)
+            canvas.worldCamera = Camera.main;
     }
     void Start()
     {
@@ -125,6 +132,8 @@ public class UI3DManager : MonoBehaviour
             messageObject.timeShown = 0f;
             messageItems.Dequeue();
         }
+        BindWorldCamera();
+        if (canvas.worldCamera == null) return;
         foreach (MessageObject messageObject in messageObjectList)
         {
             if (!messageObject.isBusy) continue;
@@ -167,9 +176,8 @@ public class UI3DManager : MonoBehaviour
             SliderToPawnConnector controller = pawnsInScene[pawnObject];
             RectTransform uiElementRect = controller.rectTransform;
             Vector3 worldPosition = pawnObject.transform.position + uiOffset;
-            var temp1 = canvas.worldCamera;
-            var temp2 = worldPosition;
-            var temp3 = temp1.WorldToScreenPoint(temp2);
+            BindWorldCamera();
+            if (canvas.worldCamera == null) continue;
             Vector3 screenPosition = canvas.worldCamera.WorldToScreenPoint(worldPosition);
             Vector2 localPoint;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -193,6 +201,8 @@ public class UI3DManager : MonoBehaviour
 
     private void UpdateActionBoxPositions()
     {
+        BindWorldCamera();
+        if (canvas.worldCamera == null) return;
         List<ISelectable> toRemove = new List<ISelectable>();
         foreach (ISelectable selectable in selectablesInScene.Keys)
         {
@@ -201,10 +211,6 @@ public class UI3DManager : MonoBehaviour
                 toRemove.Add(selectable);
                 continue;
             }
-            // if (!selectablesInScene[selectable].gameObject.activeSelf)
-            // {
-            //     selectablesInScene[selectable].gameObject.SetActive(true);
-            // }
             SelectableToBoxConnector controller = selectablesInScene[selectable];
             RectTransform uiElementRect = controller.rectTransform;
             Vector3 worldPosition = selectable.GetTransform().position + uiOffset;
@@ -231,6 +237,8 @@ public class UI3DManager : MonoBehaviour
 
     private void UpdateTransformSlidersPositions()
     {
+        BindWorldCamera();
+        if (canvas.worldCamera == null) return;
         List<Transform> toRemove = new List<Transform>();
         foreach (Transform transform in slidersOnTransform.Keys)
         {

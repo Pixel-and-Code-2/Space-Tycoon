@@ -49,6 +49,7 @@ public class CameraTargetController : MonoBehaviour
 
     void Update()
     {
+        if (PawnController.Instance == null) return;
         if (listenOnlyPlayerControls)
         {
             if (PawnController.Instance.currentSelector != PawnController.Instance.playerSelectorBrain)
