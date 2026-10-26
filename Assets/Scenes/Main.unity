@@ -2087,19 +2087,19 @@ MonoBehaviour:
   shapeConfig: {fileID: 0}
   diceCatalog: []
   diceMaterial: {fileID: 2100000, guid: 852dbfeee7af2124ca78c45065331318, type: 2}
-  settleTimeout: 8
-  linearSleep: 0.15
-  angularSleep: 0.25
-  stableHold: 0.33
+  settleTimeout: 1
+  linearSleep: 0.1
+  angularSleep: 0.15
+  stableHold: 0.25
   magnetVelocityKick: 2.75
-  magnetImpulseGap: 0.03
-  magnetDuration: 1
+  magnetImpulseGap: 0.05
+  magnetDuration: 2
   magnetGroundY: 0.5
-  spawnHeight: 2.5
+  spawnHeight: 3
   spawnSide: 8
   throwSpeed: 7
   dieMass: 250
-  cameraThrowDistance: 2.2
+  cameraThrowDistance: 3
   softBounce: {fileID: 0}
 --- !u!4 &1651585250
 Transform:
